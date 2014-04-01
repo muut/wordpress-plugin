@@ -18,7 +18,7 @@ $current_language = muut()->getOption( 'language', 'en' );
 			<tbody>
 			<tr>
 				<th scope="row">
-					<label for="setting[remote_forum_name]"><?php _e( 'Remote Forum Name', 'muut' ); ?></label>
+					<label for="muut_remote_forum_name"><?php _e( 'Remote Forum Name', 'muut' ); ?></label>
 				</th>
 				<td>
 					<input name="setting[remote_forum_name]" type="text" id="muut_remote_forum_name" value="<?php echo muut()->getOption( 'remote_forum_name', '' ); ?>" />
@@ -26,7 +26,7 @@ $current_language = muut()->getOption( 'language', 'en' );
 			</tr>
 			<tr>
 				<th scope="row">
-					<label for="setting[language]"><?php _e( 'Language', 'muut' ); ?></label>
+					<label for="moot_language"><?php _e( 'Language', 'muut' ); ?></label>
 				</th>
 				<td>
 					<select name="setting[language]" id="moot_language">
@@ -40,7 +40,7 @@ $current_language = muut()->getOption( 'language', 'en' );
 			</tr>
 			<tr>
 				<th scope="row">
-					<label for="setting[replace_comments]"><?php _e( 'Use Muut for commenting', 'muut' ); ?></label>
+					<label for="muut_replace_comments"><?php _e( 'Use Muut for commenting', 'muut' ); ?></label>
 				</th>
 				<td>
 					<input name="setting[replace_comments]" type="checkbox" id="muut_replace_comments" value="1" <?php checked( '1', muut()->getOption( 'replace_comments', '0' ) ); ?> />
