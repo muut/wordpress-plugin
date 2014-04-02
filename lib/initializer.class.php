@@ -29,6 +29,11 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		protected static $instance;
 
 		/**
+		 * @property array An array of classes that have already been initialized.
+		 */
+		protected $alreadyInit;
+
+		/**
 		 * The singleton method.
 		 *
 		 * @return Muut_Initializer The instance.
@@ -50,6 +55,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 * @since  3.0
 		 */
 		protected function __construct() {
+			$this->alreadyInit = array();
 			$this->addInitListeners();
 		}
 
@@ -72,9 +78,13 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 * @since 3.0
 		 */
 		public function initTemplateLoader() {
-			require_once( muut()->getPluginPath() . 'lib/template-loader.class.php');
-			if ( class_exists( 'Muut_Template_Loader' ) ) {
-				Muut_Template_Loader::instance();
+			$class = 'Muut_Template_Loader';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/template-loader.class.php');
+				if ( class_exists( $class ) ) {
+					$class::instance();
+				}
+				$this->alreadyInit[] = $class;
 			}
 		}
 	}
