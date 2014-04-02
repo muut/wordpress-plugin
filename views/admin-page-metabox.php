@@ -8,8 +8,6 @@
 
 $is_forum = get_post_meta( get_the_ID(), 'muut_is_forum_page', true );
 
-error_log( $is_forum );
-
 if ( $is_forum != '1' ) {
 	$forum_show_class = 'hidden';
 }
