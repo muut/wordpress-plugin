@@ -39,6 +39,11 @@ if ( !class_exists( 'Muut' ) ) {
 		const OPTIONNAME = 'muut_options';
 
 		/**
+		 * The Muut server location.
+		 */
+		const MUUTSERVERS = 'moot.it';
+
+		/**
 		 * @static
 		 * @property Muut The instance of the class.
 		 */
@@ -115,9 +120,11 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		protected function addActions() {
 			add_action( 'admin_init', array( $this, 'maybeSetVersion' ) );
+			add_action( 'admin_init', array( $this, 'maybeAddRewriteRules' ) );
 			add_action( 'admin_menu', array( $this, 'createAdminMenuItems' ) );
 			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ) );
 			add_action( 'load-' . self::SLUG . '_page_muut_settings', array( $this, 'saveSettings' ) );
+			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
 		}
 
 		/**
@@ -128,7 +135,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since  3.0
 		 */
 		protected function addFilters() {
-
+			//add_filter( 'mod_rewrite_rules', array( $this, 'addProxyRewrites' ) );
 		}
 
 		/**
@@ -186,6 +193,104 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function getPluginUrl() {
 			return $this->pluginUrl;
+		}
+
+		/**
+		 * Adds the rewrite rules for indexing Muut posts locally if they are currently not already set.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function maybeAddRewriteRules() {
+			if ( !$this->getOption( 'added_rewrite_rules', false ) ) {
+				$this->addProxyRewrites();
+			}
+		}
+
+		/**
+		 * If using DEFAULT permalinks (i.e. no permalinks), we need to still add the rewrite such that data is
+		 * indexed properly.
+		 * Much of the design of this method comes from wp-admin/includes/misc.php, save_mod_rewrite_rules() function.
+		 * If we are not using defaults, lets make sure to filter in proper rewrites by adding the filter and then
+		 * flushing the rules (so it gets executed).
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function addProxyRewrites() {
+			if ( get_option( 'permalink_structure', '') == '' ) {
+
+				$home_path = get_home_path();
+				$htaccess_file = $home_path.'.htaccess';
+
+				$rules = array(
+					'<IfModule mod_rewrite.c>',
+					'RewriteEngine On',
+					'RewriteBase /',
+					'RewriteRule ^i/(.*)$ http://' . self::MUUTSERVERS . '/i/$1 [P]',
+					'RewriteRule ^m/(.*)$ http://' . self::MUUTSERVERS . '/m/$1 [P]',
+					'</IfModule>',
+				);
+
+				if ( ( !file_exists( $htaccess_file ) && is_writable( $home_path ) ) || is_writable( $htaccess_file ) ) {
+					insert_with_markers( $htaccess_file, 'WordPress', $rules );
+				}
+				$this->setOption( 'added_rewrite_rules', true );
+			} else {
+				add_filter( 'mod_rewrite_rules', array( $this, 'addProxyRewritesFilter' ) );
+				flush_rewrite_rules( true );
+			}
+		}
+
+		/**
+		 * Adds the necessary rewrite rules to fix SEO issues such that Muut posts are indexed at this site
+		 * even though the content is hosted on Muut's servers.
+		 *
+		 * @param string $rules The current string containing all of the re-write structure block.
+		 * @return string The modified rewrite block (as a long string).
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function addProxyRewritesFilter( $rules ) {
+			$permastruct = get_option( 'permalink_structure', '' );
+
+			$muut_rules = "RewriteRule ^i/(.*)\$ http://" . self::MUUTSERVERS . "/i/\$1 [P]\n";
+			$muut_rules .=	"RewriteRule ^m/(.*)\$ http://" . self::MUUTSERVERS . "/m/\$1 [P]";
+
+			if ( $permastruct == '' ) {
+				$rules .= "<IfModule mod_rewrite.c>\n";
+				$rules .= "RewriteEngine On\n";
+				$rules .= "RewriteBase /\n";
+				$rules .= $muut_rules . "\n";
+				$rules .= "</IfModule>\n";
+			} else {
+				$split_rules = explode( "\n", $rules );
+				$rule_before_index = array_search( 'RewriteRule ^index\.php$ - [L]', $split_rules );
+				array_splice( $split_rules, $rule_before_index, 0, $muut_rules );
+				$rules = implode( "\n", $split_rules ) . "\n";
+			}
+
+			$this->setOption( 'added_rewrite_rules', true );
+			return $rules;
+		}
+
+		/**
+		 * Removes the plugin setting that says we have added the necessary rewrite rules.
+		 *
+		 * @param bool $hard_flush Whether we are undergoing a hard flush or not.
+		 * @return bool The same variable as the parameter passed in (we are treating this like and action).
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function removeRewriteAdded( $hard_flush ) {
+			if ( $hard_flush ) {
+				$this->setOption( 'added_rewrite_rules', false );
+				// Make have the rewrites double checked at top of page (in case we were in the middle of initial flush).
+				add_action( 'admin_head', array( $this, 'maybeAddRewriteRules' ) );
+			}
+			return $hard_flush;
 		}
 
 		/**
