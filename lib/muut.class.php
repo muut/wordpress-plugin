@@ -203,7 +203,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function maybeAddRewriteRules() {
-			if ( !$this->getOption( 'added_rewrite_rules', false ) ) {
+			if ( $this->getOption( 'remote_forum_name', '' ) !== '' && !$this->getOption( 'added_rewrite_rules', false ) ) {
 				$this->addProxyRewrites();
 			}
 		}
@@ -229,7 +229,7 @@ if ( !class_exists( 'Muut' ) ) {
 					'<IfModule mod_rewrite.c>',
 					'RewriteEngine On',
 					'RewriteBase /',
-					'RewriteRule ^i/(.*)$ http://' . self::MUUTSERVERS . '/i/$1 [P]',
+					'RewriteRule ^i/(' . $this->getOption( 'remote_forum_name' ) . ')(/.*)?$ http://' . self::MUUTSERVERS . '/i/$1$2 [P]',
 					'RewriteRule ^m/(.*)$ http://' . self::MUUTSERVERS . '/m/$1 [P]',
 					'</IfModule>',
 				);
@@ -256,8 +256,8 @@ if ( !class_exists( 'Muut' ) ) {
 		public function addProxyRewritesFilter( $rules ) {
 			$permastruct = get_option( 'permalink_structure', '' );
 
-			$muut_rules = "RewriteRule ^i/(.*)\$ http://" . self::MUUTSERVERS . "/i/\$1 [P]\n";
-			$muut_rules .=	"RewriteRule ^m/(.*)\$ http://" . self::MUUTSERVERS . "/m/\$1 [P]";
+			$muut_rules = "RewriteRule ^i/(" . $this->getOption( 'remote_forum_name' ) . ")(/.*)?\$ http://" . self::MUUTSERVERS . "/i/\$1\$2 [P]\n";
+			$muut_rules .=	"RewriteRule ^m/(.*)$ http://" . self::MUUTSERVERS . "/m/\$1 [P]";
 
 			if ( $permastruct == '' ) {
 				$rules .= "<IfModule mod_rewrite.c>\n";
@@ -462,16 +462,10 @@ if ( !class_exists( 'Muut' ) ) {
 			) {
 				$old_options = $this->getOptions();
 
-				$boolean_settings = array(
-					'replace_comments'
-				);
-
-				foreach ( $boolean_settings as $boolean_setting ) {
-					$_POST['setting'][$boolean_setting] = isset( $_POST['setting'][$boolean_setting]) ? $_POST['setting'][$boolean_setting] : '0';
-				}
+				$settings = $this->settingsValidate( $_POST['setting'] );
 
 				// Save all the options by passing an array into setOption.
-				if ( $this->setOption( $_POST['setting'] ) || $old_options == $this->getOptions() ) {
+				if ( $this->setOption( $settings ) || $old_options == $this->getOptions() ) {
 					// Display success notice if they were updated or matched the previous settings.
 					$this->queueAdminNotice( 'updated', __( 'Settings successfully saved.', 'muut' ) );
 				} else {
@@ -479,6 +473,31 @@ if ( !class_exists( 'Muut' ) ) {
 					$this->queueAdminNotice( 'error', __( 'Failed to save settings.', 'muut' ) );
 				}
 			}
+		}
+
+		/**
+		 * Deals with settings-specific validation functionality.
+		 *
+		 * @param array $settings an array of key => value pairs that define what settings are being changed to.
+		 * @return array A modified array defining the settings after validation.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		protected function settingsValidate( $settings ) {
+
+			$boolean_settings = apply_filters( 'muut_boolean_settings', array(
+				'replace_comments',
+			) );
+
+			foreach ( $boolean_settings as $boolean_setting ) {
+				$settings[$boolean_setting] = isset( $settings[$boolean_setting]) ? $settings[$boolean_setting] : '0';
+			}
+
+			if ( isset( $settings['remote_forum_name'] ) && $settings['remote_forum_name'] != $this->getOption( 'remote_forum_name' ) ) {
+				flush_rewrite_rules( true );
+			}
+
+			return apply_filters( 'muut_settings_validated', $settings );
 		}
 
 		/**
