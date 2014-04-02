@@ -16,6 +16,12 @@ jQuery(document).ready( function($) {
     }
     $('#muut_page_specify_forum').show();
     $('#page_template').prop('disabled', 'disabled');
+    // Make sure the page template is set as default, even though we are disabling the dropdown.
+    $('<input />').attr('type', 'hidden')
+      .attr('name', "page_template")
+      .attr('value', "default")
+      .appendTo('#post');
+
     $('#page_template option').filter( function() {
         return $(this).val() == 'default';
     }).prop('selected', true);
