@@ -135,7 +135,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since  3.0
 		 */
 		protected function addFilters() {
-			//add_filter( 'mod_rewrite_rules', array( $this, 'addProxyRewrites' ) );
+			
 		}
 
 		/**
