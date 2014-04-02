@@ -171,6 +171,9 @@ if ( !class_exists( 'Muut' ) ) {
 			// Load the template tags.
 			require_once( $this->pluginPath . 'public/template_tags.php' );
 
+			// Load the initializer class.
+			require_once( $this->pluginPath . 'lib/initializer.class.php' );
+			Muut_Initializer::instance();
 		}
 
 		/**
@@ -198,6 +201,47 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function getPluginUrl() {
 			return $this->pluginUrl;
+		}
+
+		/**
+		 * Gets the remote forum name that is registered.
+		 *
+		 * @return string The remote forum name.
+		 */
+		public function getRemoteForumName() {
+			$this->getOption( 'remote_forum_name', '' );
+		}
+
+		/**
+		 * Checks if a given page is a Muut forum page.
+		 *
+		 * @param int $page_id The ID of the page we are checking.
+		 * @return bool True if the page is a forum page.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function isForumPage( $page_id ) {
+			if ( get_post_meta( $page_id, 'muut_is_forum_page', true ) == '1' ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Gets the sub forum name for a forum page.
+		 *
+		 * @param int $page_id The ID of the page we are fetching the forum name for.
+		 * @return string|false The forum name or false if it is not a forum page.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function getPageForumName( $page_id ) {
+			if ( !$this->isForumPage( $page_id ) ) {
+				return false;
+			}
+
+			return get_post_meta( $page_id, 'muut_forum', true );
 		}
 
 		/**
@@ -666,8 +710,6 @@ if ( !class_exists( 'Muut' ) ) {
 		public function saveForumPage( $post_id, $post ) {
 			if ( get_post_type( $post ) != 'page' )
 				return;
-
-			$is_forum = get_post_meta( $post_id, 'muut_is_forum_page', true );
 
 			if ( $_POST['muut_is_forum_page'] == '0' ) {
 				delete_post_meta( $post_id, 'muut_is_forum_page' );
