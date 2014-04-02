@@ -123,8 +123,13 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'admin_init', array( $this, 'maybeAddRewriteRules' ) );
 			add_action( 'admin_menu', array( $this, 'createAdminMenuItems' ) );
 			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ) );
+			add_action( 'add_meta_boxes_page', array( $this, 'addPageMetaBoxes' ) );
 			add_action( 'load-' . self::SLUG . '_page_muut_settings', array( $this, 'saveSettings' ) );
 			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
+			add_action( 'save_post_page', array( $this, 'saveForumPage' ), 10, 2 );
+
+			add_action( 'init', array( $this, 'registerScriptsAndStyles' ) );
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueueAdminScripts' ) );
 		}
 
 		/**
@@ -135,7 +140,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since  3.0
 		 */
 		protected function addFilters() {
-			
+
 		}
 
 		/**
@@ -291,6 +296,60 @@ if ( !class_exists( 'Muut' ) ) {
 				add_action( 'admin_head', array( $this, 'maybeAddRewriteRules' ) );
 			}
 			return $hard_flush;
+		}
+
+		/**
+		 * Registers the various scripts and styles that we may be using in the plugin.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function registerScriptsAndStyles() {
+			wp_register_script( 'muut-admin-functions', $this->pluginUrl . 'resources/admin-functions.js', array( 'jquery' ), '1.0', true );
+		}
+
+		/**
+		 * Enqueues the admin-side scripts we will be using.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function enqueueAdminScripts() {
+			$screen = get_current_screen();
+			if ( $screen->id == 'page' ) {
+				wp_enqueue_script( 'muut-admin-functions' );
+			}
+		}
+
+		/**
+		 * Adds the metaboxes for the Page admin editor.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function addPageMetaBoxes() {
+			add_meta_box(
+				'muut-is-forum-page',
+				__( 'Muut', 'muut' ),
+				array( $this, 'renderMuutPageMetaBox' ),
+				'page',
+				'side',
+				'high'
+			);
+		}
+
+		/**
+		 * Renders the metabox content for the Page Editor.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function renderMuutPageMetaBox() {
+			include( $this->pluginPath . 'views/admin-page-metabox.php' );
 		}
 
 		/**
@@ -593,6 +652,34 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function renderAdminUpgradesPage() {
 			// Print the content for the Muut upgrades page.
+		}
+
+		/**
+		 *  Saves a forum page's information.
+		 *
+		 * @param int $post_id The id of the post (page) being saved.
+		 * @param WP_Post $post The post (page) object that is being saved.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function saveForumPage( $post_id, $post ) {
+			if ( get_post_type( $post ) != 'page' )
+				return;
+
+			$is_forum = get_post_meta( $post_id, 'muut_is_forum_page', true );
+
+			if ( $_POST['muut_is_forum_page'] == '0' ) {
+				delete_post_meta( $post_id, 'muut_is_forum_page' );
+				delete_post_meta( $post_id, 'muut_forum' );
+			} elseif ( $_POST['muut_is_forum_page'] == '1' ) {
+				update_post_meta( $post_id, 'muut_is_forum_page', '1' );
+			}
+
+			if ( $_POST['muut_is_forum_page'] == '1' ) {
+				update_post_meta( $post_id, 'muut_forum', $_POST['muut_forum'] );
+			}
+
 		}
 
 	}
