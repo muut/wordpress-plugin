@@ -68,6 +68,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 */
 		protected function addInitListeners() {
 			add_action( 'template_redirect', array( $this, 'initTemplateLoader' ) );
+			add_action( 'init', array( $this, 'initForumPageUtility' ) );
 		}
 
 		/**
@@ -84,6 +85,21 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 				if ( class_exists( $class ) ) {
 					$class::instance();
 				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the Forum Page utility.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function initForumPageUtility() {
+			$class = 'Muut_Forum_Page_Utility';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/forum-page.utility.class.php');
 				$this->alreadyInit[] = $class;
 			}
 		}

@@ -21,13 +21,23 @@ $sub_forum = muut_get_page_forum_name( $post->ID );
 	<div id="main-content" class="main-content">
 		<div id="primary" class="content-area">
 			<div id="content" class="site-content" role="main">
+				<?php while ( have_posts() ) : the_post(); ?>
+
+				<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+					<header class="entry-header">
+					<h1 class="entry-title"><?php echo get_the_title(); ?></h1>
+				</header>
+				<div class="entry-content">
 				<?php
-						if ( $sub_forum == '' ) {
-							_e( 'Forum not found!', 'muut' );
-						} else {
-							echo '<a class="moot" href="https://moot.it/i/' . $root_forum . '/' . $sub_forum .'">' . get_the_title( $post->ID ) . '</a>';
-						}
+					if ( $sub_forum == '' ) {
+						_e( 'This page has not been assigned a working forum.', 'muut' );
+					} else {
+						echo '<a class="moot" href="https://moot.it/i/' . $root_forum . '/' . $sub_forum .'">' . get_the_title() . '</a>';
+					}
 				?>
+				</div>
+				</article>
+				<?php endwhile; ?>
 			</div><!-- #content -->
 		</div><!-- #primary -->
 	</div><!-- #main-content -->

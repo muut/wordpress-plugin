@@ -1,0 +1,211 @@
+<?php
+/**
+ * The Forum Page static class that contains all the static methods required to interact with a Forum Page that
+ * are Muut-related.
+ *
+ * @package   Muut
+ * @copyright 2014 Moot Inc
+ */
+
+// Don't load directly
+if ( !defined( 'ABSPATH' ) ) {
+	die( '-1' );
+}
+
+if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
+
+	/**
+	 * Muut Forum Page Utility class.
+	 *
+	 * @package Muut
+	 * @author  Paul Hughes
+	 * @since   3.0
+	 */
+	class Muut_Forum_Page_Utility
+	{
+
+		/**
+		 * Make it impossible to instantiate the class by declaring __construct() as private.
+		 *
+		 * @return Muut_Forum_Page_Utility (Except it can never be called).
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		private function __construct() {}
+
+		/**
+		 * The meta name for a forum page's remote forum name.
+		 */
+		const META_REMOTEPATH = 'muut_forum_page_remote_path';
+
+		/**
+		 * The meta name for whether a page is a forum page or not.
+		 */
+		const META_ISFORUMPAGE = 'muut_is_forum_page';
+
+		/**
+		 * The meta name for the super-options meta for individual forum pages.
+		 * This post_meta will contain an array of the specific page options.
+		 */
+		const META_FORUMPAGESETTINGS = 'muut_forum_page_settings';
+
+		/**
+		 * The meta name for the forum page's general options (those not covered by the others).
+		 */
+		const META_ISTHREADED = 'muut_forum_page_is_threaded';
+
+
+		/**
+		 * The meta name for the forum page's option to show who is online above the forum content.
+		 */
+		const META_SHOWONLINE = 'muut_forum_page_show_online';
+
+		/**
+		 * The meta name for the forum page's option to allow users to upload images.
+		 */
+		const META_ALLOWUPLOADS = 'muut_forum_page_allow_uploads';
+
+		/**
+		 * The key for a forum page's specific setting
+		 */
+
+		/**
+		 * The method for setting a forum page's remote path.
+		 *
+		 * @param int $page_id The page ID for the forum page.
+		 * @return bool Whether the page's remote path was updated or not.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function setForumPageRemotePath( $page_id, $path = '' ) {
+			if ( !is_numeric( $page_id ) || !is_string( $path ) ) {
+				return false;
+			}
+
+			if ( $path == '' ) {
+				delete_post_meta( $page_id, self::META_REMOTEPATH );
+				return true;
+			}
+
+			update_post_meta( $page_id, self::META_REMOTEPATH, $path );
+			return true;
+		}
+
+		/**
+		 * Sets the page as a forum page.
+		 *
+		 * @param int $page_id The page ID we are turning into a forum page.
+		 * @return bool Whether the page was successfully turned into a forum page.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function setAsForumPage( $page_id ) {
+			if ( !is_numeric( $page_id ) ) {
+				return false;
+			}
+
+			update_post_meta( $page_id, self::META_ISFORUMPAGE, true );
+			return true;
+		}
+
+		/**
+		 * Sets page as no longer being a forum page.
+		 *
+		 * @param int $page_id The page ID that we are removing as being a forum page.
+		 * @return bool Whether the page was successfully turned into NO LONGER being a forum page.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function removeAsForumPage( $page_id ) {
+			if ( !is_numeric( $page_id ) ) {
+				return false;
+			}
+
+			delete_post_meta( $page_id, self::META_ISFORUMPAGE );
+			return true;
+		}
+
+		/**
+		 * Returns whether a page is a forum page or not.
+		 *
+		 * @param int $page_id The page ID that we are checking if it is a forum page or not.
+		 * @return bool Whether the page is a forum page or not.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function isForumPage( $page_id ) {
+			if( is_numeric( $page_id ) && get_post_meta( $page_id, self::META_ISFORUMPAGE, true ) ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Gets the forum page's remote path.
+		 *
+		 * @param int $page_id The page ID that we are getting the remote forum path for.
+		 * @return string|false Returns the path if one is found for the forum page or false if not.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function getRemoteForumPath( $page_id ) {
+			if( !is_numeric( $page_id ) ) {
+				return false;
+			}
+
+			$path = get_post_meta( $page_id, self::META_REMOTEPATH, true );
+
+			if ( $path ) {
+				return $path;
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Sets the other options for a forum page—cannot be called directly.
+		 *
+		 * @param int $page_id The page ID that we are saving the options for.
+		 * @param string $option_name The option name for the setting we are saving.
+		 * @param mixed $value The value we are setting for the option.
+		 * @return bool Whether the options were saved or not.
+		 */
+		public static function setForumPageOption( $page_id, $option_name, $value ) {
+			if ( !is_numeric( $page_id ) || !is_string( $option_name ) ) {
+				return false;
+			}
+
+			$current_settings = get_post_meta( $page_id, self::META_FORUMPAGESETTINGS, true );
+
+			$new_setting = apply_filters( 'muut_set_page_options', array( $option_name => $value ), $page_id );
+
+			update_post_meta( $page_id, self::META_FORUMPAGESETTINGS, wp_parse_args( $new_setting, $current_settings ) );
+
+			return true;
+		}
+
+		/**
+		 * Gets a given setting for a forum page.
+		 *
+		 * @param int $page_id The page ID that we are getting a setting for.
+		 * @param string $option_name The option name that we are getting for the forum page.
+		 * @return mixed The value of the option.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function getForumPageOption( $page_id, $option_name, $default = '' ) {
+			if ( !is_numeric( $page_id ) || !is_string( $option_name ) ) {
+				return false;
+			}
+
+			$forum_page_defaults = muut()->getOption( 'forum_page_defaults', array() );
+
+			$current_settings = get_post_meta( $page_id, self::META_FORUMPAGESETTINGS, true );
+
+			$settings = apply_filters( 'muut_forum_page_settings', wp_parse_args( $current_settings, $forum_page_defaults ), $page_id );
+
+			return isset( $settings[$option_name] ) ? $settings[$option_name] : $default;
+		}
+	}
+}

@@ -354,6 +354,31 @@ if ( !class_exists( 'Muut' ) ) {
 		}
 
 		/**
+		 * Gets the default value of a given option.
+		 *
+		 * @param string $option_name Gets the default value of a given Muut option.
+		 * @return array The array of default values for the Muut options.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		protected function getOptionsDefaults() {
+
+			$defaults = apply_filters( 'muut_options_defaults', array(
+				'remote_forum_name' => '',
+				// TODO: Make this match whatever language is set for the site.
+				'language' => 'en',
+				'replace_comments' => false,
+				'forum_page_defaults' => array(
+					'is_threaded' => false,
+					'show_online' => true,
+					'allow_uploads' => false,
+				),
+			) );
+
+			return $defaults;
+		}
+
+		/**
 		 * Enqueues the admin-side scripts we will be using.
 		 *
 		 * @return void
@@ -474,7 +499,7 @@ if ( !class_exists( 'Muut' ) ) {
 		protected function getOptions() {
 			if ( !isset( $this->options ) || is_null( $this->options ) ) {
 				$options = get_option( self::OPTIONNAME, array() );
-				$this->options = apply_filters( 'muut_get_options', $options );
+				$this->options = apply_filters( 'muut_get_options', wp_parse_args( $options, $this->getOptionsDefaults() ) );
 			}
 			return $this->options;
 		}
