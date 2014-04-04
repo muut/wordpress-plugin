@@ -87,7 +87,7 @@ if ( !class_exists( 'Muut_Template_Loader' ) ) {
 		 * @since 3.0
 		 */
 		public function getProperTemplate( $template ) {
-			if ( is_page() && get_post_meta( get_the_ID(), 'muut_is_forum_page', true ) != '' ) {
+			if ( is_page() && Muut_Forum_Page_Utility::isForumPage( get_the_ID() ) ) {
 				//TODO: Allow for other forum templates to get loaded (not just the one).
 				$template = 'forum-page.php';
 				$located = $this->locateTemplate( $template );

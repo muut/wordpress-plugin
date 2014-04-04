@@ -43,7 +43,7 @@ function muut_is_forum_page( $page_id = null ) {
 		$page_id = get_the_ID();
 	}
 
-	return muut()->isForumPage( $page_id );
+	return Muut_Forum_Page_Utility::isForumPage( $page_id );
 }
 
 /**
@@ -54,10 +54,10 @@ function muut_is_forum_page( $page_id = null ) {
  * @author Paul Hughes
  * @since 3.0
  */
-function muut_get_page_forum_name( $page_id = null ) {
+function muut_get_page_forum_path( $page_id = null ) {
 	if ( is_null( $page_id ) ) {
 		$page_id = get_the_ID();
 	}
 
-	return muut()->getPageForumName( $page_id );
+	return Muut_Forum_Page_Utility::getRemoteForumPath( $page_id );
 }

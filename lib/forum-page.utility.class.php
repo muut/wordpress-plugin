@@ -134,7 +134,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 		 * @since 3.0
 		 */
 		public static function isForumPage( $page_id ) {
-			if( is_numeric( $page_id ) && get_post_meta( $page_id, self::META_ISFORUMPAGE, true ) ) {
+			if( is_numeric( $page_id ) && get_post_meta( $page_id, self::META_ISFORUMPAGE, true ) != '' ) {
 				return true;
 			} else {
 				return false;
@@ -149,7 +149,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public static function getRemoteForumPath( $page_id ) {
+		public static function getRemoteForumPath( $page_id, $no_suffix = false ) {
 			if( !is_numeric( $page_id ) ) {
 				return false;
 			}
@@ -157,6 +157,9 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 			$path = get_post_meta( $page_id, self::META_REMOTEPATH, true );
 
 			if ( $path ) {
+				if ( !self::getForumPageOption( $page_id, 'is_threaded', false ) && !$no_suffix  ) {
+					$path .= ':comments';
+				}
 				return $path;
 			} else {
 				return false;
@@ -206,6 +209,43 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 			$settings = apply_filters( 'muut_forum_page_settings', wp_parse_args( $current_settings, $forum_page_defaults ), $page_id );
 
 			return isset( $settings[$option_name] ) ? $settings[$option_name] : $default;
+		}
+
+
+		/**
+		 * Renders a given forum page's forum (returns the Muut JS anchor element).
+		 *
+		 * @param int $page_id The page ID whose forum we are rendering.
+		 * @param bool $echo Whether to echo the anchor or return the markup.
+		 * @return string|void The anchor markup or void, if it is set to be echoed.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function forumPageAnchor( $page_id, $echo = true ) {
+			if ( !is_numeric( $page_id ) || !self::isForumPage( $page_id ) ) {
+				return false;
+			}
+
+			$path = self::getRemoteForumPath( $page_id );
+
+			$settings = ' ';
+			if ( !self::getForumPageOption( $page_id, 'show_online', true ) ) {
+				$settings .= 'data-show_online="false" ';
+			}
+			if ( !self::getForumPageOption( $page_id, 'data-upload', false ) ) {
+				$settings .= 'data-upload="false" ';
+			}
+
+			if ( !$path )
+				return false;
+
+			$anchor = '<a class="moot" href="/i/' . muut()->getRemoteForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
+
+			if ( $echo ) {
+				echo $anchor;
+			} else {
+				return $anchor;
+			}
 		}
 	}
 }

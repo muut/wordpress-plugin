@@ -15,7 +15,7 @@ get_header();
 global $post;
 
 $root_forum = muut_get_option( 'remote_forum_name', '' );
-$sub_forum = muut_get_page_forum_name( $post->ID );
+$sub_forum = Muut_Forum_Page_Utility::getRemoteForumPath( $post->ID );;
 ?>
 
 	<div id="main-content" class="main-content">
@@ -32,7 +32,7 @@ $sub_forum = muut_get_page_forum_name( $post->ID );
 					if ( $sub_forum == '' ) {
 						_e( 'This page has not been assigned a working forum.', 'muut' );
 					} else {
-						echo '<a class="moot" href="https://moot.it/i/' . $root_forum . '/' . $sub_forum .'">' . get_the_title() . '</a>';
+						Muut_Forum_Page_Utility::forumPageAnchor( get_the_ID() );
 					}
 				?>
 				</div>

@@ -130,6 +130,7 @@ if ( !class_exists( 'Muut' ) ) {
 
 			add_action( 'init', array( $this, 'registerScriptsAndStyles' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueueAdminScripts' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ) );
 		}
 
 		/**
@@ -209,39 +210,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @return string The remote forum name.
 		 */
 		public function getRemoteForumName() {
-			$this->getOption( 'remote_forum_name', '' );
-		}
-
-		/**
-		 * Checks if a given page is a Muut forum page.
-		 *
-		 * @param int $page_id The ID of the page we are checking.
-		 * @return bool True if the page is a forum page.
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		public function isForumPage( $page_id ) {
-			if ( get_post_meta( $page_id, 'muut_is_forum_page', true ) == '1' ) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		/**
-		 * Gets the sub forum name for a forum page.
-		 *
-		 * @param int $page_id The ID of the page we are fetching the forum name for.
-		 * @return string|false The forum name or false if it is not a forum page.
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		public function getPageForumName( $page_id ) {
-			if ( !$this->isForumPage( $page_id ) ) {
-				return false;
-			}
-
-			return get_post_meta( $page_id, 'muut_forum', true );
+			return $this->getOption( 'remote_forum_name', '' );
 		}
 
 		/**
@@ -350,6 +319,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function registerScriptsAndStyles() {
+			wp_register_script( 'muut', '//cdn.moot.it/1/moot.' . $this->getOption( 'language', 'en' ) . '.min.js', array( 'jquery' ), '1', true );
 			wp_register_script( 'muut-admin-functions', $this->pluginUrl . 'resources/admin-functions.js', array( 'jquery' ), '1.0', true );
 		}
 
@@ -389,6 +359,19 @@ if ( !class_exists( 'Muut' ) ) {
 			$screen = get_current_screen();
 			if ( $screen->id == 'page' ) {
 				wp_enqueue_script( 'muut-admin-functions' );
+			}
+		}
+
+		/**
+		 * Enqueues scripts for the frontend.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function enqueueFrontendScripts() {
+			if ( Muut_Forum_Page_Utility::isForumPage( get_the_ID() ) ) {
+				wp_enqueue_script( 'muut' );
 			}
 		}
 
@@ -737,16 +720,14 @@ if ( !class_exists( 'Muut' ) ) {
 				return;
 
 			if ( $_POST['muut_is_forum_page'] == '0' ) {
-				delete_post_meta( $post_id, 'muut_is_forum_page' );
-				delete_post_meta( $post_id, 'muut_forum' );
+				Muut_Forum_Page_Utility::removeAsForumPage( $post_id );
 			} elseif ( $_POST['muut_is_forum_page'] == '1' ) {
-				update_post_meta( $post_id, 'muut_is_forum_page', '1' );
+				Muut_Forum_Page_Utility::setAsForumPage( $post_id );
 			}
 
 			if ( $_POST['muut_is_forum_page'] == '1' ) {
-				update_post_meta( $post_id, 'muut_forum', $_POST['muut_forum'] );
+				Muut_Forum_Page_Utility::setForumPageRemotePath( $post_id, $_POST['muut_forum_remote_path'] );
 			}
-
 		}
 
 	}
