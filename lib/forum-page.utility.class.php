@@ -50,22 +50,6 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 		const META_FORUMPAGESETTINGS = 'muut_forum_page_settings';
 
 		/**
-		 * The meta name for the forum page's general options (those not covered by the others).
-		 */
-		const META_ISTHREADED = 'muut_forum_page_is_threaded';
-
-
-		/**
-		 * The meta name for the forum page's option to show who is online above the forum content.
-		 */
-		const META_SHOWONLINE = 'muut_forum_page_show_online';
-
-		/**
-		 * The meta name for the forum page's option to allow users to upload images.
-		 */
-		const META_ALLOWUPLOADS = 'muut_forum_page_allow_uploads';
-
-		/**
 		 * The key for a forum page's specific setting
 		 */
 
@@ -207,6 +191,8 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 			$current_settings = get_post_meta( $page_id, self::META_FORUMPAGESETTINGS, true );
 
 			$settings = apply_filters( 'muut_forum_page_settings', wp_parse_args( $current_settings, $forum_page_defaults ), $page_id );
+
+			error_log( $option_name . ': ' . $settings[$option_name] );
 
 			return isset( $settings[$option_name] ) ? $settings[$option_name] : $default;
 		}

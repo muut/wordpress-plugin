@@ -14,7 +14,7 @@ jQuery(document).ready( function($) {
     if ($('#muut_forum').val() == ''){
       $('#muut_forum').val($('#editable-post-name').text());
     }
-    $('#muut_page_specify_forum').show();
+    $('#muut_page_forum_settings').show();
     $('#page_template').prop('disabled', 'disabled');
     // Make sure the page template is set as default, even though we are disabling the dropdown.
     $('<input />').attr('type', 'hidden')
@@ -32,7 +32,7 @@ jQuery(document).ready( function($) {
 
   // If we change it to not being a forum, make sure to hide the name field and re-enable the template selector.
   $( '#muut_is_forum_false').click( function() {
-    $('#muut_page_specify_forum').hide();
+    $('#muut_page_forum_settings').hide();
     $('#page_template').prop('disabled', false);
   });
 });
