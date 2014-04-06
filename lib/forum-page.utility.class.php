@@ -217,9 +217,13 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 			$settings = ' ';
 			if ( !self::getForumPageOption( $page_id, 'show_online', true ) ) {
 				$settings .= 'data-show_online="false" ';
+			} else {
+				$settings .= 'data-show_online="true" ';
 			}
-			if ( !self::getForumPageOption( $page_id, 'data-upload', false ) ) {
+			if ( !self::getForumPageOption( $page_id, 'allow_uploads', false ) ) {
 				$settings .= 'data-upload="false" ';
+			} else {
+				$settings .= 'data-upload="true" ';
 			}
 
 			if ( !$path )
