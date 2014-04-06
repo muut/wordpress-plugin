@@ -312,6 +312,47 @@ if ( !class_exists( 'Muut' ) ) {
 		}
 
 		/**
+		 * Gets the Muut language equivalent of a given WordPress language abbreviation.
+		 *
+		 * @param string $muut_lang The WordPress abbreviation for a given language.
+		 * @return string The Muut equivalent language string.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function getMuutLangEquivalent( $wp_lang ) {
+			// Format is muut_lang => wp_lang.
+			$muut_langs = apply_filters( 'muut_and_wp_langs', array(
+				'ar' => 'ar',
+				'pt_BR' => 'pt-br',
+				'bg_BG' => 'bg',
+				'zh_CN'=> 'ch',
+				'zh_TW' => 'tw',
+				'nl_NL' => 'nl',
+				'en_US' => 'en',
+				'fi' => 'fi',
+				'fr_FR' => 'fr',
+				'de_DE' => 'de',
+				'hu_HU' => 'hu',
+				'he_IL' => 'he',
+				'id_ID' => 'id',
+				'ja' => 'ja',
+				'ko_KR' => 'ko',
+				'pl_PL' => 'pl',
+				'ru_RU' => 'ru',
+				'es_ES' => 'es',
+				'sv_SE' => 'se',
+				'ta_IN' => 'ta',
+				'tr_TR' => 'tr',
+			) );
+
+			if ( in_array( $wp_lang, array_keys( $muut_langs ) ) ) {
+				return $muut_langs[$wp_lang];
+			} else {
+				return 'en';
+			}
+		}
+
+		/**
 		 * Registers the various scripts and styles that we may be using in the plugin.
 		 *
 		 * @return void
@@ -333,10 +374,16 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		protected function getOptionsDefaults() {
 
+			$default_lang = 'en';
+
+			if ( defined( 'WPLANG' ) ) {
+				$default_lang = $this->getMuutLangEquivalent( WPLANG );
+			}
+
 			$defaults = apply_filters( 'muut_options_defaults', array(
 				'remote_forum_name' => '',
 				// TODO: Make this match whatever language is set for the site.
-				'language' => 'en',
+				'language' => $default_lang,
 				'replace_comments' => false,
 				'forum_page_defaults' => array(
 					'is_threaded' => false,
@@ -482,7 +529,7 @@ if ( !class_exists( 'Muut' ) ) {
 		protected function getOptions() {
 			if ( !isset( $this->options ) || is_null( $this->options ) ) {
 				$options = get_option( self::OPTIONNAME, array() );
-				$this->options = apply_filters( 'muut_get_options', wp_parse_args( $options, $this->getOptionsDefaults() ) );
+				$this->options = apply_filters( 'muut_get_options', $options );
 			}
 			return $this->options;
 		}
@@ -498,6 +545,12 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function getOption( $option_name, $default = '' ) {
 			$options = $this->getOptions();
+
+			$default_options = $this->getOptionsDefaults();
+
+			if ( in_array( $option_name, array_keys( $default_options ) ) ) {
+				$default = $default_options[$option_name];
+			}
 
 			if ( !is_string( $option_name ) )
 				return false;
@@ -575,6 +628,7 @@ if ( !class_exists( 'Muut' ) ) {
 
 				$settings = $this->settingsValidate( $_POST['setting'] );
 
+				// Save all the options by passing an array into setOption.
 				// Save all the options by passing an array into setOption.
 				if ( $this->setOption( $settings ) || $old_options == $this->getOptions() ) {
 					// Display success notice if they were updated or matched the previous settings.
