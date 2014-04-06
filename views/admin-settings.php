@@ -7,6 +7,8 @@
  */
 $languages = muut()->getLanguages();
 $current_language = muut()->getOption( 'language', 'en' );
+
+$forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 ?>
 
 <div class="wrap">
@@ -48,6 +50,35 @@ $current_language = muut()->getOption( 'language', 'en' );
 			</tr>
 			</tbody>
 		</table>
+		<table class="form-table">
+			<tbody>
+			<tr>
+				<th scope="row">
+					<label for="muut_is_threaded_default"><?php _e( 'Threaded Posts', 'muut' ); ?></label>
+				</th>
+				<td>
+					<input name="setting[is_threaded_default]" type="checkbox" id="muut_is_threaded_default" value="1" <?php checked( '1', $forum_page_defaults['is_threaded'] ); ?> />
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">
+					<label for="muut_show_online_default"><?php _e( 'Show Online Users', 'muut' ); ?></label>
+				</th>
+				<td>
+					<input name="setting[show_online_default]" type="checkbox" id="muut_show_online_default" value="1" <?php checked( '1', $forum_page_defaults['show_online'] ); ?> />
+				</td>
+			</tr>
+			<tr>
+				<th scope="row">
+					<label for="muut_allow_uploads_default"><?php _e( 'Allow Image Uploads', 'muut' ); ?></label>
+				</th>
+				<td>
+					<input name="setting[allow_uploads_default]" type="checkbox" id="muut_allow_uploads_default" value="1" <?php checked( '1', $forum_page_defaults['allow_uploads'] ); ?> />
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		<h3 class="title"><?php __( 'Forum Page Defaults', 'muut' ); ?></h3>
 		<p class="submit">
 			<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
 		</p>

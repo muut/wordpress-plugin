@@ -652,6 +652,7 @@ if ( !class_exists( 'Muut' ) ) {
 
 			$boolean_settings = apply_filters( 'muut_boolean_settings', array(
 				'replace_comments',
+				'is_threaded_default'
 			) );
 
 			foreach ( $boolean_settings as $boolean_setting ) {
@@ -661,6 +662,14 @@ if ( !class_exists( 'Muut' ) ) {
 			if ( isset( $settings['remote_forum_name'] ) && $settings['remote_forum_name'] != $this->getOption( 'remote_forum_name' ) ) {
 				flush_rewrite_rules( true );
 			}
+
+			// Add depth to the settings that need to be further in on the actual settings array.
+			$settings['forum_page_defaults']['is_threaded'] = $settings['is_threaded_default'];
+			$settings['forum_page_defaults']['show_online'] = $settings['show_online_default'];
+			$settings['forum_page_defaults']['allow_uploads'] = $settings['allow_uploads_default'];
+			unset( $settings['is_threaded_default'] );
+			unset( $settings['show_online_default'] );
+			unset( $settings['allow_uploads_default'] );
 
 			return apply_filters( 'muut_settings_validated', $settings );
 		}
