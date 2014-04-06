@@ -50,6 +50,7 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 			</tr>
 			</tbody>
 		</table>
+		<h3 class="title"><?php _e( 'Forum Defaults', 'muut' ); ?></h3>
 		<table class="form-table">
 			<tbody>
 			<tr>
