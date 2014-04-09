@@ -3,7 +3,7 @@
  * The main class file for the Muut plugin.
  *
  * @package   Muut
- * @copyright 2014 Moot Inc
+ * @copyright 2014 Muut Inc
  */
 
 // Don't load directly

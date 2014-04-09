@@ -4,7 +4,7 @@
  * are Muut-related.
  *
  * @package   Muut
- * @copyright 2014 Moot Inc
+ * @copyright 2014 Muut Inc
  */
 
 // Don't load directly

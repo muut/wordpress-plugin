@@ -3,7 +3,7 @@
  * The markup for the Muut page editor metabox.
  *
  * @package   Muut
- * @copyright 2014 Moot Inc
+ * @copyright 2014 Muut Inc
  */
 
 $is_forum = Muut_Forum_Page_Utility::isForumPage( get_the_ID() );

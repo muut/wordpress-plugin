@@ -3,7 +3,7 @@
  * The main page for the new Muut admin section.
  *
  * @package   Muut
- * @copyright 2014 Moot Inc
+ * @copyright 2014 Muut Inc
  */
 ?>
 <div class="wrap">

@@ -4,7 +4,7 @@
  * Responsible for all template loading functionality.
  *
  * @package   Muut
- * @copyright 2014 Moot Inc
+ * @copyright 2014 Muut Inc
  */
 
 // Don't load directly

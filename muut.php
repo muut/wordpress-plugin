@@ -1,15 +1,15 @@
 <?php
 /*
 Plugin Name: Muut
-Plugin URI: http://wordpress.org/plugins/moot/
+Plugin URI: http://wordpress.org/plugins/muut/
 Description: A complete re-imagining of what online discussions should be. Realtime forums and commenting for WordPress.
 Version: 3.0-alpha
-Author: Moot, Inc.
+Author: Muut, Inc.
 Author URI: http://muut.com
 Text Domain: muut
 */
 
-/* Copyright 2014 Moot, Inc. */
+/* Copyright 2014 Muut, Inc. */
 
 // Don't load directly.
 if ( !defined( 'ABSPATH' ) ) {

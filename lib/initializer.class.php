@@ -3,7 +3,7 @@
  * The initializer class that is responsible for initializing singleton classes only when necessary.
  *
  * @package   Muut
- * @copyright 2014 Moot Inc
+ * @copyright 2014 Muut Inc
  */
 
 // Don't load directly

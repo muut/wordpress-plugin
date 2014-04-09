@@ -6,7 +6,7 @@
  * (wp-content/themes/my-theme/muut/forum-page.php) and make any modifications you like!
  *
  * @package   Muut
- * @copyright 2014 Moot Inc
+ * @copyright 2014 Muut Inc
  */
 
 

@@ -3,7 +3,7 @@
  * The Muut settings page.
  *
  * @package   Muut
- * @copyright 2014 Moot Inc
+ * @copyright 2014 Muut Inc
  */
 $languages = muut()->getLanguages();
 $current_language = muut()->getOption( 'language', 'en' );
