@@ -61,3 +61,21 @@ function muut_get_page_forum_path( $page_id = null ) {
 
 	return Muut_Forum_Page_Utility::getRemoteForumPath( $page_id );
 }
+
+/**
+ * Get embed anchor for page.
+ *
+ * @param int $page_id The ID of the page we are getting the anchor for.
+ * @param bool $echo Whether to echo the anchor or not.
+ * @return void|string The anchor markup or void, we $echo is set to true (and we echo the markup).
+ * @author Paul Hughes
+ * @since 3.0
+ */
+function muut_forum_page_anchor( $page_id = null, $echo = true ) {
+	if ( is_null( $page_id ) ) {
+		$page_id = get_the_ID();
+	}
+
+	return Muut_Forum_Page_Utility::forumPageAnchor( $page_id, $echo );
+}
+
