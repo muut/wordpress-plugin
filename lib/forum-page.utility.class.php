@@ -192,8 +192,6 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 
 			$settings = apply_filters( 'muut_forum_page_settings', wp_parse_args( $current_settings, $forum_page_defaults ), $page_id );
 
-			error_log( $option_name . ': ' . $settings[$option_name] );
-
 			return isset( $settings[$option_name] ) ? $settings[$option_name] : $default;
 		}
 

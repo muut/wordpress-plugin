@@ -784,7 +784,6 @@ if ( !class_exists( 'Muut' ) ) {
 				return;
 
 			if ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '0' ) {
-				error_log( $_POST['muut_is_forum_page'] );
 				Muut_Forum_Page_Utility::removeAsForumPage( $post_id );
 			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' ) {
 				Muut_Forum_Page_Utility::setAsForumPage( $post_id );
@@ -809,7 +808,6 @@ if ( !class_exists( 'Muut' ) ) {
 			if ( isset( $_POST['muut_forum_allow_uploads'] ) && $_POST['muut_forum_allow_uploads'] == '1' ) {
 				Muut_Forum_Page_Utility::setForumPageOption( $post_id, 'allow_uploads', '1' );
 			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' && Muut_Forum_Page_Utility::getForumPageOption( $post_id, 'allow_uploads', '0' ) == '1' ) {
-				error_log( Muut_Forum_Page_Utility::getForumPageOption( $post_id, 'allow_uploads', '0' ) );
 				Muut_Forum_Page_Utility::setForumPageOption( $post_id, 'allow_uploads', '0' );
 			}
 		}
