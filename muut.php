@@ -5,7 +5,7 @@ Plugin URI: http://wordpress.org/plugins/moot/
 Description: A complete re-imagining of what online discussions should be. Realtime forums and commenting for WordPress.
 Version: 3.0-alpha
 Author: Moot, Inc.
-Author URI: http://moot.it
+Author URI: http://muut.com
 Text Domain: muut
 */
 

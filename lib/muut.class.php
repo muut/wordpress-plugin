@@ -41,7 +41,7 @@ if ( !class_exists( 'Muut' ) ) {
 		/**
 		 * The Muut server location.
 		 */
-		const MUUTSERVERS = 'moot.it';
+		const MUUTSERVERS = 'muut.com';
 
 		/**
 		 * @static
@@ -360,7 +360,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function registerScriptsAndStyles() {
-			wp_register_script( 'muut', '//cdn.moot.it/1/moot.' . $this->getOption( 'language', 'en' ) . '.min.js', array( 'jquery' ), '1', true );
+			wp_register_script( 'muut', '//cdn.muut.com/1/moot.' . $this->getOption( 'language', 'en' ) . '.min.js', array( 'jquery' ), '1', true );
 			wp_register_script( 'muut-admin-functions', $this->pluginUrl . 'resources/admin-functions.js', array( 'jquery' ), '1.0', true );
 		}
 
