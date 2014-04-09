@@ -78,3 +78,44 @@ function muut_forum_page_anchor( $page_id = null, $echo = true ) {
 
 	return Muut_Forum_Page_Utility::forumPageAnchor( $page_id, $echo );
 }
+
+/**
+ * Gets the comment path for a given post id.
+ *
+ * @param int $post_id The post we are getting the comments path for.
+ * @return string|false The comments path or false if there was an error retrieving them (such as override not being enabled).
+ * @author Paul Hughes
+ * @since 3.0
+ */
+function muut_get_comments_path( $post_id, $full_path = false ) {
+	if ( is_null( $post_id ) ) {
+		$post_id = get_the_ID();
+	}
+
+	if ( class_exists( 'Muut_Comment_Overrides' ) ) {
+		return Muut_Comment_Overrides::instance()->getCommentsPath( $post_id, $full_path );
+	} else {
+		return false;
+	}
+}
+
+/**
+ * Gets embed anchor for a given post comments override.
+ *
+ * @param int $post_id The post we are getting the comments anchor for.
+ * @return void|string The anchor markup or void, we $echo is set to true (and we echo the markup).
+ * @param bool $echo Whether to echo the anchor or not.
+ * @author Paul Hughes
+ * @since 3.0
+ */
+function muut_comments_override_anchor( $post_id = null, $echo = true ) {
+	if ( is_null( $post_id ) ) {
+		$post_id = get_the_ID();
+	}
+
+	if ( class_exists( 'Muut_Comment_Overrides' ) ) {
+		return Muut_Comment_Overrides::instance()->commentsOverrideAnchor( $post_id, $echo );
+	} else {
+		return false;
+	}
+}

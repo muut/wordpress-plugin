@@ -69,6 +69,8 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		protected function addInitListeners() {
 			add_action( 'template_redirect', array( $this, 'initTemplateLoader' ) );
 			add_action( 'init', array( $this, 'initForumPageUtility' ) );
+			add_action( 'init', array( $this, 'initCommentOverrides' ) );
+			add_filter( 'comments_template', array( $this, 'initTemplateLoader' ) );
 		}
 
 		/**
@@ -113,8 +115,11 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 */
 		public function initCommentOverrides() {
 			$class = 'Muut_Comment_Overrides';
-			if ( !in_array( $class, $this->alreadyInit ) ) {
+			if ( !in_array( $class, $this->alreadyInit ) && muut()->getOption( 'replace_comments', false ) ) {
 				require_once( muut()->getPluginPath() . 'lib/comment-overrides.class.php');
+				if ( class_exists( $class ) ) {
+					$class::instance();
+				}
 				$this->alreadyInit[] = $class;
 			}
 		}

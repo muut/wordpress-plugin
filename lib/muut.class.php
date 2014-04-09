@@ -417,7 +417,8 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function enqueueFrontendScripts() {
-			if ( Muut_Forum_Page_Utility::isForumPage( get_the_ID() ) ) {
+			if ( Muut_Forum_Page_Utility::isForumPage( get_the_ID() )
+			|| ( $this->getOption( 'replace_comments' ) && is_singular() ) ) {
 				wp_enqueue_script( 'muut' );
 			}
 		}
