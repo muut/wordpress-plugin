@@ -96,7 +96,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			if ( $domain == '' ) {
 				// Assign the domain name to the post for permanent reference.
 				$domain = $_SERVER['SERVER_NAME'];
-				update_post_meta( $post_id, 'muut_post_domain', $domain );
+				update_post_meta( $post_id, 'muut_post_domain', apply_filters( 'muut_post_comments_domain', $domain, $post_id ) );
 			}
 
 			$path = $domain . '/' . $post_id . ':comments';
