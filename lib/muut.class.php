@@ -782,14 +782,14 @@ if ( !class_exists( 'Muut' ) ) {
 			if ( get_post_type( $post ) != 'page' )
 				return;
 
-			if ( $_POST['muut_is_forum_page'] == '0' ) {
+			if ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '0' ) {
 				error_log( $_POST['muut_is_forum_page'] );
 				Muut_Forum_Page_Utility::removeAsForumPage( $post_id );
-			} elseif ( $_POST['muut_is_forum_page'] == '1' ) {
+			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' ) {
 				Muut_Forum_Page_Utility::setAsForumPage( $post_id );
 			}
 
-			if ( $_POST['muut_is_forum_page'] == '1' ) {
+			if ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' ) {
 				Muut_Forum_Page_Utility::setForumPageRemotePath( $post_id, $_POST['muut_forum_remote_path'] );
 			}
 
