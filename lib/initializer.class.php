@@ -103,5 +103,20 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 				$this->alreadyInit[] = $class;
 			}
 		}
+
+		/**
+		 * Initializes the Comment Overrides class (when WP comments over overridden by Muut).
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function initCommentOverrides() {
+			$class = 'Muut_Comment_Overrides';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/comment-overrides.class.php');
+				$this->alreadyInit[] = $class;
+			}
+		}
 	}
 }
