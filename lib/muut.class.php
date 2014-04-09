@@ -664,9 +664,9 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			// Add depth to the settings that need to be further in on the actual settings array.
-			$settings['forum_page_defaults']['is_threaded'] = $settings['is_threaded_default'];
-			$settings['forum_page_defaults']['show_online'] = $settings['show_online_default'];
-			$settings['forum_page_defaults']['allow_uploads'] = $settings['allow_uploads_default'];
+			$settings['forum_page_defaults']['is_threaded'] = isset( $settings['is_threaded_default'] ) ? $settings['is_threaded_default'] : null;
+			$settings['forum_page_defaults']['show_online'] = isset( $settings['show_online_default'] ) ? $settings['show_online_default'] : null;
+			$settings['forum_page_defaults']['allow_uploads'] = isset( $settings['allow_uploads_default'] ) ? $settings['allow_uploads_default'] : null;
 			unset( $settings['is_threaded_default'] );
 			unset( $settings['show_online_default'] );
 			unset( $settings['allow_uploads_default'] );
