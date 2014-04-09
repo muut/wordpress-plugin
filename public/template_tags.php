@@ -78,4 +78,3 @@ function muut_forum_page_anchor( $page_id = null, $echo = true ) {
 
 	return Muut_Forum_Page_Utility::forumPageAnchor( $page_id, $echo );
 }
-
