@@ -388,6 +388,7 @@ if ( !class_exists( 'Muut' ) ) {
 				// TODO: Make this match whatever language is set for the site.
 				'language' => $default_lang,
 				'replace_comments' => false,
+				'override_all_comments' => false,
 				'forum_page_defaults' => array(
 					'is_threaded' => false,
 					'show_online' => true,
@@ -658,7 +659,10 @@ if ( !class_exists( 'Muut' ) ) {
 
 			$boolean_settings = apply_filters( 'muut_boolean_settings', array(
 				'replace_comments',
-				'is_threaded_default'
+				'override_all_comments',
+				'is_threaded_default',
+				'show_online_default',
+				'allow_uploads_default',
 			) );
 
 			foreach ( $boolean_settings as $boolean_setting ) {
@@ -670,9 +674,9 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			// Add depth to the settings that need to be further in on the actual settings array.
-			$settings['forum_page_defaults']['is_threaded'] = isset( $settings['is_threaded_default'] ) ? $settings['is_threaded_default'] : null;
-			$settings['forum_page_defaults']['show_online'] = isset( $settings['show_online_default'] ) ? $settings['show_online_default'] : null;
-			$settings['forum_page_defaults']['allow_uploads'] = isset( $settings['allow_uploads_default'] ) ? $settings['allow_uploads_default'] : null;
+			$settings['forum_page_defaults']['is_threaded'] = $settings['is_threaded_default'];
+			$settings['forum_page_defaults']['show_online'] = $settings['show_online_default'];
+			$settings['forum_page_defaults']['allow_uploads'] = $settings['allow_uploads_default'];
 			unset( $settings['is_threaded_default'] );
 			unset( $settings['show_online_default'] );
 			unset( $settings['allow_uploads_default'] );
