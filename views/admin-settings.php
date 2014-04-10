@@ -63,7 +63,8 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 			</tr>
 			</tbody>
 		</table>
-		<h3 class="title"><?php _e( 'Forum Defaults', 'muut' ); ?></h3>
+		<h3 class="title"><?php _e( 'Forum Page Defaults', 'muut' ); ?></h3>
+		<p><?php _e( 'These can be changed for individual pages when you create/edit them.', 'muut' ); ?></p>
 		<table class="form-table">
 			<tbody>
 			<tr>
