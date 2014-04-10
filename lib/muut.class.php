@@ -141,7 +141,8 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since  3.0
 		 */
 		protected function addFilters() {
-
+			add_filter( 'body_class', array( $this, 'addBodyClasses' ) );
+			add_filter( 'admin_body_class', array( $this, 'addAdminBodyClasses' ) );
 		}
 
 		/**
@@ -362,6 +363,8 @@ if ( !class_exists( 'Muut' ) ) {
 		public function registerScriptsAndStyles() {
 			wp_register_script( 'muut', '//cdn.muut.com/1/moot.' . $this->getOption( 'language', 'en' ) . '.min.js', array( 'jquery' ), '1', true );
 			wp_register_script( 'muut-admin-functions', $this->pluginUrl . 'resources/admin-functions.js', array( 'jquery' ), '1.0', true );
+
+			wp_register_style('muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
 		}
 
 		/**
@@ -404,8 +407,10 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function enqueueAdminScripts() {
 			$screen = get_current_screen();
-			if ( $screen->id == 'page' ) {
+			if ( $screen->id == 'page' || $screen->id == self::SLUG . '_page_muut_settings' ) {
 				wp_enqueue_script( 'muut-admin-functions' );
+
+				wp_enqueue_style( 'muut-admin-style' );
 			}
 		}
 
@@ -810,6 +815,38 @@ if ( !class_exists( 'Muut' ) ) {
 			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' && Muut_Forum_Page_Utility::getForumPageOption( $post_id, 'allow_uploads', '0' ) == '1' ) {
 				Muut_Forum_Page_Utility::setForumPageOption( $post_id, 'allow_uploads', '0' );
 			}
+		}
+
+		/**
+		 * Adds the proper body class(es) for admin depending on the admin page being loaded.
+		 *
+		 * @param string $classes The current string of body classes.
+		 * @return string The modified array of body classes
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function addAdminBodyClasses( $classes ) {
+			$screen = get_current_screen();
+
+			if ( $screen->id == self::SLUG . '_page_muut_settings' ) {
+				$classes .= 'muut_settings';
+			}
+
+			return $classes;
+		}
+
+		/**
+		 * Adds the proper body class(es) depending on the page being loaded.
+		 *
+		 * @param array $classes The current array of body classes.
+		 * @return array The modified array of body classes
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function addBodyClasses( $classes ) {
+			// Add body class functionality for the fronted.
+
+			return $classes;
 		}
 
 	}
