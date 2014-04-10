@@ -40,12 +40,25 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 					</select>
 				</td>
 			</tr>
+			</tbody>
+		</table>
+		<h3 class="title"><?php _e( 'Post Commenting', 'muut' ); ?></h3>
+		<table class="form-table">
+			<tbody>
 			<tr>
 				<th scope="row">
 					<label for="muut_replace_comments"><?php _e( 'Use Muut for commenting', 'muut' ); ?></label>
 				</th>
 				<td>
 					<input name="setting[replace_comments]" type="checkbox" id="muut_replace_comments" value="1" <?php checked( '1', muut()->getOption( 'replace_comments', '0' ) ); ?> />
+				</td>
+			</tr>
+			<tr data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')">
+				<th scope="row">
+					<label for="muut_override_all_comments"><?php _e( 'Override existing comments', 'muut' ); ?></label>
+				</th>
+				<td>
+					<input name="setting[override_all_comments]" type="checkbox" id="muut_override_all_comments" value="1" <?php checked( '1', muut()->getOption( 'override_all_comments', '0' ) ); ?> />
 				</td>
 			</tr>
 			</tbody>

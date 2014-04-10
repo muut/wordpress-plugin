@@ -1,0 +1,8 @@
+.muut_settings .form-table {
+    margin-left: 30px;
+}
+
+.muut_settings .form-table tr.disabled th,
+.muut_settings .form-table tr.disabled td {
+    color: #999;
+}

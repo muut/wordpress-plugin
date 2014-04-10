@@ -141,7 +141,8 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since  3.0
 		 */
 		protected function addFilters() {
-
+			add_filter( 'body_class', array( $this, 'addBodyClasses' ) );
+			add_filter( 'admin_body_class', array( $this, 'addAdminBodyClasses' ) );
 		}
 
 		/**
@@ -362,6 +363,8 @@ if ( !class_exists( 'Muut' ) ) {
 		public function registerScriptsAndStyles() {
 			wp_register_script( 'muut', '//cdn.muut.com/1/moot.' . $this->getOption( 'language', 'en' ) . '.min.js', array( 'jquery' ), '1', true );
 			wp_register_script( 'muut-admin-functions', $this->pluginUrl . 'resources/admin-functions.js', array( 'jquery' ), '1.0', true );
+
+			wp_register_style('muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
 		}
 
 		/**
@@ -385,6 +388,7 @@ if ( !class_exists( 'Muut' ) ) {
 				// TODO: Make this match whatever language is set for the site.
 				'language' => $default_lang,
 				'replace_comments' => false,
+				'override_all_comments' => false,
 				'forum_page_defaults' => array(
 					'is_threaded' => false,
 					'show_online' => true,
@@ -404,8 +408,10 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function enqueueAdminScripts() {
 			$screen = get_current_screen();
-			if ( $screen->id == 'page' ) {
+			if ( $screen->id == 'page' || $screen->id == self::SLUG . '_page_muut_settings' ) {
 				wp_enqueue_script( 'muut-admin-functions' );
+
+				wp_enqueue_style( 'muut-admin-style' );
 			}
 		}
 
@@ -653,7 +659,10 @@ if ( !class_exists( 'Muut' ) ) {
 
 			$boolean_settings = apply_filters( 'muut_boolean_settings', array(
 				'replace_comments',
-				'is_threaded_default'
+				'override_all_comments',
+				'is_threaded_default',
+				'show_online_default',
+				'allow_uploads_default',
 			) );
 
 			foreach ( $boolean_settings as $boolean_setting ) {
@@ -665,9 +674,9 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			// Add depth to the settings that need to be further in on the actual settings array.
-			$settings['forum_page_defaults']['is_threaded'] = isset( $settings['is_threaded_default'] ) ? $settings['is_threaded_default'] : null;
-			$settings['forum_page_defaults']['show_online'] = isset( $settings['show_online_default'] ) ? $settings['show_online_default'] : null;
-			$settings['forum_page_defaults']['allow_uploads'] = isset( $settings['allow_uploads_default'] ) ? $settings['allow_uploads_default'] : null;
+			$settings['forum_page_defaults']['is_threaded'] = $settings['is_threaded_default'];
+			$settings['forum_page_defaults']['show_online'] = $settings['show_online_default'];
+			$settings['forum_page_defaults']['allow_uploads'] = $settings['allow_uploads_default'];
 			unset( $settings['is_threaded_default'] );
 			unset( $settings['show_online_default'] );
 			unset( $settings['allow_uploads_default'] );
@@ -810,6 +819,38 @@ if ( !class_exists( 'Muut' ) ) {
 			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' && Muut_Forum_Page_Utility::getForumPageOption( $post_id, 'allow_uploads', '0' ) == '1' ) {
 				Muut_Forum_Page_Utility::setForumPageOption( $post_id, 'allow_uploads', '0' );
 			}
+		}
+
+		/**
+		 * Adds the proper body class(es) for admin depending on the admin page being loaded.
+		 *
+		 * @param string $classes The current string of body classes.
+		 * @return string The modified array of body classes
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function addAdminBodyClasses( $classes ) {
+			$screen = get_current_screen();
+
+			if ( $screen->id == self::SLUG . '_page_muut_settings' ) {
+				$classes .= 'muut_settings';
+			}
+
+			return $classes;
+		}
+
+		/**
+		 * Adds the proper body class(es) depending on the page being loaded.
+		 *
+		 * @param array $classes The current array of body classes.
+		 * @return array The modified array of body classes
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function addBodyClasses( $classes ) {
+			// Add body class functionality for the fronted.
+
+			return $classes;
 		}
 
 	}

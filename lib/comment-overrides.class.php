@@ -74,7 +74,6 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 		 */
 		protected function addFilters() {
 			add_filter( 'comments_template', array( $this, 'commentsTemplate' ) );
-			//add_filter( 'body_class', array( $this, 'addBodyClass' ) );
 		}
 
 		/**
@@ -119,8 +118,10 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			if ( muut()->getOption( 'replace_comments', false ) ) {
 				global $post;
 
-				// TODO: Make it so it checks if the post type is supposed to be overridden.
-				$template = Muut_Template_Loader::instance()->locateTemplate( 'comments.php' );
+				if ( ( !muut()->getOption( 'override_all_comments', false ) && get_comments_number() == 0 ) || muut()->getOption( 'override_all_comments', false ) ) {
+					// TODO: Make it so it checks if the post type is supposed to be overridden.
+					$template = Muut_Template_Loader::instance()->locateTemplate( 'comments.php' );
+				}
 			}
 
 			return $template;
