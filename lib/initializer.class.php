@@ -85,7 +85,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			if ( !in_array( $class, $this->alreadyInit ) ) {
 				require_once( muut()->getPluginPath() . 'lib/template-loader.class.php');
 				if ( class_exists( $class ) ) {
-					$class::instance();
+					Muut_Template_Loader::instance();
 				}
 				$this->alreadyInit[] = $class;
 			}
@@ -118,7 +118,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			if ( !in_array( $class, $this->alreadyInit ) && muut()->getOption( 'replace_comments', false ) ) {
 				require_once( muut()->getPluginPath() . 'lib/comment-overrides.class.php');
 				if ( class_exists( $class ) ) {
-					$class::instance();
+					Muut_Comment_Overrides::instance();
 				}
 				$this->alreadyInit[] = $class;
 			}
