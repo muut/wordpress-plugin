@@ -74,7 +74,6 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 		 */
 		protected function addFilters() {
 			add_filter( 'comments_template', array( $this, 'commentsTemplate' ) );
-			//add_filter( 'body_class', array( $this, 'addBodyClass' ) );
 		}
 
 		/**
