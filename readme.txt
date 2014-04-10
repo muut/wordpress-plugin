@@ -7,4 +7,4 @@ Stable tag: 3.0
 License: MIT
 License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
 
-Realtime forums and commenting for WordPress.
+Realtime forums and commenting for WordPress. Webiste is http://muut.com.
