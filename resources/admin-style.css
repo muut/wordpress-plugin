@@ -6,3 +6,7 @@
 .muut_settings .form-table tr.disabled td {
     color: #999;
 }
+
+#muut_page_forum_settings {
+    margin-top: 10px;
+}

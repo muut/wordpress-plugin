@@ -799,7 +799,19 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			if ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' ) {
-				Muut_Forum_Page_Utility::setForumPageRemotePath( $post_id, $_POST['muut_forum_remote_path'] );
+				// If no path is saved yet, let's generate one and save it.
+				// An already saved path CANNOT be changed (even though the post slug and ancestry can).
+				if ( !Muut_Forum_Page_Utility::getRemoteForumPath( $post_id ) ) {
+					$path = '/' . $post->post_name;
+					$ancestors = get_post_ancestors( $post );
+
+					foreach ( $ancestors as $ancestor ) {
+						if ( Muut_Forum_Page_Utility::isForumPage( $ancestor ) && Muut_Forum_Page_Utility::getForumPageOption( $ancestor, 'is_threaded', false ) ) {
+							$path = '/' . Muut_Forum_Page_Utility::getRemoteForumPath( $ancestor ) . $path;
+						}
+					}
+					Muut_Forum_Page_Utility::setForumPageRemotePath( $post_id, $path );
+				}
 			}
 
 			if ( isset( $_POST['muut_forum_is_threaded'] ) && $_POST['muut_forum_is_threaded'] == '1' ) {
