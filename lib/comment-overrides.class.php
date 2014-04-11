@@ -115,10 +115,14 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 		 * @since 3.0
 		 */
 		public function commentsTemplate( $template ) {
-			if ( muut()->getOption( 'replace_comments', false ) ) {
-				global $post;
+			global $post;
+			$disabled_post_types = apply_filters( 'muut_disabled_comment_override_post_types', array() );
 
-				if ( ( !muut()->getOption( 'override_all_comments', false ) && get_comments_number() == 0 ) || muut()->getOption( 'override_all_comments', false ) ) {
+			if ( muut()->getOption( 'replace_comments', false )
+				&& !in_array( $post->post_type, $disabled_post_types ) ) {
+
+				if ( ( !muut()->getOption( 'override_all_comments', false ) && get_comments_number() == 0 )
+					|| muut()->getOption( 'override_all_comments', false ) ) {
 					// TODO: Make it so it checks if the post type is supposed to be overridden.
 					$template = Muut_Template_Loader::instance()->locateTemplate( 'comments.php' );
 				}
