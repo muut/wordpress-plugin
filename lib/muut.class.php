@@ -728,11 +728,11 @@ if ( !class_exists( 'Muut' ) ) {
 
 			add_submenu_page(
 				self::SLUG,
-				__( 'Muut Upgrades', 'muut' ),
-				__( 'Upgrades', 'muut' ),
-				'manage_options',
-				'muut_upgrades',
-				array( $this, 'renderAdminUpgradesPage' )
+				__( 'Muut Custom Navigation', 'muut' ),
+				__( 'Custom Navigation', 'muut' ),
+				'edit_pages',
+				'muut_custom_navigation',
+				array( $this, 'renderAdminCustomNavPage' )
 			);
 		}
 
@@ -769,14 +769,19 @@ if ( !class_exists( 'Muut' ) ) {
 		}
 
 		/**
-		 * Renders the Muut upgrades page.
+		 * Renders the Muut Custom Navigation page, which interacts with the Muut Forum Category CPT.
 		 *
 		 * @return void
 		 * @author Paul Hughes
 		 * @since  3.0
 		 */
-		public function renderAdminUpgradesPage() {
-			// Print the content for the Muut upgrades page.
+		public function renderAdminCustomNavPage() {
+			// Confirm that this function is being called from a valid callback.
+			if ( $this->adminBail( self::SLUG . '_page_muut_custom_navigation' ) ) {
+				return;
+			}
+
+			include( $this->pluginPath . 'views/admin-custom-nav.php');
 		}
 
 		/**

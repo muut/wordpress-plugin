@@ -28,6 +28,11 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 	{
 
 		/**
+		 * The name for the custom post type for Forum Categories.
+		 */
+		const FORUMCATEGORY_POSTTYPE = 'muut_forum_category';
+
+		/**
 		 * Make it impossible to instantiate the class by declaring __construct() as private.
 		 *
 		 * @return Muut_Forum_Category_Utility (Except it can never be called).
@@ -68,7 +73,7 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 				'hierarchical' => true,
 			);
 
-			register_post_type( 'muut_forum_category', $args );
+			register_post_type( self::FORUMCATEGORY_POSTTYPE, $args );
 		}
 	}
 }
