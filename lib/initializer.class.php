@@ -69,6 +69,8 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		protected function addInitListeners() {
 			add_action( 'template_redirect', array( $this, 'initTemplateLoader' ) );
 			add_action( 'init', array( $this, 'initForumPageUtility' ) );
+			add_action( 'init', array( $this, 'initForumCategoryUtility' ), 10 );
+			add_action( 'init', array( 'Muut_Forum_Category_Utility', 'registerPostType' ), 20 );
 			add_action( 'init', array( $this, 'initCommentOverrides' ) );
 			add_filter( 'comments_template', array( $this, 'initTemplateLoader' ) );
 		}
@@ -120,6 +122,21 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 				if ( class_exists( $class ) ) {
 					Muut_Comment_Overrides::instance();
 				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the Forum Category utility class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function initForumCategoryUtility() {
+			$class = 'Muut_Forum_Category_Utility';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/forum-category.utility.class.php' );
 				$this->alreadyInit[] = $class;
 			}
 		}

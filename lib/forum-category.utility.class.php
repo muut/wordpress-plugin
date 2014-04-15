@@ -36,6 +36,39 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 		 */
 		private function __construct() {}
 
-		
+		/**
+		 * Register the Forum Category custom post type (CPT).
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function registerPostType() {
+			$labels = array(
+				'name' => _x( 'Forum Categories', 'post type general name', 'muut' ),
+				'singular_name' => _x( 'Forum Category', 'post type singular name', 'muut' ),
+				'menu_name' => _x( 'Categories', 'admin menu', 'muut' ),
+				'name_admin_bar' => _x( 'Category', 'add new on admin bar', 'muut' ),
+				'add_new' => _x( 'Add New', 'book', 'muut' ),
+				'add_new_item' => __( 'Add New Category', 'muut' ),
+				'new_item' => __( 'New Forum Category', 'muut' ),
+				'edit_item' => __( 'Edit Forum Category', 'muut' ),
+				'view_item' => __( 'View Category', 'muut' ),
+				'all_items' => __( 'All Forum Categories', 'muut' ),
+				'search_items' => __( 'Search Forum Categories', 'muut' ),
+				'parent_item_colon' => __( 'Parent Categories:', 'muut' ),
+				'not_found' => __( 'No forum categories found.', 'muut' ),
+				'not_found_in_trash' => __( 'No forum categories found in Trash.', 'muut' ),
+			);
+
+			$args = array(
+				'labels' => $labels,
+				'public' => false,
+				'capability_type' => 'page',
+				'hierarchical' => true,
+			);
+
+			register_post_type( 'muut_forum_category', $args );
+		}
 	}
 }

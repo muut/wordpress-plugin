@@ -106,9 +106,9 @@ if ( !class_exists( 'Muut' ) ) {
 			$this->pluginUrl = trailingslashit( plugins_url( '', dirname( __FILE__ ) ) );
 			$this->adminNotices = array();
 
+			$this->loadLibraries();
 			$this->addActions();
 			$this->addFilters();
-			$this->loadLibraries();
 		}
 
 		/**
