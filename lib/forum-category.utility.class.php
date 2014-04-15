@@ -33,6 +33,11 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 		const FORUMCATEGORY_POSTTYPE = 'muut_forum_category';
 
 		/**
+		 * The name for the forum category header taxonomy.
+		 */
+		const FORUMCATEGORYHEADER_TAXONOMY = 'muut_forum_category_header';
+
+		/**
 		 * Make it impossible to instantiate the class by declaring __construct() as private.
 		 *
 		 * @return Muut_Forum_Category_Utility (Except it can never be called).
@@ -49,7 +54,7 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 		 * @since 3.0
 		 */
 		public static function registerPostType() {
-			$labels = array(
+			$post_type_labels = array(
 				'name' => _x( 'Forum Categories', 'post type general name', 'muut' ),
 				'singular_name' => _x( 'Forum Category', 'post type singular name', 'muut' ),
 				'menu_name' => _x( 'Categories', 'admin menu', 'muut' ),
@@ -66,14 +71,40 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 				'not_found_in_trash' => __( 'No forum categories found in Trash.', 'muut' ),
 			);
 
-			$args = array(
-				'labels' => $labels,
+			$post_type_args = array(
+				'labels' => $post_type_labels,
 				'public' => false,
 				'capability_type' => 'page',
 				'hierarchical' => true,
+				'taxonomies' => array(
+					'muut_forum_category_header',
+				),
 			);
 
-			register_post_type( self::FORUMCATEGORY_POSTTYPE, $args );
+			register_post_type( self::FORUMCATEGORY_POSTTYPE, $post_type_args );
+
+
+			$taxonomy_labels = array(
+				'name' => _x( 'Forum Category Headers', 'taxonomy general name', 'muut' ),
+				'singular_name' => _x( 'Forum Category Header', 'taxonomy singular name', 'muut' ),
+				'search_items' => __( 'Search Category Headers', 'muut' ),
+				'all_items' => __( 'All Category Headers', 'muut'),
+				'parent_item' => __( 'Parent Category Header', 'muut' ),
+				'parent_item_colon' => __( 'Parent Category Header:', 'muut' ),
+				'edit_item' => __( 'Edit Category Header', 'muut' ),
+				'update_item' => __( 'Update Category Header', 'muut' ),
+				'add_new_item' => __( 'Add New Category Header', 'muut' ),
+				'new_item_name' => __( 'New Category Header Name', 'muut' ),
+				'menu_name' => __( 'Category Header', 'muut' ),
+			);
+
+			$taxonomy_args = array(
+				'labels' => $taxonomy_labels,
+				'hierarchical' => false,
+				'public' => false,
+			);
+
+			register_taxonomy( self::FORUMCATEGORYHEADER_TAXONOMY, self::FORUMCATEGORY_POSTTYPE, $taxonomy_args );
 		}
 	}
 }

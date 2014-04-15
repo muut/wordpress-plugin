@@ -72,6 +72,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			add_action( 'init', array( $this, 'initForumCategoryUtility' ), 10 );
 			add_action( 'init', array( 'Muut_Forum_Category_Utility', 'registerPostType' ), 20 );
 			add_action( 'init', array( $this, 'initCommentOverrides' ) );
+			add_action( 'admin_init', array( $this, 'adminInits' ) );
 			add_filter( 'comments_template', array( $this, 'initTemplateLoader' ) );
 		}
 
@@ -138,6 +139,38 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			if ( !in_array( $class, $this->alreadyInit ) ) {
 				require_once( muut()->getPluginPath() . 'lib/forum-category.utility.class.php' );
 				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the Admin Custom Navigation class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function initAdminCustomNav() {
+			$class = 'Muut_Admin_Custom_Navigation';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/admin/admin-custom-navigation.class.php' );
+				if ( class_exists( $class ) ) {
+					Muut_Admin_Custom_Navigation::instance();
+				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Checks some things in the admin and, from there, knows which libraries to initialize.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function adminInits() {
+			$page = isset( $_GET['page'] ) ? $_GET['page'] : '';
+			if ( $page == 'muut_custom_navigation' ) {
+				$this->initAdminCustomNav();
 			}
 		}
 	}
