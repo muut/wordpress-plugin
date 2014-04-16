@@ -106,5 +106,47 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 
 			register_taxonomy( self::FORUMCATEGORYHEADER_TAXONOMY, self::FORUMCATEGORY_POSTTYPE, $taxonomy_args );
 		}
+
+		/**
+		 * Gets a nested array of category header IDs as keys containing the category posts as a sub-array for each
+		 * header id.
+		 *
+		 * @return array The array of category headers and their categories.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function getForumCategoryHeaders() {
+			$args = array(
+				'hide_empty' => false,
+			);
+			$all_category_headers = get_terms( self::FORUMCATEGORYHEADER_TAXONOMY, $args );
+
+			$category_headers_keys = array();
+			foreach ( $all_category_headers as $header ) {
+				// Need to append 'id-' to keys to make sure they are interpreted as strings for re-ordering.
+				$category_headers_keys[$header->slug] = $header;
+			}
+
+			$order_of_headers = muut()->getOption( 'muut_category_headers', array() );
+
+			$category_headers_sorted = array_merge( array_flip( $order_of_headers ), $category_headers_keys );
+
+			$category_headers = array();
+
+			foreach( $category_headers_sorted as $header ) {
+				$args = array(
+					'posts_per_page' => '-1',
+					self::FORUMCATEGORYHEADER_TAXONOMY => $header->slug,
+					'orderby' => 'menu_order',
+					'order' => 'asc',
+					'post_type' => self::FORUMCATEGORY_POSTTYPE,
+				);
+				$category_posts = get_posts( $args );
+
+				$category_headers[$header->term_id] = $category_posts;
+			}
+
+			return $category_headers;
+		}
 	}
 }

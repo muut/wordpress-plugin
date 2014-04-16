@@ -9,6 +9,9 @@
  */
 jQuery(document).ready( function($) {
 
+  /********************************************/
+  /* CODE FOR FORUM PAGE EDITOR FUNCTIONALITY */
+  /********************************************/
   // If this is a Muut forum, make sure to show the forum name field and disable the template selector.
   $('#muut_is_forum_true').click( function() {
     if ($('#muut_forum').val() == ''){
@@ -63,4 +66,21 @@ jQuery(document).ready( function($) {
   // It will run a check that is the function (in string form) stored in the same tr's data-muut_require_func attribute.
   // If true, it enables assigns that tr the class "disabled" and any inputs in that tr are disabled.
   $('body.muut_settings tr[data-muut_requires]').check_requires_fields();
+
+  /********************************************/
+  /* CODE FOR CUSTOM NAVIGATION FUNCTIONALITY */
+  /********************************************/
+
+  var muut_inserted_header_block_index = 1;
+  $('#muut_add_category_header').on('click', function() {
+    if ( typeof categoryHeaderBlockTemplate === 'string' ) {
+      var insert_header_replacements = { '%ID%': 'new-' + muut_inserted_header_block_index, '%TITLE%': 'New Category' };
+      var insert_block = categoryHeaderBlockTemplate.replace(/%\w+%/g, function(all) {
+        return insert_header_replacements[all] || all;
+      });
+      $('#muut_forum_nav_headers').prepend( insert_block );
+      muut_inserted_header_block_index++;
+    }
+  });
+
 });

@@ -40,3 +40,10 @@
 #muut_forum_nav_headers .muut-category-header-content {
     padding: 10px;
 }
+
+.muut_page_muut_custom_navigation #col-right {
+    width: 40%;
+}
+.muut_page_muut_custom_navigation #col-left {
+    width: 60%;
+}

@@ -783,7 +783,7 @@ if ( !class_exists( 'Muut' ) ) {
 				return;
 			}
 
-			include( $this->pluginPath . 'views/admin-custom-nav.php');
+			include( $this->pluginPath . 'views/admin-custom-navigation.php');
 		}
 
 		/**
