@@ -365,6 +365,19 @@ if ( !class_exists( 'Muut' ) ) {
 			wp_register_script( 'muut-admin-functions', $this->pluginUrl . 'resources/admin-functions.js', array( 'jquery' ), '1.0', true );
 
 			wp_register_style('muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
+
+			// Localization rules.
+			$localizations = array(
+				'muut-admin-functions' => array(
+					'new_header' => __( 'New Header', 'muut' ),
+				),
+			);
+
+			foreach ( $localizations as $key => $array ) {
+				$new_key = str_replace( '-', '_', $key ) . '_localized';
+
+				wp_localize_script( $key, $new_key, $array );
+			}
 		}
 
 		/**

@@ -9,6 +9,8 @@
  */
 jQuery(document).ready( function($) {
 
+  var muut_localized = muut_admin_functions_localized;
+
   /********************************************/
   /* CODE FOR FORUM PAGE EDITOR FUNCTIONALITY */
   /********************************************/
@@ -74,7 +76,7 @@ jQuery(document).ready( function($) {
   var muut_inserted_header_block_index = 1;
   $('#muut_add_category_header').on('click', function() {
     if ( typeof categoryHeaderBlockTemplate === 'string' ) {
-      var insert_header_replacements = { '%ID%': 'new-' + muut_inserted_header_block_index, '%TITLE%': 'New Category' };
+      var insert_header_replacements = { '%ID%': 'new[' + muut_inserted_header_block_index + ']', '%TITLE%': muut_localized.new_header };
       var insert_block = categoryHeaderBlockTemplate.replace(/%\w+%/g, function(all) {
         return insert_header_replacements[all] || all;
       });
