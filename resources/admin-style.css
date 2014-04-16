@@ -47,3 +47,7 @@
 .muut_page_muut_custom_navigation #col-left {
     width: 60%;
 }
+
+.muut_page_muut_custom_navigation .new_category_for_header {
+    float: right;
+}
