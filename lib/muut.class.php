@@ -363,8 +363,10 @@ if ( !class_exists( 'Muut' ) ) {
 		public function registerScriptsAndStyles() {
 			wp_register_script( 'muut', '//cdn.muut.com/1/moot.' . $this->getOption( 'language', 'en' ) . '.min.js', array( 'jquery' ), '1', true );
 			wp_register_script( 'muut-admin-functions', $this->pluginUrl . 'resources/admin-functions.js', array( 'jquery' ), '1.0', true );
+			wp_register_script( 'x-editable', $this->pluginUrl . 'vendor/jqueryui-editable/js/jqueryui-editable.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-tooltip', 'jquery-ui-button' ), '1.5.1', true);
 
-			wp_register_style('muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
+			wp_register_style( 'muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
+			wp_register_style( 'x-editable-style', $this->pluginUrl . 'vendor/jqueryui-editable/css/jqueryui-editable.css' );
 
 			// Localization rules.
 			$localizations = array(
@@ -422,10 +424,15 @@ if ( !class_exists( 'Muut' ) ) {
 		public function enqueueAdminScripts() {
 			$screen = get_current_screen();
 			if ( $screen->id == 'page'
-				|| $screen->id == self::SLUG . '_page_muut_settings'
-				|| $screen->id == self::SLUG . '_page_muut_custom_navigation' ) {
+				|| $screen->id == self::SLUG . '_page_muut_settings' ) {
 				wp_enqueue_script( 'muut-admin-functions' );
+				wp_enqueue_style( 'muut-admin-style' );
+			}
 
+			if ( $screen->id == self::SLUG . '_page_muut_custom_navigation' ) {
+				wp_enqueue_script( 'muut-admin-functions' );
+				wp_enqueue_script( 'x-editable' );
+				wp_enqueue_style( 'x-editable-style' );
 				wp_enqueue_style( 'muut-admin-style' );
 			}
 		}
