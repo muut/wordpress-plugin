@@ -96,7 +96,7 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 					'post_type' => Muut_Forum_Category_Utility::FORUMCATEGORY_POSTTYPE,
 					'orderby' => 'menu_order',
 					'order' => 'ASC',
-					self::FORUMCATEGORYHEADER_TAXONOMY => $term->slug,
+					Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY => $term->slug,
 				);
 				$posts = get_posts( $args );
 			}
@@ -148,7 +148,6 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		 * @since 3.0
 		 */
 		public function printCategoryHeaderTemplateJs() {
-			error_log( 'Done' );
 			$header_block_id = '%ID%';
 			$header_block_title = '%TITLE%';
 			echo '<script type="text/javascript"> var categoryHeaderBlockTemplate = ';

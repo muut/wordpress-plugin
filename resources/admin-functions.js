@@ -74,15 +74,22 @@ jQuery(document).ready( function($) {
   /********************************************/
 
   var muut_inserted_header_block_index = 1;
-  $('#muut_add_category_header').on('click', function() {
+  $('#muut_add_category_header').on('click', function(e) {
     if ( typeof categoryHeaderBlockTemplate === 'string' ) {
+      e.stopPropagation();
       var insert_header_replacements = { '%ID%': 'new[' + muut_inserted_header_block_index + ']', '%TITLE%': muut_localized.new_header };
       var insert_block = categoryHeaderBlockTemplate.replace(/%\w+%/g, function(all) {
         return insert_header_replacements[all] || all;
       });
-      $('#muut_forum_nav_headers').prepend( insert_block );
+      $('#muut_forum_nav_headers').prepend( insert_block);
+      $('#muut_forum_nav_headers > li').first().find('.x-editable').editable('toggle');
       muut_inserted_header_block_index++;
     }
   });
 
+  // If X-Editable is enabled, make sure the editables are by default done inline.
+  //if ( typeof editable !== 'undefined') {
+  $.fn.editable.defaults.mode = 'inline';
+  $.fn.editable.defaults.showbuttons = false;
+  //}
 });

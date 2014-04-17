@@ -17,28 +17,34 @@
 }
 
 #muut_forum_nav_headers .muut_forum_header_item {
-    background-color: #ffffff;
+    background: transparent;
+    border: none;
     display: block;
     float:left;
     width: 80%;
-    border: 1px solid #e5e5e5;
-    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);
-    box-shadow: 0 1px 1px rgba(0,0,0,.04);
 }
 
 #muut_forum_nav_headers .muut-category-header-actions {
     background-color: #fafafa;
+    position: relative;
     padding: 10px;
-    border-bottom: 1px solid #e5e5e5;
+    border: 1px solid #e5e5e5;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    z-index: 500;
+    min-height: 28px;
+    vertical-align: middle;
+}
+
+#muut_forum_nav_headers .muut-category-header-actions .x-editable {
+    line-height: 28px;
+    float: left;
+    border-bottom: none;
 }
 
 #muut_forum_nav_headers .menu-header-input-label {
     margin-right: 10px;
     vertical-align: top;
-}
-
-#muut_forum_nav_headers .muut-category-header-content {
-    padding: 10px;
 }
 
 .muut_page_muut_custom_navigation #col-right {
@@ -50,4 +56,43 @@
 
 .muut_page_muut_custom_navigation .new_category_for_header {
     float: right;
+}
+
+.muut_page_muut_custom_navigation .muut-category-header-content {
+    background: transparent;
+    position: relative;
+    border: none;
+    text-align: center;
+    overflow: hidden;
+    z-index: 50;
+}
+
+.muut_forum_header_item .muut_category_list {
+    margin-top: -1px;
+    list-style: none;
+    display: block;
+    width: 90%;
+    position: relative;
+    left: 50%;
+    float: left;
+}
+
+.muut_forum_header_item .muut_forum_category_item {
+    position: relative;
+    text-align: left;
+    float: left;
+    right: 50%;
+    background-color: #ffffff;
+    display: block;
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #e5e5e5;
+    margin: 0;
+}
+
+.muut_forum_header_item .muut_forum_category_item:first-child {
+    border-bottom: none;
+}
+.muut_forum_header_item .muut_forum_category_item h3 {
+    margin: 0;
 }
