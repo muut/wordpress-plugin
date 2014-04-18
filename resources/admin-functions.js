@@ -82,6 +82,7 @@ jQuery(document).ready( function($) {
         return insert_header_replacements[all] || all;
       });
       $('#muut_forum_nav_headers').prepend(insert_block).find('.muut-header-title.x-editable').first().editable('toggle');
+      refresh_category_sortables();
       muut_inserted_header_block_index++;
     }
   });
@@ -99,9 +100,28 @@ jQuery(document).ready( function($) {
     }
   });
 
-  // If X-Editable is enabled, make sure the editables are by default done inline.
-  //if ( typeof editable !== 'undefined') {
+  // Hook up the sortable lists.
+  $('#muut_forum_nav_headers').sortable({
+    cursor: 'move',
+    handle: '.muut-category-header-actions',
+    containment: '#col-left'
+
+  });
+
+  function refresh_category_sortables() {
+    $('.muut_category_list').sortable({
+      cursor: 'move',
+      connectWith: '.muut_category_lists_connected',
+      placeholder: 'muut_category_sortable_placeholder'
+    });
+  }
+
+  var refresh_customized_navigation_array = function() {
+
+  }
+
+  // Make sure editables are by default done inline.
   $.fn.editable.defaults.mode = 'inline';
   $.fn.editable.defaults.showbuttons = false;
-  //}
+  refresh_category_sortables();
 });

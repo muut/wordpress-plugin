@@ -36,6 +36,10 @@
     vertical-align: middle;
 }
 
+#muut_forum_nav_headers .muut-category-header-actions:hover {
+    cursor: move;
+}
+
 #muut_forum_nav_headers .muut-category-header-actions .x-editable {
     line-height: 28px;
     float: left;
@@ -63,7 +67,6 @@
     position: relative;
     border: none;
     text-align: center;
-    overflow: hidden;
     z-index: 50;
 }
 
@@ -87,12 +90,11 @@
     width: 95%;
     padding: 10px;
     border: 1px solid #e5e5e5;
-    border-width: 1px 1px 0 1px;
-    margin: 0;
+    margin: -1px 0 0 0;
+    min-height: 18px;
 }
 
 .muut_forum_header_item .muut_forum_category_item:last-child {
-    border-bottom: 1px solid #e5e5e5;
     padding-bottom: 12px;
 }
 .muut_forum_header_item .muut_forum_category_item h3 {
@@ -101,4 +103,22 @@
 
 .muut-category-title.x-editable {
     border-bottom: none;
+}
+
+.muut_category_list {
+    min-height: 20px;
+}
+
+.muut_category_sortable_placeholder {
+    position: relative;
+    text-align: left;
+    float: left;
+    right: 50%;
+    background-color: #fafafa;
+    display: block;
+    width: 95%;
+    padding: 10px;
+    border: 1px solid #e5e5e5;
+    margin: 5px 0 5px 30px;
+    min-height: 18px;
 }

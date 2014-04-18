@@ -24,7 +24,7 @@ if ( !isset( $header_block_posts ) || !is_array( $header_block_posts ) ) {
 			<input type="button" class="button button-secondary new_category_for_header" id="new_category_in_<?php echo $header_block_id; ?>" title="<?php _e( 'New Category', 'muut' ); ?>" value="<?php _e( 'New Category', 'muut' ); ?>" />
 	</div>
 	<div class="muut-category-header-content">
-		<ul id="muut_forum_nav_categories_<?php echo $header_block_id; ?>" class="muut_category_list">
+		<ul id="muut_forum_nav_categories_<?php echo $header_block_id; ?>" class="muut_category_list muut_category_lists_connected">
 			<?php foreach ( $header_block_posts as $category_post ) {
 				Muut_Admin_Custom_Navigation::instance()->forumCategoryItem( $category_post->ID );
 			}

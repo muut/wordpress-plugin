@@ -431,6 +431,7 @@ if ( !class_exists( 'Muut' ) ) {
 
 			if ( $screen->id == self::SLUG . '_page_muut_custom_navigation' ) {
 				wp_enqueue_script( 'muut-admin-functions' );
+				wp_enqueue_script( 'jquery-ui-sortable' );
 				wp_enqueue_script( 'x-editable' );
 				wp_enqueue_style( 'x-editable-style' );
 				wp_enqueue_style( 'muut-admin-style' );
