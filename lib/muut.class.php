@@ -371,7 +371,7 @@ if ( !class_exists( 'Muut' ) ) {
 			// Localization rules.
 			$localizations = array(
 				'muut-admin-functions' => array(
-					'new_header' => __( 'New Header', 'muut' ),
+					//'new_header' => __( 'New Header', 'muut' ),
 				),
 			);
 

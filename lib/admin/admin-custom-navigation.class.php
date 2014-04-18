@@ -187,7 +187,7 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		 */
 		public function printCustomNavTemplatesJs() {
 			$header_block_id = $category_block_id = '%ID%';
-			$header_block_title = $category_block_id = '%TITLE%';
+			$header_block_title = $category_block_title = '';
 			$html = '<script type="text/javascript"> var categoryHeaderBlockTemplate = ';
 			ob_start();
 			include( muut()->getPluginPath() . 'views/blocks/admin-category-header-block.php' );
