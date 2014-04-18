@@ -62,7 +62,7 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		 * @since 3.0
 		 */
 		public function addActions() {
-			add_action( 'admin_head', array( $this, 'printCategoryHeaderTemplateJs' ) );
+			add_action( 'admin_head', array( $this, 'printCustomNavTemplatesJs' ) );
 		}
 
 		/**
@@ -83,11 +83,15 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		 * @param int $header_id The term ID for the category header.
 		 * @param array $posts An array of posts to display within this category (optional).
 		 * @param bool $echo Whether to output the markup or simply return it (false).
-		 * @return string|void Returns the markup or void if it is echoed.
+		 * @return string|false|void Returns the markup or void if it is echoed.
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
 		public function forumCategoryHeaderItem( $header_id, $posts = null, $echo = true ) {
+			if ( !is_numeric( $header_id ) ) {
+				return false;
+			}
+
 			$term = get_term( $header_id, Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY );
 
 			if ( !is_array( $posts ) ) {
@@ -103,9 +107,43 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 
 			$header_block_id = $header_id;
 			$header_block_title = $term->name;
+			$header_block_categories = $posts;
 
 			ob_start();
-			include ( muut()->getPluginPath() . 'views/snippets/admin-category-header-block.php' );
+			include ( muut()->getPluginPath() . 'views/blocks/admin-category-header-block.php' );
+
+			$html = ob_get_clean();
+
+			ob_end_clean();
+
+			if ( $echo ) {
+				echo $html;
+			} else {
+				return $html;
+			}
+		}
+
+		/**
+		 * Render an admin forum category list item for the custom navigation editor.
+		 *
+		 * @param int $category_id The post ID for the category.
+		 * @param bool $echo Whether to output the markup or simply return it (false).
+		 * @return string|false|void Returns the markup or void if it is echoed. False on error.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function forumCategoryItem( $category_id, $echo = true ) {
+			if ( !is_numeric( $category_id ) ) {
+				return false;
+			}
+
+			$category_post = get_post( $category_id );
+
+			$category_block_id = $category_id;
+			$category_block_title = $category_post->post_title;
+
+			ob_start();
+			include ( muut()->getPluginPath() . 'views/blocks/admin-category-block.php' );
 
 			$html = ob_get_clean();
 
@@ -147,18 +185,23 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public function printCategoryHeaderTemplateJs() {
-			$header_block_id = '%ID%';
-			$header_block_title = '%TITLE%';
-			echo '<script type="text/javascript"> var categoryHeaderBlockTemplate = ';
+		public function printCustomNavTemplatesJs() {
+			$header_block_id = $category_block_id = '%ID%';
+			$header_block_title = $category_block_id = '%TITLE%';
+			$html = '<script type="text/javascript"> var categoryHeaderBlockTemplate = ';
 			ob_start();
-			include ( muut()->getPluginPath() . 'views/snippets/admin-category-header-block.php' );
+			include( muut()->getPluginPath() . 'views/blocks/admin-category-header-block.php' );
+			$html .= json_encode( ob_get_clean() );
+			$html .= '; ';
 
-			$html = ob_get_clean();
+			$html .= 'var categoryBlockTemplate = ';
+			ob_start();
+			include( muut()->getPluginPath() . 'views/blocks/admin-category-block.php' );
+			$html .= json_encode( ob_get_clean() );
+			$html .= ';';
+			$html .= '</script>';
 
-			echo json_encode( $html );
-			echo ';</script>';
-
+			echo $html;
 		}
 	}
 }
