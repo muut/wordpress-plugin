@@ -81,9 +81,21 @@ jQuery(document).ready( function($) {
       var insert_block = categoryHeaderBlockTemplate.replace(/%\w+%/g, function(all) {
         return insert_header_replacements[all] || all;
       });
-      $('#muut_forum_nav_headers').prepend( insert_block);
-      $('#muut_forum_nav_headers > li').first().find('.x-editable').editable('toggle');
+      $('#muut_forum_nav_headers').prepend(insert_block).find('.muut-header-title.x-editable').first().editable('toggle');
       muut_inserted_header_block_index++;
+    }
+  });
+
+  var muut_inserted_forum_category_index = 1;
+  $(document).on('click', '.new_category_for_header', function(e) {
+    if ( typeof categoryBlockTemplate === 'string' ) {
+      e.stopPropagation();
+      var insert_category_replacements = { '%ID%': 'new[' + muut_inserted_forum_category_index + ']', '%TITLE%': '' };
+      var insert_block = categoryBlockTemplate.replace(/%\w+%/g, function(all) {
+        return insert_category_replacements[all] || all;
+      });
+      $(this).closest('.muut_forum_header_item').find('.muut_category_list').prepend(insert_block).first().find('.muut-category-title.x-editable').editable('toggle');
+      muut_inserted_forum_category_index++;
     }
   });
 

@@ -87,12 +87,18 @@
     width: 95%;
     padding: 10px;
     border: 1px solid #e5e5e5;
+    border-width: 1px 1px 0 1px;
     margin: 0;
 }
 
-.muut_forum_header_item .muut_forum_category_item:first-child {
-    border-bottom: none;
+.muut_forum_header_item .muut_forum_category_item:last-child {
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 12px;
 }
 .muut_forum_header_item .muut_forum_category_item h3 {
     margin: 0;
+}
+
+.muut-category-title.x-editable {
+    border-bottom: none;
 }
