@@ -73,11 +73,11 @@ jQuery(document).ready( function($) {
   /* CODE FOR CUSTOM NAVIGATION FUNCTIONALITY */
   /********************************************/
 
-  var muut_inserted_header_block_index = 1;
+  var muut_inserted_header_block_index = 0;
   $('#muut_add_category_header').on('click', function(e) {
     if ( typeof categoryHeaderBlockTemplate === 'string' ) {
       e.stopPropagation();
-      var insert_header_replacements = { '%ID%': 'new[' + muut_inserted_header_block_index + ']' };
+      var insert_header_replacements = { '%ID%': 'new_' + muut_inserted_header_block_index };
       var insert_block = categoryHeaderBlockTemplate.replace(/%\w+%/g, function(all) {
         return insert_header_replacements[all] || all;
       });
@@ -87,11 +87,11 @@ jQuery(document).ready( function($) {
     }
   });
 
-  var muut_inserted_forum_category_index = 1;
+  var muut_inserted_forum_category_index = 0;
   $(document).on('click', '.new_category_for_header', function(e) {
     if ( typeof categoryBlockTemplate === 'string' ) {
       e.stopPropagation();
-      var insert_category_replacements = { '%ID%': 'new[' + muut_inserted_forum_category_index + ']' };
+      var insert_category_replacements = { '%ID%': 'new_' + muut_inserted_forum_category_index };
       var insert_block = categoryBlockTemplate.replace(/%\w+%/g, function(all) {
         return insert_category_replacements[all] || all;
       });
@@ -104,20 +104,31 @@ jQuery(document).ready( function($) {
   $('#muut_forum_nav_headers').sortable({
     cursor: 'move',
     handle: '.muut-category-header-actions',
-    containment: '#col-left'
-
+    containment: '#col-left',
+    update: refresh_customized_navigation_array
   });
 
   function refresh_category_sortables() {
     $('.muut_category_list').sortable({
       cursor: 'move',
       connectWith: '.muut_category_lists_connected',
-      placeholder: 'muut_category_sortable_placeholder'
+      placeholder: 'muut_category_sortable_placeholder',
+      update: refresh_customized_navigation_array
     });
   }
 
-  var refresh_customized_navigation_array = function() {
+  function refresh_customized_navigation_array() {
+    var headers_order_array =  $('#muut_forum_nav_headers').sortable('toArray');
+    var headers_order_new = new Array();
 
+    for (index = 0; index < headers_order_array.length; ++index) {
+      //console.log( $('#'+ headers_order_array[index] + ' .muut-header-title.editable').editable('getValue') );
+      headers_order_new[headers_order_array[index]] = {
+        value: $('#'+ headers_order_array[index] + ' .muut-header-title.editable').editable('getValue'),
+        categories: $('#' + headers_order_array[index] + ' .muut_category_list').sortable('toArray')
+      }
+    }
+    //console.log( headers_order_new );
   }
 
   // Make sure editables are by default done inline.
