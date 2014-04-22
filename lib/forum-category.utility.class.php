@@ -221,8 +221,10 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 		 * @since 3.0
 		 */
 		public static function createForumCategory( $name, $custom_args = array(), $post_args = array() ) {
+			$defaults = muut()->getOption( 'forum_category_defaults', array() );
+
 			$custom_args_defaults = array(
-				'show_in_allposts' => true,
+				'show_in_allposts' => $defaults['show_in_allposts'],
 			);
 
 			$post_args_defaults = array(

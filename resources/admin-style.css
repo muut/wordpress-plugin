@@ -124,3 +124,10 @@
     margin: 5px 0 5px 30px;
     min-height: 42px;
 }
+
+.muut_category_item_setting {
+    float: right;
+    font-size: .9em;
+    font-style: italic;
+    color: #666;
+}

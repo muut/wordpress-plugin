@@ -122,6 +122,11 @@ jQuery(document).ready( function($) {
     $('#muut_forum_nav_headers .x-editable').on( 'save', function() {
       refresh_customized_navigation_array();
     });
+
+
+    $('#muut_forum_nav_headers .muut_show_in_allposts_check').on('click', function() {
+      refresh_customized_navigation_array();
+    });
   }
 
   function refresh_customized_navigation_array() {
@@ -135,11 +140,12 @@ jQuery(document).ready( function($) {
 
       // Prepare the categories array under this header.
       for (var index_y = 0; index_y < header_categories_array.length; index_y++) {
+        var show_in_allposts_value = $('#' + header_categories_array[index_y] + ' .muut_show_in_allposts_check').is(':checked');
         header_categories_new[index_y] = {
           id: $('#' + header_categories_array[index_y]).data('id'),
           name: $('#' + header_categories_array[index_y] + ' .muut-category-title.editable').editable('getValue', true),
           args: {
-            show_in_allposts: true
+            show_in_allposts: show_in_allposts_value
           }
         };
       }
@@ -162,6 +168,7 @@ jQuery(document).ready( function($) {
   $('#muut_forum_nav_headers .x-editable').editable().on('click', function() {
     refresh_category_sortables();
   });
+
   refresh_category_sortables();
   refresh_customized_navigation_array();
 

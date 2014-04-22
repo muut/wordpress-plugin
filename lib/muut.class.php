@@ -409,6 +409,9 @@ if ( !class_exists( 'Muut' ) ) {
 					'show_online' => true,
 					'allow_uploads' => false,
 				),
+				'forum_category_defaults' => array(
+					'show_in_allposts' => true,
+				),
 			) );
 
 			return $defaults;
