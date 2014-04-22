@@ -96,39 +96,60 @@ jQuery(document).ready( function($) {
         return insert_category_replacements[all] || all;
       });
       $(this).closest('.muut_forum_header_item').find('.muut_category_list').prepend(insert_block).find('.muut-category-title.x-editable').first().editable('toggle');
+      refresh_category_sortables();
       muut_inserted_forum_category_index++;
     }
   });
 
   // Hook up the sortable lists.
-  $('#muut_forum_nav_headers').sortable({
-    cursor: 'move',
-    handle: '.muut-category-header-actions',
-    containment: '#col-left',
-    update: refresh_customized_navigation_array
-  });
-
   function refresh_category_sortables() {
+    $('#muut_forum_nav_headers').sortable({
+      cursor: 'move',
+      handle: '.muut-category-header-actions',
+      update: refresh_customized_navigation_array,
+      create: refresh_customized_navigation_array
+    });
+
     $('.muut_category_list').sortable({
       cursor: 'move',
       connectWith: '.muut_category_lists_connected',
       placeholder: 'muut_category_sortable_placeholder',
-      update: refresh_customized_navigation_array
+      update: refresh_customized_navigation_array,
+      create: refresh_customized_navigation_array
     });
+
+    $('#muut_forum_nav_headers .editable').on('save', refresh_customized_navigation_array );
   }
 
   function refresh_customized_navigation_array() {
     var headers_order_array =  $('#muut_forum_nav_headers').sortable('toArray');
     var headers_order_new = new Array();
 
-    for (index = 0; index < headers_order_array.length; ++index) {
-      //console.log( $('#'+ headers_order_array[index] + ' .muut-header-title.editable').editable('getValue') );
-      headers_order_new[headers_order_array[index]] = {
-        value: $('#'+ headers_order_array[index] + ' .muut-header-title.editable').editable('getValue'),
-        categories: $('#' + headers_order_array[index] + ' .muut_category_list').sortable('toArray')
+    // For each header, make sure the data is set up.
+    for (var index = 0; index < headers_order_array.length; index++) {
+      var header_categories_array = $('#' + headers_order_array[index] + ' .muut_category_list').sortable('toArray');
+      var header_categories_new = new Array();
+
+      // Prepare the categories array under this header.
+      for (var index_y = 0; index_y < header_categories_array.length; index_y++) {
+        header_categories_new[index_y] = {
+          id: $('#' + header_categories_array[index_y]).data('id'),
+          name: $('#' + header_categories_array[index_y] + ' .muut-category-title.editable').editable('getValue', true),
+          args: {
+            show_in_allposts: true
+          }
+        };
       }
+
+      // And prepare the main array with all headers and categories.
+      headers_order_new[index] = {
+        id: $('#' + headers_order_array[index]).data('id'),
+        name: $('#'+ headers_order_array[index] + ' .muut-header-title.editable').editable('getValue', true),
+        categories: header_categories_new
+      };
     }
-    //console.log( headers_order_new );
+
+    $('#muut_customized_navigation_array_field').val(JSON.stringify(headers_order_new));
   }
 
   // Make sure editables are by default done inline.

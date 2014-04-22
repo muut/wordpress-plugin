@@ -8,6 +8,7 @@
 
 $is_forum = Muut_Forum_Page_Utility::isForumPage( get_the_ID() );
 
+$forum_show_class = '';
 if ( $is_forum != '1' ) {
 	$forum_show_class = 'hidden';
 }

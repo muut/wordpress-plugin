@@ -67,27 +67,27 @@
     position: relative;
     border: none;
     text-align: center;
-    z-index: 50;
 }
 
 .muut_forum_header_item .muut_category_list {
     margin-top: -1px;
     list-style: none;
     display: block;
-    width: 90%;
-    position: relative;
-    left: 50%;
-    float: left;
+    width: auto;
+    text-align: center;
+    padding: 0 10%;
 }
 
 .muut_forum_header_item .muut_forum_category_item {
-    position: relative;
     text-align: left;
+    position: relative;
     float: left;
-    right: 50%;
     background-color: #ffffff;
     display: block;
-    width: 95%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
     padding: 10px;
     border: 1px solid #e5e5e5;
     margin: -1px 0 0 0;
@@ -113,12 +113,14 @@
     position: relative;
     text-align: left;
     float: left;
-    right: 50%;
     background-color: #fafafa;
     display: block;
-    width: 95%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
     padding: 10px;
     border: 1px solid #e5e5e5;
     margin: 5px 0 5px 30px;
-    min-height: 18px;
+    min-height: 42px;
 }

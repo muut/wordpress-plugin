@@ -12,6 +12,7 @@ $category_headers = Muut_Forum_Category_Utility::getForumCategoryHeaders();
 	<h2><?php _e( 'Custom Navigation', 'muut' ); ?></h2>
 	<h3 style="color: red">NON-FUNCTIONAL</h3>
 	<form id="muut_custom_navigation_form" method="POST" action="#">
+	<?php wp_nonce_field( 'muut_save_custom_navigation', 'muut_custom_nav_nonce' ); ?>
 	<div id="col-container">
 		<div id="col-right">
 			<div class="col-wrap">

@@ -17,7 +17,7 @@ if ( !isset( $header_block_posts ) || !is_array( $header_block_posts ) ) {
 }
 ?>
 
-<li class="muut_forum_header_item" id="category_header-<?php echo $header_block_id; ?>">
+<li class="muut_forum_header_item" id="category_header-<?php echo $header_block_id; ?>" data-id="<?php echo $header_block_id; ?>">
 	<div class="muut-category-header-actions">
 			<label class="screen-reader-text" for="header-name-<?php echo $header_block_id; ?>"><?php _e( 'Header Text', 'muut' ); ?></label>
 			<a href="#" class="muut-header-title x-editable" id="header-name-<?php echo $header_block_id; ?>" data-type="text" data-url="#" data-value="<?php echo $header_block_title; ?>"></a>

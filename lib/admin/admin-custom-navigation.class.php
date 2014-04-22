@@ -63,6 +63,7 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		 */
 		public function addActions() {
 			add_action( 'admin_head', array( $this, 'printCustomNavTemplatesJs' ) );
+			add_action( 'admin_head', array( $this, 'saveCustomNavigation' ) );
 		}
 
 		/**
@@ -202,6 +203,21 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 			$html .= '</script>';
 
 			echo $html;
+		}
+
+		/**
+		 * Saves the custom navigation settngs.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function saveCustomNavigation() {
+			if ( isset( $_POST['muut_customized_navigation_array'] ) && check_admin_referer( 'muut_save_custom_navigation', 'muut_custom_nav_nonce' ) ) {
+				$save_data = json_decode( stripslashes( $_POST['muut_customized_navigation_array'] ) );
+
+				// Save the data.
+			}
 		}
 	}
 }
