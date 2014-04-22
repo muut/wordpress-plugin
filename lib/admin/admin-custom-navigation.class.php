@@ -253,6 +253,7 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 										Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY => $header_term->slug,
 									),
 									'menu_order' => $menu_order,
+									'post_title' => $category->name,
 								);
 
 								// Create a new category post if it does not exist yet.

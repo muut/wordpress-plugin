@@ -121,7 +121,6 @@ jQuery(document).ready( function($) {
 
     $('#muut_forum_nav_headers .x-editable').on( 'save', function() {
       refresh_customized_navigation_array();
-      $(this).unbind('click');
     });
   }
 

@@ -269,7 +269,6 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 			$post_args_defaults = array(
 				'ID' => $post_id,
 				'post_status' => 'publish'
-
 			);
 
 			// Filter the args we will be passing to the update.
