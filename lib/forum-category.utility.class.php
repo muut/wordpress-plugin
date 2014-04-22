@@ -124,10 +124,14 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 			$category_headers_keys = array();
 			foreach ( $all_category_headers as $header ) {
 				// Need to append 'id-' to keys to make sure they are interpreted as strings for re-ordering.
-				$category_headers_keys[$header->slug] = $header;
+				$category_headers_keys['header-' . $header->term_id] = $header;
 			}
 
 			$order_of_headers = muut()->getOption( 'muut_category_headers', array() );
+
+			foreach ( $order_of_headers as &$value ) {
+				$value = 'header-' . $value;
+			}
 
 			$category_headers_sorted = array_merge( array_flip( $order_of_headers ), $category_headers_keys );
 
@@ -147,6 +151,144 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 			}
 
 			return $category_headers;
+		}
+
+
+		/**
+		 * Creates a new custom navigation header (adds a term to the header taxonomy).
+		 *
+		 * @param string $name The name for the header we are adding.
+		 * @return int|false The term ID or false on error.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function createNavigationHeader( $name ) {
+			if ( !is_string( $name ) ) {
+				return false;
+			}
+
+			$args = apply_filters( 'muut_create_navigation_header_args', array(), $name );
+
+			$term = wp_insert_term( $name, self::FORUMCATEGORYHEADER_TAXONOMY, $args );
+
+			if ( is_array( $term ) ) {
+				return $term['term_id'];
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Updates an existing custom navigation header.
+		 *
+		 * @param int $term_id The Term ID of the header we are editing.
+		 * @param array $args The args we are using to edit the existing header.
+		 * @return bool Whether the update was successful.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function updateNavigationHeader( $term_id, $args = array() ) {
+			if ( !is_int( $term_id ) ) {
+				return false;
+			}
+
+			// Filter the args we will be passing to the wp_update_term() function.
+			$args = apply_filters( 'muut_update_navigation_header_args', array(
+					'term_id' => $term_id,
+					'name' => $args['name'],
+				),
+				$term_id
+			);
+
+			$update = wp_update_term( $term_id, self::FORUMCATEGORYHEADER_TAXONOMY, $args );
+
+			// If it returns an array (the success result for updating a term), return true.
+			if ( is_array( $update ) ) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Creates a new forum category (custom WP_Post type).
+		 *
+		 * @param string $name The category name/title.
+		 * @param array $custom_args The Muut-specific args for creation.
+		 * @param array $post_args The args for creating the actual WP Post.
+		 * @return int|false The post id for the "category" or false on error.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function createForumCategory( $name, $custom_args = array(), $post_args = array() ) {
+			$custom_args_defaults = array(
+				'show_in_allposts' => true,
+			);
+
+			$post_args_defaults = array(
+				'post_title' => $name,
+				'post_type' => self::FORUMCATEGORY_POSTTYPE,
+				'post_status' => 'publish',
+				'comment_status' => 'closed',
+			);
+
+			// Filter the args we will be passing to the post insert.
+			$custom_args = wp_parse_args( apply_filters( 'muut_create_forum_category_args', $custom_args, $name, $post_args ), $custom_args_defaults );
+			$post_args = wp_parse_args( apply_filters( 'muut_create_forum_category_post_args', $post_args, $name, $custom_args ), $post_args_defaults );
+
+			$forum_category_id = wp_insert_post( $post_args );
+
+			if ( !is_int( $forum_category_id ) ) {
+				return false;
+			}
+
+			// Save the custom args as post meta.
+			foreach( $custom_args as $arg_name => $arg_value ) {
+				update_post_meta( $forum_category_id, 'muut_' . $arg_name, $arg_value );
+			}
+
+			return $forum_category_id;
+		}
+
+		/**
+		 * Updates an already existing Forum Category (a custom WP_Post type).
+		 *
+		 * @param int $post_id the WP_Post id.
+		 * @param array $custom_args The Muut-specific args to pass.
+		 * @param array $post_args The WordPress post args for updating the WP_Post.
+		 * @return bool True on success, false on failure.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function updateForumCategory( $post_id, $custom_args = array(), $post_args = array() ) {
+			if ( !is_int( $post_id ) ) {
+				return false;
+			}
+
+			$custom_args_defaults = array();
+			$post_args_defaults = array(
+				'ID' => $post_id,
+				'post_status' => 'publish'
+
+			);
+
+			// Filter the args we will be passing to the update.
+			$custom_args = wp_parse_args( apply_filters( 'muut_update_forum_category_args', $custom_args, $post_args ), $custom_args_defaults );
+			$post_args = wp_parse_args( apply_filters( 'muut_update_forum_category_post_args', $post_args, $post_id, $custom_args ), $post_args_defaults );
+
+			$update = wp_update_post( $post_args );
+
+			if ( !is_numeric( $update ) ) {
+				return false;
+			}
+
+			// Save the custom args as post meta.
+			foreach( $custom_args as $arg_name => $arg_value ) {
+				update_post_meta( $post_id, 'muut_' . $arg_name, $arg_value );
+			}
+
+			// Success.
+			return true;
 		}
 	}
 }

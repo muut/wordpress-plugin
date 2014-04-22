@@ -83,6 +83,7 @@ jQuery(document).ready( function($) {
       });
       $('#muut_forum_nav_headers').prepend(insert_block).find('.muut-header-title.x-editable').first().editable('toggle');
       refresh_category_sortables();
+      refresh_customized_navigation_array();
       muut_inserted_header_block_index++;
     }
   });
@@ -97,28 +98,31 @@ jQuery(document).ready( function($) {
       });
       $(this).closest('.muut_forum_header_item').find('.muut_category_list').prepend(insert_block).find('.muut-category-title.x-editable').first().editable('toggle');
       refresh_category_sortables();
+      refresh_customized_navigation_array();
       muut_inserted_forum_category_index++;
     }
   });
 
-  // Hook up the sortable lists.
+    // Hook up the sortable lists.
   function refresh_category_sortables() {
     $('#muut_forum_nav_headers').sortable({
       cursor: 'move',
       handle: '.muut-category-header-actions',
-      update: refresh_customized_navigation_array,
-      create: refresh_customized_navigation_array
+      update: refresh_customized_navigation_array
     });
 
     $('.muut_category_list').sortable({
       cursor: 'move',
       connectWith: '.muut_category_lists_connected',
       placeholder: 'muut_category_sortable_placeholder',
-      update: refresh_customized_navigation_array,
-      create: refresh_customized_navigation_array
+      update: refresh_customized_navigation_array
     });
 
-    $('#muut_forum_nav_headers .editable').on('save', refresh_customized_navigation_array );
+
+    $('#muut_forum_nav_headers .x-editable').on( 'save', function() {
+      refresh_customized_navigation_array();
+      $(this).unbind('click');
+    });
   }
 
   function refresh_customized_navigation_array() {
@@ -155,5 +159,11 @@ jQuery(document).ready( function($) {
   // Make sure editables are by default done inline.
   $.fn.editable.defaults.mode = 'inline';
   $.fn.editable.defaults.showbuttons = false;
+
+  $('#muut_forum_nav_headers .x-editable').editable().on('click', function() {
+    refresh_category_sortables();
+  });
   refresh_category_sortables();
+  refresh_customized_navigation_array();
+
 });
