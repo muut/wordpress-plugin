@@ -29,7 +29,7 @@ if ( !isset( $path ) ) {
 		<div class="m-h3"><?php echo Muut_Forum_Category_Utility::getCategoryHeaderTitle( $header_id ); ?></div>
 		<?php foreach ( $header_array as $category_post ) {
 			$class = '';
-			if ( Muut_Forum_Category_Utility::isAllpostsCategory( $category_post->ID ) ) {
+			if ( !Muut_Forum_Category_Utility::isAllpostsCategory( $category_post->ID ) ) {
 				$class .= 'non-category ';
 			}
 			?>
