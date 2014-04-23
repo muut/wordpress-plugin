@@ -14,8 +14,11 @@ $category_headers = Muut_Forum_Category_Utility::getForumCategoryHeaders();
 	<?php wp_nonce_field( 'muut_save_custom_navigation', 'muut_custom_nav_nonce' ); ?>
 	<div id="col-container">
 		<div id="col-right">
-			<div class="col-wrap">
-				<h3><?php _e( 'Hidden Categories', 'muut' ); ?></h3>
+			<div class="col-wrap muut_admin_wrapper">
+				<h3><?php _e( 'What is this?', 'muut' ); ?></h3>
+				<p><?php _e( 'You can control the customized navigation on this page. This navigation controls the categories that are listed on the navigation for a fully embeded Muut forum. Make sure one of your pages is specified as the Forum Home, and the navigation that is customized on this page will automatically be used there, instead of the default Muut categories.', 'muut' ); ?></p>
+				<p><?php _e( 'Note that you can re-order the categories and headers by dragging and dropping, and individual categories can be dragged from one header to the next, if you want to adjust that.', 'muut' ); ?></p>
+				<p><?php _e( 'In future releases, this right column will contain deactivated/past categories that can be re-added to the headers on the left, and the help paragraph will be for the Help dropdown at the top right.', 'muut' ); ?></p>
 			</div>
 		</div>
 		<div id="col-left">
