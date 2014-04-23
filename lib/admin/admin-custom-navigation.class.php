@@ -64,6 +64,7 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		public function addActions() {
 			add_action( 'admin_head', array( $this, 'printCustomNavTemplatesJs' ) );
 			add_action( 'admin_head', array( $this, 'saveCustomNavigation' ) );
+			add_action( 'admin_notices', array( $this, 'adminNotices' ) );
 		}
 
 		/**
@@ -75,6 +76,21 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		 */
 		public function addFilters() {
 
+		}
+
+		/**
+		 * Once navigation is saved, make sure to display the proper admin notice.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function adminNotices() {
+			if ( did_action( 'muut_custom_nav_saved' ) > 0 ) {
+				echo '<div class="updated">';
+				echo '<p>' . __( 'Custom navigation successfully saved.', 'muut' ) . '</p>';
+				echo '</div>';
+			}
 		}
 
 
@@ -287,6 +303,7 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 					}
 				}
 				muut()->setOption( 'muut_category_headers', $custom_navigation_header_id_order );
+				do_action( 'muut_custom_nav_saved' );
 			}
 		}
 	}
