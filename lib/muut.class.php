@@ -466,14 +466,16 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function addPageMetaBoxes() {
-			add_meta_box(
-				'muut-is-forum-page',
-				__( 'Muut', 'muut' ),
-				array( $this, 'renderMuutPageMetaBox' ),
-				'page',
-				'side',
-				'high'
-			);
+			if ( $this->getOption( 'remote_forum_name', '' ) != '' ) {
+				add_meta_box(
+					'muut-is-forum-page',
+					__( 'Muut', 'muut' ),
+					array( $this, 'renderMuutPageMetaBox' ),
+					'page',
+					'side',
+					'high'
+				);
+			}
 		}
 
 		/**
