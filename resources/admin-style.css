@@ -94,6 +94,10 @@
     min-height: 18px;
 }
 
+.muut_forum_header_item .muut_forum_category_item:hover {
+    cursor: move;
+}
+
 .muut_forum_header_item .muut_forum_category_item:last-child {
     padding-bottom: 12px;
 }
