@@ -162,14 +162,15 @@ jQuery(document).ready( function($) {
   }
 
   // Make sure editables are by default done inline.
-  $.fn.editable.defaults.mode = 'inline';
-  $.fn.editable.defaults.showbuttons = false;
+  if ( typeof($.fn.editable) !== 'undefined') {
+    $.fn.editable.defaults.mode = 'inline';
+    $.fn.editable.defaults.showbuttons = false;
 
-  $('#muut_forum_nav_headers .x-editable').editable().on('click', function() {
+    $('#muut_forum_nav_headers .x-editable').editable().on('click', function() {
+      refresh_category_sortables();
+    });
+
     refresh_category_sortables();
-  });
-
-  refresh_category_sortables();
-  refresh_customized_navigation_array();
-
+    refresh_customized_navigation_array();
+  }
 });
