@@ -143,6 +143,7 @@ if ( !class_exists( 'Muut' ) ) {
 		protected function addFilters() {
 			add_filter( 'body_class', array( $this, 'addBodyClasses' ) );
 			add_filter( 'admin_body_class', array( $this, 'addAdminBodyClasses' ) );
+			add_filter( 'post_type_link', array( $this, 'filterForumCategoriesPermalinks' ), 10, 2 );
 		}
 
 		/**
@@ -874,6 +875,27 @@ if ( !class_exists( 'Muut' ) ) {
 			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' && Muut_Forum_Page_Utility::getForumPageOption( $post_id, 'allow_uploads', '0' ) == '1' ) {
 				Muut_Forum_Page_Utility::setForumPageOption( $post_id, 'allow_uploads', '0' );
 			}
+		}
+
+		/**
+		 * Filters the permalink for post category pages. This makes sure that the link goes to the proper muut forum page with the hashbang.
+		 *
+		 * @param string $permalink The current permalink.
+		 * @param WP_Post $post The category WP_Post (custom post type).
+		 * @return string The modified permalink.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function filterForumCategoriesPermalinks( $permalink, $post ) {
+			if ( Muut_Forum_Category_Utility::FORUMCATEGORY_POSTTYPE == get_post_type( $post ) ) {
+				$forum_home_id = $this->getOption( 'forum_home_id', false );
+				if ( $forum_home_id ) {
+					$base_link = get_permalink( $forum_home_id );
+
+					$permalink = $base_link . '#!/' . $post->post_name;
+				}
+			}
+			return $permalink;
 		}
 
 		/**

@@ -59,7 +59,7 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 				'singular_name' => _x( 'Forum Category', 'post type singular name', 'muut' ),
 				'menu_name' => _x( 'Categories', 'admin menu', 'muut' ),
 				'name_admin_bar' => _x( 'Category', 'add new on admin bar', 'muut' ),
-				'add_new' => _x( 'Add New', 'book', 'muut' ),
+				'add_new' => _x( 'Add New', 'new muut category', 'muut' ),
 				'add_new_item' => __( 'Add New Category', 'muut' ),
 				'new_item' => __( 'New Forum Category', 'muut' ),
 				'edit_item' => __( 'Edit Forum Category', 'muut' ),
@@ -74,6 +74,7 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 			$post_type_args = array(
 				'labels' => $post_type_labels,
 				'public' => false,
+				'show_in_nav_menus' => true,
 				'capability_type' => 'page',
 				'hierarchical' => true,
 				'taxonomies' => array(
