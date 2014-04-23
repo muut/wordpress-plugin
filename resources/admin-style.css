@@ -8,7 +8,9 @@
 }
 
 .muut_settings .form-table tr.disabled th,
-.muut_settings .form-table tr.disabled td {
+.muut_settings .form-table tr.disabled td,
+p.disabled
+{
     color: #999;
 }
 

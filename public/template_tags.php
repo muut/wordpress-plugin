@@ -71,12 +71,12 @@ function muut_get_page_forum_path( $page_id = null ) {
  * @author Paul Hughes
  * @since 3.0
  */
-function muut_forum_page_anchor( $page_id = null, $echo = true ) {
+function muut_forum_page_embed( $page_id = null, $echo = true ) {
 	if ( is_null( $page_id ) ) {
 		$page_id = get_the_ID();
 	}
 
-	return Muut_Forum_Page_Utility::forumPageAnchor( $page_id, $echo );
+	return Muut_Forum_Page_Utility::forumPageEmbedMarkup( $page_id, $echo );
 }
 
 /**

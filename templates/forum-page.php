@@ -30,7 +30,7 @@ $sub_forum = muut_get_page_forum_path();
 					if ( $sub_forum == '' ) {
 						_e( 'This page has not been assigned a working forum.', 'muut' );
 					} else {
-						muut_forum_page_anchor();
+						muut_forum_page_embed();
 					}
 				?>
 				</div>

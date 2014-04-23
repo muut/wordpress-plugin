@@ -19,7 +19,7 @@ $sub_forum = muut_get_page_forum_path();
 		<div id="content" class="site-content" role="main">
 			<?php while ( have_posts() ) : the_post();
 				if ( muut_is_forum_page() ) {
-					muut_forum_page_anchor();
+					muut_forum_page_embed();
 				}
 			endwhile; ?>
 		</div><!-- #content -->

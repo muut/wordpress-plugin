@@ -153,6 +153,49 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 			return $category_headers;
 		}
 
+		/**
+		 * Gets the name title of a category header.
+		 *
+		 * @param int $header_id The header id.
+		 * @return string The title of the header id.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function getCategoryHeaderTitle( $header_id ) {
+			if ( !is_numeric( $header_id ) ) {
+				return '';
+			}
+
+			$term = get_term( $header_id, self::FORUMCATEGORYHEADER_TAXONOMY );
+
+			if ( $term === null || get_class( $term ) === 'WP_Error' ) {
+				return '';
+			} else {
+				return $term->name;
+			}
+		}
+
+		/**
+		 * Checks if a given category should not be displayed in all posts.
+		 *
+		 * @param int $category_id The post id of the Muut category.
+		 * @return bool Whether the category should be displayed in all posts.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function isAllpostsCategory( $category_id ) {
+			if ( !is_numeric( $category_id ) ) {
+				return false;
+			}
+
+			$show_in_posts_meta = get_post_meta( $category_id, 'muut_show_in_allposts', true );
+
+			if ( !$show_in_posts_meta ) {
+				return false;
+			} else {
+				return true;
+			}
+		}
 
 		/**
 		 * Creates a new custom navigation header (adds a term to the header taxonomy).

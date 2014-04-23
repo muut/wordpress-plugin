@@ -140,14 +140,10 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 
 			$path = get_post_meta( $page_id, self::META_REMOTEPATH, true );
 
-			if ( $path ) {
-				if ( !self::getForumPageOption( $page_id, 'is_threaded', false ) && !$no_suffix  ) {
-					$path .= ':comments';
-				}
-				return $path;
-			} else {
-				return false;
+			if ( !self::getForumPageOption( $page_id, 'is_threaded', false ) && !$no_suffix  ) {
+				$path .= ':comments';
 			}
+			return $path;
 		}
 
 		/**
@@ -205,7 +201,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public static function forumPageAnchor( $page_id, $echo = true ) {
+		public static function forumPageEmbedMarkup( $page_id, $echo = true ) {
 			if ( !is_numeric( $page_id ) || !self::isForumPage( $page_id ) ) {
 				return false;
 			}
@@ -224,16 +220,26 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 				$settings .= 'data-upload="true" ';
 			}
 
-			if ( !$path )
+			if ( $path === false )
 				return false;
 
-			$anchor = '<a class="moot" href="/i/' . muut()->getRemoteForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
+			if ( muut()->getOption( 'forum_home_id', false ) == $page_id ) {
+				ob_start();
+				include ( muut()->getPluginPath() . 'views/blocks/custom-navigation-embed-block.php' );
+				$embed = ob_get_clean();
+			} else {
+				$embed = '<a class="moot" href="/i/' . muut()->getRemoteForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
+			}
 
 			if ( $echo ) {
-				echo $anchor;
+				echo $embed;
 			} else {
-				return $anchor;
+				return $embed;
 			}
 		}
+
+		/**
+		 *
+		 */
 	}
 }

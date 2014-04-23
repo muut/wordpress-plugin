@@ -404,6 +404,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'language' => $default_lang,
 				'replace_comments' => false,
 				'override_all_comments' => false,
+				'forum_home_id' => false,
 				'forum_page_defaults' => array(
 					'is_threaded' => false,
 					'show_online' => true,
@@ -843,6 +844,13 @@ if ( !class_exists( 'Muut' ) ) {
 					}
 					Muut_Forum_Page_Utility::setForumPageRemotePath( $post_id, $path );
 				}
+			}
+
+			if ( isset( $_POST['muut_forum_is_home'] ) && $_POST['muut_forum_is_home'] == '1' ) {
+				$this->setOption( 'forum_home_id', $post_id );
+				Muut_Forum_Page_Utility::setForumPageRemotePath( $post_id, '' );
+			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' && ( $this->getOption( 'forum_home_id', false ) == $post_id || $this->getOption( 'forum_home_id', false ) === false ) ) {
+				$this->setOption( 'forum_home_id', '0' );
 			}
 
 			if ( isset( $_POST['muut_forum_is_threaded'] ) && $_POST['muut_forum_is_threaded'] == '1' ) {
