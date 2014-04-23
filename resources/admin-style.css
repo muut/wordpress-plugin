@@ -137,3 +137,26 @@ p.disabled
     font-style: italic;
     color: #666;
 }
+
+.muut_admin_welcome p,
+.muut_admin_welcome ul li {
+    line-height: 1.9em;
+}
+
+.muut_admin_welcome span.bullet-title {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.muut_admin_welcome ul {
+    margin-left: 40px;
+    list-style: circle;
+}
+
+.muut-header-logo {
+    float: left;
+    margin: 10px 10px 10px 0;
+    height: 57px;
+    width: 57px;
+    background-image: url( '//muut.com/apple-touch-icon-57x57-precomposed.png' );
+}

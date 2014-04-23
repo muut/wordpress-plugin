@@ -428,10 +428,12 @@ if ( !class_exists( 'Muut' ) ) {
 		public function enqueueAdminScripts() {
 			$screen = get_current_screen();
 			if ( $screen->id == 'page'
-				|| $screen->id == self::SLUG . '_page_muut_settings' ) {
+				|| $screen->id == self::SLUG . '_page_muut_settings'
+				|| $screen->id == 'toplevel_page_muut' ) {
 				wp_enqueue_script( 'muut-admin-functions' );
 				wp_enqueue_style( 'muut-admin-style' );
 			}
+
 
 			if ( $screen->id == self::SLUG . '_page_muut_custom_navigation' ) {
 				wp_enqueue_script( 'muut-admin-functions' );
