@@ -6,7 +6,7 @@
  * @copyright 2014 Muut Inc
  */
 ?>
-<div class="wrap muut_admin_welcome">
+<div class="wrap muut_admin_wrapper">
 	<div class="muut-header-logo"></div>
 	<h2><?php _e( 'Welcome to Muut!', 'muut' ); ?></h2>
 	<p><?php _e( 'Welcome to Muut forums! Whether you\'re setting up your first forum or have just updated to the new version of the plugin, you\'re going to love what we\'ve done to make implementing Muut in your WordPress website.', 'muut' ); ?></p>

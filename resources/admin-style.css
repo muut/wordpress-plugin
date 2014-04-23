@@ -138,17 +138,17 @@ p.disabled
     color: #666;
 }
 
-.muut_admin_welcome p,
-.muut_admin_welcome ul li {
+.muut_admin_wrapper p,
+.muut_admin_wrapper ul li {
     line-height: 1.9em;
 }
 
-.muut_admin_welcome span.bullet-title {
+.muut_admin_wrapper span.bullet-title {
     font-weight: bold;
     font-style: italic;
 }
 
-.muut_admin_welcome ul {
+.muut_admin_wrapper ul {
     margin-left: 40px;
     list-style: circle;
 }
