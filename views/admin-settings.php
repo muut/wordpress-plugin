@@ -93,6 +93,36 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 			</tr>
 			</tbody>
 		</table>
+		<h3 class="title"><?php _e( 'Single Sign-On', 'muut' ); ?></h3>
+		<p><?php printf( __( 'With Single Sign-On, your users will not have to register separately with Muut but will automatically be able to use their WordPress users. Visit the  %sforum upgrades%s page to purchase the developer package.', 'muut' ), '<a href="https://muut.com/pricing/">', '</a>' ); ?></p>
+		<table class="form-table">
+			<tbody>
+			<tr>
+				<th scope="row">
+					<label for="muut_subscription_api_key"><?php _e( 'API Key', 'muut' ); ?></label>
+				</th>
+				<td>
+					<input name="setting[subscription_api_key]" type="text" id="muut_subscription_api_key" value="<?php echo muut()->getOption( 'subscription_api_key', '' ); ?>" />
+				</td>
+			</tr>
+			<tr data-muut_requires="muut_subscription_api_key" data-muut_require_func="val()">
+				<th scope="row">
+					<label for="muut_subscription_secret_key"><?php _e( 'Secret Key', 'muut' ); ?></label>
+				</th>
+				<td>
+					<input name="setting[subscription_secret_key]" type="text" id="muut_subscription_secret_key" value="<?php echo muut()->getOption( 'subscription_secret_key', '' ); ?>" />
+				</td>
+			</tr>
+			<tr data-muut_requires="muut_subscription_api_key" data-muut_require_func="val()">
+				<th scope="row">
+					<label for="muut_subscription_use_sso"><?php _e( 'Use SSO', 'muut' ); ?></label>
+				</th>
+				<td>
+					<input name="setting[subscription_use_sso]" type="checkbox" id="muut_subscription_use_sso" value="1" <?php checked( '1', muut()->getOption( 'subscription_use_sso', '0' ) ); ?> />
+				</td>
+			</tr>
+			</tbody>
+		</table>
 		<h3 class="title"><?php __( 'Forum Page Defaults', 'muut' ); ?></h3>
 		<p class="submit">
 			<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">

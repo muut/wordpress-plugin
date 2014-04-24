@@ -413,6 +413,9 @@ if ( !class_exists( 'Muut' ) ) {
 					'show_online' => true,
 					'allow_uploads' => false,
 				),
+				'subscription_api_key' => '',
+				'subscription_secret_key' => '',
+				'subscription_use_sso' => false,
 				'forum_category_defaults' => array(
 					'show_in_allposts' => true,
 				),
@@ -697,6 +700,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'is_threaded_default',
 				'show_online_default',
 				'allow_uploads_default',
+				'subscription_use_sso',
 			) );
 
 			foreach ( $boolean_settings as $boolean_setting ) {
@@ -714,6 +718,9 @@ if ( !class_exists( 'Muut' ) ) {
 			unset( $settings['is_threaded_default'] );
 			unset( $settings['show_online_default'] );
 			unset( $settings['allow_uploads_default'] );
+
+			// If the Secret Key setting does not get submitted (i.e. is disabled), make sure to erase its value.
+			$settings['subscription_secret_key'] = isset( $settings['subscription_secret_key']) ? $settings['subscription_secret_key'] : '';
 
 			return apply_filters( 'muut_settings_validated', $settings );
 		}
