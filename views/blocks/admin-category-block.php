@@ -27,5 +27,6 @@ $show_in_allposts = is_numeric( $category_block_id ) ? get_post_meta( $category_
 		<label class="screen-reader-text" for="category-name-<?php echo $category_block_id; ?>"><?php _e( 'Category Name', 'muut' ); ?></label>
 		<a href="#" class="muut-category-title x-editable" id="category-name-<?php echo $category_block_id; ?>" data-type="text" data-url="#" data-value="<?php echo $category_block_title; ?>"></a>
 		<span class="muut_category_item_setting"><input class="muut_show_in_allposts_check" type="checkbox" <?php checked( true, $show_in_allposts ); ?> /><?php _e( 'Feature in All Posts', 'muut' ); ?></span>
+		<span class="delete-link"><a href="#"><?php _e( 'Delete', 'muut' ); ?></a></span>
 	</div>
 </li>

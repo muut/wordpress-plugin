@@ -91,6 +91,12 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 				echo '<p>' . __( 'Custom navigation successfully saved.', 'muut' ) . '</p>';
 				echo '</div>';
 			}
+
+			if ( muut()->getOption( 'forum_home_id', 'false' ) < 1 ) {
+				echo '<div class="error">';
+				echo '<p>' . __( 'You need to set up a page as the Forum Home before custom navigation will have an effect.', 'muut' ) . '</p>';
+				echo '</div>';
+			}
 		}
 
 
@@ -238,6 +244,8 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 
 				$custom_navigation_header_id_order = array();
 
+				$current_header_order = muut()->getOption( 'muut_category_headers', array() );
+
 				// Save the data.
 				foreach ( $save_data as $header_object ) {
 					if ( isset( $header_object->id ) && is_string( $header_object->id ) && !is_numeric( $header_object->id ) && substr( $header_object->id, 0, 3 ) == 'new' && isset( $header_object->name ) ) {
@@ -252,6 +260,11 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 					// If we've got a header id, let's attach it to the header order option array and  make sure to
 					// evaluate the categories underneath.
 					if ( isset( $header_id ) ) {
+						$current_order_index = array_search( $header_id, $current_header_order );
+						if ( $current_header_order !== false ) {
+							unset( $current_header_order[$current_order_index]);
+						}
+
 						$header_term = get_term( $header_id, Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY );
 						$custom_navigation_header_id_order[] = $header_id;
 
@@ -259,6 +272,18 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 						// of the custom post type Muut_Forum_Category_Utility::FORUMCATEGORY_POSTTYPE.
 						// (At time of writing, that is: 'muut_forum_category')
 						if ( isset( $header_object->categories ) && is_array( $header_object->categories ) ) {
+
+							$current_categories = get_posts( array(
+								 'post_type' => Muut_Forum_Category_Utility::FORUMCATEGORY_POSTTYPE,
+								 'tax_query' => array(
+									 'taxonomy' => Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY,
+									 'field' => 'term_id',
+									 'terms' => $header_id,
+								 ),
+								'posts_per_page' => '-1',
+							 ));
+
+							$keep_categories_array = array();
 
 							$menu_order = 0;
 							foreach ( $header_object->categories as $category ) {
@@ -277,7 +302,20 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 
 									$custom_args = isset( $category->args ) ? $category->args : array();
 
-									$category_post_id = Muut_Forum_Category_Utility::createForumCategory( $category->name, $custom_args, $post_args );
+									$possible_post = get_posts( array(
+										'name' => sanitize_title( $category->name ),
+										'post_type' => Muut_Forum_Category_Utility::FORUMCATEGORY_POSTTYPE,
+										'posts_per_page' => '1',
+									));
+
+									if ( count( $possible_post ) > 0 ) {
+										$category_post_id = $possible_post[0]->ID;
+										wp_set_post_terms( $category_post_id, $header_term->slug, Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY, false );
+									} else {
+										$category_post_id = Muut_Forum_Category_Utility::createForumCategory( $category->name, $custom_args, $post_args );
+									}
+
+									$keep_categories_array[] = $category_post_id;
 
 									if ( is_int( $category_post_id ) ) {
 										$category_id = $category_post_id;
@@ -294,14 +332,27 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 
 									wp_set_post_terms( $category_id, $header_term->slug, Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY, false );
 
+									$keep_categories_array[] = $category_id;
+
 									if ( $update == true ) {
 										$menu_order++;
 									}
 								}
 							}
+
+							foreach( $current_categories as $current_category ) {
+								if ( !in_array( $current_category->ID, $keep_categories_array ) ) {
+									wp_remove_object_terms( $current_category->ID, $header_id, Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY );
+								}
+							}
 						}
 					}
 				}
+				$current_headers_superobject = Muut_Forum_Category_Utility::getForumCategoryHeaders();
+				foreach( $current_header_order as $delete_header ) {
+					wp_delete_term( $delete_header, Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY );
+				}
+
 				muut()->setOption( 'muut_category_headers', $custom_navigation_header_id_order );
 				do_action( 'muut_custom_nav_saved' );
 			}

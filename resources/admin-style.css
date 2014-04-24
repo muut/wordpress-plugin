@@ -160,3 +160,20 @@ p.disabled
     width: 57px;
     background-image: url( '//muut.com/apple-touch-icon-57x57-precomposed.png' );
 }
+
+.muut_forum_header_item span.delete-link a {
+    display: none;
+    float: right;
+    line-height: 28px;
+    margin-right: 5px;
+    color: #F00;
+}
+
+.muut_forum_category_item span.delete-link a {
+    display: none;
+    line-height: 16px;
+    float: right;
+    font-size: .8em;
+    margin-right: 5px;
+    color: #F00;
+}
