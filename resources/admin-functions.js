@@ -103,16 +103,6 @@ jQuery(document).ready( function($) {
     }
   });
 
-  $('.muut-category-header-actions > .delete-link').on('click', function() {
-      $(this).closest('.muut_forum_header_item').remove();
-      refresh_customized_navigation_array();
-  });
-
-  $('.muut_category_item_content > .delete-link').on('click', function() {
-    $(this).closest('.muut_forum_category_item').remove();
-    refresh_customized_navigation_array();
-  });
-
     // Hook up the sortable lists.
   function refresh_category_sortables() {
     $('#muut_forum_nav_headers').sortable({
@@ -149,6 +139,16 @@ jQuery(document).ready( function($) {
       $(this).find('.delete-link a').show();
     }).on('mouseout', function() {
       $(this).find('.delete-link a').hide();
+    });
+
+    $('.muut-category-header-actions > .delete-link').on('click', function() {
+      $(this).closest('.muut_forum_header_item').remove();
+      refresh_customized_navigation_array();
+    });
+
+    $('.muut_category_item_content > .delete-link').on('click', function() {
+      $(this).closest('.muut_forum_category_item').remove();
+      refresh_customized_navigation_array();
     });
   }
 
