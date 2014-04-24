@@ -72,8 +72,10 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			add_action( 'init', array( $this, 'initForumCategoryUtility' ), 10 );
 			add_action( 'init', array( 'Muut_Forum_Category_Utility', 'registerPostType' ), 20 );
 			add_action( 'init', array( $this, 'initCommentOverrides' ) );
-			add_action( 'admin_init', array( $this, 'adminInits' ) );
+			add_action( 'init', array( $this, 'initDeveloperSubscription' ) );
 			add_filter( 'comments_template', array( $this, 'initTemplateLoader' ) );
+
+			add_action( 'admin_init', array( $this, 'adminInits' ) );
 		}
 
 		/**
@@ -138,6 +140,26 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			$class = 'Muut_Forum_Category_Utility';
 			if ( !in_array( $class, $this->alreadyInit ) ) {
 				require_once( muut()->getPluginPath() . 'lib/forum-category.utility.class.php' );
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the Developer Subscription class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function initDeveloperSubscription() {
+			$class = 'Muut_Developer_Subscription';
+			if ( !in_array( $class, $this->alreadyInit )
+				&& muut()->getOption( 'subscription_api_key', '' )
+				&& muut()->getOption( 'subscription_secret_key', '' ) ) {
+				require_once( muut()->getPluginPath() . 'lib/subscriber/developer-subscription.class.php');
+				if ( class_exists( $class ) ) {
+					Muut_Developer_Subscription::instance();
+				}
 				$this->alreadyInit[] = $class;
 			}
 		}
