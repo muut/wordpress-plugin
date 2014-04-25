@@ -207,7 +207,10 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 * @since 3.0
 		 */
 		public function filterWrapperClass( $class ) {
-			return '';
+			if ( muut()->getOption( 'subscription_use_sso' ) ) {
+				$class = '';
+			}
+			return $class;
 		}
 
 		/**
@@ -219,7 +222,10 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 * @since 3.0
 		 */
 		public function filterWrapperId( $id_string ) {
-			return 'muut_sso';
+			if ( muut()->getOption( 'subscription_use_sso' ) ) {
+				$id_string = 'muut_sso';
+			}
+			return $id_string;
 		}
 	}
 }
