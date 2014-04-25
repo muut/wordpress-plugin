@@ -79,6 +79,7 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 */
 		public function addActions() {
 			add_action( 'wp_print_scripts', array( $this, 'printSsoJs' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueDeveloperScripts' ) );
 		}
 
 		/**
@@ -89,7 +90,23 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 * @since 3.0
 		 */
 		public function addFilters() {
+			add_filter( 'muut_wrapper_css_id', array( $this, 'filterWrapperId' ) );
+			add_filter( 'muut_wrapper_css_class', array( $this, 'filterWrapperClass' ) );
+		}
 
+		/**
+		 * Enqueue the JS script that handles developer functions (like SSO).
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function enqueueDeveloperScripts() {
+			if ( Muut_Forum_Page_Utility::isForumPage( get_the_ID() )
+				|| ( muut()->getOption( 'replace_comments' ) && is_singular() && comments_open() ) ) {
+				wp_enqueue_script( 'muut' );
+				wp_enqueue_script( 'muut-sso' );
+			}
 		}
 
 		/**
@@ -165,21 +182,44 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 				&& muut()->getOption( 'subscription_use_sso', '0' )
 			) {
 				$key = muut()->getOption( 'subscription_api_key', '' );
-				$timestamp = time();
 
-				echo 'var moot_conf = {';
+				echo 'var muut_conf = {';
 				echo 'login_url: "' . wp_login_url( get_permalink() ) . '",';
 				echo 'sso: {';
 				echo 'key: "' .  $key .'",';
 				echo 'timestamp: "' . $this->sso_timestamp . '",';
 				echo 'signature: "' . $this->getSsoSignature() . '",';
-				echo 'message: "' . $this->sso_message . '"';
+				echo 'message: "' . $this->getSsoMessage() . '"';
 				echo '}';
 				echo '}';
 			} else {
-				echo 'var moot_conf = {};';
+				echo 'var muut_conf = {};';
 			}
 			echo '</script>';
+		}
+
+		/**
+		 * Filters the container css class to work properly for SSO.
+		 *
+		 * @param string $class The current container attribution string.
+		 * @return string The modified attribute string.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function filterWrapperClass( $class ) {
+			return '';
+		}
+
+		/**
+		 * Filters the container element id value to work properly for SSO.
+		 *
+		 * @param string $id_string The current element id string.
+		 * @return string The modified attribute string.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function filterWrapperId( $id_string ) {
+			return 'muut_sso';
 		}
 	}
 }

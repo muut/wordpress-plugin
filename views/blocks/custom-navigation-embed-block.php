@@ -11,16 +11,14 @@ if ( !isset( $settings ) ) {
 	$settings = '';
 }
 
+$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
+
 if ( !isset( $path ) ) {
 	$path = Muut_Forum_Page_Utility::getRemoteForumPath( get_the_ID() );
 }
 ?>
 <!-- Muut placeholder tag -->
-<div class="muut">
-
-	<!-- Muut API -->
-	<a class="muut-url" href="/i/<?php echo muut()->getRemoteForumName() . '/' . $path; ?>"><?php echo get_the_title(); ?></a>
-
+<div <?php echo $id_attr; ?> class="muut-url" data-url="/i/<?php echo muut()->getRemoteForumName() . '/' . $path; ?>">
 
 	<!-- Custom HTML -->
 	<?php

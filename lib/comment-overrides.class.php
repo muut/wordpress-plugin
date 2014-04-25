@@ -151,7 +151,8 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			if ( !$path )
 				return false;
 
-			$anchor = '<a class="moot" href="/i/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
+			$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
+			$anchor = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="/i/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
 			if ( $echo ) {
 				echo $anchor;
 			} else {

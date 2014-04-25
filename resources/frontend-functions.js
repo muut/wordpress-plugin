@@ -9,6 +9,4 @@
  */
 jQuery(document).ready( function($) {
 
-  
-
 });

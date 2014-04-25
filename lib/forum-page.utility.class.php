@@ -228,7 +228,9 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 				include ( muut()->getPluginPath() . 'views/blocks/custom-navigation-embed-block.php' );
 				$embed = ob_get_clean();
 			} else {
-				$embed = '<a class="moot" href="/i/' . muut()->getRemoteForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
+				$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
+
+				$embed = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="/i/' . muut()->getRemoteForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
 			}
 
 			if ( $echo ) {

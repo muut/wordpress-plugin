@@ -65,6 +65,16 @@ if ( !class_exists( 'Muut' ) ) {
 		protected $pluginUrl;
 
 		/**
+		 * @property string The Muut container element css class.
+		 */
+		protected $wrapperClass;
+
+		/**
+		 * @property string The Muut container element css id.
+		 */
+		protected $wrapperId;
+
+		/**
 		 * @property array The plugin options array.
 		 */
 		protected $options;
@@ -104,6 +114,8 @@ if ( !class_exists( 'Muut' ) ) {
 			$this->pluginDir = trailingslashit( basename( dirname( dirname( __FILE__ ) ) ) );
 			$this->pluginPath = trailingslashit( dirname( dirname( __FILE__ ) ) );
 			$this->pluginUrl = trailingslashit( plugins_url( '', dirname( __FILE__ ) ) );
+			$this->wrapperClass = 'muut';
+			$this->wrapperId = '';
 			$this->adminNotices = array();
 
 			$this->loadLibraries();
@@ -213,6 +225,28 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function getRemoteForumName() {
 			return $this->getOption( 'remote_forum_name', '' );
+		}
+
+		/**
+		 * Gets the Muut element wrapper class.
+		 *
+		 * @return string The container css class attribute.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function getWrapperCssClass() {
+			return ' ' . apply_filters( 'muut_wrapper_css_class', $this->wrapperClass );
+		}
+
+		/**
+		 * Gets the Muut element wrapper id attribute.
+		 *
+		 * @return string The container id attribute.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function getWrapperCssId() {
+			return apply_filters( 'muut_wrapper_css_id', $this->wrapperId );
 		}
 
 		/**
@@ -367,9 +401,11 @@ if ( !class_exists( 'Muut' ) ) {
 			wp_register_script( 'x-editable', $this->pluginUrl . 'vendor/jqueryui-editable/js/jqueryui-editable.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-tooltip', 'jquery-ui-button' ), '1.5.1', true);
 
 			wp_register_script( 'muut-frontend-functions', $this->pluginUrl . 'resources/frontend-functions.js', array( 'jquery' ), '1.0', true );
+			wp_register_script( 'muut-sso', $this->pluginUrl . 'resources/muut-sso.js', array( 'jquery', 'muut' ), '1.0', true );
 
 			wp_register_style( 'muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
 			wp_register_style( 'x-editable-style', $this->pluginUrl . 'vendor/jqueryui-editable/css/jqueryui-editable.css' );
+			wp_register_style( 'muut-forum-css', '//cdn.muut.com/latest/moot.css', array(), $this->version );
 
 			// Localization rules.
 			$localizations = array(
@@ -459,8 +495,9 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function enqueueFrontendScripts() {
 			if ( Muut_Forum_Page_Utility::isForumPage( get_the_ID() )
-			|| ( $this->getOption( 'replace_comments' ) && is_singular() ) ) {
+			|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() ) ) {
 				wp_enqueue_script( 'muut' );
+				wp_enqueue_style( 'muut-forum-css' );
 			}
 		}
 
@@ -934,7 +971,12 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function addBodyClasses( $classes ) {
-			// Add body class functionality for the fronted.
+			if ( Muut_Forum_Page_Utility::isForumPage( get_the_ID() )
+				|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() ) ) {
+				$classes[] = 'muut-enabled';
+				$classes[] = 'has-muut';
+				$classes[] = 'has-moot';
+			}
 
 			return $classes;
 		}
