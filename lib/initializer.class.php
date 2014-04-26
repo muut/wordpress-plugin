@@ -75,6 +75,9 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			add_action( 'init', array( $this, 'initDeveloperSubscription' ) );
 			add_filter( 'comments_template', array( $this, 'initTemplateLoader' ) );
 
+			// Deprecating these, scheduled for full removal.
+			add_action( 'init', array( $this, 'initMuutShortcodes' ) );
+
 			add_action( 'admin_init', array( $this, 'adminInits' ) );
 		}
 
@@ -177,6 +180,24 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 				require_once( muut()->getPluginPath() . 'lib/admin/admin-custom-navigation.class.php' );
 				if ( class_exists( $class ) ) {
 					Muut_Admin_Custom_Navigation::instance();
+				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the Muut Shortcodes. We will be getting rid of these soon.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function initMuutShortcodes() {
+			$class = 'Muut_Shortcodes';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/shortcodes.class.php' );
+				if ( class_exists( $class ) ) {
+					Muut_Shortcodes::instance();
 				}
 				$this->alreadyInit[] = $class;
 			}
