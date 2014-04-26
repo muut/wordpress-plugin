@@ -75,6 +75,12 @@ if ( !class_exists( 'Muut' ) ) {
 		protected $wrapperId;
 
 		/**
+		 * @property string The path prefix for fetching information from the Muut servers.
+		 *                      Depends on if proxy rewriting is enabled.
+		 */
+		protected $contentPathPrefix;
+
+		/**
 		 * @property array The plugin options array.
 		 */
 		protected $options;
@@ -219,6 +225,25 @@ if ( !class_exists( 'Muut' ) ) {
 		}
 
 		/**
+		 * Gets the content path prefix for fetching content from the Muut servers.
+		 * Depends on if proxy rewriting is enabled.
+		 *
+		 * @return string The path prefix (full server is rewriting is disabled).
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function getContentPathPrefix() {
+			if ( !isset( $this->contentPathPrefix ) ) {
+				if ( $this->getOption( 'disable_proxy_rewrites', false ) ) {
+					$this->contentPathPrefix = 'https://' . self::MUUTSERVERS . '/';
+				} else {
+					$this->contentPathPrefix = '/';
+				}
+			}
+			return $this->contentPathPrefix;
+		}
+
+		/**
 		 * Gets the remote forum name that is registered.
 		 *
 		 * @return string The remote forum name.
@@ -257,7 +282,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function maybeAddRewriteRules() {
-			if ( $this->getOption( 'remote_forum_name', '' ) !== '' && !$this->getOption( 'added_rewrite_rules', false ) ) {
+			if ( $this->getOption( 'remote_forum_name', '' ) !== '' && !$this->getOption( 'added_rewrite_rules', false ) && !$this->getOption( 'disable_proxy_rewrites', false ) ) {
 				$this->addProxyRewrites();
 			}
 		}
@@ -455,6 +480,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'forum_category_defaults' => array(
 					'show_in_allposts' => true,
 				),
+				'disable_proxy_rewrites' => false
 			) );
 
 			return $defaults;
@@ -738,13 +764,15 @@ if ( !class_exists( 'Muut' ) ) {
 				'show_online_default',
 				'allow_uploads_default',
 				'subscription_use_sso',
+				'disable_proxy_rewrites',
 			) );
 
 			foreach ( $boolean_settings as $boolean_setting ) {
 				$settings[$boolean_setting] = isset( $settings[$boolean_setting]) ? $settings[$boolean_setting] : '0';
 			}
 
-			if ( isset( $settings['remote_forum_name'] ) && $settings['remote_forum_name'] != $this->getOption( 'remote_forum_name' ) ) {
+			if ( ( isset( $settings['remote_forum_name'] ) && $settings['remote_forum_name'] != $this->getOption( 'remote_forum_name' ) )
+				|| ( isset( $settings['disable_proxy_rewrites'] ) && $settings['disable_proxy_rewrites'] != $this->getOption( 'disable_proxy_rewrites' ) ) ) {
 				flush_rewrite_rules( true );
 			}
 

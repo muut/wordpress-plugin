@@ -230,7 +230,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 			} else {
 				$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
 
-				$embed = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="/i/' . muut()->getRemoteForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
+				$embed = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . muut()->getRemoteForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
 			}
 
 			if ( $echo ) {

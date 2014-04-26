@@ -45,7 +45,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 		/**
 		 * The class constructor.
 		 *
-		 * @return Muut_Initializer
+		 * @return Muut_Comment_Overrides
 		 * @author Paul Hughes
 		 * @since  3.0
 		 */
@@ -152,7 +152,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 				return false;
 
 			$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
-			$anchor = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="/i/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
+			$anchor = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
 			if ( $echo ) {
 				echo $anchor;
 			} else {

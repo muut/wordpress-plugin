@@ -123,6 +123,20 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 			</tr>
 			</tbody>
 		</table>
+		<h3 class="title"><?php _e( 'Advanced Settings', 'muut' ); ?></h3>
+		<p><?php printf( __( 'These settings should not have to be altered.', 'muut' ) ); ?></p>
+		<table class="form-table">
+			<tbody>
+			<tr>
+				<th scope="row">
+					<label for="muut_disable_proxy_rewrites"><?php _e( 'Disable Proxy Rewrites', 'muut' ); ?></label>
+				</th>
+				<td>
+					<input name="setting[disable_proxy_rewrites]" type="checkbox" id="muut_disable_proxy_rewrites" value="1" <?php checked( '1', muut()->getOption( 'disable_proxy_rewrites', '0' ) ); ?> />
+				</td>
+			</tr>
+			</tbody>
+		</table>
 		<h3 class="title"><?php __( 'Forum Page Defaults', 'muut' ); ?></h3>
 		<p class="submit">
 			<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
