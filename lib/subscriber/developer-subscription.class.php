@@ -185,8 +185,10 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 			) {
 				$key = muut()->getOption( 'subscription_api_key', '' );
 
+				$login_url = apply_filters( 'muut_sso_login_url', wp_login_url( get_permalink() ) );
+
 				echo 'var muut_conf = {';
-				echo 'login_url: "' . wp_login_url( get_permalink() ) . '",';
+				echo 'login_url: "' . $login_url . '",';
 				echo 'api: {';
 				echo 'key: "' .  $key .'",';
 				echo 'timestamp: "' . $this->sso_timestamp . '",';
