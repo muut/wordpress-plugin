@@ -121,33 +121,37 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 				return $this->sso_message;
 			}
 
-			if ( !is_user_logged_in()
-				|| !muut()->getOption( 'subscription_api_key', '' )
+			if ( !muut()->getOption( 'subscription_api_key', '' )
 				|| !muut()->getOption( 'subscription_use_sso', '0' )
 			) {
 				return false;
 			}
 
-			$user = wp_get_current_user();
-			$key = muut()->getOption( 'subscription_api_key' );
-			$display_name = $user->display_name;
-			$avatar = get_user_meta($user->ID, 'profilepicture', true);
-			if (!$avatar) {
-				$avatar = function_exists( 'bp_core_fetch_avatar' ) ? bp_core_fetch_avatar( array( 'item_id' => $user->ID, 'html' => false ) ) : "//gravatar.com/avatar/" . md5( $user->user_email );
+			if ( !is_user_logged_in() ) {
+				$sso = array( 'user' => array() );
+			} else {
+
+				$user = wp_get_current_user();
+				$key = muut()->getOption( 'subscription_api_key' );
+				$display_name = $user->display_name;
+				$avatar = get_user_meta($user->ID, 'profilepicture', true);
+				if (!$avatar) {
+					$avatar = function_exists( 'bp_core_fetch_avatar' ) ? bp_core_fetch_avatar( array( 'item_id' => $user->ID, 'html' => false ) ) : "//gravatar.com/avatar/" . md5( $user->user_email );
+				}
+
+				$sso = array(
+					'user' => array(
+						'id' => $user->user_login,
+						'email' => $user->user_email,
+						'avatar' => $avatar,
+						'displayname' => $display_name,
+						'is_admin' => is_super_admin()
+					)
+				);
 			}
 
-			$sso = array(
-				"user" => array(
-					"id" => $user->user_login,
-					"email" => $user->user_email,
-					"avatar" => $avatar,
-					"displayname" => $display_name,
-					"is_admin" => is_super_admin()
-				)
-			);
-
 			$this->sso_message = base64_encode( json_encode( $sso ) );
-			return base64_encode(json_encode($sso));
+			return $this->sso_message;
 		}
 
 		/**
@@ -158,8 +162,7 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 * @since 3.0
 		 */
 		private function getSsoSignature() {
-			if ( !is_user_logged_in()
-				|| !muut()->getOption( 'subscription_secret_key', '' )
+			if ( !muut()->getOption( 'subscription_secret_key', '' )
 				|| !muut()->getOption( 'subscription_use_sso', '0' )
 			) {
 				return false;
@@ -177,21 +180,20 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 */
 		public function printSsoJs() {
 			echo '<script type="text/javascript">';
-			if ( is_user_logged_in()
-				&& muut()->getOption( 'subscription_api_key', '' )
+			if ( muut()->getOption( 'subscription_api_key', '' )
 				&& muut()->getOption( 'subscription_use_sso', '0' )
 			) {
 				$key = muut()->getOption( 'subscription_api_key', '' );
 
 				echo 'var muut_conf = {';
 				echo 'login_url: "' . wp_login_url( get_permalink() ) . '",';
-				echo 'sso: {';
+				echo 'api: {';
 				echo 'key: "' .  $key .'",';
 				echo 'timestamp: "' . $this->sso_timestamp . '",';
 				echo 'signature: "' . $this->getSsoSignature() . '",';
 				echo 'message: "' . $this->getSsoMessage() . '"';
 				echo '}';
-				echo '}';
+				echo '};';
 			} else {
 				echo 'var muut_conf = {};';
 			}
