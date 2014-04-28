@@ -78,7 +78,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			// Deprecating these, scheduled for full removal.
 			add_action( 'init', array( $this, 'initMuutShortcodes' ) );
 
-			add_action( 'admin_init', array( $this, 'adminInits' ) );
+			add_action( 'admin_init', array( $this, 'adminInits' ), 3 );
 		}
 
 		/**
@@ -186,6 +186,24 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		}
 
 		/**
+		 * Initializes the plugin Updater class, to pass along old options and other functionality.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function initUpdater() {
+			$class = 'Muut_Updater';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/updater.class.php' );
+				if ( class_exists( $class ) ) {
+					Muut_Updater::instance();
+				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
 		 * Initializes the Muut Shortcodes. We will be getting rid of these soon.
 		 *
 		 * @return void
@@ -214,6 +232,9 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			$page = isset( $_GET['page'] ) ? $_GET['page'] : '';
 			if ( $page == 'muut_custom_navigation' ) {
 				$this->initAdminCustomNav();
+			}
+			if ( version_compare( Muut::VERSION, muut()->getOption( 'current_version', '0' ), '>' ) ) {
+				$this->initUpdater();
 			}
 		}
 	}
