@@ -61,6 +61,14 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 					<input name="setting[override_all_comments]" type="checkbox" id="muut_override_all_comments" value="1" <?php checked( '1', muut()->getOption( 'override_all_comments', '0' ) ); ?> />
 				</td>
 			</tr>
+			<tr data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')">
+				<th scope="row">
+					<label for="muut_show_comments_in_forum"><?php _e( 'Show Comments In Forum', 'muut' ); ?></label>
+				</th>
+				<td>
+					<input name="setting[show_comments_in_forum]" type="checkbox" id="muut_show_comments_in_forum" value="1" <?php checked( '1', muut()->getOption( 'override_all_comments', '0' ) ); ?> />
+				</td>
+			</tr>
 			</tbody>
 		</table>
 		<h3 class="title"><?php _e( 'Forum Page Defaults', 'muut' ); ?></h3>

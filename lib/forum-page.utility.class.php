@@ -241,7 +241,20 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 		}
 
 		/**
+		 * Gets and echoes the markup for displaying the comments link on the forum navigation.
 		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
 		 */
+		public static function forumPageCommentsNavigationItem( $category_headers ) {
+			if ( muut()->getOption( 'show_comments_in_forum' ) ) {
+				if ( !empty( $category_headers ) ) {
+					echo '<div class="m-h3">' . apply_filters( 'muut_forum_comments_navigation_header', __( 'Site', 'muut' ) ) . '</div>';
+					$class = 'non-category ';
+					echo '<a href="#!/' . muut()->getOption( 'comments_base_domain' ) . '" class="' . $class . '">' . __( 'Comments', 'muut' ) . '</a>';
+				}
+			}
+		}
 	}
 }

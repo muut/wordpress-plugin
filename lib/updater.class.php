@@ -153,6 +153,7 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 						'remote_forum_name' => get_option( 'muut_forum_name', null ),
 						'language' => get_option( 'muut_language', null ),
 						'replace_comments' => get_option( 'muut_generate', null ),
+						'show_comments_in_forum' => get_option( 'muut_comments_under_forums', null ),
 						'subscription_api_key' => get_option( 'muut_api_key', null ),
 						'subscription_secret_key' => get_option( 'muut_secret_key', null ),
 						'subscription_use_sso' => get_option( 'muut_api_key', false ) && get_option( 'muut_secret_key', false ) ? true : false,

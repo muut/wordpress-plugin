@@ -151,6 +151,8 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ) );
 
 			add_action( 'wp_print_scripts', array( $this, 'printCurrentPageJs' ) );
+
+			add_action( 'muut_forum_custom_navigation_after_headers', array( 'Muut_Forum_Page_Utility', 'forumPageCommentsNavigationItem' ), 10 , 1 );
 		}
 
 		/**
@@ -489,6 +491,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'language' => $default_lang,
 				'replace_comments' => false,
 				'override_all_comments' => false,
+				'show_comments_in_forum' => false,
 				'forum_home_id' => false,
 				'forum_page_defaults' => array(
 					'is_threaded' => false,
@@ -563,8 +566,10 @@ if ( !class_exists( 'Muut' ) ) {
 			$page_id = get_the_ID();
 			if ( Muut_Forum_Page_Utility::isForumPage( $page_id ) ) {
 				echo '<script type="text/javascript">';
-				if ( muut()->getOption( 'forum_home_id', 0 ) == $page_id ) {
+				if ( $this->getOption( 'forum_home_id', 0 ) == $page_id ) {
 					echo 'var muut_current_page_permalink = "' . get_permalink( $page_id ) . '";';
+					echo 'var muut_show_comments_in_nav = ' . $this->getOption( 'show_comments_in_forum' ) . ';';
+					echo 'var muut_comments_base_domain = "' . $this->getOption( 'comments_base_domain' ) . '";';
 				}
 				echo '</script>';
 			}
@@ -803,6 +808,7 @@ if ( !class_exists( 'Muut' ) ) {
 			$boolean_settings = apply_filters( 'muut_boolean_settings', array(
 				'replace_comments',
 				'override_all_comments',
+				'show_comments_in_forum',
 				'is_threaded_default',
 				'show_online_default',
 				'allow_uploads_default',
@@ -1032,6 +1038,10 @@ if ( !class_exists( 'Muut' ) ) {
 				$classes[] = 'has-moot';
 				if ( $this->getOption( 'forum_home_id', '0' ) == get_the_ID() ) {
 					$classes[] = 'muut-forum-home';
+					$category_headers = Muut_Forum_Category_Utility::getForumCategoryHeaders();
+					if ( !empty( $category_headers ) ) {
+						$classes[] = 'muut-custom-nav';
+					}
 				}
 			}
 
