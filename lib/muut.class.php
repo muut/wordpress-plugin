@@ -501,7 +501,8 @@ if ( !class_exists( 'Muut' ) ) {
 				'forum_category_defaults' => array(
 					'show_in_allposts' => true,
 				),
-				'disable_proxy_rewrites' => false
+				'disable_proxy_rewrites' => false,
+				'comments_base_domain' => $_SERVER['SERVER_NAME'],
 			) );
 
 			return $defaults;

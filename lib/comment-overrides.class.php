@@ -94,7 +94,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 
 			if ( $domain == '' ) {
 				// Assign the domain name to the post for permanent reference.
-				$domain = $_SERVER['SERVER_NAME'];
+				$domain = muut()->getOption( 'comments_base_domain' );
 				update_post_meta( $post_id, 'muut_post_domain', apply_filters( 'muut_post_comments_domain', $domain, $post_id ) );
 			}
 
