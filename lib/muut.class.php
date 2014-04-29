@@ -149,6 +149,8 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'init', array( $this, 'disregardOldMoot' ), 2 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueueAdminScripts' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ) );
+
+			add_action( 'wp_print_scripts', array( $this, 'printCurrentPageJs' ) );
 		}
 
 		/**
@@ -543,6 +545,27 @@ if ( !class_exists( 'Muut' ) ) {
 			|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() ) ) {
 				wp_enqueue_script( 'muut' );
 				wp_enqueue_style( 'muut-forum-css' );
+				wp_enqueue_script( 'muut-frontend-functions' );
+			}
+
+
+		}
+
+		/**
+		 * Prints the JS necessary on a given frontend page.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function printCurrentPageJs() {
+			$page_id = get_the_ID();
+			if ( Muut_Forum_Page_Utility::isForumPage( $page_id ) ) {
+				echo '<script type="text/javascript">';
+				if ( muut()->getOption( 'forum_home_id', 0 ) == $page_id ) {
+					echo 'var muut_current_page_permalink = "' . get_permalink( $page_id ) . '";';
+				}
+				echo '</script>';
 			}
 		}
 
@@ -1006,6 +1029,9 @@ if ( !class_exists( 'Muut' ) ) {
 				$classes[] = 'muut-enabled';
 				$classes[] = 'has-muut';
 				$classes[] = 'has-moot';
+				if ( $this->getOption( 'forum_home_id', '0' ) == get_the_ID() ) {
+					$classes[] = 'muut-forum-home';
+				}
 			}
 
 			return $classes;
