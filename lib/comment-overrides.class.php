@@ -146,7 +146,10 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 
 			$path = $this->getCommentsPath( $post_id, true );
 
-			$settings = 'data-show_online="false" data-upload="false" ';
+			$post_type = get_post_type_object( get_post_type( $post_id ) );
+			$post_type_name = $post_type->labels->singular_name;
+
+			$settings = 'data-show_online="false" data-upload="false" title="' . $post_type_name . ': ' . get_the_title( $post_id ) . '" ';
 
 			if ( !$path )
 				return false;
