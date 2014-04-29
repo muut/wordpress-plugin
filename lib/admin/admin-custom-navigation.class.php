@@ -62,7 +62,7 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		 * @since 3.0
 		 */
 		public function addActions() {
-			add_action( 'admin_head', array( $this, 'printCustomNavTemplatesJs' ) );
+			add_action( 'admin_print_scripts', array( $this, 'printCustomNavTemplatesJs' ) );
 			add_action( 'admin_head', array( $this, 'saveCustomNavigation' ) );
 			add_action( 'admin_notices', array( $this, 'adminNotices' ) );
 		}
