@@ -137,7 +137,6 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since  3.0
 		 */
 		protected function addActions() {
-			add_action( 'admin_init', array( $this, 'maybeSetVersion' ) );
 			add_action( 'admin_init', array( $this, 'maybeAddRewriteRules' ) );
 			add_action( 'admin_menu', array( $this, 'createAdminMenuItems' ) );
 			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ) );
@@ -147,6 +146,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'save_post_page', array( $this, 'saveForumPage' ), 10, 2 );
 
 			add_action( 'init', array( $this, 'registerScriptsAndStyles' ) );
+			add_action( 'init', array( $this, 'disregardOldMoot' ), 2 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueueAdminScripts' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ) );
 		}
@@ -370,6 +370,25 @@ if ( !class_exists( 'Muut' ) ) {
 				add_action( 'admin_head', array( $this, 'maybeAddRewriteRules' ) );
 			}
 			return $hard_flush;
+		}
+
+		/**
+		 * If the user is upgrading from the OLD plugin with namespace "moot" instead of "muut" and has not yet
+		 * deactivated it, make sure to ignore it.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 2.0.13
+		 */
+		public function disregardOldMoot() {
+			if ( class_exists( 'Moot' ) ) {
+				remove_filter('the_content', array(Moot::get_instance(), 'default_comments'));
+
+				remove_action('wp_enqueue_scripts', array(Moot::get_instance(), 'moot_includes'));
+				remove_action('wp_head', array(Moot::get_instance(), 'moot_head'));
+				remove_action('admin_menu', array(Moot::get_instance(), 'moot_admin_menu'));
+				remove_action('admin_init', array(Moot::get_instance(), 'moot_settings'));
+			}
 		}
 
 		/**
@@ -788,23 +807,6 @@ if ( !class_exists( 'Muut' ) ) {
 			$settings['subscription_secret_key'] = isset( $settings['subscription_secret_key']) ? $settings['subscription_secret_key'] : '';
 
 			return apply_filters( 'muut_settings_validated', $settings );
-		}
-
-		/**
-		 * Checks to see that the stored version number is the same as the current version number, and if not, it fires
-		 * the version-chance action and updates the stored number.
-		 *
-		 * @return bool True if version was changed, False if not.
-		 * @author Paul Hughes
-		 * @since  3.0
-		 */
-		public function maybeSetVersion() {
-			$current_version = $this->getOption( 'current_version', '0' );
-			if ( version_compare( self::VERSION, $current_version ) != '0' ) {
-				if ( $this->setOption( 'current_version', self::VERSION ) ) {
-					do_action( 'muut_updated_current_version', self::VERSION, $current_version );
-				}
-			}
 		}
 
 		/**
