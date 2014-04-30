@@ -133,6 +133,7 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 		public function updateOptions( $to_version ) {
 			switch ( $to_version ) {
 				case '2.0.13':
+
 					update_option( 'muut_forum_name', get_option( 'moot_forum_name', '' ) );
 					update_option( 'muut_api_key', get_option( 'moot_api_key', '' ) );
 					update_option( 'muut_secret_key', get_option( 'moot_secret_key', '' ) );
@@ -149,6 +150,10 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 				break;
 
 				case '3.0':
+					if ( get_option( 'muut_forum_name', '' ) != '' && $this->oldVersion == '0' ) {
+						$this->oldVersion = '2.0.13';
+					}
+
 					$new_settings = array(
 						'remote_forum_name' => get_option( 'muut_forum_name', null ),
 						'language' => get_option( 'muut_language', null ),
@@ -157,7 +162,7 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 						'subscription_api_key' => get_option( 'muut_api_key', null ),
 						'subscription_secret_key' => get_option( 'muut_secret_key', null ),
 						'subscription_use_sso' => get_option( 'muut_api_key', false ) && get_option( 'muut_secret_key', false ) ? true : false,
-						'comments_base_domain' => $_SERVER['SERVER_NAME'],
+						'comments_base_domain' => $this->oldVersion == '0' ? $_SERVER['SERVER_NAME'] : 'wordpress',
 					);
 
 					// muut()->setOptions() is a protected method, so we have to do it one-by-one.
