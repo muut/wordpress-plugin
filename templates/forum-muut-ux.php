@@ -16,13 +16,15 @@ $root_forum = muut_get_option( 'remote_forum_name', '' );
 $sub_forum = muut_get_page_forum_path();
 ?>
 	<div id="main-content" class="main-content">
-		<div id="content" class="site-content" role="main">
-			<?php while ( have_posts() ) : the_post();
-				if ( muut_is_forum_page() ) {
-					muut_forum_page_embed();
-				}
-			endwhile; ?>
-		</div><!-- #content -->
+		<div id="primary" class="content-area">
+			<div id="content" class="site-content" role="main">
+				<?php while ( have_posts() ) : the_post();
+					if ( muut_is_forum_page() ) {
+						muut_forum_page_embed();
+					}
+				endwhile; ?>
+			</div><!-- #content -->
+		</div><!-- #primary -->
 	</div><!-- #main-content -->
 <?php
 get_sidebar();
