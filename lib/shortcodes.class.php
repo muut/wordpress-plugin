@@ -52,6 +52,7 @@ if ( !class_exists( 'Muut_Shortcodes' ) ) {
 		 */
 		protected function __construct() {
 			$this->addActions();
+			$this->addFilters();
 			$this->addShortcodes();
 		}
 
@@ -65,6 +66,17 @@ if ( !class_exists( 'Muut_Shortcodes' ) ) {
 		protected function addActions() {
 			add_action( 'admin_head', array( $this, 'maybeShowShortcodeNotice' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ) );
+		}
+
+		/**
+		 * Adds the proper filters.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		protected function addFilters() {
+			add_filter( 'muut_requires_muut_resources', array( $this, 'checkForShortcodes' ), 10 , 2 );
 		}
 
 		/**
@@ -212,15 +224,44 @@ if ( !class_exists( 'Muut_Shortcodes' ) ) {
 
 			if ($forum_name == null) return "";
 
-			$tag = '<a class="moot" href="' . muut()->getContentPathPrefix() . 'i/' . $forum_name;
-			$page_slug = sanitize_title( get_the_title() );
+			$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
 
+			$tag = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . $forum_name;
+			$page_slug = sanitize_title( get_the_title() );
 
 			// (bool ? this : that) not working
 			if ( $forum )   return $tag .'">' . $forumname . 'forums</a>';
 			if ( $threaded ) return $tag .'/wordpress/' . $page_slug . '">Comments</a>';
 			if ( $path )    return $tag . '/' . $path .'">Comments are here</a>';
 			return $tag . '/wordpress:' . $page_slug . '">Comments</a>';
+		}
+
+		/**
+		 * Checks if the current post uses a shortcode and if so, returns true.
+		 *
+		 * @param bool $requires_resources Whether the current post is a forum page.
+		 * @param int $page_id The page ID we are checking.
+		 * @return bool Whether it is a forum page, considering shortcodes.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function checkForShortcodes( $requires_resources, $page_id ) {
+			if ( !$requires_resources ) {
+				if ( $page_id == get_the_ID() ) {
+					global $post;
+
+					if ( !is_object( $post ) || !is_a( $post, 'WP_Post' ) ) {
+						$post = get_post( $page_id );
+					}
+				} else {
+					$post = get_post( $page_id );
+				}
+				if ( has_shortcode( $post->post_content, 'muut' ) || has_shortcode( $post->post_content, 'moot' ) ) {
+					$requires_resources = true;
+				}
+			}
+
+			return $requires_resources;
 		}
 	}
 }

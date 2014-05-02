@@ -545,8 +545,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function enqueueFrontendScripts() {
-			if ( Muut_Forum_Page_Utility::isForumPage( get_the_ID() )
-			|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() ) ) {
+			if ( $this->needsMuutResources() ) {
 				wp_enqueue_script( 'muut' );
 				wp_enqueue_style( 'muut-forum-css' );
 				wp_enqueue_script( 'muut-frontend-functions' );
@@ -1031,8 +1030,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function addBodyClasses( $classes ) {
-			if ( Muut_Forum_Page_Utility::isForumPage( get_the_ID() )
-				|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() ) ) {
+			if ( $this->needsMuutResources( get_the_ID() ) ) {
 				$classes[] = 'muut-enabled';
 				$classes[] = 'has-muut';
 				$classes[] = 'has-moot';
@@ -1046,6 +1044,32 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			return $classes;
+		}
+
+		/**
+		 * Checks if the a page needs to include the frontend Muut resources.
+		 *
+		 * @param int $page_id The page we are checking.
+		 * @return bool Whether we need the frontend Muut resources or not.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function needsMuutResources( $page_id = null ) {
+			if ( is_null( $page_id ) ) {
+				$page_id = get_the_ID();
+			}
+
+			if ( !is_numeric( $page_id ) ) {
+				return false;
+			}
+
+			$return = false;
+			if ( Muut_Forum_Page_Utility::isForumPage( get_the_ID() )
+				|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() ) ) {
+				$return = true;
+			}
+
+			return apply_filters( 'muut_requires_muut_resources', $return, $page_id );
 		}
 
 	}

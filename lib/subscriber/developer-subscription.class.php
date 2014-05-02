@@ -102,8 +102,8 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 * @since 3.0
 		 */
 		public function enqueueDeveloperScripts() {
-			if ( Muut_Forum_Page_Utility::isForumPage( get_the_ID() )
-				|| ( muut()->getOption( 'replace_comments' ) && is_singular() && comments_open() ) ) {
+			global $post;
+			if ( muut()->needsMuutResources() ) {
 				wp_enqueue_script( 'muut' );
 				wp_enqueue_script( 'muut-sso' );
 			}

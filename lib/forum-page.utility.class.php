@@ -119,10 +119,11 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 		 */
 		public static function isForumPage( $page_id ) {
 			if( is_numeric( $page_id ) && get_post_meta( $page_id, self::META_ISFORUMPAGE, true ) != '' ) {
-				return true;
+				$value = true;
 			} else {
-				return false;
+				$value = false;
 			}
+			return apply_filters( 'muut_is_forum_page', $value, $page_id );
 		}
 
 		/**
