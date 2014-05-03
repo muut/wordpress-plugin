@@ -71,6 +71,10 @@ jQuery(document).ready( function($) {
     $(this).check_requires_fields();
   });
 
+  $('body.post-type-page span.muut_requires_input_block').each(function() {
+    $(this).check_requires_fields();
+  })
+
   /********************************************/
   /* CODE FOR CUSTOM NAVIGATION FUNCTIONALITY */
   /********************************************/

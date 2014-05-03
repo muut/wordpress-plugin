@@ -141,7 +141,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 
 			$path = get_post_meta( $page_id, self::META_REMOTEPATH, true );
 
-			if ( !self::getForumPageOption( $page_id, 'is_threaded', false ) && !$no_suffix  ) {
+			if ( muut()->getOption( 'forum_home_id', false ) != $page_id && !self::getForumPageOption( $page_id, 'is_threaded', false ) && !$no_suffix  ) {
 				$path .= ':comments';
 			}
 			return $path;

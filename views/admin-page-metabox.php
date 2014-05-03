@@ -47,14 +47,14 @@ if ( $is_forum != '1' ) {
 			<?php if ( $forum_home_id != get_the_ID() && $forum_home_id > 0 ) printf( __( 'Current Forum Home is %s', 'muut' ), '<a href="' . admin_url( 'post.php?post=' . $forum_home_id . '&action=edit' ) . '">' . $forum_home_post_title . '</a>' ); ?>
 		</p>
 		<p>
-		<input name="muut_forum_is_threaded" type="checkbox" id="muut_forum_is_threaded" value="1" <?php checked( '1', Muut_Forum_Page_Utility::getForumPageOption( get_the_ID(), 'is_threaded' ) ); ?> />
-		<?php _e( 'Threaded Posts', 'muut' ); ?><br />
+		<span class="muut_requires_input_block" data-muut_requires="muut_forum_is_home" data-muut_require_func="is(':not(:checked)')"><input name="muut_forum_is_threaded" type="checkbox" id="muut_forum_is_threaded" value="1" <?php checked( '1', Muut_Forum_Page_Utility::getForumPageOption( get_the_ID(), 'is_threaded' ) ); ?> />
+		<?php _e( 'Threaded Posts', 'muut' ); ?></span><br />
 		<label class="screen-reader-text" for="muut_forum_is_threaded"><?php _e( 'Threaded Posts', 'muut' ); ?></label>
-		<input name="muut_forum_show_online" type="checkbox" id="muut_forum_show_online" value="1" <?php checked( '1', Muut_Forum_Page_Utility::getForumPageOption( get_the_ID(), 'show_online' ) ); ?> />
-		<?php _e( 'Show Online Users', 'muut' ); ?><br />
+		<span class="muut_requires_input_block" data-muut_requires="muut_forum_is_home" data-muut_require_func="is(':not(:checked)')"><input name="muut_forum_show_online" type="checkbox" id="muut_forum_show_online" value="1" <?php checked( '1', Muut_Forum_Page_Utility::getForumPageOption( get_the_ID(), 'show_online' ) ); ?> />
+		<?php _e( 'Show Online Users', 'muut' ); ?></span><br />
 		<label class="screen-reader-text" for="muut_forum_show_online"><?php _e( 'Show Online Users', 'muut' ); ?></label>
-		<input name="muut_forum_allow_uploads" type="checkbox" id="muut_forum_allow_uploads" value="1" <?php checked( '1', Muut_Forum_Page_Utility::getForumPageOption( get_the_ID(), 'allow_uploads' ) ); ?> />
-		<?php _e( 'Allow Image Uploads', 'muut' ); ?>
+		<span class="muut_requires_input_block" data-muut_requires="muut_forum_is_home" data-muut_require_func="is(':not(:checked)')"><input name="muut_forum_allow_uploads" type="checkbox" id="muut_forum_allow_uploads" value="1" <?php checked( '1', Muut_Forum_Page_Utility::getForumPageOption( get_the_ID(), 'allow_uploads' ) ); ?> />
+		<?php _e( 'Allow Image Uploads', 'muut' ); ?></span>
 		<label class="screen-reader-text" for="muut_forum_allow_uploads"><?php _e( 'Allow Image Uploads', 'muut' ); ?></label>
 		</p>
 	</div>
