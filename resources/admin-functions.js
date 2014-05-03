@@ -200,6 +200,7 @@ jQuery(document).ready( function($) {
   if ( typeof($.fn.editable) !== 'undefined') {
     $.fn.editable.defaults.mode = 'inline';
     $.fn.editable.defaults.showbuttons = false;
+    $.fn.editable.defaults.onblur = 'submit';
 
     $('#muut_forum_nav_headers .x-editable').editable().on('click', function() {
       refresh_category_sortables();
