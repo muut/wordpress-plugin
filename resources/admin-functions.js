@@ -169,22 +169,28 @@ jQuery(document).ready( function($) {
 
       // Prepare the categories array under this header.
       for (var index_y = 0; index_y < header_categories_array.length; index_y++) {
-        var show_in_allposts_value = $('#' + header_categories_array[index_y] + ' .muut_show_in_allposts_check').is(':checked');
-        header_categories_new[index_y] = {
-          id: $('#' + header_categories_array[index_y]).data('id'),
-          name: $('#' + header_categories_array[index_y] + ' .muut-category-title.editable').editable('getValue', true),
-          args: {
-            show_in_allposts: show_in_allposts_value
-          }
-        };
+        var category_title = $('#' + header_categories_array[index_y] + ' .muut-category-title.editable').editable('getValue', true);
+        if (category_title.length > 0) {
+          var show_in_allposts_value = $('#' + header_categories_array[index_y] + ' .muut_show_in_allposts_check').is(':checked');
+          header_categories_new[index_y] = {
+            id: $('#' + header_categories_array[index_y]).data('id'),
+            name: category_title,
+            args: {
+              show_in_allposts: show_in_allposts_value
+            }
+          };
+        }
       }
 
       // And prepare the main array with all headers and categories.
-      headers_order_new[index] = {
-        id: $('#' + headers_order_array[index]).data('id'),
-        name: $('#'+ headers_order_array[index] + ' .muut-header-title.editable').editable('getValue', true),
-        categories: header_categories_new
-      };
+      var header_title = $('#' + headers_order_array[index] + ' .muut-header-title.editable').editable('getValue', true);
+      if (header_title.length > 0) {
+        headers_order_new[index] = {
+          id: $('#' + headers_order_array[index]).data('id'),
+          name: header_title,
+          categories: header_categories_new
+        };
+      }
     }
 
     $('#muut_customized_navigation_array_field').val(JSON.stringify(headers_order_new));
