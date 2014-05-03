@@ -139,16 +139,18 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 			$category_headers = array();
 
 			foreach( $category_headers_sorted as $header ) {
-				$args = array(
-					'posts_per_page' => '-1',
-					self::FORUMCATEGORYHEADER_TAXONOMY => $header->slug,
-					'orderby' => 'menu_order',
-					'order' => 'asc',
-					'post_type' => self::FORUMCATEGORY_POSTTYPE,
-				);
-				$category_posts = get_posts( $args );
+				if ( is_object( $header ) ) {
+					$args = array(
+						'posts_per_page' => '-1',
+						self::FORUMCATEGORYHEADER_TAXONOMY => $header->slug,
+						'orderby' => 'menu_order',
+						'order' => 'asc',
+						'post_type' => self::FORUMCATEGORY_POSTTYPE,
+					);
+					$category_posts = get_posts( $args );
 
-				$category_headers[$header->term_id] = $category_posts;
+					$category_headers[$header->term_id] = $category_posts;
+				}
 			}
 
 			return $category_headers;
