@@ -91,11 +91,9 @@ if ( !class_exists( 'Muut_Template_Loader' ) ) {
 				//TODO: Allow for other forum templates to get loaded (not just the one).
 				if ( muut()->getOption( 'forum_home_id', false ) == get_the_ID() ) {
 					$template = 'forum-muut-ux.php';
-				} else {
-					$template = 'forum-page.php';
+					$located = $this->locateTemplate( $template );
+					$template = $located != '' ? $located : $template;
 				}
-				$located = $this->locateTemplate( $template );
-				$template = $located != '' ? $located : $template;
 			}
 			return $template;
 		}

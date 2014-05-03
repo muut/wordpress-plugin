@@ -220,7 +220,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 			} else {
 				$settings .= 'data-upload="true" ';
 			}
-			
+
 			$settings .= 'title="' . get_the_title( $page_id ) . '" ';
 			$settings .= 'data-category="' . get_the_title( $page_id ) . '" ';
 

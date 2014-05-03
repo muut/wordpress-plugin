@@ -171,6 +171,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_filter( 'body_class', array( $this, 'addBodyClasses' ) );
 			add_filter( 'admin_body_class', array( $this, 'addAdminBodyClasses' ) );
 			add_filter( 'post_type_link', array( $this, 'filterForumCategoriesPermalinks' ), 10, 2 );
+			add_filter( 'the_content', array( $this, 'filterForumPageContent' ), 10 );
 		}
 
 		/**
@@ -1078,6 +1079,26 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			return apply_filters( 'muut_requires_muut_resources', $return, $page_id );
+		}
+
+		/**
+		 * Filters the content on a page if it is a standalone forum page to include the embed.
+		 *
+		 * @param string $content The current content string.
+		 * @param int $post_id The post ID.
+		 * @return string The content.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function filterForumPageContent( $content ) {
+			global $post;
+
+
+			if ( $post->post_type == 'page' && Muut_Forum_Page_Utility::isForumPage( $post->ID ) ) {
+				$content = Muut_Forum_Page_Utility::forumPageEmbedMarkup( $post->ID, false );
+			}
+
+			return $content;
 		}
 
 	}
