@@ -88,7 +88,8 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		public function adminNotices() {
 			if ( did_action( 'muut_custom_nav_saved' ) > 0 ) {
 				echo '<div class="updated">';
-				echo '<p>' . __( 'Custom navigation successfully saved.', 'muut' ) . '</p>';
+				echo '<p>' . __( 'Custom navigation successfully saved.', 'muut' ) . '<br />';
+				echo sprintf( __( '%sMake sure to visit the frontend under your Forum\'s administrator account to finalize the custom navigation settings.%s', 'muut' ), '<strong>', '</strong></p>' );
 				echo '</div>';
 			}
 
