@@ -158,6 +158,8 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'wp_print_scripts', array( $this, 'printCurrentPageJs' ) );
 
 			add_action( 'muut_forum_custom_navigation_after_headers', array( 'Muut_Forum_Page_Utility', 'forumPageCommentsNavigationItem' ), 10 , 1 );
+
+			add_action( 'load-nav-menus.php', array( $this, 'checkIfUserEditedMenus') );
 		}
 
 		/**
@@ -1099,6 +1101,38 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			return $content;
+		}
+
+		/**
+		 * Check if the user has edited nav menus before and, if so, add the hook to update his meta data to NOT hide
+		 * the forum categories metabox.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function checkIfUserEditedMenus() {
+			if ( get_user_meta( get_current_user_id(), 'metaboxhidden_nav-menus', true ) == '' ) {
+				add_action( 'admin_head', array( $this, 'updateHiddenMetaboxUserDefault' ) );
+			}
+		}
+
+		/**
+		 * Updates the user's default hidden metabox default so that forum categories are displayed by default.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function updateHiddenMetaboxUserDefault() {
+			$current_meta = get_user_meta( get_current_user_id(), 'metaboxhidden_nav-menus', true );
+
+			$index = array_search( 'add-' . Muut_Forum_Category_Utility::FORUMCATEGORY_POSTTYPE, $current_meta );
+
+			if ( $index ) {
+				unset( $current_meta[$index] );
+				update_user_meta( get_current_user_id(), 'metaboxhidden_nav-menus', $current_meta );
+			}
 		}
 
 	}
