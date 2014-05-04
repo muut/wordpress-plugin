@@ -11,7 +11,7 @@
 	<h2><?php _e( 'Welcome to Muut!', 'muut' ); ?></h2>
 	<p><?php _e( 'Welcome to Muut forums! Whether you\'re setting up your first forum or have just updated to the new version of the plugin, you\'re going to love what we\'ve done to make implementing Muut in your WordPress website easy and flexible.', 'muut' ); ?></p>
 	<h3><?php _e( 'Setup', 'muut' ); ?></h3>
-	<p><?php printf( __( 'If you have already registered a Muut forum, you can head straight to the %sMuut Settings%s page and enter its information. Otherwise, you can register your own Muut forum right %shere%s.', 'muut' ), '<a href="' . add_query_arg( array( 'page' => 'muut_settings' ), admin_url( 'admin.php' ) ) . '">', '</a>', '<a href="#">', '</a>' ); ?></p>
+	<p><?php printf( __( 'If you have already registered a Muut forum, you can head straight to the %sMuut Settings%s page and enter its information. Otherwise, you can register your own Muut forum right %shere%s.', 'muut' ), '<a href="' . add_query_arg( array( 'page' => 'muut_settings' ), admin_url( 'admin.php' ) ) . '">', '</a>', '<a target="_blank" href="https://muut.com/setup/">', '</a>' ); ?></p>
 	<p><?php printf( __( 'Once you have saved your settings, you can go ahead and %screate a new forum page%s. There are a couple ways you can embed Muut forums in your pages:', 'muut' ), '<a href="' . add_query_arg( array( 'post_type' => 'page' ), admin_url( 'post-new.php' ) ) . '">', '</a>' ); ?></p>
 	<ul>
 		<li><?php printf( __( '%sOverride default WordPress comments:%s This will use Muut commenting instead of the default WordPress comments for all posts and pages on your website.', 'muut' ), '<span class="bullet-title">', '</span>' ); ?></li>
