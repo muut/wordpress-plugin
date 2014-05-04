@@ -569,7 +569,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function printCurrentPageJs() {
-			if ( !is_admin() ) {
+			if ( !is_admin() && get_post() ) {
 				$page_id = get_the_ID();
 				if ( Muut_Forum_Page_Utility::isForumPage( $page_id ) ) {
 					echo '<script type="text/javascript">';
