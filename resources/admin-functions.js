@@ -61,7 +61,7 @@ jQuery(document).ready( function($) {
       current.addClass( 'disabled' );
       current.find('input').prop('disabled', true);
     }
-  }
+  };
 
   // Execute the above check.
   // The syntax is to set a tr data-muut_requires attribute to the id of another element in the page.
@@ -71,9 +71,9 @@ jQuery(document).ready( function($) {
     $(this).check_requires_fields();
   });
 
-  $('body.post-type-page span.muut_requires_input_block').each(function() {
+  $('body.post-type-page span.muut_requires_input_block').each(function () {
     $(this).check_requires_fields();
-  })
+  });
 
   /********************************************/
   /* CODE FOR CUSTOM NAVIGATION FUNCTIONALITY */
