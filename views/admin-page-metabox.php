@@ -64,9 +64,11 @@ $remote_path = '/' . rawurldecode( Muut_Forum_Page_Utility::getRemoteForumPath( 
 		</p>
 		<div id="muut_forum_page_advanced_options">
 			<p>
+				<span class="muut_requires_input_block" data-muut_requires="muut_forum_is_home" data-muut_require_func="is(':not(:checked)')">
 				<?php _e( 'Muut Path', 'muut' ); ?>
-				<input name="muut_forum_path" <?php echo $disabled; ?> type="text" id="" value="<?php echo $remote_path; ?>" />
+				<input name="muut_forum_path" <?php echo $disabled; ?> type="text" id="muut_forum_path" value="<?php echo $remote_path; ?>" />
 				<label class="screen-reader-text" for="muut_forum_path"><?php _e( 'Muut Path', 'muut' ); ?></label>
+				</span>
 			</p>
 		</div>
 	</div>
