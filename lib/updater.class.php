@@ -155,19 +155,22 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 					}
 
 					$new_settings = array(
-						'remote_forum_name' => get_option( 'muut_forum_name', null ),
-						'language' => get_option( 'muut_language', null ),
-						'replace_comments' => get_option( 'muut_generate', null ),
-						'show_comments_in_forum' => get_option( 'muut_comments_under_forums', null ),
-						'subscription_api_key' => get_option( 'muut_api_key', null ),
-						'subscription_secret_key' => get_option( 'muut_secret_key', null ),
+						'remote_forum_name' => get_option( 'muut_forum_name', '' ),
+						'language' => get_option( 'muut_language', '' ),
+						'replace_comments' => get_option( 'muut_generate', '' ),
+						'show_comments_in_forum' => get_option( 'muut_comments_under_forums', '' ),
+						'subscription_api_key' => get_option( 'muut_api_key', '' ),
+						'subscription_secret_key' => get_option( 'muut_secret_key', '' ),
 						'subscription_use_sso' => get_option( 'muut_api_key', false ) && get_option( 'muut_secret_key', false ) ? true : false,
 						'comments_base_domain' => $this->oldVersion == '0' ? $_SERVER['SERVER_NAME'] : 'wordpress',
 					);
 
 					// muut()->setOptions() is a protected method, so we have to do it one-by-one.
 					foreach( $new_settings as $setting => $value ) {
-						muut()->setOption( $setting, $value );
+						if ( $value != '' ) {
+							$value = ( $value === 'true' ) ? 1 : $value;
+							muut()->setOption( $setting, $value );
+						}
 					}
 
 					delete_option( 'muut_forum_name' );
