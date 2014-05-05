@@ -31,7 +31,7 @@ if ( !class_exists( 'Muut' ) ) {
 		/**
 		 * The version of Muut this was released with.
 		 */
-		const MUUTVERSION = '1.11.6';
+		const MUUTVERSION = '1.11.7';
 
 		/**
 		 * The plugin slug, for all intents and purposes.
