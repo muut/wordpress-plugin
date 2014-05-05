@@ -406,13 +406,13 @@ if ( !class_exists( 'Muut' ) ) {
 		/**
 		 * Gets the Muut language equivalent of a given WordPress language abbreviation.
 		 *
-		 * @param string $muut_lang The WordPress abbreviation for a given language.
+		 * @param string $wp_lang The WordPress abbreviation for a given language.
 		 * @return string The Muut equivalent language string.
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
 		public function getMuutLangEquivalent( $wp_lang ) {
-			// Format is muut_lang => wp_lang.
+			// Format is wp_lang => muut_lang.
 			$muut_langs = apply_filters( 'muut_and_wp_langs', array(
 				'ar' => 'ar',
 				'pt_BR' => 'pt-br',
@@ -1087,7 +1087,6 @@ if ( !class_exists( 'Muut' ) ) {
 		 * Filters the content on a page if it is a standalone forum page to include the embed.
 		 *
 		 * @param string $content The current content string.
-		 * @param int $post_id The post ID.
 		 * @return string The content.
 		 * @author Paul Hughes
 		 * @since 3.0

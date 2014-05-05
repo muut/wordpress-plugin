@@ -83,6 +83,7 @@ function muut_forum_page_embed( $page_id = null, $echo = true ) {
  * Gets the comment path for a given post id.
  *
  * @param int $post_id The post we are getting the comments path for.
+ * @param bool $full_path Whether to return the full path for the comments.
  * @return string|false The comments path or false if there was an error retrieving them (such as override not being enabled).
  * @author Paul Hughes
  * @since 3.0

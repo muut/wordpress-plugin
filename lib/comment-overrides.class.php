@@ -135,7 +135,8 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 		 * Gets the comments anchor for a given post.
 		 *
 		 * @param int $post_id The ID of the post we are getting the comments anchor for.
-		 * @return string The markup for the Muut comments embed.
+		 * @param bool $echo Whether to echo the value.
+		 * @return string|void The markup for the Muut comments embed or void if echoed.
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */

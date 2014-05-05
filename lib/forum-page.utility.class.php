@@ -57,6 +57,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 		 * The method for setting a forum page's remote path.
 		 *
 		 * @param int $page_id The page ID for the forum page.
+		 * @param string $path The path to set (if custom).
 		 * @return bool Whether the page's remote path was updated or not.
 		 * @author Paul Hughes
 		 * @since 3.0
@@ -130,6 +131,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 		 * Gets the forum page's remote path.
 		 *
 		 * @param int $page_id The page ID that we are getting the remote forum path for.
+		 * @param bool $no_suffix Whether to include ':comments' for unthreaded.
 		 * @return string|false Returns the path if one is found for the forum page or false if not.
 		 * @author Paul Hughes
 		 * @since 3.0
@@ -174,6 +176,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 		 *
 		 * @param int $page_id The page ID that we are getting a setting for.
 		 * @param string $option_name The option name that we are getting for the forum page.
+		 * @param string $default The default value if none is returned.
 		 * @return mixed The value of the option.
 		 * @author Paul Hughes
 		 * @since 3.0
@@ -247,6 +250,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 		/**
 		 * Gets and echoes the markup for displaying the comments link on the forum navigation.
 		 *
+		 * @param array $category_headers The array of category header objects—just used to see if custom nav has been set.
 		 * @return void
 		 * @author Paul Hughes
 		 * @since 3.0
