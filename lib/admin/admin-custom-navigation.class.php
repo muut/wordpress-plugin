@@ -163,6 +163,7 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 
 			$category_block_id = $category_id;
 			$category_block_title = $category_post->post_title;
+			$category_block_path = get_post_meta( $category_id, Muut_Forum_Category_Utility::META_REMOTEPATH, true );
 
 			ob_start();
 			include ( muut()->getPluginPath() . 'views/blocks/admin-category-block.php' );
@@ -208,6 +209,7 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		public function printCustomNavTemplatesJs() {
 			$header_block_id = $category_block_id = '%ID%';
 			$header_block_title = $category_block_title = '';
+			$category_block_path = '';
 			$html = '<script type="text/javascript"> var categoryHeaderBlockTemplate = ';
 			ob_start();
 			include( muut()->getPluginPath() . 'views/blocks/admin-category-header-block.php' );
@@ -301,7 +303,7 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 								// Create a new category post if it does not exist yet.
 								if ( isset( $category->id ) && is_string( $category->id ) && substr( $category->id, 0, 3 ) == 'new' && isset( $category->name ) ) {
 
-									$custom_args = isset( $category->args ) ? $category->args : array();
+									$custom_args = isset( $category->args ) ? get_object_vars( $category->args ) : array();
 
 									$possible_post = get_posts( array(
 										'name' => sanitize_title( $category->name ),

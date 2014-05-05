@@ -54,6 +54,10 @@ span.disabled input[type=text]
     border-bottom: none;
 }
 
+#muut_forum_nav_headers .editable-unsaved {
+    font-weight: normal;
+}
+
 #muut_forum_nav_headers .menu-header-input-label {
     margin-right: 10px;
     vertical-align: top;
@@ -106,6 +110,10 @@ span.disabled input[type=text]
     cursor: move;
 }
 
+.muut_forum_header_item .muut_forum_category_item.disabled {
+    cursor: default;
+}
+
 .muut_forum_header_item .muut_forum_category_item:last-child {
     padding-bottom: 12px;
 }
@@ -138,7 +146,6 @@ span.disabled input[type=text]
 }
 
 .muut_category_item_setting {
-    float: right;
     font-size: .9em;
     font-style: italic;
     color: #666;
@@ -182,4 +189,39 @@ span.disabled input[type=text]
     font-size: .8em;
     margin-right: 5px;
     color: #F00;
+}
+
+.muut_forum_category_item span.action-link a {
+    display: none;
+    line-height: 16px;
+    float: right;
+    font-size: .8em;
+    margin-right: 5px;
+}
+
+.muut_category_advanced_options {
+    display: none;
+}
+
+.muut_category_advanced_options p {
+    font-size: .85em;
+    margin-left: 15px;
+}
+
+.muut_category_advanced_options input {
+    font-size: 1em;
+}
+
+.muut_category_advanced_options h4 {
+    text-transform: uppercase;
+    font-size: 1em;
+    margin: 0;
+}
+
+.muut_category_advanced_options label {
+    font-style: italic;
+}
+
+.muut_forum_category_item .button {
+    font-size: .9em;
 }

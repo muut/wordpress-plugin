@@ -38,6 +38,11 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 		const FORUMCATEGORYHEADER_TAXONOMY = 'muut_forum_category_header';
 
 		/**
+		 * The Muut path meta name for a given Muut category.
+		 */
+		const META_REMOTEPATH = 'muut_category_remote_path';
+
+		/**
 		 * Make it impossible to instantiate the class by declaring __construct() as private.
 		 *
 		 * @return Muut_Forum_Category_Utility (Except it can never be called).
@@ -269,10 +274,6 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 		public static function createForumCategory( $name, $custom_args = array(), $post_args = array() ) {
 			$defaults = muut()->getOption( 'forum_category_defaults', array() );
 
-			$custom_args_defaults = array(
-				'show_in_allposts' => $defaults['show_in_allposts'],
-			);
-
 			$post_args_defaults = array(
 				'post_title' => $name,
 				'post_type' => self::FORUMCATEGORY_POSTTYPE,
@@ -281,14 +282,22 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 			);
 
 			// Filter the args we will be passing to the post insert.
-			$custom_args = wp_parse_args( apply_filters( 'muut_create_forum_category_args', $custom_args, $name, $post_args ), $custom_args_defaults );
-			$post_args = wp_parse_args( apply_filters( 'muut_create_forum_category_post_args', $post_args, $name, $custom_args ), $post_args_defaults );
+			$post_args = wp_parse_args( apply_filters( 'muut_create_forum_category_post_args', $post_args, $name ), $post_args_defaults );
 
 			$forum_category_id = wp_insert_post( $post_args );
 
 			if ( !is_int( $forum_category_id ) ) {
 				return false;
 			}
+
+			$category_post = get_post( $forum_category_id );
+
+			$custom_args_defaults = array(
+				'show_in_allposts' => $defaults['show_in_allposts'],
+				'category_remote_path' => $category_post->post_name,
+			);
+
+			$custom_args = wp_parse_args( apply_filters( 'muut_create_forum_category_args', array_filter( $custom_args ), $name, $post_args ), $custom_args_defaults );
 
 			// Save the custom args as post meta.
 			foreach( $custom_args as $arg_name => $arg_value ) {
@@ -313,21 +322,31 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 				return false;
 			}
 
-			$custom_args_defaults = array();
+			$defaults = muut()->getOption( 'forum_category_defaults', array() );
+
 			$post_args_defaults = array(
 				'ID' => $post_id,
 				'post_status' => 'publish'
 			);
 
 			// Filter the args we will be passing to the update.
-			$custom_args = wp_parse_args( apply_filters( 'muut_update_forum_category_args', $custom_args, $post_args ), $custom_args_defaults );
-			$post_args = wp_parse_args( apply_filters( 'muut_update_forum_category_post_args', $post_args, $post_id, $custom_args ), $post_args_defaults );
+			$post_args = wp_parse_args( apply_filters( 'muut_update_forum_category_post_args', $post_args, $post_id ), $post_args_defaults );
 
 			$update = wp_update_post( $post_args );
 
 			if ( !is_numeric( $update ) ) {
 				return false;
 			}
+
+			$category_post = get_post( $post_id );
+
+			$custom_args_defaults = array(
+				'show_in_allposts' => $defaults['show_in_allposts'],
+				'category_remote_path' => $category_post->post_name,
+			);
+
+			$custom_args = wp_parse_args( apply_filters( 'muut_create_forum_category_args', array_filter( $custom_args ), $post_args ), $custom_args_defaults );
+
 
 			// Save the custom args as post meta.
 			foreach( $custom_args as $arg_name => $arg_value ) {
@@ -336,6 +355,25 @@ if ( !class_exists( 'Muut_Forum_Category_Utility' ) ) {
 
 			// Success.
 			return true;
+		}
+
+		/**
+		 * Gets the remote path for the category.
+		 *
+		 * @param int $category_id The post id of the category.
+		 * @return string The remote path.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function getRemotePath( $category_id ) {
+			$path = get_post_meta( $category_id, self::META_REMOTEPATH, true );
+
+			if ( $path == '' ) {
+				$category_post = get_post( $category_id );
+				$path = $category_post->post_name;
+			}
+
+			return apply_filters( 'muut_get_category_remote_path', $path, $category_id );
 		}
 	}
 }

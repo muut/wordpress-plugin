@@ -38,7 +38,7 @@ if ( !isset( $path ) ) {
 					$class .= 'non-category ';
 				}
 				?>
-				<a href="#!/<?php echo $category_post->post_name; ?>" class="<?php echo $class; ?>"><?php echo $category_post->post_title; ?></a>
+				<a href="#!/<?php echo Muut_Forum_Category_Utility::getRemotePath( $category_post->ID ); ?>" class="<?php echo $class; ?>"><?php echo $category_post->post_title; ?></a>
 			<?php }
 		}
 	}

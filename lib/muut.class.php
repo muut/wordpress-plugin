@@ -467,7 +467,7 @@ if ( !class_exists( 'Muut' ) ) {
 			// Localization rules.
 			$localizations = array(
 				'muut-admin-functions' => array(
-					//'new_header' => __( 'New Header', 'muut' ),
+					//'default_path' => sprintf( __( '%sdefault%s', 'muut' ), '/(', ')' ),
 				),
 			);
 
@@ -1028,7 +1028,7 @@ if ( !class_exists( 'Muut' ) ) {
 				if ( $forum_home_id ) {
 					$base_link = get_permalink( $forum_home_id );
 
-					$permalink = $base_link . '#!/' . $post->post_name;
+					$permalink = $base_link . '#!/' . Muut_Forum_Category_Utility::getRemotePath( $post->ID );
 				}
 			}
 			return $permalink;
