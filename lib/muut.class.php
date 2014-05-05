@@ -953,18 +953,36 @@ if ( !class_exists( 'Muut' ) ) {
 				Muut_Forum_Page_Utility::setAsForumPage( $post_id );
 			}
 
-			if ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' ) {
-				// If no path is saved yet, let's generate one and save it.
-				// An already saved path CANNOT be changed (even though the post slug and ancestry can).
-				if ( !Muut_Forum_Page_Utility::getRemoteForumPath( $post_id, true ) ) {
-					$path = $post->post_name;
-					$ancestors = get_post_ancestors( $post );
+			if ( isset( $_POST['muut_is_forum_page'] )
+				&& $_POST['muut_is_forum_page'] == '1'
+				&& ( ( isset( $_POST['muut_forum_is_home'] )
+					&& $_POST['muut_forum_is_home'] != '1' )
+					|| !isset( $_POST['muut_forum_is_home'] )
+				) ) {
+				if ( !isset( $_POST['muut_forum_path'] )
+					|| $_POST['muut_forum_path'] == '' ) {
+					// If no path is saved yet, let's generate one and save it.
+					// An already saved path CANNOT be changed (even though the post slug and ancestry can).
+					if ( !Muut_Forum_Page_Utility::getRemoteForumPath( $post_id, true ) ) {
+						$path = $post->post_name;
+						$ancestors = get_post_ancestors( $post );
 
-					foreach ( $ancestors as $ancestor ) {
-						if ( Muut_Forum_Page_Utility::isForumPage( $ancestor ) && Muut_Forum_Page_Utility::getForumPageOption( $ancestor, 'is_threaded', false ) ) {
-							$path = Muut_Forum_Page_Utility::getRemoteForumPath( $ancestor ) . '/' . $path;
+						foreach ( $ancestors as $ancestor ) {
+							if ( Muut_Forum_Page_Utility::isForumPage( $ancestor ) && Muut_Forum_Page_Utility::getForumPageOption( $ancestor, 'is_threaded', false ) ) {
+								$path = Muut_Forum_Page_Utility::getRemoteForumPath( $ancestor ) . '/' . $path;
+							}
 						}
+						Muut_Forum_Page_Utility::setForumPageRemotePath( $post_id, $path );
 					}
+				} elseif ( isset( $_POST['muut_forum_path'] ) && $_POST['muut_forum_path'] != '' ) {
+					$path = $_POST['muut_forum_path'];
+					if ( substr( $path, 0, 1 ) == '/' ) {
+						$path = substr( $path, 1 );
+					}
+					if ( substr( $path, -1 ) == '/' ) {
+						$path = substr( $path, 0, -1 );
+					}
+					$path = implode('/', array_map('rawurlencode', explode( '/', $path ) ) );
 					Muut_Forum_Page_Utility::setForumPageRemotePath( $post_id, $path );
 				}
 			}

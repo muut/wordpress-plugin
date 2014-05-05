@@ -75,6 +75,11 @@ jQuery(document).ready( function($) {
     $(this).check_requires_fields();
   });
 
+  // Functionality for the Advanced Options.
+  $('#muut_forum_page_advanced_options_link').on('click', function() {
+    $('#muut_forum_page_advanced_options').toggle();
+  });
+
   /********************************************/
   /* CODE FOR CUSTOM NAVIGATION FUNCTIONALITY */
   /********************************************/

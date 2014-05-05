@@ -19,6 +19,10 @@ span.disabled
     margin-top: 10px;
 }
 
+#muut_forum_page_advanced_options {
+    display: none;
+}
+
 #muut_forum_nav_headers .muut_forum_header_item {
     background: transparent;
     border: none;
