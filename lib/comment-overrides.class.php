@@ -98,7 +98,12 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 				update_post_meta( $post_id, 'muut_post_domain', apply_filters( 'muut_post_comments_domain', $domain, $post_id ) );
 			}
 
-			$path = $domain . '/' . $post_id . ':comments';
+			$path = $domain . '/' . $post_id;
+
+			if ( !muut()->getOption( 'use_threaded_commenting', '0' ) ) {
+				$path .= ':comments';
+			}
+
 			if ( !$full_path ) {
 				return $path;
 			} else {
@@ -152,11 +157,15 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 
 			$settings = 'data-show_online="false" data-upload="false" data-category="' . __( 'Comments', 'muut' ) . '" title="' . $post_type_name . ': ' . get_the_title( $post_id ) . '" ';
 
+			if ( muut()->getOption( 'use_threaded_commenting', '0' ) ) {
+				$settings .= 'data-show_title="false" ';
+			}
+
 			if ( !$path )
-				return false;
+			return false;
 
 			$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
-			$anchor = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
+			$anchor = '<section id="comments"><a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a></section>';
 			if ( $echo ) {
 				echo $anchor;
 			} else {

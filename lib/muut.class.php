@@ -499,6 +499,7 @@ if ( !class_exists( 'Muut' ) ) {
 				// TODO: Make this match whatever language is set for the site.
 				'language' => $default_lang,
 				'replace_comments' => false,
+				'use_threaded_commenting' => false,
 				'override_all_comments' => true,
 				'show_comments_in_forum' => false,
 				'forum_home_id' => false,
@@ -817,6 +818,7 @@ if ( !class_exists( 'Muut' ) ) {
 
 			$boolean_settings = apply_filters( 'muut_boolean_settings', array(
 				'replace_comments',
+				'use_threaded_commenting',
 				'override_all_comments',
 				'show_comments_in_forum',
 				'is_threaded_default',

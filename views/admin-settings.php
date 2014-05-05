@@ -55,6 +55,14 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 			</tr>
 			<tr data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')">
 				<th scope="row">
+					<label for="muut_use_threaded_commenting"><?php _e( 'Use threaded commenting', 'muut' );?></label>
+				</th>
+				<td>
+					<input name="setting[use_threaded_commenting]" type="checkbox" id="muut_use_threaded_commenting" value="1" <?php checked( '1', muut()->getOption( 'use_threaded_commenting', '0' ) ); ?> />
+				</td>
+			</tr>
+			<tr data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')">
+				<th scope="row">
 					<label for="muut_override_all_comments"><?php _e( 'Override existing comments', 'muut' ); ?></label>
 				</th>
 				<td>
