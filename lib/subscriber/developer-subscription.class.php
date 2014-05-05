@@ -90,7 +90,6 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 * @since 3.0
 		 */
 		public function addFilters() {
-			add_filter( 'muut_wrapper_css_id', array( $this, 'filterWrapperId' ) );
 			add_filter( 'muut_wrapper_css_class', array( $this, 'filterWrapperClass' ) );
 		}
 
@@ -212,24 +211,9 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 */
 		public function filterWrapperClass( $class ) {
 			if ( muut()->getOption( 'subscription_use_sso' ) ) {
-				$class = '';
+				$class = 'muut_sso';
 			}
 			return $class;
-		}
-
-		/**
-		 * Filters the container element id value to work properly for SSO.
-		 *
-		 * @param string $id_string The current element id string.
-		 * @return string The modified attribute string.
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		public function filterWrapperId( $id_string ) {
-			if ( muut()->getOption( 'subscription_use_sso' ) ) {
-				$id_string = 'muut_sso';
-			}
-			return $id_string;
 		}
 	}
 }
