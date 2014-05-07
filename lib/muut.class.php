@@ -464,6 +464,7 @@ if ( !class_exists( 'Muut' ) ) {
 			wp_register_style( 'x-editable-style', $this->pluginUrl . 'vendor/jqueryui-editable/css/jqueryui-editable.css' );
 			wp_register_style( 'muut-forum-css', '//cdn.' . self::MUUTSERVERS . '/' . $muut_version . '/moot.css', array(), $muut_version );
 
+			wp_register_style( 'muut-font-css', $this->pluginUrl . 'resources/muut-font.css', array(), $muut_version );
 			// Localization rules.
 			$localizations = array(
 				'muut-admin-functions' => array(
@@ -558,6 +559,9 @@ if ( !class_exists( 'Muut' ) ) {
 				wp_enqueue_style( 'x-editable-style' );
 				wp_enqueue_style( 'muut-admin-style' );
 			}
+
+			// Enqueue the font on all admin pages for the menu icon.
+			wp_enqueue_style( 'muut-font-css' );
 		}
 
 		/**
