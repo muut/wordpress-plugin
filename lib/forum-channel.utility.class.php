@@ -299,12 +299,24 @@ if ( !class_exists( 'Muut_Forum_Channel_Utility' ) ) {
 
 			$channel_post = get_post( $forum_channel_id );
 
+			$boolean_custom_args = apply_filters( 'muut_forum_channel_boolean_custom_args', array(
+				'show_in_allposts',
+			) );
+
+			foreach ( $custom_args as $key => $custom_arg ) {
+				if ( !$custom_arg && !in_array( $key, $boolean_custom_args ) ) {
+					unset( $custom_args[$key] );
+				} elseif ( in_array( $key, $boolean_custom_args ) ) {
+					$custom_args[$key] = !is_null( $custom_arg ) ? $custom_arg : '0';
+				}
+			}
+
 			$custom_args_defaults = array(
 				'show_in_allposts' => $defaults['show_in_allposts'],
 				'channel_remote_path' => $channel_post->post_name,
 			);
 
-			$custom_args = wp_parse_args( apply_filters( 'muut_create_forum_channel_args', array_filter( $custom_args ), $name, $post_args ), $custom_args_defaults );
+			$custom_args = wp_parse_args( apply_filters( 'muut_create_forum_channel_args', $custom_args, $name, $post_args ), $custom_args_defaults );
 
 			// Save the custom args as post meta.
 			foreach( $custom_args as $arg_name => $arg_value ) {
@@ -347,13 +359,24 @@ if ( !class_exists( 'Muut_Forum_Channel_Utility' ) ) {
 
 			$channel_post = get_post( $post_id );
 
+			$boolean_custom_args = apply_filters( 'muut_forum_channel_boolean_custom_args', array(
+				'show_in_allposts',
+			) );
+
+			foreach ( $custom_args as $key => $custom_arg ) {
+				if ( !$custom_arg && !in_array( $key, $boolean_custom_args ) ) {
+					unset( $custom_args[$key] );
+				} elseif ( in_array( $key, $boolean_custom_args ) ) {
+					$custom_args[$key] = !is_null( $custom_arg ) ? $custom_arg : '0';
+				}
+			}
+
 			$custom_args_defaults = array(
 				'show_in_allposts' => $defaults['show_in_allposts'],
 				'channel_remote_path' => $channel_post->post_name,
 			);
 
-			$custom_args = wp_parse_args( apply_filters( 'muut_create_forum_channel_args', array_filter( $custom_args ), $post_args ), $custom_args_defaults );
-
+			$custom_args = wp_parse_args( apply_filters( 'muut_create_forum_channel_args', $custom_args, $post_args ), $custom_args_defaults );
 
 			// Save the custom args as post meta.
 			foreach( $custom_args as $arg_name => $arg_value ) {
