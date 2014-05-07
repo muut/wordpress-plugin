@@ -32,7 +32,7 @@ span.disabled input[type=text]
     width: 80%;
 }
 
-#muut_forum_nav_headers .muut-category-header-actions {
+#muut_forum_nav_headers .muut-channel-header-actions {
     background-color: #fafafa;
     position: relative;
     padding: 10px;
@@ -44,11 +44,11 @@ span.disabled input[type=text]
     vertical-align: middle;
 }
 
-#muut_forum_nav_headers .muut-category-header-actions:hover {
+#muut_forum_nav_headers .muut-channel-header-actions:hover {
     cursor: move;
 }
 
-#muut_forum_nav_headers .muut-category-header-actions .x-editable {
+#muut_forum_nav_headers .muut-channel-header-actions .x-editable {
     line-height: 28px;
     float: left;
     border-bottom: none;
@@ -70,18 +70,18 @@ span.disabled input[type=text]
     width: 60%;
 }
 
-.muut_page_muut_custom_navigation .new_category_for_header {
+.muut_page_muut_custom_navigation .new_channel_for_header {
     float: right;
 }
 
-.muut_page_muut_custom_navigation .muut-category-header-content {
+.muut_page_muut_custom_navigation .muut-channel-header-content {
     background: transparent;
     position: relative;
     border: none;
     text-align: center;
 }
 
-.muut_forum_header_item .muut_category_list {
+.muut_forum_header_item .muut_channel_list {
     margin-top: -1px;
     list-style: none;
     display: block;
@@ -90,7 +90,7 @@ span.disabled input[type=text]
     padding: 0 10%;
 }
 
-.muut_forum_header_item .muut_forum_category_item {
+.muut_forum_header_item .muut_forum_channel_item {
     text-align: left;
     position: relative;
     float: left;
@@ -106,30 +106,30 @@ span.disabled input[type=text]
     min-height: 18px;
 }
 
-.muut_forum_header_item .muut_forum_category_item:hover {
+.muut_forum_header_item .muut_forum_channel_item:hover {
     cursor: move;
 }
 
-.muut_forum_header_item .muut_forum_category_item.disabled {
+.muut_forum_header_item .muut_forum_channel_item.disabled {
     cursor: default;
 }
 
-.muut_forum_header_item .muut_forum_category_item:last-child {
+.muut_forum_header_item .muut_forum_channel_item:last-child {
     padding-bottom: 12px;
 }
-.muut_forum_header_item .muut_forum_category_item h3 {
+.muut_forum_header_item .muut_forum_channel_item h3 {
     margin: 0;
 }
 
-.muut-category-title.x-editable {
+.muut-channel-title.x-editable {
     border-bottom: none;
 }
 
-.muut_category_list {
+.muut_channel_list {
     min-height: 20px;
 }
 
-.muut_category_sortable_placeholder {
+.muut_channel_sortable_placeholder {
     position: relative;
     text-align: left;
     float: left;
@@ -145,7 +145,7 @@ span.disabled input[type=text]
     min-height: 42px;
 }
 
-.muut_category_item_setting {
+.muut_channel_item_setting {
     font-size: .9em;
     font-style: italic;
     color: #666;
@@ -182,7 +182,7 @@ span.disabled input[type=text]
     color: #F00;
 }
 
-.muut_forum_category_item span.delete-link a {
+.muut_forum_channel_item span.delete-link a {
     display: none;
     line-height: 16px;
     float: right;
@@ -191,7 +191,7 @@ span.disabled input[type=text]
     color: #F00;
 }
 
-.muut_forum_category_item span.action-link a {
+.muut_forum_channel_item span.action-link a {
     display: none;
     line-height: 16px;
     float: right;
@@ -199,29 +199,29 @@ span.disabled input[type=text]
     margin-right: 5px;
 }
 
-.muut_category_advanced_options {
+.muut_channel_advanced_options {
     display: none;
 }
 
-.muut_category_advanced_options p {
+.muut_channel_advanced_options p {
     font-size: .85em;
     margin-left: 15px;
 }
 
-.muut_category_advanced_options input {
+.muut_channel_advanced_options input {
     font-size: 1em;
 }
 
-.muut_category_advanced_options h4 {
+.muut_channel_advanced_options h4 {
     text-transform: uppercase;
     font-size: 1em;
     margin: 0;
 }
 
-.muut_category_advanced_options label {
+.muut_channel_advanced_options label {
     font-style: italic;
 }
 
-.muut_forum_category_item .button {
+.muut_forum_channel_item .button {
     font-size: .9em;
 }

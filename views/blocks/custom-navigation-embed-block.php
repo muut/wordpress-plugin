@@ -27,21 +27,21 @@ if ( !isset( $path ) ) {
 
 	<!-- Custom HTML -->
 	<?php
-	$category_headers = Muut_Forum_Category_Utility::getForumCategoryHeaders();
-	do_action( 'muut_forum_custom_navigation_before_headers', $category_headers );
-	if ( !empty( $category_headers ) ) {
-		foreach( $category_headers as $header_id => $header_array ) { ?>
-			<div class="m-h3"><?php echo Muut_Forum_Category_Utility::getCategoryHeaderTitle( $header_id ); ?></div>
-			<?php foreach ( $header_array as $category_post ) {
+	$channel_headers = Muut_Forum_Channel_Utility::getForumChannelHeaders();
+	do_action( 'muut_forum_custom_navigation_before_headers', $channel_headers );
+	if ( !empty( $channel_headers ) ) {
+		foreach( $channel_headers as $header_id => $header_array ) { ?>
+			<div class="m-h3"><?php echo Muut_Forum_Channel_Utility::getChannelHeaderTitle( $header_id ); ?></div>
+			<?php foreach ( $header_array as $channel_post ) {
 				$class = '';
-				if ( !Muut_Forum_Category_Utility::isAllpostsCategory( $category_post->ID ) ) {
-					$class .= 'non-category ';
+				if ( !Muut_Forum_Channel_Utility::isAllpostsChannel( $channel_post->ID ) ) {
+					$class .= 'non-channel ';
 				}
 				?>
-				<a href="#!/<?php echo Muut_Forum_Category_Utility::getRemotePath( $category_post->ID ); ?>" class="<?php echo $class; ?>"><?php echo $category_post->post_title; ?></a>
+				<a href="#!/<?php echo Muut_Forum_Channel_Utility::getRemotePath( $channel_post->ID ); ?>" class="<?php echo $class; ?>"><?php echo $channel_post->post_title; ?></a>
 			<?php }
 		}
 	}
-	do_action( 'muut_forum_custom_navigation_after_headers', $category_headers );
+	do_action( 'muut_forum_custom_navigation_after_headers', $channel_headers );
 	?>
 </div>

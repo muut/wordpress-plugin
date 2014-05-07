@@ -6,7 +6,7 @@
  * @copyright 2014 Muut Inc
  */
 
-$category_headers = Muut_Forum_Category_Utility::getForumCategoryHeaders();
+$channel_headers = Muut_Forum_Channel_Utility::getForumChannelHeaders();
 ?>
 <div class="wrap">
 	<h2><?php _e( 'Custom Navigation', 'muut' ); ?></h2>
@@ -16,20 +16,20 @@ $category_headers = Muut_Forum_Category_Utility::getForumCategoryHeaders();
 		<div id="col-right">
 			<div class="col-wrap muut_admin_wrapper">
 				<h3><?php _e( 'What is this?', 'muut' ); ?></h3>
-				<p><?php _e( 'You can control the customized navigation on this page. This navigation controls the categories that are listed on the navigation for a fully embeded Muut forum. Make sure one of your pages is specified as the Forum Home, and the navigation that is customized on this page will automatically be used there, instead of the default Muut categories.', 'muut' ); ?></p>
-				<p><?php _e( 'Note that you can re-order the categories and headers by dragging and dropping, and individual categories can be dragged from one header to the next, if you want to adjust that.', 'muut' ); ?></p>
-				<p><?php _e( 'In future releases, this right column will contain deactivated/past categories that can be re-added to the headers on the left, and the help paragraph will be for the Help dropdown at the top right.', 'muut' ); ?></p>
+				<p><?php _e( 'You can control the customized navigation on this page. This navigation controls the channels that are listed on the navigation for a fully embeded Muut forum. Make sure one of your pages is specified as the Forum Home, and the navigation that is customized on this page will automatically be used there, instead of the default Muut channels.', 'muut' ); ?></p>
+				<p><?php _e( 'Note that you can re-order the channels and headers by dragging and dropping, and individual channels can be dragged from one header to the next, if you want to adjust that.', 'muut' ); ?></p>
+				<p><?php _e( 'In future releases, this right column will contain deactivated/past channels that can be re-added to the headers on the left, and the help paragraph will be for the Help dropdown at the top right.', 'muut' ); ?></p>
 			</div>
 		</div>
 		<div id="col-left">
 			<div class="col-wrap">
 				<h3><?php _e( 'Navigation', 'muut' ); ?></h3>
-				<input type="button" class="button button-secondary" id="muut_add_category_header" value="<?php _e( 'Insert New Header', 'muut' ); ?>" />
+				<input type="button" class="button button-secondary" id="muut_add_channel_header" value="<?php _e( 'Insert New Header', 'muut' ); ?>" />
 				<input type="hidden" name="muut_customized_navigation_array" id="muut_customized_navigation_array_field" value="" />
 				<ul id="muut_forum_nav_headers">
 					<?php
-					foreach ( $category_headers as $id => $header ) {
-						Muut_Admin_Custom_Navigation::instance()->forumCategoryHeaderItem( $id, $header, true );
+					foreach ( $channel_headers as $id => $header ) {
+						Muut_Admin_Custom_Navigation::instance()->forumChannelHeaderItem( $id, $header, true );
 					}
 					?>
 				</ul>

@@ -85,49 +85,49 @@ jQuery(document).ready( function($) {
   /********************************************/
 
   var muut_inserted_header_block_index = 0;
-  $('#muut_add_category_header').on('click', function(e) {
-    if ( typeof categoryHeaderBlockTemplate === 'string' ) {
+  $('#muut_add_channel_header').on('click', function(e) {
+    if ( typeof channelHeaderBlockTemplate === 'string' ) {
       e.stopPropagation();
       var insert_header_replacements = { '%ID%': 'new_' + muut_inserted_header_block_index };
-      var insert_block = categoryHeaderBlockTemplate.replace(/%\w+%/g, function(all) {
+      var insert_block = channelHeaderBlockTemplate.replace(/%\w+%/g, function(all) {
         return insert_header_replacements[all] || all;
       });
       $('#muut_forum_nav_headers').prepend(insert_block).find('.muut-header-title.x-editable').first().editable('toggle');
-      refresh_category_sortables();
+      refresh_channel_sortables();
       refresh_customized_navigation_array();
       muut_inserted_header_block_index++;
     }
   });
 
-  var muut_inserted_forum_category_index = 0;
-  $(document).on('click', '.new_category_for_header', function(e) {
-    if ( typeof categoryBlockTemplate === 'string' ) {
+  var muut_inserted_forum_channel_index = 0;
+  $(document).on('click', '.new_channel_for_header', function(e) {
+    if ( typeof channelBlockTemplate === 'string' ) {
       e.stopPropagation();
-      var insert_category_replacements = {
-        '%ID%': 'new_' + muut_inserted_forum_category_index
+      var insert_channel_replacements = {
+        '%ID%': 'new_' + muut_inserted_forum_channel_index
       };
-      var insert_block = categoryBlockTemplate.replace(/%\w+%/g, function(all) {
-        return insert_category_replacements[all] || all;
+      var insert_block = channelBlockTemplate.replace(/%\w+%/g, function(all) {
+        return insert_channel_replacements[all] || all;
       });
-      $(this).closest('.muut_forum_header_item').find('.muut_category_list').prepend(insert_block).find('.muut-category-title.x-editable').first().editable('toggle');
-      refresh_category_sortables();
+      $(this).closest('.muut_forum_header_item').find('.muut_channel_list').prepend(insert_block).find('.muut-channel-title.x-editable').first().editable('toggle');
+      refresh_channel_sortables();
       refresh_customized_navigation_array();
-      muut_inserted_forum_category_index++;
+      muut_inserted_forum_channel_index++;
     }
   });
 
     // Hook up the sortable lists.
-  function refresh_category_sortables() {
+  function refresh_channel_sortables() {
     $('#muut_forum_nav_headers').sortable({
       cursor: 'move',
-      handle: '.muut-category-header-actions',
+      handle: '.muut-channel-header-actions',
       update: refresh_customized_navigation_array
     });
 
-    $('.muut_category_list').sortable({
+    $('.muut_channel_list').sortable({
       cursor: 'move',
-      connectWith: '.muut_category_lists_connected',
-      placeholder: 'muut_category_sortable_placeholder',
+      connectWith: '.muut_channel_lists_connected',
+      placeholder: 'muut_channel_sortable_placeholder',
       update: refresh_customized_navigation_array,
       cancel: '.disabled'
     });
@@ -143,13 +143,13 @@ jQuery(document).ready( function($) {
     });
 
 
-    $('.muut-category-header-actions').on('mouseover', function() {
+    $('.muut-channel-header-actions').on('mouseover', function() {
       $(this).find('.delete-link a').show();
     }).on('mouseout', function() {
       $(this).find('.delete-link a').hide();
     });
 
-    $('.muut_forum_category_item').on('mouseover', function() {
+    $('.muut_forum_channel_item').on('mouseover', function() {
       $(this).find('.delete-link a').show();
       $(this).find('.action-link a').show();
     }).on('mouseout', function() {
@@ -157,22 +157,22 @@ jQuery(document).ready( function($) {
       $(this).find('.action-link a').hide();
     });
 
-    $('.muut-category-header-actions > .delete-link').on('click', function() {
+    $('.muut-channel-header-actions > .delete-link').on('click', function() {
       $(this).closest('.muut_forum_header_item').remove();
       refresh_customized_navigation_array();
     });
 
-    $('.muut_category_item_basic > .delete-link').on('click', function() {
-      $(this).closest('.muut_forum_category_item').remove();
+    $('.muut_channel_item_basic > .delete-link').on('click', function() {
+      $(this).closest('.muut_forum_channel_item').remove();
       refresh_customized_navigation_array();
     });
 
-    $('.muut_category_item_basic > .action-link.advanced-options').on('click', function() {
-      $(this).parent().hide().next('.muut_category_advanced_options').show().closest('li').addClass('disabled');
+    $('.muut_channel_item_basic > .action-link.advanced-options').on('click', function() {
+      $(this).parent().hide().next('.muut_channel_advanced_options').show().closest('li').addClass('disabled');
     });
 
-    $('.muut_category_advanced_options > .muut-advanced-category-settings-save').on('click', function() {
-      $(this).parent().hide().prev('.muut_category_item_basic').show().closest('li').removeClass('disabled');
+    $('.muut_channel_advanced_options > .muut-advanced-channel-settings-save').on('click', function() {
+      $(this).parent().hide().prev('.muut_channel_item_basic').show().closest('li').removeClass('disabled');
       refresh_customized_navigation_array();
     });
 
@@ -184,39 +184,39 @@ jQuery(document).ready( function($) {
 
     // For each header, make sure the data is set up.
     for (var index = 0; index < headers_order_array.length; index++) {
-      var header_categories_array = $('#' + headers_order_array[index] + ' .muut_category_list').sortable('toArray');
-      var header_categories_new = new Array();
+      var header_channels_array = $('#' + headers_order_array[index] + ' .muut_channel_list').sortable('toArray');
+      var header_channels_new = new Array();
 
-      // Prepare the categories array under this header.
-      for (var index_y = 0; index_y < header_categories_array.length; index_y++) {
-        var category_title = $('#' + header_categories_array[index_y] + ' .muut-category-title.editable').editable('getValue', true);
-        if (category_title.length > 0) {
-          var show_in_allposts_value = $('#' + header_categories_array[index_y] + ' .muut_show_in_allposts_check').is(':checked');
-          var category_muut_path = $('#' + header_categories_array[index_y] + ' .muut_category_path_input').val();
-          if (category_muut_path.charAt(0) == '/') {
-            category_muut_path = category_muut_path.substr(1);
+      // Prepare the channels array under this header.
+      for (var index_y = 0; index_y < header_channels_array.length; index_y++) {
+        var channel_title = $('#' + header_channels_array[index_y] + ' .muut-channel-title.editable').editable('getValue', true);
+        if (channel_title.length > 0) {
+          var show_in_allposts_value = $('#' + header_channels_array[index_y] + ' .muut_show_in_allposts_check').is(':checked');
+          var channel_muut_path = $('#' + header_channels_array[index_y] + ' .muut_channel_path_input').val();
+          if (channel_muut_path.charAt(0) == '/') {
+            channel_muut_path = channel_muut_path.substr(1);
           }
-          if (category_muut_path.charAt(category_muut_path.length-1) == '/') {
-            category_muut_path = category_muut_path.substr(0, category_muut_path.length-1);
+          if (channel_muut_path.charAt(channel_muut_path.length-1) == '/') {
+            channel_muut_path = channel_muut_path.substr(0, channel_muut_path.length-1);
           }
-          header_categories_new[index_y] = {
-            id: $('#' + header_categories_array[index_y]).data('id'),
-            name: category_title,
+          header_channels_new[index_y] = {
+            id: $('#' + header_channels_array[index_y]).data('id'),
+            name: channel_title,
             args: {
               show_in_allposts: show_in_allposts_value,
-              category_remote_path: category_muut_path
+              channel_remote_path: channel_muut_path
             }
           };
         }
       }
 
-      // And prepare the main array with all headers and categories.
+      // And prepare the main array with all headers and channels.
       var header_title = $('#' + headers_order_array[index] + ' .muut-header-title.editable').editable('getValue', true);
       if (header_title.length > 0) {
         headers_order_new[index] = {
           id: $('#' + headers_order_array[index]).data('id'),
           name: header_title,
-          categories: header_categories_new
+          channels: header_channels_new
         };
       }
     }
@@ -231,10 +231,10 @@ jQuery(document).ready( function($) {
     $.fn.editable.defaults.onblur = 'submit';
 
     $('#muut_forum_nav_headers .x-editable').editable().on('click', function() {
-      refresh_category_sortables();
+      refresh_channel_sortables();
     });
 
-    refresh_category_sortables();
+    refresh_channel_sortables();
     refresh_customized_navigation_array();
   }
 });
