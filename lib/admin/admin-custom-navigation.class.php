@@ -102,29 +102,29 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 
 
 		/**
-		 * Render an admin forum category header list item for the custom navigation editor.
+		 * Render an admin forum channel header list item for the custom navigation editor.
 		 *
-		 * @param int $header_id The term ID for the category header.
-		 * @param array $posts An array of posts to display within this category (optional).
+		 * @param int $header_id The term ID for the channel header.
+		 * @param array $posts An array of posts to display within this channel (optional).
 		 * @param bool $echo Whether to output the markup or simply return it (false).
 		 * @return string|false|void Returns the markup or void if it is echoed.
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public function forumCategoryHeaderItem( $header_id, $posts = null, $echo = true ) {
+		public function forumChannelHeaderItem( $header_id, $posts = null, $echo = true ) {
 			if ( !is_numeric( $header_id ) ) {
 				return false;
 			}
 
-			$term = get_term( $header_id, Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY );
+			$term = get_term( $header_id, Muut_Forum_Channel_Utility::FORUMCHANNELHEADER_TAXONOMY );
 
 			if ( !is_array( $posts ) || empty( $posts ) || is_null( $posts ) ) {
 				$args = array(
 					'posts_per_page' => '-1',
-					'post_type' => Muut_Forum_Category_Utility::FORUMCATEGORY_POSTTYPE,
+					'post_type' => Muut_Forum_Channel_Utility::FORUMCHANNEL_POSTTYPE,
 					'orderby' => 'menu_order',
 					'order' => 'ASC',
-					Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY => $term->slug,
+					Muut_Forum_Channel_Utility::FORUMCHANNELHEADER_TAXONOMY => $term->slug,
 				);
 				$posts = get_posts( $args );
 			}
@@ -146,24 +146,24 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		}
 
 		/**
-		 * Render an admin forum category list item for the custom navigation editor.
+		 * Render an admin forum channel list item for the custom navigation editor.
 		 *
-		 * @param int $category_id The post ID for the category.
+		 * @param int $channel_id The post ID for the channel.
 		 * @param bool $echo Whether to output the markup or simply return it (false).
 		 * @return string|false|void Returns the markup or void if it is echoed. False on error.
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public function forumCategoryItem( $category_id, $echo = true ) {
-			if ( !is_numeric( $category_id ) ) {
+		public function forumChannelItem( $channel_id, $echo = true ) {
+			if ( !is_numeric( $channel_id ) ) {
 				return false;
 			}
 
-			$category_post = get_post( $category_id );
+			$channel_post = get_post( $channel_id );
 
-			$category_block_id = $category_id;
-			$category_block_title = $category_post->post_title;
-			$category_block_path = get_post_meta( $category_id, Muut_Forum_Category_Utility::META_REMOTEPATH, true );
+			$channel_block_id = $channel_id;
+			$channel_block_title = $channel_post->post_title;
+			$channel_block_path = get_post_meta( $channel_id, Muut_Forum_Channel_Utility::META_REMOTEPATH, true );
 
 			ob_start();
 			include ( muut()->getPluginPath() . 'views/blocks/admin-category-block.php' );
@@ -178,25 +178,25 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		}
 
 		/**
-		 * Saves an array of term IDs that represent the order that the category headers should be listed/retrieved.
+		 * Saves an array of term IDs that represent the order that the channel headers should be listed/retrieved.
 		 *
 		 * @param array $header_ids An array of term IDs representing the headers.
 		 * @return bool Whether the save was successful or not.
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public function setForumCategoryHeaderOrder( $header_ids = array() ) {
+		public function setForumChannelHeaderOrder( $header_ids = array() ) {
 			if ( !is_array( $header_ids ) ) {
 				return false;
 			}
 
-			$header_array = apply_filters( 'muut_set_category_headers', $header_ids );
+			$header_array = apply_filters( 'muut_set_channel_headers', $header_ids );
 
 			foreach ( $header_array as &$header ) {
 				$header = 'id-' . $header;
 			}
 
-			return muut()->setOption( 'muut_category_headers', $header_array );
+			return muut()->setOption( Muut_Forum_Channel_Utility::FORUMCHANNELHEADERS_OPTION, $header_array );
 		}
 
 		/**
@@ -207,16 +207,16 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		 * @since 3.0
 		 */
 		public function printCustomNavTemplatesJs() {
-			$header_block_id = $category_block_id = '%ID%';
-			$header_block_title = $category_block_title = '';
-			$category_block_path = '';
-			$html = '<script type="text/javascript"> var categoryHeaderBlockTemplate = ';
+			$header_block_id = $channel_block_id = '%ID%';
+			$header_block_title = $channel_block_title = '';
+			$channel_block_path = '';
+			$html = '<script type="text/javascript"> var channelHeaderBlockTemplate = ';
 			ob_start();
 			include( muut()->getPluginPath() . 'views/blocks/admin-category-header-block.php' );
 			$html .= json_encode( ob_get_clean() );
 			$html .= '; ';
 
-			$html .= 'var categoryBlockTemplate = ';
+			$html .= 'var channelBlockTemplate = ';
 			ob_start();
 			include( muut()->getPluginPath() . 'views/blocks/admin-category-block.php' );
 			$html .= json_encode( ob_get_clean() );
@@ -229,9 +229,9 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 		/**
 		 * Saves the custom navigation settings.
 		 * The JSON that has been passed is of the following format:
-		 * [{ "id":<header_id>, "name":"Header Name", "categories":[{
-		 *   "id":"<category_post_id>",
-		 *   "name":"Category Name",
+		 * [{ "id":<header_id>, "name":"Header Name", "channel":[{
+		 *   "id":"<channel_post_id>",
+		 *   "name":"Channel Name",
 		 *   "args":{
 		 *     "show_in_allposts":true
 		 *   }}]
@@ -247,95 +247,93 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 
 				$custom_navigation_header_id_order = array();
 
-				$current_header_order = muut()->getOption( 'muut_category_headers', array() );
+				$current_header_order = muut()->getOption( Muut_Forum_Channel_Utility::FORUMCHANNELHEADERS_OPTION, array() );
 
 				// Save the data.
 				foreach ( $save_data as $header_object ) {
 					if ( isset( $header_object->id ) && is_string( $header_object->id ) && !is_numeric( $header_object->id ) && substr( $header_object->id, 0, 3 ) == 'new' && isset( $header_object->name ) ) {
-						$header_id = Muut_Forum_Category_Utility::createNavigationHeader( $header_object->name );
+						$header_id = Muut_Forum_Channel_Utility::createNavigationHeader( $header_object->name );
 					} elseif ( isset( $header_object->id ) && is_numeric( $header_object->id ) ) {
 						$header_id = $header_object->id;
 						if ( isset( $header_object->name ) ) {
-							Muut_Forum_Category_Utility::updateNavigationHeader( $header_id, array( 'name' => $header_object->name ) );
+							Muut_Forum_Channel_Utility::updateNavigationHeader( $header_id, array( 'name' => $header_object->name ) );
 						}
 					}
 
 					// If we've got a header id, let's attach it to the header order option array and  make sure to
-					// evaluate the categories underneath.
+					// evaluate the channels underneath.
 					if ( isset( $header_id ) ) {
 						$current_order_index = array_search( $header_id, $current_header_order );
 						if ( $current_header_order !== false ) {
 							unset( $current_header_order[$current_order_index]);
 						}
 
-						$header_term = get_term( $header_id, Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY );
+						$header_term = get_term( $header_id, Muut_Forum_Channel_Utility::FORUMCHANNELHEADER_TAXONOMY );
 						$custom_navigation_header_id_order[] = $header_id;
 
-						// It is important to remember that categories in this context are ACTUALLY WP_Post objects
-						// of the custom post type Muut_Forum_Category_Utility::FORUMCATEGORY_POSTTYPE.
-						// (At time of writing, that is: 'muut_forum_category')
-						if ( isset( $header_object->categories ) && is_array( $header_object->categories ) ) {
+						// It is important to remember that channels in this context are ACTUALLY WP_Post objects
+						// of the custom post type Muut_Forum_Channel_Utility::FORUMCHANNEL_POSTTYPE.
+						if ( isset( $header_object->channels ) && is_array( $header_object->channels ) ) {
 
-							$current_categories = get_posts( array(
-								 'post_type' => Muut_Forum_Category_Utility::FORUMCATEGORY_POSTTYPE,
+							$current_channels = get_posts( array(
+								 'post_type' => Muut_Forum_Channel_Utility::FORUMCHANNEL_POSTTYPE,
 								 'tax_query' => array(
-									 'taxonomy' => Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY,
+									 'taxonomy' => Muut_Forum_Channel_Utility::FORUMCHANNELHEADER_TAXONOMY,
 									 'field' => 'term_id',
 									 'terms' => $header_id,
 								 ),
 								'posts_per_page' => '-1',
 							 ));
 
-							$keep_categories_array = array();
+							$keep_channel_array = array();
 
 							$menu_order = 0;
-							foreach ( $header_object->categories as $category ) {
-
+							foreach ( $header_object->channels as $channel ) {
 								// Set the base post args.
 								$post_args = array(
 									'tax_input' => array(
-										Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY => $header_term->slug,
+										Muut_Forum_Channel_Utility::FORUMCHANNELHEADER_TAXONOMY => $header_term->slug,
 									),
 									'menu_order' => $menu_order,
-									'post_title' => $category->name,
+									'post_title' => $channel->name,
 								);
 
-								// Create a new category post if it does not exist yet.
-								if ( isset( $category->id ) && is_string( $category->id ) && substr( $category->id, 0, 3 ) == 'new' && isset( $category->name ) ) {
+								// Create a new channel post if it does not exist yet.
+								if ( isset( $channel->id ) && is_string( $channel->id ) && substr( $channel->id, 0, 3 ) == 'new' && isset( $channel->name ) ) {
 
-									$custom_args = isset( $category->args ) ? get_object_vars( $category->args ) : array();
+									$custom_args = isset( $channel->args ) ? get_object_vars( $channel->args ) : array();
 
 									$possible_post = get_posts( array(
-										'name' => sanitize_title( $category->name ),
-										'post_type' => Muut_Forum_Category_Utility::FORUMCATEGORY_POSTTYPE,
+										'name' => sanitize_title( $channel->name ),
+										'post_type' => Muut_Forum_Channel_Utility::FORUMCHANNEL_POSTTYPE,
 										'posts_per_page' => '1',
 									));
 
 									if ( count( $possible_post ) > 0 ) {
-										$category_post_id = $possible_post[0]->ID;
-										wp_set_post_terms( $category_post_id, $header_term->slug, Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY, false );
+										$channel_post_id = $possible_post[0]->ID;
+										wp_set_post_terms( $channel_post_id, $header_term->slug, Muut_Forum_Channel_Utility::FORUMCHANNELHEADER_TAXONOMY, false );
 									} else {
-										$category_post_id = Muut_Forum_Category_Utility::createForumCategory( $category->name, $custom_args, $post_args );
+										$channel_post_id = Muut_Forum_Channel_Utility::createForumChannel( $channel->name, $custom_args, $post_args );
 									}
 
-									$keep_categories_array[] = $category_post_id;
+									$keep_channel_array[] = $channel_post_id;
 
-									if ( is_int( $category_post_id ) ) {
-										$category_id = $category_post_id;
+									if ( is_int( $channel_post_id ) ) {
+										$channel_id = $channel_post_id;
 										$menu_order++;
 									}
 
 								// If it does already exist, modify the existing one.
-								} elseif ( isset( $category->id ) && is_numeric( $category->id ) ) {
-									$category_id = $category->id;
+								} elseif ( isset( $channel->id ) && is_numeric( $channel->id ) ) {
+									$channel_id = $channel->id;
 
-									$custom_args = isset( $category->args ) ? get_object_vars( $category->args ) : array();
+									$custom_args = isset( $channel->args ) ? get_object_vars( $channel->args ) : array();
 
-									$update = Muut_Forum_Category_Utility::updateForumCategory( $category_id, $custom_args, $post_args );
+									$update = Muut_Forum_Channel_Utility::updateForumChannel( $channel_id, $custom_args, $post_args );
 
-									wp_set_post_terms( $category_id, $header_term->slug, Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY, false );
+									wp_set_post_terms( $channel_id, $header_term->slug, Muut_Forum_Channel_Utility::FORUMCHANNELHEADER_TAXONOMY, false );
 
-									$keep_categories_array[] = $category_id;
+									$keep_channel_array[] = $channel_id;
 
 									if ( $update == true ) {
 										$menu_order++;
@@ -343,20 +341,20 @@ if ( !class_exists( 'Muut_Admin_Custom_Navigation' ) ) {
 								}
 							}
 
-							foreach( $current_categories as $current_category ) {
-								if ( !in_array( $current_category->ID, $keep_categories_array ) ) {
-									wp_remove_object_terms( $current_category->ID, $header_id, Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY );
+							foreach( $current_channels as $current_channel ) {
+								if ( !in_array( $current_channel->ID, $keep_channel_array ) ) {
+									wp_remove_object_terms( $current_channel->ID, $header_id, Muut_Forum_Channel_Utility::FORUMCHANNELHEADER_TAXONOMY );
 								}
 							}
 						}
 					}
 				}
-				$current_headers_superobject = Muut_Forum_Category_Utility::getForumCategoryHeaders();
+				$current_headers_superobject = Muut_Forum_Channel_Utility::getForumChannelHeaders();
 				foreach( $current_header_order as $delete_header ) {
-					wp_delete_term( $delete_header, Muut_Forum_Category_Utility::FORUMCATEGORYHEADER_TAXONOMY );
+					wp_delete_term( $delete_header, Muut_Forum_Channel_Utility::FORUMCHANNELHEADER_TAXONOMY );
 				}
 
-				muut()->setOption( 'muut_category_headers', $custom_navigation_header_id_order );
+				muut()->setOption( Muut_Forum_Channel_Utility::FORUMCHANNELHEADERS_OPTION, $custom_navigation_header_id_order );
 				do_action( 'muut_custom_nav_saved' );
 			}
 		}

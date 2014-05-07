@@ -155,7 +155,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			$post_type = get_post_type_object( get_post_type( $post_id ) );
 			$post_type_name = $post_type->labels->singular_name;
 
-			$settings = 'data-show_online="false" data-upload="false" data-category="' . __( 'Comments', 'muut' ) . '" title="' . $post_type_name . ': ' . get_the_title( $post_id ) . '" ';
+			$settings = 'data-show_online="false" data-upload="false" data-channel="' . __( 'Comments', 'muut' ) . '" title="' . $post_type_name . ': ' . get_the_title( $post_id ) . '" ';
 
 			if ( muut()->getOption( 'use_threaded_commenting', '0' ) ) {
 				$settings .= 'data-show_title="false" ';

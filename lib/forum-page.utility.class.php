@@ -225,7 +225,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 			}
 
 			$settings .= 'title="' . get_the_title( $page_id ) . '" ';
-			$settings .= 'data-category="' . get_the_title( $page_id ) . '" ';
+			$settings .= 'data-channel="' . get_the_title( $page_id ) . '" ';
 
 			if ( $path === false )
 				return false;
@@ -250,14 +250,14 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 		/**
 		 * Gets and echoes the markup for displaying the comments link on the forum navigation.
 		 *
-		 * @param array $category_headers The array of category header objects—just used to see if custom nav has been set.
+		 * @param array $channel_headers The array of channel header objects—just used to see if custom nav has been set.
 		 * @return void
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public static function forumPageCommentsNavigationItem( $category_headers ) {
+		public static function forumPageCommentsNavigationItem( $channel_headers ) {
 			if ( muut()->getOption( 'show_comments_in_forum' ) ) {
-				if ( !empty( $category_headers ) ) {
+				if ( !empty( $channel_headers ) ) {
 					echo '<div class="m-h3">' . apply_filters( 'muut_forum_comments_navigation_header', __( 'Site', 'muut' ) ) . '</div>';
 					$class = 'non-category ';
 					echo '<a href="#!/' . muut()->getOption( 'comments_base_domain' ) . '" class="' . $class . '" title="' . __( 'Comments', 'muut' ) .'">' . __( 'Comments', 'muut' ) . '</a>';

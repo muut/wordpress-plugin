@@ -9,7 +9,7 @@
  */
 jQuery(document).ready( function($) {
 
-  // Handles making generated permalinks to forum categories to function properly on the Forum main page.
+  // Handles making generated permalinks to forum channels to function properly on the Forum main page.
   if ( typeof muut_current_page_permalink == 'string' && $('body').hasClass('muut-forum-home') ) {
     $('a[href^="' + muut_current_page_permalink + '#!"]').on('click', function(e) {
       var el = $(this);
