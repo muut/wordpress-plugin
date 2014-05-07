@@ -452,8 +452,8 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function registerScriptsAndStyles() {
-			$muut_version = defined( 'MUUT_VERSION' ) ? MUUT_VERSION : self::MUUTVERSION;
-			wp_register_script( 'muut', '//cdn.muut.com/' . $muut_version . '/moot.' . $this->getOption( 'language', 'en' ) . '.min.js', array( 'jquery' ), $muut_version, true );
+			$muut_version = $this->getMuutVersion();
+			wp_register_script( 'muut', '//cdn.' . self::MUUTSERVERS . '/' . $muut_version . '/moot.' . $this->getOption( 'language', 'en' ) . '.min.js', array( 'jquery' ), $muut_version, true );
 			wp_register_script( 'muut-admin-functions', $this->pluginUrl . 'resources/admin-functions.js', array( 'jquery' ), '1.0', true );
 			wp_register_script( 'x-editable', $this->pluginUrl . 'vendor/jqueryui-editable/js/jqueryui-editable.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-tooltip', 'jquery-ui-button' ), '1.5.1', true);
 
@@ -462,7 +462,7 @@ if ( !class_exists( 'Muut' ) ) {
 
 			wp_register_style( 'muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
 			wp_register_style( 'x-editable-style', $this->pluginUrl . 'vendor/jqueryui-editable/css/jqueryui-editable.css' );
-			wp_register_style( 'muut-forum-css', '//cdn.muut.com/' . $muut_version . '/moot.css', array(), $muut_version );
+			wp_register_style( 'muut-forum-css', '//cdn.' . self::MUUTSERVERS . '/' . $muut_version . '/moot.css', array(), $muut_version );
 
 			// Localization rules.
 			$localizations = array(
@@ -476,6 +476,19 @@ if ( !class_exists( 'Muut' ) ) {
 
 				wp_localize_script( $key, $new_key, $array );
 			}
+		}
+
+		/**
+		 * Gets the version of Muut to use.
+		 *
+		 * @return string
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function getMuutVersion() {
+			$muut_version = defined( 'MUUT_VERSION' ) ? MUUT_VERSION : self::MUUTVERSION;
+
+			return $muut_version;
 		}
 
 		/**
