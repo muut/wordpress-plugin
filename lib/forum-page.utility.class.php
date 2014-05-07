@@ -259,7 +259,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 			if ( muut()->getOption( 'show_comments_in_forum' ) ) {
 				if ( !empty( $channel_headers ) ) {
 					echo '<div class="m-h3">' . apply_filters( 'muut_forum_comments_navigation_header', __( 'Site', 'muut' ) ) . '</div>';
-					$class = 'non-channel ';
+					$class = 'non-category ';
 					echo '<a href="#!/' . muut()->getOption( 'comments_base_domain' ) . '" class="' . $class . '" title="' . __( 'Comments', 'muut' ) .'">' . __( 'Comments', 'muut' ) . '</a>';
 				}
 			}
