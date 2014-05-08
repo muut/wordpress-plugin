@@ -35,7 +35,7 @@ if ( !isset( $path ) ) {
 			<?php foreach ( $header_array as $channel_post ) {
 				$class = '';
 				if ( !Muut_Forum_Channel_Utility::isAllpostsChannel( $channel_post->ID ) ) {
-					$class .= 'non-category ';
+					$class .= 'unlisted ';
 				}
 				?>
 				<a href="#!/<?php echo Muut_Forum_Channel_Utility::getRemotePath( $channel_post->ID ); ?>" class="<?php echo $class; ?>"><?php echo $channel_post->post_title; ?></a>

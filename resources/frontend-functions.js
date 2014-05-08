@@ -21,7 +21,7 @@ jQuery(document).ready( function($) {
   // Adds the comments navigation link to the forum navigation.
   if ( $('body').hasClass('muut-forum-home') && !$('body').hasClass('muut-custom-nav') && typeof muut_show_comments_in_nav != 'undefined' && muut_show_comments_in_nav ) {
     muut().on( 'init', function() {
-      $(".m-forums").append('<p><a href="#!/' + muut_comments_base_domain + '" title="Comments">Comments</a></p>');
+      $(".m-forums").append('<p><a href="#!/' + muut_comments_base_domain + '" title="Comments" class="unlisted">Comments</a></p>');
     });
   }
 });
