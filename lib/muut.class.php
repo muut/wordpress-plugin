@@ -153,7 +153,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'init', array( $this, 'registerScriptsAndStyles' ) );
 			add_action( 'init', array( $this, 'disregardOldMoot' ), 2 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueueAdminScripts' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ), 11 );
 
 			add_action( 'wp_print_scripts', array( $this, 'printCurrentPageJs' ) );
 
