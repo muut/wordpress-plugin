@@ -156,10 +156,6 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ), 11 );
 
 			add_action( 'wp_print_scripts', array( $this, 'printCurrentPageJs' ) );
-
-			add_action( 'muut_forum_custom_navigation_after_headers', array( 'Muut_Forum_Page_Utility', 'forumPageCommentsNavigationItem' ), 10 , 1 );
-
-			add_action( 'load-nav-menus.php', array( $this, 'checkIfUserEditedMenus') );
 		}
 
 		/**
@@ -172,7 +168,6 @@ if ( !class_exists( 'Muut' ) ) {
 		protected function addFilters() {
 			add_filter( 'body_class', array( $this, 'addBodyClasses' ) );
 			add_filter( 'admin_body_class', array( $this, 'addAdminBodyClasses' ) );
-			add_filter( 'post_type_link', array( $this, 'filterForumChannelsPermalinks' ), 10, 2 );
 			add_filter( 'the_content', array( $this, 'filterForumPageContent' ), 10 );
 		}
 
@@ -525,9 +520,6 @@ if ( !class_exists( 'Muut' ) ) {
 				'subscription_api_key' => '',
 				'subscription_secret_key' => '',
 				'subscription_use_sso' => false,
-				'forum_channel_defaults' => array(
-					'show_in_allposts' => true,
-				),
 				'disable_proxy_rewrites' => false,
 				'comments_base_domain' => $_SERVER['SERVER_NAME'],
 			) );
@@ -892,15 +884,6 @@ if ( !class_exists( 'Muut' ) ) {
 				'muut_settings',
 				array( $this, 'renderAdminSettingsPage' )
 			);
-
-			add_submenu_page(
-				self::SLUG,
-				__( 'Muut Custom Navigation', 'muut' ),
-				__( 'Custom Navigation', 'muut' ),
-				'edit_pages',
-				'muut_custom_navigation',
-				array( $this, 'renderAdminCustomNavPage' )
-			);
 		}
 
 		/**
@@ -933,22 +916,6 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			include( $this->pluginPath . 'views/admin-settings.php');
-		}
-
-		/**
-		 * Renders the Muut Custom Navigation page, which interacts with the Muut Forum Channel CPT.
-		 *
-		 * @return void
-		 * @author Paul Hughes
-		 * @since  3.0
-		 */
-		public function renderAdminCustomNavPage() {
-			// Confirm that this function is being called from a valid callback.
-			if ( $this->adminBail( self::SLUG . '_page_muut_custom_navigation' ) ) {
-				return;
-			}
-
-			include( $this->pluginPath . 'views/admin-custom-navigation.php');
 		}
 
 		/**
@@ -1031,27 +998,6 @@ if ( !class_exists( 'Muut' ) ) {
 		}
 
 		/**
-		 * Filters the permalink for post channel pages. This makes sure that the link goes to the proper muut forum page with the hashbang.
-		 *
-		 * @param string $permalink The current permalink.
-		 * @param WP_Post $post The channel WP_Post (custom post type).
-		 * @return string The modified permalink.
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		public function filterForumChannelsPermalinks( $permalink, $post ) {
-			if ( Muut_Forum_Channel_Utility::FORUMCHANNEL_POSTTYPE == get_post_type( $post ) ) {
-				$forum_home_id = $this->getOption( 'forum_home_id', false );
-				if ( $forum_home_id ) {
-					$base_link = get_permalink( $forum_home_id );
-
-					$permalink = $base_link . '#!/' . Muut_Forum_Channel_Utility::getRemotePath( $post->ID );
-				}
-			}
-			return $permalink;
-		}
-
-		/**
 		 * Adds the proper body class(es) for admin depending on the admin page being loaded.
 		 *
 		 * @param string $classes The current string of body classes.
@@ -1084,10 +1030,6 @@ if ( !class_exists( 'Muut' ) ) {
 				$classes[] = 'has-moot';
 				if ( $this->getOption( 'forum_home_id', '0' ) == get_the_ID() ) {
 					$classes[] = 'muut-forum-home';
-					$channel_headers = Muut_Forum_Channel_Utility::getForumChannelHeaders();
-					if ( !empty( $channel_headers ) ) {
-						$classes[] = 'muut-custom-nav';
-					}
 				}
 			}
 
@@ -1138,41 +1080,10 @@ if ( !class_exists( 'Muut' ) ) {
 
 			return $content;
 		}
-
-		/**
-		 * Check if the user has edited nav menus before and, if so, add the hook to update his meta data to NOT hide
-		 * the forum channels metabox.
-		 *
-		 * @return void
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		public function checkIfUserEditedMenus() {
-			if ( get_user_meta( get_current_user_id(), 'metaboxhidden_nav-menus', true ) == '' ) {
-				add_action( 'admin_head', array( $this, 'updateHiddenMetaboxUserDefault' ) );
-			}
-		}
-
-		/**
-		 * Updates the user's default hidden metabox default so that forum channels are displayed by default.
-		 *
-		 * @return void
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		public function updateHiddenMetaboxUserDefault() {
-			$current_meta = get_user_meta( get_current_user_id(), 'metaboxhidden_nav-menus', true );
-
-			$index = array_search( 'add-' . Muut_Forum_Channel_Utility::FORUMCHANNEL_POSTTYPE, $current_meta );
-
-			if ( $index ) {
-				unset( $current_meta[$index] );
-				update_user_meta( get_current_user_id(), 'metaboxhidden_nav-menus', $current_meta );
-			}
-		}
-
 	}
-
+	/**
+	 * END MAIN CLASS
+	 */
 
 	/**
 	 * Can be used to return the Muut instance.

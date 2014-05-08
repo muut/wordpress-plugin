@@ -232,7 +232,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 
 			if ( muut()->getOption( 'forum_home_id', false ) == $page_id ) {
 				ob_start();
-				include ( muut()->getPluginPath() . 'views/blocks/custom-navigation-embed-block.php' );
+					include ( muut()->getPluginPath() . 'views/blocks/forum-page-embed.php' );
 				$embed = ob_get_clean();
 			} else {
 				$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
@@ -244,24 +244,6 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 				echo $embed;
 			} else {
 				return $embed;
-			}
-		}
-
-		/**
-		 * Gets and echoes the markup for displaying the comments link on the forum navigation.
-		 *
-		 * @param array $channel_headers The array of channel header objects—just used to see if custom nav has been set.
-		 * @return void
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		public static function forumPageCommentsNavigationItem( $channel_headers ) {
-			if ( muut()->getOption( 'show_comments_in_forum' ) ) {
-				if ( !empty( $channel_headers ) ) {
-					echo '<div class="m-h3">' . apply_filters( 'muut_forum_comments_navigation_header', __( 'Site', 'muut' ) ) . '</div>';
-					$class = 'unlisted ';
-					echo '<a href="#!/' . muut()->getOption( 'comments_base_domain' ) . '" class="' . $class . '" title="' . __( 'Comments', 'muut' ) .'">' . __( 'Comments', 'muut' ) . '</a>';
-				}
 			}
 		}
 	}

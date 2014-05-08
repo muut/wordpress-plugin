@@ -1,9 +1,9 @@
 <?php
 /**
- * forum-muut-ux.php
+ * forum-page.php
  * The page template for the forum root page. It contains all the Muut UX.
  * To override this template, copy this file to a muut directory under your theme's root
- * (wp-content/themes/my-theme/muut/forum-muut-ux.php) and make any modifications you like!
+ * (wp-content/themes/my-theme/muut/forum-page.php) and make any modifications you like!
  *
  * @package   Muut
  * @copyright 2014 Muut Inc

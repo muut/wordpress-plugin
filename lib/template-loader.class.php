@@ -90,7 +90,7 @@ if ( !class_exists( 'Muut_Template_Loader' ) ) {
 			if ( is_page() && Muut_Forum_Page_Utility::isForumPage( get_the_ID() ) ) {
 				//TODO: Allow for other forum templates to get loaded (not just the one).
 				if ( muut()->getOption( 'forum_home_id', false ) == get_the_ID() ) {
-					$template = 'forum-muut-ux.php';
+					$template = 'forum-page.php';
 					$located = $this->locateTemplate( $template );
 					$template = $located != '' ? $located : $template;
 				}
