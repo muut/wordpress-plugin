@@ -180,6 +180,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		protected function adminBail( $screen_id ) {
+			error_log( get_current_screen()->id );
 			if ( get_current_screen()->id != $screen_id ) {
 				return true;
 			} else {
@@ -873,33 +874,8 @@ if ( !class_exists( 'Muut' ) ) {
 				__( 'Muut', 'muut' ),
 				'manage_options',
 				self::SLUG,
-				array( $this, 'renderAdminMainPage' )
-			);
-
-			add_submenu_page(
-				self::SLUG,
-				__( 'Muut Settings', 'muut' ),
-				__( 'Settings', 'muut' ),
-				'manage_options',
-				'muut_settings',
 				array( $this, 'renderAdminSettingsPage' )
 			);
-		}
-
-		/**
-		 * Renders the Muut main menu page.
-		 *
-		 * @return void
-		 * @author Paul Hughes
-		 * @since  3.0
-		 */
-		public function renderAdminMainPage() {
-			// Confirm that this function is being called from a valid callback.
-			if ( $this->adminBail( 'toplevel_page_' . self::SLUG ) ) {
-				return;
-			}
-
-			include( $this->pluginPath . 'views/admin-main.php' );
 		}
 
 		/**
@@ -911,7 +887,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function renderAdminSettingsPage() {
 			// Confirm that this function is being called from a valid callback.
-			if ( $this->adminBail( self::SLUG . '_page_muut_settings' ) ) {
+			if ( $this->adminBail( 'toplevel_page_' . self::SLUG ) ) {
 				return;
 			}
 
