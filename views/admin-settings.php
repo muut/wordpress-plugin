@@ -12,20 +12,32 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 ?>
 
 <div class="wrap">
-	<h2><?php _e( 'Muut Settings', 'muut' ); ?></h2>
+	<h2><?php _e( 'Muut', 'muut' ); ?></h2>
 	<form method="post">
-	<input type="hidden" name="muut_settings_save" value="true" />
-	<?php wp_nonce_field( 'muut_settings_save', 'muut_settings_nonce' ); ?>
+		<input type="hidden" name="muut_settings_save" value="true" />
+		<?php wp_nonce_field( 'muut_settings_save', 'muut_settings_nonce' ); ?>
+		<h3><?php _e( 'Forums and commenting re-imagined.', 'muut' ); ?></h3>
+<?php if ( !muut()->getForumName() ): ?>
+		<p><?php printf( __( 'Please enter the name of your Muut forum. If you don\'t have one, please %ssetup now%s!', 'muut' ), '<a href="https://muut.com/setup/" target="_blank">', '</a>' ); ?></p>
+		<p><?php _e( 'You can have any number of forums, users, or commenting pages. No traffic limits: 10, 1,000, or 100,000,000 loads a day, for free.', 'muut' ); ?></p>
+<?php endif; ?>
 		<table class="form-table">
 			<tbody>
 			<tr>
 				<th scope="row">
-					<label for="muut_remote_forum_name"><?php _e( 'Remote Forum Name', 'muut' ); ?></label>
+					<label for="muut_forum_name"><?php _e( 'Forum Name', 'muut' ); ?></label>
 				</th>
 				<td>
-					<input name="setting[remote_forum_name]" type="text" id="muut_remote_forum_name" value="<?php echo muut()->getOption( 'remote_forum_name', '' ); ?>" />
+					<?php echo trailingslashit( Muut::MUUTSERVERS ); ?><input name="setting[forum_name]" type="text" id="muut_forum_name" value="<?php echo muut()->getForumName(); ?>" />
 				</td>
 			</tr>
+<?php if ( !muut()->getForumName() ): ?>
+			</tbody>
+		</table>
+	<p class="submit">
+		<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Continue', 'muut' ); ?>">
+	</p>
+<?php else: ?>
 			<tr>
 				<th scope="row">
 					<label for="moot_language"><?php _e( 'Language', 'muut' ); ?></label>
@@ -40,80 +52,34 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 					</select>
 				</td>
 			</tr>
+			<tr>
+				<td colspan="2">
+					<input name="setting[enable_proxy_rewrites]" type="checkbox" id="muut_enable_proxy_rewrites" value="1" <?php checked( '1', muut()->getOption( 'enable_proxy_rewrites', '1' ) ); ?> />
+					<label for="muut_enable_proxy_rewrites"><?php printf( __( 'Allow search engines to crawl discussions at %s', 'muut' ), '<a href="' . get_site_url() . '">' . str_replace( array( 'http://', 'https://', ), '', get_site_url() ) . '</a>.' ); ?></label>
+				</td>
+			</tr>
+<?php if ( Muut_Forum_Page_Utility::getForumPageId() ):
+	$forum_page_id = Muut_Forum_Page_Utility::getForumPageId();
+?>
+			<tr>
+				<td colspan="2">
+					<p class="description"><?php printf( __( 'Current forum page is %s', 'muut' ), '<a href="' . get_edit_post_link( $forum_page_id ) . '">' . get_the_title( $forum_page_id ) . '</a>.' ); ?></p>
+				</td>
+			</tr>
+	<?php endif; ?>
 			</tbody>
 		</table>
-		<h3 class="title"><?php _e( 'Post Commenting', 'muut' ); ?></h3>
+		<h3 class="title"><?php _e( 'Single Sign-on', 'muut' ); ?></h3>
+		<?php $sso_field_class = muut()->getOption( 'subscription_use_sso' ) ? '' : 'hidden'; ?>
 		<table class="form-table">
 			<tbody>
 			<tr>
-				<th scope="row">
-					<label for="muut_replace_comments"><?php _e( 'Use Muut for commenting', 'muut' ); ?></label>
-				</th>
-				<td>
-					<input name="setting[replace_comments]" type="checkbox" id="muut_replace_comments" value="1" <?php checked( '1', muut()->getOption( 'replace_comments', '0' ) ); ?> />
+				<td colspan="2">
+					<input name="setting[subscription_use_sso]" type="checkbox" id="muut_subscription_use_sso" value="1" <?php checked( '1', muut()->getOption( 'subscription_use_sso', '0' ) ); ?> />
+					<label for="muut_subscription_use_sso"><?php _e( 'Enabled', 'muut' ); ?></label>
 				</td>
 			</tr>
-			<tr data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')">
-				<th scope="row">
-					<label for="muut_use_threaded_commenting"><?php _e( 'Use threaded commenting', 'muut' );?></label>
-				</th>
-				<td>
-					<input name="setting[use_threaded_commenting]" type="checkbox" id="muut_use_threaded_commenting" value="1" <?php checked( '1', muut()->getOption( 'use_threaded_commenting', '0' ) ); ?> />
-				</td>
-			</tr>
-			<tr data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')">
-				<th scope="row">
-					<label for="muut_override_all_comments"><?php _e( 'Override existing comments', 'muut' ); ?></label>
-				</th>
-				<td>
-					<input name="setting[override_all_comments]" type="checkbox" id="muut_override_all_comments" value="1" <?php checked( '1', muut()->getOption( 'override_all_comments', '0' ) ); ?> />
-				</td>
-			</tr>
-			<tr data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')">
-				<th scope="row">
-					<label for="muut_show_comments_in_forum"><?php _e( 'Show Comments In Forum', 'muut' ); ?></label>
-				</th>
-				<td>
-					<input name="setting[show_comments_in_forum]" type="checkbox" id="muut_show_comments_in_forum" value="1" <?php checked( '1', muut()->getOption( 'show_comments_in_forum', '0' ) ); ?> />
-				</td>
-			</tr>
-			</tbody>
-		</table>
-		<h3 class="title"><?php _e( 'Forum Page Defaults', 'muut' ); ?></h3>
-		<p><?php _e( 'These can be changed for individual pages when you create/edit them.', 'muut' ); ?></p>
-		<table class="form-table">
-			<tbody>
-			<tr>
-				<th scope="row">
-					<label for="muut_is_threaded_default"><?php _e( 'Threaded Posts', 'muut' ); ?></label>
-				</th>
-				<td>
-					<input name="setting[is_threaded_default]" type="checkbox" id="muut_is_threaded_default" value="1" <?php checked( '1', $forum_page_defaults['is_threaded'] ); ?> />
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="muut_show_online_default"><?php _e( 'Show Online Users', 'muut' ); ?></label>
-				</th>
-				<td>
-					<input name="setting[show_online_default]" type="checkbox" id="muut_show_online_default" value="1" <?php checked( '1', $forum_page_defaults['show_online'] ); ?> />
-				</td>
-			</tr>
-			<tr>
-				<th scope="row">
-					<label for="muut_allow_uploads_default"><?php _e( 'Allow Image Uploads', 'muut' ); ?></label>
-				</th>
-				<td>
-					<input name="setting[allow_uploads_default]" type="checkbox" id="muut_allow_uploads_default" value="1" <?php checked( '1', $forum_page_defaults['allow_uploads'] ); ?> />
-				</td>
-			</tr>
-			</tbody>
-		</table>
-		<h3 class="title"><?php _e( 'Single Sign-On', 'muut' ); ?></h3>
-		<p><?php printf( __( 'With Single Sign-On, your users will not have to register separately with Muut but will automatically be able to use their WordPress users. Visit the  %sforum upgrades%s page to purchase the developer package.', 'muut' ), '<a href="https://muut.com/pricing/">', '</a>' ); ?></p>
-		<table class="form-table">
-			<tbody>
-			<tr>
+			<tr class="<?php echo $sso_field_class; ?>" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':checked()')">
 				<th scope="row">
 					<label for="muut_subscription_api_key"><?php _e( 'API Key', 'muut' ); ?></label>
 				</th>
@@ -121,7 +87,7 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 					<input name="setting[subscription_api_key]" type="text" id="muut_subscription_api_key" value="<?php echo muut()->getOption( 'subscription_api_key', '' ); ?>" />
 				</td>
 			</tr>
-			<tr data-muut_requires="muut_subscription_api_key" data-muut_require_func="val()">
+			<tr class="<?php echo $sso_field_class; ?>" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':checked()')">
 				<th scope="row">
 					<label for="muut_subscription_secret_key"><?php _e( 'Secret Key', 'muut' ); ?></label>
 				</th>
@@ -129,33 +95,13 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 					<input name="setting[subscription_secret_key]" type="text" id="muut_subscription_secret_key" value="<?php echo muut()->getOption( 'subscription_secret_key', '' ); ?>" />
 				</td>
 			</tr>
-			<tr data-muut_requires="muut_subscription_api_key" data-muut_require_func="val()">
-				<th scope="row">
-					<label for="muut_subscription_use_sso"><?php _e( 'Use SSO', 'muut' ); ?></label>
-				</th>
-				<td>
-					<input name="setting[subscription_use_sso]" type="checkbox" id="muut_subscription_use_sso" value="1" <?php checked( '1', muut()->getOption( 'subscription_use_sso', '0' ) ); ?> />
-				</td>
-			</tr>
 			</tbody>
 		</table>
-		<h3 class="title"><?php _e( 'Advanced Settings', 'muut' ); ?></h3>
-		<p><?php printf( __( 'These settings should not have to be altered.', 'muut' ) ); ?></p>
-		<table class="form-table">
-			<tbody>
-			<tr>
-				<th scope="row">
-					<label for="muut_disable_proxy_rewrites"><?php _e( 'Disable Proxy Rewrites', 'muut' ); ?></label>
-				</th>
-				<td>
-					<input name="setting[disable_proxy_rewrites]" type="checkbox" id="muut_disable_proxy_rewrites" value="1" <?php checked( '1', muut()->getOption( 'disable_proxy_rewrites', '0' ) ); ?> />
-				</td>
-			</tr>
-			</tbody>
-		</table>
-		<h3 class="title"><?php __( 'Forum Page Defaults', 'muut' ); ?></h3>
+		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php _e( 'Upgrade to Muut Developer to use the WordPress authentication system for your forum. No logging in twice—WordPress users automatically become Muut users.', 'muut' ); ?></p>
+		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Developer%s', 'muut' ), '<a href="https://muut.com/pricing/">', '</a>' ); ?></p>
 		<p class="submit">
 			<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
 		</p>
+		<?php endif; ?>
 	</form>
 </div>

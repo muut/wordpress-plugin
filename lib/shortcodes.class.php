@@ -220,7 +220,7 @@ if ( !class_exists( 'Muut_Shortcodes' ) ) {
 
 			 ), $params) );
 
-			$forum_name = muut()->getRemoteForumName();
+			$forum_name = muut()->getForumName();
 
 			if ($forum_name == null) return "";
 

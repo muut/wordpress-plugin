@@ -26,8 +26,8 @@ function muut_get_option( $option, $default = '' ) {
  * @author Paul Hughes
  * @since 3.0
  */
-function muut_get_root_forum() {
-	muut()->getRemoteForumName();
+function muut_get_forum_name() {
+	muut()->getForumName();
 }
 
 /**

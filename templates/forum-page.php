@@ -12,7 +12,7 @@
 
 get_header();
 
-$root_forum = muut_get_option( 'remote_forum_name', '' );
+$root_forum = muut_get_forum_name();
 $sub_forum = muut_get_page_forum_path();
 ?>
 	<div id="main-content" class="main-content">

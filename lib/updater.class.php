@@ -155,7 +155,7 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 					}
 
 					$new_settings = array(
-						'remote_forum_name' => get_option( 'muut_forum_name', '' ),
+						'forum_name' => get_option( 'muut_forum_name', '' ),
 						'language' => get_option( 'muut_language', '' ),
 						'replace_comments' => get_option( 'muut_generate', '' ),
 						'show_comments_in_forum' => get_option( 'muut_comments_under_forums', '' ),

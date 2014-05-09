@@ -143,7 +143,7 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 
 			$path = get_post_meta( $page_id, self::META_REMOTEPATH, true );
 
-			if ( muut()->getOption( 'forum_home_id', false ) != $page_id && !self::getForumPageOption( $page_id, 'is_threaded', false ) && !$no_suffix  ) {
+			if ( muut()->getOption( 'forum_page_id', false ) != $page_id && !self::getForumPageOption( $page_id, 'is_threaded', false ) && !$no_suffix  ) {
 				$path .= ':comments';
 			}
 			return $path;
@@ -230,14 +230,14 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 			if ( $path === false )
 				return false;
 
-			if ( muut()->getOption( 'forum_home_id', false ) == $page_id ) {
+			if ( muut()->getOption( 'forum_page_id', false ) == $page_id ) {
 				ob_start();
 					include ( muut()->getPluginPath() . 'views/blocks/forum-page-embed.php' );
 				$embed = ob_get_clean();
 			} else {
 				$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
 
-				$embed = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . muut()->getRemoteForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
+				$embed = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . muut()->getForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
 			}
 
 			if ( $echo ) {
@@ -245,6 +245,10 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 			} else {
 				return $embed;
 			}
+		}
+
+		public static function getForumPageId() {
+			return muut()->getOption( 'forum_page_id', false );
 		}
 	}
 }

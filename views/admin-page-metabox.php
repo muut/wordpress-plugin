@@ -27,26 +27,26 @@ $remote_path = '/' . rawurldecode( Muut_Forum_Page_Utility::getRemoteForumPath( 
 <div id="muut_page_forum_settings" class="<?php echo $forum_show_class; ?>">
 		<h4><?php _e( 'Forum Options', 'muut' ); ?></h4>
 		<?php
-		$forum_home_id = muut()->getOption( 'forum_home_id', false );
+		$forum_page_id = muut()->getOption( 'forum_page_id', false );
 		$disabled = '';
 		$disabled_class = '';
-		if ( $forum_home_id != '0' && $forum_home_id != get_the_ID() ) {
+		if ( $forum_page_id != '0' && $forum_page_id != get_the_ID() ) {
 			$disabled = 'disabled="disabled"';
 			$disabled_class = 'disabled';
-			$forum_home_post = get_post( $forum_home_id );
+			$forum_home_post = get_post( $forum_page_id );
 			$forum_home_post_title = $forum_home_post->post_title;
-		} else if ( $forum_home_id === false ) {
-			$forum_home_id = get_the_ID();
+		} else if ( $forum_page_id === false ) {
+			$forum_page_id = get_the_ID();
 		}
-		$root_forum_post_name = get_the_title( $forum_home_id );
+		$root_forum_post_name = get_the_title( $forum_page_id );
 		?>
 		<p class="<?php echo $disabled_class; ?>">
-			<input name="muut_forum_is_home" <?php echo $disabled; ?> type="checkbox" id="muut_forum_is_home" value="1" <?php checked( get_the_ID(), $forum_home_id ); ?> />
+			<input name="muut_forum_is_home" <?php echo $disabled; ?> type="checkbox" id="muut_forum_is_home" value="1" <?php checked( get_the_ID(), $forum_page_id ); ?> />
 			<?php _e( 'Forum Home Page?', 'muut' ); ?><br />
 			<label class="screen-reader-text" for="muut_forum_is_home"><?php _e( 'Forum Home Page?', 'muut' ); ?></label>
 		</p>
 		<p>
-			<?php if ( $forum_home_id != get_the_ID() && $forum_home_id > 0 ) printf( __( 'Current Forum Home is %s', 'muut' ), '<a href="' . admin_url( 'post.php?post=' . $forum_home_id . '&action=edit' ) . '">' . $forum_home_post_title . '</a>' ); ?>
+			<?php if ( $forum_page_id != get_the_ID() && $forum_page_id > 0 ) printf( __( 'Current Forum Home is %s', 'muut' ), '<a href="' . admin_url( 'post.php?post=' . $forum_page_id . '&action=edit' ) . '">' . $forum_home_post_title . '</a>' ); ?>
 		</p>
 		<p>
 			<span class="muut_requires_input_block" data-muut_requires="muut_forum_is_home" data-muut_require_func="is(':not(:checked)')"><input name="muut_forum_is_threaded" type="checkbox" id="muut_forum_is_threaded" value="1" <?php checked( '1', Muut_Forum_Page_Utility::getForumPageOption( get_the_ID(), 'is_threaded' ) ); ?> />

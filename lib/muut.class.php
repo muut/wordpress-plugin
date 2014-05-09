@@ -146,7 +146,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'admin_menu', array( $this, 'createAdminMenuItems' ) );
 			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ) );
 			add_action( 'add_meta_boxes_page', array( $this, 'addPageMetaBoxes' ) );
-			add_action( 'load-' . self::SLUG . '_page_muut_settings', array( $this, 'saveSettings' ) );
+			add_action( 'load-toplevel_page_' . self::SLUG, array( $this, 'saveSettings' ) );
 			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
 			add_action( 'save_post_page', array( $this, 'saveForumPage' ), 10, 2 );
 
@@ -242,7 +242,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function getContentPathPrefix() {
 			if ( !isset( $this->contentPathPrefix ) ) {
-				if ( $this->getOption( 'disable_proxy_rewrites', false ) ) {
+				if ( !$this->getOption( 'enable_proxy_rewrites', true ) ) {
 					$this->contentPathPrefix = 'https://' . self::MUUTSERVERS . '/';
 				} else {
 					$this->contentPathPrefix = '/';
@@ -256,8 +256,8 @@ if ( !class_exists( 'Muut' ) ) {
 		 *
 		 * @return string The remote forum name.
 		 */
-		public function getRemoteForumName() {
-			return $this->getOption( 'remote_forum_name', '' );
+		public function getForumName() {
+			return $this->getOption( 'forum_name', '' );
 		}
 
 		/**
@@ -290,7 +290,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function maybeAddRewriteRules() {
-			if ( $this->getOption( 'remote_forum_name', '' ) !== '' && !$this->getOption( 'added_rewrite_rules', false ) && !$this->getOption( 'disable_proxy_rewrites', false ) ) {
+			if ( $this->getForumName() !== '' && !$this->getOption( 'added_rewrite_rules', false ) && $this->getOption( 'enable_proxy_rewrites', true ) ) {
 				$this->addProxyRewrites();
 			}
 		}
@@ -316,7 +316,7 @@ if ( !class_exists( 'Muut' ) ) {
 					'<IfModule mod_rewrite.c>',
 					'RewriteEngine On',
 					'RewriteBase /',
-					'RewriteRule ^i/(' . $this->getOption( 'remote_forum_name' ) . ')(/.*)?$ http://' . self::MUUTSERVERS . '/i/$1$2 [P]',
+					'RewriteRule ^i/(' . $this->getForumName() . ')(/.*)?$ http://' . self::MUUTSERVERS . '/i/$1$2 [P]',
 					'RewriteRule ^m/(.*)$ http://' . self::MUUTSERVERS . '/m/$1 [P]',
 					'</IfModule>',
 				);
@@ -343,7 +343,7 @@ if ( !class_exists( 'Muut' ) ) {
 		public function addProxyRewritesFilter( $rules ) {
 			$permastruct = get_option( 'permalink_structure', '' );
 
-			$muut_rules = "RewriteRule ^i/(" . $this->getOption( 'remote_forum_name' ) . ")(/.*)?\$ http://" . self::MUUTSERVERS . "/i/\$1\$2 [P]\n";
+			$muut_rules = "RewriteRule ^i/(" . $this->getForumName() . ")(/.*)?\$ http://" . self::MUUTSERVERS . "/i/\$1\$2 [P]\n";
 			$muut_rules .=	"RewriteRule ^m/(.*)$ http://" . self::MUUTSERVERS . "/m/\$1 [P]";
 
 			if ( $permastruct == '' ) {
@@ -505,14 +505,14 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			$defaults = apply_filters( 'muut_options_defaults', array(
-				'remote_forum_name' => '',
+				'forum_name' => '',
 				// TODO: Make this match whatever language is set for the site.
 				'language' => $default_lang,
 				'replace_comments' => false,
 				'use_threaded_commenting' => false,
 				'override_all_comments' => true,
 				'show_comments_in_forum' => false,
-				'forum_home_id' => false,
+				'forum_page_id' => false,
 				'forum_page_defaults' => array(
 					'is_threaded' => false,
 					'show_online' => true,
@@ -521,7 +521,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'subscription_api_key' => '',
 				'subscription_secret_key' => '',
 				'subscription_use_sso' => false,
-				'disable_proxy_rewrites' => false,
+				'enable_proxy_rewrites' => true,
 				'comments_base_domain' => $_SERVER['SERVER_NAME'],
 			) );
 
@@ -586,7 +586,7 @@ if ( !class_exists( 'Muut' ) ) {
 				$page_id = get_the_ID();
 				if ( Muut_Forum_Page_Utility::isForumPage( $page_id ) ) {
 					echo '<script type="text/javascript">';
-					if ( $this->getOption( 'forum_home_id', 0 ) == $page_id ) {
+					if ( $this->getOption( 'forum_page_id', 0 ) == $page_id ) {
 						echo 'var muut_current_page_permalink = "' . get_permalink( $page_id ) . '";';
 						echo 'var muut_show_comments_in_nav = ' . $this->getOption( 'show_comments_in_forum' ) . ';';
 						echo 'var muut_comments_base_domain = "' . $this->getOption( 'comments_base_domain' ) . '";';
@@ -604,7 +604,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function addPageMetaBoxes() {
-			if ( $this->getOption( 'remote_forum_name', '' ) != '' ) {
+			if ( $this->getForumName() != '' ) {
 				add_meta_box(
 					'muut-is-forum-page',
 					__( 'Muut', 'muut' ),
@@ -835,15 +835,15 @@ if ( !class_exists( 'Muut' ) ) {
 				'show_online_default',
 				'allow_uploads_default',
 				'subscription_use_sso',
-				'disable_proxy_rewrites',
+				'enable_proxy_rewrites',
 			) );
 
 			foreach ( $boolean_settings as $boolean_setting ) {
 				$settings[$boolean_setting] = isset( $settings[$boolean_setting]) ? $settings[$boolean_setting] : '0';
 			}
 
-			if ( ( isset( $settings['remote_forum_name'] ) && $settings['remote_forum_name'] != $this->getOption( 'remote_forum_name' ) )
-				|| ( isset( $settings['disable_proxy_rewrites'] ) && $settings['disable_proxy_rewrites'] != $this->getOption( 'disable_proxy_rewrites' ) ) ) {
+			if ( ( isset( $settings['forum_name'] ) && $settings['forum_name'] != $this->getForumName() )
+				|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != $this->getOption( 'enable_proxy_rewrites' ) ) ) {
 				flush_rewrite_rules( true );
 			}
 
@@ -948,10 +948,10 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			if ( isset( $_POST['muut_forum_is_home'] ) && $_POST['muut_forum_is_home'] == '1' ) {
-				$this->setOption( 'forum_home_id', $post_id );
+				$this->setOption( 'forum_page_id', $post_id );
 				Muut_Forum_Page_Utility::setForumPageRemotePath( $post_id, '' );
-			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' && ( $this->getOption( 'forum_home_id', false ) == $post_id || $this->getOption( 'forum_home_id', false ) === false ) ) {
-				$this->setOption( 'forum_home_id', '0' );
+			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' && ( $this->getOption( 'forum_page_id', false ) == $post_id || $this->getOption( 'forum_page_id', false ) === false ) ) {
+				$this->setOption( 'forum_page_id', '0' );
 			}
 
 			if ( isset( $_POST['muut_forum_is_threaded'] ) && $_POST['muut_forum_is_threaded'] == '1' ) {
@@ -1004,7 +1004,7 @@ if ( !class_exists( 'Muut' ) ) {
 				$classes[] = 'muut-enabled';
 				$classes[] = 'has-muut';
 				$classes[] = 'has-moot';
-				if ( $this->getOption( 'forum_home_id', '0' ) == get_the_ID() ) {
+				if ( $this->getOption( 'forum_page_id', '0' ) == get_the_ID() ) {
 					$classes[] = 'muut-forum-home';
 				}
 			}

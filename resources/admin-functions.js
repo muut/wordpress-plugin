@@ -55,11 +55,11 @@ jQuery(document).ready( function($) {
     var parent = event.data.parent;
     var current = event.data.current;
     if ( eval( 'parent.' + passed_function ) ) {
-      current.removeClass( 'disabled' );
-      current.find('input').prop('disabled', false);
+      current.removeClass( 'hidden' );
+      //current.find('input').prop('disabled', false);
     } else {
-      current.addClass( 'disabled' );
-      current.find('input').prop('disabled', true);
+      current.addClass( 'hidden' );
+      //current.find('input').prop('disabled', true);
     }
   };
 
@@ -67,7 +67,7 @@ jQuery(document).ready( function($) {
   // The syntax is to set a tr data-muut_requires attribute to the id of another element in the page.
   // It will run a check that is the function (in string form) stored in the same tr's data-muut_require_func attribute.
   // If true, it enables assigns that tr the class "disabled" and any inputs in that tr are disabled.
-  $('body.muut_settings tr[data-muut_requires]').each(function(){
+  $('body.toplevel_page_muut tr[data-muut_requires], body.toplevel_page_muut .muut_requires_input_block').each(function(){
     $(this).check_requires_fields();
   });
 

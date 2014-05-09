@@ -17,11 +17,11 @@ if ( !isset( $path ) ) {
 }
 ?>
 <!-- Muut placeholder tag -->
-<div <?php echo $id_attr; ?> class="<?php echo muut()->getWrapperCssClass(); ?>" data-url="<?php echo muut()->getContentPathPrefix(); ?>i/<?php echo muut()->getRemoteForumName() . '/' . $path; ?>">
+<div <?php echo $id_attr; ?> class="<?php echo muut()->getWrapperCssClass(); ?>" data-url="<?php echo muut()->getContentPathPrefix(); ?>i/<?php echo muut()->getForumName() . '/' . $path; ?>">
 
 	<!-- Muut API -->
 	<?php if ( !muut()->getOption( 'subscription_use_sso' ) ) { ?>
-	<a class="muut-url" href="<?php echo muut()->getContentPathPrefix(); ?>i/<?php echo muut()->getRemoteForumName() . '/' . $path; ?>"><?php echo get_the_title(); ?></a>
+	<a class="muut-url" href="<?php echo muut()->getContentPathPrefix(); ?>i/<?php echo muut()->getForumName() . '/' . $path; ?>"><?php echo get_the_title(); ?></a>
 	<?php } ?>
 
 	<!-- Custom HTML -->

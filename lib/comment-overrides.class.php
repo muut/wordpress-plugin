@@ -107,7 +107,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			if ( !$full_path ) {
 				return $path;
 			} else {
-				return muut()->getRemoteForumName() . '/' . $path;
+				return muut()->getForumName() . '/' . $path;
 			}
 		}
 
