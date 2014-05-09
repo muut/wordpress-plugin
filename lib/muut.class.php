@@ -49,6 +49,11 @@ if ( !class_exists( 'Muut' ) ) {
 		const MUUTSERVERS = 'muut.com';
 
 		/**
+		 * @property Whether develop mode was executed.
+		 */
+		private $developMode;
+
+		/**
 		 * @static
 		 * @property Muut The instance of the class.
 		 */
@@ -132,6 +137,10 @@ if ( !class_exists( 'Muut' ) ) {
 			$this->loadLibraries();
 			$this->addActions();
 			$this->addFilters();
+
+			if ( defined( 'MUUT_DEVELOP_MODE' ) && MUUT_DEVELOP_MODE == true ) {
+				$this->developMode();
+			}
 		}
 
 		/**
@@ -1059,6 +1068,79 @@ if ( !class_exists( 'Muut' ) ) {
 
 			return $content;
 		}
+
+		/**
+		 * Functions to run if we are running in Muut Development Mode
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		private function developMode() {
+			if ( defined( 'MUUT_DEVELOP_MODE' ) && MUUT_DEVELOP_MODE == true && is_user_logged_in() && is_super_admin() ) {
+				$this->developMode = true;
+				add_action( 'admin_init', array( $this, 'developSettingsAddActions' ), 10 );
+			}
+		}
+
+		/**
+		 * Adds the actions to run on the Muut main/settings page when in develop mode.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function developSettingsAddActions() {
+			if ( isset( $_GET['page'] ) && $_GET['page'] == 'muut' && $this->developMode ) {
+				if ( isset( $_GET['muut_development_action'] ) && check_admin_referer( 'muut_development_action', 'muut_nonce' ) ) {
+
+					$this->developAction( $_GET['muut_development_action'] );
+				}
+				add_action( 'in_admin_header', array( $this, 'developSettingsBox' ) );
+			}
+		}
+
+		/**
+		 * Executes a given develop-mode action.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		private function developAction( $action ) {
+			if ( $this->developMode ) {
+				switch ( $action ) {
+					case 'settings_reset':
+						delete_option( self::OPTIONNAME );
+						if ( isset( $_GET['page'] ) ) {
+							wp_redirect( admin_url( 'admin.php?page=' . $_GET['page'] ) );
+						} else {
+							wp_redirect( admin_url( 'admin.php' ) );
+						}
+					break;
+				}
+			}
+		}
+
+		/**
+		 * Renders the items/buttons that are enabled if we are in develop mode.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function developSettingsBox() {
+			if ( $this->developMode ) {
+				echo '<div id="muut_develop_actions_wrapper"><div id="muut_develop_actions">';
+					if ( isset( $_GET['page'] ) )
+						echo '<a href="' . wp_nonce_url( admin_url( 'admin.php?page=' . $_GET['page'] . '&muut_development_action=settings_reset'), 'muut_development_action', 'muut_nonce' ) . '">Reset Muut Settings</a>';
+					else
+						echo '<a href="' . wp_nonce_url( admin_url( 'admin.php?muut_development_action=settings_reset'), 'muut_development_action', 'muut_nonce' ) . '">Reset Muut Settings</a>';
+				echo '</div></div>';
+			}
+		}
+
+
 	}
 	/**
 	 * END MAIN CLASS

@@ -46,3 +46,17 @@ span.disabled input[type=text]
     width: 57px;
     background-image: url( '//muut.com/apple-touch-icon-57x57-precomposed.png' );
 }
+
+#muut_develop_actions_wrapper {
+    padding: 10px;
+}
+
+#muut_develop_actions {
+    background-color: #FFD6AD;
+    border: 1px solid #FF9933;
+    padding: 8px;
+}
+
+#muut_develop_actions a {
+    font-weight: bold;
+}
