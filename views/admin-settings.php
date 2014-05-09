@@ -99,7 +99,7 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 			</tbody>
 		</table>
 		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php _e( 'Upgrade to Muut Developer to use the WordPress authentication system for your forum. No logging in twice—WordPress users automatically become Muut users.', 'muut' ); ?></p>
-		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Developer%s', 'muut' ), '<a href="https://muut.com/pricing/">', '</a>' ); ?></p>
+		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Developer%s', 'muut' ), '<a target="_blank" href="https://muut.com/pricing/">', '</a>' ); ?></p>
 		<p class="submit">
 			<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
 		</p>
