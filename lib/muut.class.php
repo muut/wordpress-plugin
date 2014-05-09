@@ -180,7 +180,6 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		protected function adminBail( $screen_id ) {
-			error_log( get_current_screen()->id );
 			if ( get_current_screen()->id != $screen_id ) {
 				return true;
 			} else {
@@ -521,7 +520,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'subscription_api_key' => '',
 				'subscription_secret_key' => '',
 				'subscription_use_sso' => false,
-				'enable_proxy_rewrites' => true,
+				'enable_proxy_rewrites' => '1',
 				'comments_base_domain' => $_SERVER['SERVER_NAME'],
 			) );
 
@@ -825,6 +824,10 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		protected function settingsValidate( $settings ) {
+
+			if ( isset( $_POST['initial_save'] ) ) {
+				return apply_filters( 'muut_settings_initial_save', apply_filters( 'muut_settings_validated', $settings ) );
+			}
 
 			$boolean_settings = apply_filters( 'muut_boolean_settings', array(
 				'replace_comments',

@@ -35,7 +35,8 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 			</tbody>
 		</table>
 	<p class="submit">
-		<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( 'Continue', 'muut' ); ?>">
+		<input type="hidden" name="initial_save" value="true" />
+		<input type="submit" name="submit_initial" id="submit" class="button button-primary" value="<?php _e( 'Continue', 'muut' ); ?>">
 	</p>
 <?php else: ?>
 			<tr>
