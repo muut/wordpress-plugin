@@ -196,8 +196,6 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 * @since 3.0
 		 */
 		public function initPostEditor() {
-			error_log( 'there' );
-
 			$class = 'Muut_Admin_Post_Editor';
 			if ( !in_array( $class, $this->alreadyInit ) ) {
 				require_once( muut()->getPluginPath() . 'lib/admin/admin-post-editor.class.php' );

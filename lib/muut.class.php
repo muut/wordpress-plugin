@@ -154,7 +154,6 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'admin_init', array( $this, 'maybeAddRewriteRules' ) );
 			add_action( 'admin_menu', array( $this, 'createAdminMenuItems' ) );
 			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ) );
-			add_action( 'add_meta_boxes_page', array( $this, 'addPageMetaBoxes' ) );
 			add_action( 'load-toplevel_page_' . self::SLUG, array( $this, 'saveSettings' ) );
 			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
 			add_action( 'save_post_page', array( $this, 'saveForumPage' ), 10, 2 );
@@ -602,37 +601,6 @@ if ( !class_exists( 'Muut' ) ) {
 					echo '</script>';
 				}
 			}
-		}
-
-		/**
-		 * Adds the metaboxes for the Page admin editor.
-		 *
-		 * @return void
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		public function addPageMetaBoxes() {
-			if ( $this->getForumName() != '' ) {
-				add_meta_box(
-					'muut-is-forum-page',
-					__( 'Muut', 'muut' ),
-					array( $this, 'renderMuutPageMetaBox' ),
-					'page',
-					'side',
-					'high'
-				);
-			}
-		}
-
-		/**
-		 * Renders the metabox content for the Page Editor.
-		 *
-		 * @return void
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		public function renderMuutPageMetaBox() {
-			include( $this->pluginPath . 'views/admin-page-metabox.php' );
 		}
 
 		/**
