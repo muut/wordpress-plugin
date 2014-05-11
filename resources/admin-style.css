@@ -63,3 +63,8 @@ span.disabled input[type=text]
 #muut_develop_actions a {
     font-weight: bold;
 }
+
+.muut_metabox_radio {
+    display: inline-block;
+    margin-right: 12px;
+}

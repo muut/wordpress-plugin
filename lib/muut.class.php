@@ -519,6 +519,10 @@ if ( !class_exists( 'Muut' ) ) {
 				'use_threaded_commenting' => false,
 				'override_all_comments' => true,
 				'show_comments_in_forum' => false,
+				'commenting_defaults' => array(
+					'type' => 'flat',
+					'disable_uploads' => '0',
+				),
 				'forum_page_id' => false,
 				'forum_page_defaults' => array(
 					'is_threaded' => false,
