@@ -63,6 +63,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		 * @since 3.0
 		 */
 		public function addActions() {
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueueAdminScripts' ) );
 		}
 
 		/**
@@ -73,6 +74,19 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		 * @since 3.0
 		 */
 		public function addFilters() {
+		}
+
+		/**
+		 * Enqueues necessary admin scripts for the page/post editor.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function enqueueAdminScripts() {
+			wp_enqueue_script ( 'jquery-ui-tabs' );
+			wp_enqueue_script( 'muut-admin-functions' );
+			wp_enqueue_style( 'muut-admin-style' );
 		}
 	}
 }
