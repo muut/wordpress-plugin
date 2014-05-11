@@ -77,6 +77,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			add_action( 'init', array( $this, 'initMuutShortcodes' ) );
 
 			add_action( 'admin_init', array( $this, 'adminInits' ), 3 );
+			add_action( 'load-post.php', array( $this, 'initPostEditor') );
 		}
 
 		/**
@@ -181,6 +182,24 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 				require_once( muut()->getPluginPath() . 'lib/shortcodes.class.php' );
 				if ( class_exists( $class ) ) {
 					Muut_Shortcodes::instance();
+				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the admin post editor.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function initPostEditor() {
+			$class = 'Muut_Admin_Post_Editor';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/admin/admin-post-editor.class.php' );
+				if ( class_exists( $class ) ) {
+					Muut_Admin_Post_Editor::instance();
 				}
 				$this->alreadyInit[] = $class;
 			}
