@@ -39,6 +39,9 @@ span.disabled input[type=text]
     list-style: circle;
 }
 
+.muut-tab-panel {
+}
+
 .muut-header-logo {
     float: left;
     margin: 10px 10px 10px 0;

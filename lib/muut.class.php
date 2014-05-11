@@ -458,7 +458,7 @@ if ( !class_exists( 'Muut' ) ) {
 		public function registerScriptsAndStyles() {
 			$muut_version = $this->getMuutVersion();
 			wp_register_script( 'muut', '//cdn.' . self::MUUTSERVERS . '/' . $muut_version . '/moot.' . $this->getOption( 'language', 'en' ) . '.min.js', array( 'jquery' ), $muut_version, true );
-			wp_register_script( 'muut-admin-functions', $this->pluginUrl . 'resources/admin-functions.js', array( 'jquery' ), '1.0', true );
+			wp_register_script( 'muut-admin-functions', $this->pluginUrl . 'resources/admin-functions.js', array( 'jquery', 'jquery-ui-tabs' ), '1.0', true );
 			wp_register_script( 'x-editable', $this->pluginUrl . 'vendor/jqueryui-editable/js/jqueryui-editable.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-tooltip', 'jquery-ui-button' ), '1.5.1', true);
 
 			wp_register_script( 'muut-frontend-functions', $this->pluginUrl . 'resources/frontend-functions.js', array( 'jquery' ), '1.0', true );

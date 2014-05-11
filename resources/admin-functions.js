@@ -79,4 +79,14 @@ jQuery(document).ready( function($) {
   $('#muut_forum_page_advanced_options_link').on('click', function() {
     $('#muut_forum_page_advanced_options').toggle();
   });
+
+  if ($.fn.tabs) {
+    $('#muut_metabox_tabs .hidden').removeClass('hidden');
+    $('#muut_metabox_tabs').tabs({
+      activate: function(event, ui){
+        ui.newTab.addClass('tabs');
+        ui.oldTab.removeClass('tabs');
+      }
+    });
+  }
 });
