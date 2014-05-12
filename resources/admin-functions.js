@@ -85,8 +85,11 @@ jQuery(document).ready( function($) {
     $('#muut_metabox_tabs').tabs({
       activate: function(event, ui){
         ui.newTab.addClass('tabs');
+        ui.newTab.children('input.muut_tab_last_open').val('1');
         ui.oldTab.removeClass('tabs');
-      }
-    });
+        ui.oldTab.children('input.muut_tab_last_open').val('0');
+      },
+      active: $('#muut_metabox_tabs_list li.tabs').index()
+  });
   }
 });

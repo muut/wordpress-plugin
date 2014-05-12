@@ -156,7 +156,6 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ) );
 			add_action( 'load-toplevel_page_' . self::SLUG, array( $this, 'saveSettings' ) );
 			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
-			add_action( 'save_post_page', array( $this, 'saveForumPage' ), 10, 2 );
 
 			add_action( 'init', array( $this, 'registerScriptsAndStyles' ) );
 			add_action( 'init', array( $this, 'disregardOldMoot' ), 2 );
@@ -876,85 +875,6 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			include( $this->pluginPath . 'views/admin-settings.php');
-		}
-
-		/**
-		 *  Saves a forum page's information.
-		 *
-		 * @param int $post_id The id of the post (page) being saved.
-		 * @param WP_Post $post The post (page) object that is being saved.
-		 * @return void
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		public function saveForumPage( $post_id, $post ) {
-			if ( get_post_type( $post ) != 'page' )
-				return;
-
-			if ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '0' ) {
-				Muut_Forum_Page_Utility::removeAsForumPage( $post_id );
-			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' ) {
-				Muut_Forum_Page_Utility::setAsForumPage( $post_id );
-			}
-
-			if ( isset( $_POST['muut_is_forum_page'] )
-				&& $_POST['muut_is_forum_page'] == '1'
-				&& ( ( isset( $_POST['muut_forum_is_home'] )
-					&& $_POST['muut_forum_is_home'] != '1' )
-					|| !isset( $_POST['muut_forum_is_home'] )
-				) ) {
-				if ( !isset( $_POST['muut_forum_path'] )
-					|| $_POST['muut_forum_path'] == '' ) {
-					// If no path is saved yet, let's generate one and save it.
-					// An already saved path CANNOT be changed (even though the post slug and ancestry can).
-					if ( !Muut_Forum_Page_Utility::getRemoteForumPath( $post_id, true ) ) {
-						$path = $post->post_name;
-						$ancestors = get_post_ancestors( $post );
-
-						foreach ( $ancestors as $ancestor ) {
-							if ( Muut_Forum_Page_Utility::isForumPage( $ancestor ) && Muut_Forum_Page_Utility::getForumPageOption( $ancestor, 'is_threaded', false ) ) {
-								$path = Muut_Forum_Page_Utility::getRemoteForumPath( $ancestor ) . '/' . $path;
-							}
-						}
-						Muut_Forum_Page_Utility::setForumPageRemotePath( $post_id, $path );
-					}
-				} elseif ( isset( $_POST['muut_forum_path'] ) && $_POST['muut_forum_path'] != '' ) {
-					$path = $_POST['muut_forum_path'];
-					if ( substr( $path, 0, 1 ) == '/' ) {
-						$path = substr( $path, 1 );
-					}
-					if ( substr( $path, -1 ) == '/' ) {
-						$path = substr( $path, 0, -1 );
-					}
-					$path = implode('/', array_map('rawurlencode', explode( '/', $path ) ) );
-					Muut_Forum_Page_Utility::setForumPageRemotePath( $post_id, $path );
-				}
-			}
-
-			if ( isset( $_POST['muut_forum_is_home'] ) && $_POST['muut_forum_is_home'] == '1' ) {
-				$this->setOption( 'forum_page_id', $post_id );
-				Muut_Forum_Page_Utility::setForumPageRemotePath( $post_id, '' );
-			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' && ( $this->getOption( 'forum_page_id', false ) == $post_id || $this->getOption( 'forum_page_id', false ) === false ) ) {
-				$this->setOption( 'forum_page_id', '0' );
-			}
-
-			if ( isset( $_POST['muut_forum_is_threaded'] ) && $_POST['muut_forum_is_threaded'] == '1' ) {
-				Muut_Forum_Page_Utility::setForumPageOption( $post_id, 'is_threaded', '1' );
-			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' && Muut_Forum_Page_Utility::getForumPageOption( $post_id, 'is_threaded', '0' ) == '1' ) {
-				Muut_Forum_Page_Utility::setForumPageOption( $post_id, 'is_threaded', '0' );
-			}
-
-			if ( isset( $_POST['muut_forum_show_online'] ) && $_POST['muut_forum_show_online'] == '1' ) {
-				Muut_Forum_Page_Utility::setForumPageOption( $post_id, 'show_online', '1' );
-			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' && Muut_Forum_Page_Utility::getForumPageOption( $post_id, 'show_online', '0' ) == '1' ) {
-				Muut_Forum_Page_Utility::setForumPageOption( $post_id, 'show_online', '0' );
-			}
-
-			if ( isset( $_POST['muut_forum_allow_uploads'] ) && $_POST['muut_forum_allow_uploads'] == '1' ) {
-				Muut_Forum_Page_Utility::setForumPageOption( $post_id, 'allow_uploads', '1' );
-			} elseif ( isset( $_POST['muut_is_forum_page'] ) && $_POST['muut_is_forum_page'] == '1' && Muut_Forum_Page_Utility::getForumPageOption( $post_id, 'allow_uploads', '0' ) == '1' ) {
-				Muut_Forum_Page_Utility::setForumPageOption( $post_id, 'allow_uploads', '0' );
-			}
 		}
 
 		/**

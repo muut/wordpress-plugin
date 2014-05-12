@@ -30,6 +30,11 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		protected static $instance;
 
 		/**
+		 * @property array The default tabs for Muut post saving.
+		 */
+		protected $defaultTabs;
+
+		/**
 		 * The singleton method.
 		 *
 		 * @return Muut_Admin_Post_Editor The instance.
@@ -53,6 +58,8 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		protected function __construct() {
 			$this->addActions();
 			$this->addFilters();
+
+			$this->setDefaultTabs();
 		}
 
 		/**
@@ -65,6 +72,9 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		public function addActions() {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueueAdminScripts' ) );
 			add_action( 'add_meta_boxes', array( $this, 'addPostMetaBoxes' ), 1, 10 );
+
+			add_action( 'save_post', array( $this, 'saveMuutPostSettings' ), 2, 10 );
+			add_action( 'muut_save_post_tab', array( $this, 'saveMuutPostTab' ), 3, 10 );
 		}
 
 		/**
@@ -90,7 +100,38 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 			wp_enqueue_style( 'muut-admin-style' );
 		}
 
-
+		/**
+		 * Sets the default tabs for Muut post saves.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function setDefaultTabs() {
+			$this->defaultTabs = array(
+				'commenting' => array(
+					'label' => __( 'Commenting', 'muut' ),
+					'name' => 'commenting-tab',
+					'post_types' => apply_filters( 'muut_metabox_commenting_tab_post_types', array() ),
+					'meta_name' => 'muut_commenting-tab',
+					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-commenting.php',
+				),
+				'channel' => array(
+					'label' => __( 'Channel', 'muut' ),
+					'name' => 'channel-tab',
+					'post_types' => apply_filters( 'muut_metabox_channel_tab_post_types', array( 'page' ) ),
+					'meta_name' => 'muut_channel-tab',
+					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-channel.php',
+				),
+				'forum' => array(
+					'label' => __( 'Forum', 'muut' ),
+					'name' => 'forum-tab',
+					'post_types' => apply_filters( 'muut_metabox_forum_tab_post_types', array( 'page' ) ),
+					'meta_name' => 'muut_forum-tab',
+					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-forum.php',
+				),
+			);
+		}
 
 		/**
 		 * Adds the metaboxes for the Page/Post admin editor.
@@ -133,36 +174,13 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		 * The post_types property for tabs is the post types it should be displayed for.
 		 * If it is an empty array, display that tab on all post types.
 		 *
-		 * @return void
+		 * @return array The meta box tabs to use.
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
 		public function getMetaBoxTabs() {
-			$default_tabs = array(
-				'commenting' => array(
-					'label' => __( 'Commenting', 'muut' ),
-					'name' => 'commenting-tab',
-					'post_types' => apply_filters( 'muut_metabox_commenting_tab_post_types', array() ),
-					'meta_name' => 'muut_commenting-tab',
-					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-commenting.php',
-				),
-				'channel' => array(
-					'label' => __( 'Channel', 'muut' ),
-					'name' => 'channel-tab',
-					'post_types' => apply_filters( 'muut_metabox_channel_tab_post_types', array( 'page' ) ),
-					'meta_name' => 'muut_channel-tab',
-					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-channel.php',
-				),
-				'forum' => array(
-					'label' => __( 'Forum', 'muut' ),
-					'name' => 'forum-tab',
-					'post_types' => apply_filters( 'muut_metabox_forum_tab_post_types', array( 'page' ) ),
-					'meta_name' => 'muut_forum-tab',
-					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-forum.php',
-				),
-			);
 
-			$all_tabs = apply_filters( 'muut_post_editor_metabox_tabs', $default_tabs );
+			$all_tabs = apply_filters( 'muut_post_editor_metabox_tabs', $this->defaultTabs );
 
 			$post_type = $this->getCurrentPostType();
 
@@ -205,6 +223,69 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 
 			// If nothing worked, we don't know the post type!
 			return null;
+		}
+
+		/**
+		 *  Runs the actions for active tabspost/page's Muut information.
+		 *
+		 * @param int $post_id The id of the post (page) being saved.
+		 * @param WP_Post $post The post (page) object that is being saved.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function saveMuutPostSettings( $post_id, $post ) {
+			$tabs = $this->getMetaBoxTabs();
+
+			foreach( $tabs as $tab_slug => $tab ) {
+				// Execute actions for active tabs.
+				// Next line the $_POST index could be a new hidden, if multiple tabs should be saved.
+				if ( isset( $_POST['muut_last_open_' . $tab['name'] ] ) && $_POST['muut_last_open_' . $tab['name'] ] ) {
+					do_action( 'muut_save_post_tab', $tab, $post_id, $post );
+					do_action( 'muut_save_post_tab_' . $tab_slug, $tab, $post_id, $post );
+				}
+				if ( isset( $_POST['muut_last_open_' . $tab['name'] ] ) && $_POST['muut_last_open_' . $tab['name'] ] ) {
+					update_post_meta( $post_id, 'muut_last_open_tab', $tab['name'] );
+				}
+			}
+		}
+
+		/**
+		 * Saves the settings on a given tab.
+		 *
+		 * @param array $tab The tab we are saving.
+		 * @param int $post_id The ID of the post we are saving.
+		 * @param WP_Post $post The post (or page) object that is being saved.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function saveMuutPostTab( $tab, $post_id, $post ) {
+			$muut_tabs_to_save = array();
+			foreach ( $this->defaultTabs as $default_tab ) {
+				$muut_tabs_to_save[] = $default_tab['name'];
+			}
+
+			if ( !in_array( $tab['name'], $muut_tabs_to_save ) || ( !empty( $tab['post_types'] ) && !in_array( $post->post_type, (Array) $tab['post_types'] ) ) ) {
+				return;
+			}
+
+			switch( $tab['name'] ) {
+				case 'commenting-tab':
+					if ( isset ( $_POST[$tab['meta_name']] ) ) {
+						$tab_options = $_POST[$tab['meta_name']];
+					}
+					$boolean_values = array(
+						'disable_uploads',
+					);
+
+					foreach ( $boolean_values as $boolean_value ) {
+						$tab_options[$boolean_value] = isset( $tab_options[$boolean_value] ) ? $tab_options[$boolean_value] : '0';
+					}
+
+					update_post_meta( $post_id, $tab['meta_name'], $tab_options );
+				break;
+			}
 		}
 	}
 }
