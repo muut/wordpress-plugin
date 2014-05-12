@@ -75,6 +75,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 
 			add_action( 'save_post', array( $this, 'saveMuutPostSettings' ), 2, 10 );
 			add_action( 'muut_save_post_tab', array( $this, 'saveMuutPostTab' ), 3, 10 );
+			add_action( 'transition_post_status', array( $this, 'maybeEnableSpecificComments' ), 3, 10 );
 		}
 
 		/**
@@ -113,21 +114,21 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					'label' => __( 'Commenting', 'muut' ),
 					'name' => 'commenting-tab',
 					'post_types' => apply_filters( 'muut_metabox_commenting_tab_post_types', array() ),
-					'meta_name' => 'muut_commenting-tab',
+					'meta_name' => 'muut_commenting',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-commenting.php',
 				),
 				'channel' => array(
 					'label' => __( 'Channel', 'muut' ),
 					'name' => 'channel-tab',
 					'post_types' => apply_filters( 'muut_metabox_channel_tab_post_types', array( 'page' ) ),
-					'meta_name' => 'muut_channel-tab',
+					'meta_name' => 'muut_channel',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-channel.php',
 				),
 				'forum' => array(
 					'label' => __( 'Forum', 'muut' ),
 					'name' => 'forum-tab',
 					'post_types' => apply_filters( 'muut_metabox_forum_tab_post_types', array( 'page' ) ),
-					'meta_name' => 'muut_forum-tab',
+					'meta_name' => 'muut_forum',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-forum.php',
 				),
 			);
@@ -285,6 +286,26 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 
 					update_post_meta( $post_id, $tab['meta_name'], $tab_options );
 				break;
+			}
+		}
+
+		/**
+		 * Sets a meta option that enables Muut commenting for new posts, if "Use Muut for Commenting" is enabled.
+		 *
+		 * @param string $new_status The new post status.
+		 * @param string $old_status The old post status.
+		 * @param WP_Post $post The post that has just been saved.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function maybeEnableSpecificComments( $new_status, $old_status, $post ) {
+			if ( $new_status == 'publish' ) {
+				if ( muut()->getOption( 'replace_comments' ) ) {
+					update_post_meta( $post->ID, 'muut_use_muut_commenting', true );
+				} else {
+					update_post_meta( $post->ID, 'muut_use_muut_commenting', false );
+				}
 			}
 		}
 	}

@@ -23,14 +23,14 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 <?php endif; ?>
 		<table class="form-table">
 			<tbody>
-			<tr>
-				<th scope="row">
-					<label for="muut_forum_name"><?php _e( 'Forum Name', 'muut' ); ?></label>
-				</th>
-				<td>
-					<?php echo trailingslashit( Muut::MUUTSERVERS ); ?><input name="setting[forum_name]" type="text" id="muut_forum_name" value="<?php echo muut()->getForumName(); ?>" />
-				</td>
-			</tr>
+				<tr>
+					<th scope="row">
+						<label for="muut_forum_name"><?php _e( 'Forum Name', 'muut' ); ?></label>
+					</th>
+					<td>
+						<?php echo trailingslashit( Muut::MUUTSERVERS ); ?><input name="setting[forum_name]" type="text" id="muut_forum_name" value="<?php echo muut()->getForumName(); ?>" />
+					</td>
+				</tr>
 <?php if ( !muut()->getForumName() ): ?>
 			</tbody>
 		</table>
@@ -39,35 +39,52 @@ $forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 		<input type="submit" name="submit_initial" id="submit" class="button button-primary" value="<?php _e( 'Continue', 'muut' ); ?>">
 	</p>
 <?php else: ?>
-			<tr>
-				<th scope="row">
-					<label for="moot_language"><?php _e( 'Language', 'muut' ); ?></label>
-				</th>
-				<td>
-					<select name="setting[language]" id="moot_language">
-						<?php
-						foreach ( $languages as $abbr => $text ) {
-							echo '<option value="' . $abbr . '"' . selected( $current_language, $abbr, false ) . '>' . $languages[$abbr] . '</option>';
-						}
-						?>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				<td colspan="2">
-					<input name="setting[enable_proxy_rewrites]" type="checkbox" id="muut_enable_proxy_rewrites" value="1" <?php checked( '1', muut()->getOption( 'enable_proxy_rewrites', '1' ) ); ?> />
-					<label for="muut_enable_proxy_rewrites"><?php printf( __( 'Allow search engines to crawl discussions at %s', 'muut' ), '<a href="' . get_site_url() . '">' . str_replace( array( 'http://', 'https://', ), '', get_site_url() ) . '</a>.' ); ?></label>
-				</td>
-			</tr>
+				<tr>
+					<th scope="row">
+						<label for="moot_language"><?php _e( 'Language', 'muut' ); ?></label>
+					</th>
+					<td>
+						<select name="setting[language]" id="moot_language">
+							<?php
+							foreach ( $languages as $abbr => $text ) {
+								echo '<option value="' . $abbr . '"' . selected( $current_language, $abbr, false ) . '>' . $languages[$abbr] . '</option>';
+							}
+							?>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input name="setting[enable_proxy_rewrites]" type="checkbox" id="muut_enable_proxy_rewrites" value="1" <?php checked( '1', muut()->getOption( 'enable_proxy_rewrites', '1' ) ); ?> />
+						<label for="muut_enable_proxy_rewrites"><?php printf( __( 'Allow search engines to crawl discussions at %s', 'muut' ), '<a href="' . get_site_url() . '">' . str_replace( array( 'http://', 'https://', ), '', get_site_url() ) . '</a>.' ); ?></label>
+					</td>
+				</tr>
 <?php if ( Muut_Forum_Page_Utility::getForumPageId() ):
 	$forum_page_id = Muut_Forum_Page_Utility::getForumPageId();
 ?>
-			<tr>
-				<td colspan="2">
-					<p class="description"><?php printf( __( 'Current forum page is %s', 'muut' ), '<a href="' . get_edit_post_link( $forum_page_id ) . '">' . get_the_title( $forum_page_id ) . '</a>.' ); ?></p>
-				</td>
-			</tr>
-	<?php endif; ?>
+				<tr>
+					<td colspan="2">
+						<p class="description"><?php printf( __( 'Current forum page is %s', 'muut' ), '<a href="' . get_edit_post_link( $forum_page_id ) . '">' . get_the_title( $forum_page_id ) . '</a>.' ); ?></p>
+					</td>
+				</tr>
+<?php endif; ?>
+			</tbody>
+		</table>
+		<h3 class="title"><?php _e( 'Commenting', 'muut' ); ?></h3>
+		<table class="form-table">
+			<tbody>
+				<tr>
+					<td colspan="2">
+						<input name="setting[replace_comments]" type="checkbox" id="muut_replace_comments" value="1" <?php checked( '1', muut()->getOption( 'replace_comments', '1' ) ); ?> />
+						<label for="muut_replace_comments"><?php _e( 'Use Muut for post commenting', 'muut' ); ?></label>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<input name="setting[override_all_comments]" type="checkbox" id="muut_override_all_comments" value="1" <?php checked( '1', muut()->getOption( 'override_all_comments', '0' ) ); ?> />
+						<label for="muut_override_all_comments"><?php _e( 'Override comments on existing posts', 'muut' ); ?></label>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 		<h3 class="title"><?php _e( 'Single Sign-on', 'muut' ); ?></h3>

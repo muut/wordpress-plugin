@@ -92,6 +92,8 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 
 			$domain = get_post_meta( $post_id, 'muut_post_domain', true );
 
+			$post_commenting_options = get_post_meta( $post_id, 'muut_commenting', true );
+
 			if ( $domain == '' ) {
 				// Assign the domain name to the post for permanent reference.
 				$domain = muut()->getOption( 'comments_base_domain' );
@@ -100,7 +102,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 
 			$path = $domain . '/' . $post_id;
 
-			if ( !muut()->getOption( 'use_threaded_commenting', '0' ) ) {
+			if ( !isset( $post_commenting_options['type'] ) || $post_commenting_options['type'] == 'flat' ) {
 				$path .= ':comments';
 			}
 
@@ -126,7 +128,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			if ( muut()->getOption( 'replace_comments', false )
 				&& !in_array( $post->post_type, $disabled_post_types ) ) {
 
-				if ( ( !muut()->getOption( 'override_all_comments', false ) && get_comments_number() == 0 )
+				if ( ( !muut()->getOption( 'override_all_comments', false ) && get_post_meta( $post->ID, 'muut_use_muut_commenting', true ) && get_comments_number( $post->ID ) == 0 )
 					|| muut()->getOption( 'override_all_comments', false ) ) {
 					// TODO: Make it so it checks if the post type is supposed to be overridden.
 					$template = Muut_Template_Loader::instance()->locateTemplate( 'comments.php' );
@@ -155,10 +157,20 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			$post_type = get_post_type_object( get_post_type( $post_id ) );
 			$post_type_name = $post_type->labels->singular_name;
 
-			$settings = 'data-show_online="false" data-upload="false" data-channel="' . __( 'Comments', 'muut' ) . '" title="' . $post_type_name . ': ' . get_the_title( $post_id ) . '" ';
+			$post_commenting_options = get_post_meta( $post_id, 'muut_commenting', true );
 
-			if ( muut()->getOption( 'use_threaded_commenting', '0' ) ) {
+			$settings = 'data-show_online="false" data-channel="' . __( 'Comments', 'muut' ) . '" title="' . $post_type_name . ': ' . get_the_title( $post_id ) . '" ';
+
+			if ( isset( $post_commenting_options['type'] ) && $post_commenting_options['type'] == 'threaded' ) {
 				$settings .= 'data-show_title="false" ';
+			} else {
+				$settings .= 'data-show_title="true" ';
+			}
+
+			if ( isset( $post_commenting_options['disable_uploads'] ) && $post_commenting_options['disable_uploads'] == '1' ) {
+				$settings .= 'data-upload="false" ';
+			} else {
+				$settings .= 'data-upload="true" ';
 			}
 
 			if ( !$path )

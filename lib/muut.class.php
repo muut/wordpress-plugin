@@ -514,9 +514,9 @@ if ( !class_exists( 'Muut' ) ) {
 				'forum_name' => '',
 				// TODO: Make this match whatever language is set for the site.
 				'language' => $default_lang,
-				'replace_comments' => false,
+				'replace_comments' => true,
 				'use_threaded_commenting' => false,
-				'override_all_comments' => true,
+				'override_all_comments' => false,
 				'show_comments_in_forum' => false,
 				'commenting_defaults' => array(
 					'type' => 'flat',
