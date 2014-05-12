@@ -286,6 +286,38 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 
 					update_post_meta( $post_id, $tab['meta_name'], $tab_options );
 				break;
+
+				case 'channel-tab':
+					if ( isset( $_POST[$tab['meta_name']] ) ) {
+						$tab_options = $_POST[$tab['meta_name']];
+					}
+					$boolean_values = array(
+						'hide_online',
+						'disable_uploads',
+					);
+
+					foreach ( $boolean_values as $boolean_value ) {
+						$tab_options[$boolean_value] = isset( $tab_options[$boolean_value] ) ? $tab_options[$boolean_value] : '0';
+					}
+
+					update_post_meta( $post_id, $tab['meta_name'], $tab_options );
+				break;
+
+				case 'forum-tab':
+					if ( isset( $_POST[$tab['meta_name']] ) ) {
+						$tab_options = $_POST[$tab['meta_name']];
+					}
+					$boolean_values = array(
+						'hide_online',
+						'disable_uploads',
+					);
+
+					foreach ( $boolean_values as $boolean_value ) {
+						$tab_options[$boolean_value] = isset( $tab_options[$boolean_value] ) ? $tab_options[$boolean_value] : '0';
+					}
+
+					update_post_meta( $post_id, $tab['meta_name'], $tab_options );
+					break;
 			}
 		}
 

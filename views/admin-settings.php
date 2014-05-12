@@ -7,8 +7,6 @@
  */
 $languages = muut()->getLanguages();
 $current_language = muut()->getOption( 'language', 'en' );
-
-$forum_page_defaults = muut()->getOption( 'forum_page_defaults' );
 ?>
 
 <div class="wrap">

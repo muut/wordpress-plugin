@@ -5,5 +5,21 @@
  * @package   Muut
  * @copyright 2014 Muut Inc
  */
+global $post;
+$tab;
+
+$meta_name = $tab['meta_name'];
+$forum_settings = get_post_meta( $post->ID, $meta_name, true );
+$forum_defaults = muut()->getOption( 'forum_defaults' );
+
+$hide_online = isset( $forum_settings['hide_online'] ) ? $forum_settings['hide_online'] : $forum_defaults['hide_online'];
+$disable_uploads = isset( $forum_settings['disable_uploads'] ) ? $forum_settings['disable_uploads'] : $forum_defaults['disable_uploads'];
 ?>
-<p>This is the forum tab.</p>
+
+<p>
+	<span class="description"><?php _e( 'Forum intro', 'muut' ); ?></span>
+</p>
+<p>
+	<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[hide_online]" id="muut_forum_hide_online" value="1" <?php checked( $hide_online, '1' ); ?> /><label for="muut_forum_hide_online"><?php _e( 'Hide online users', 'muut' ); ?></label></span>
+	<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[disable_uploads]" id="muut_forum_disable_uploads" value="1" <?php checked( $disable_uploads, '1' ); ?> /><label for="muut_forum_disable_uploads"><?php _e( 'Disable image uploads', 'muut' ); ?></label></span>
+</p>

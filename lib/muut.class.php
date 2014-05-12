@@ -523,10 +523,13 @@ if ( !class_exists( 'Muut' ) ) {
 					'disable_uploads' => '0',
 				),
 				'forum_page_id' => false,
-				'forum_page_defaults' => array(
-					'is_threaded' => false,
-					'show_online' => true,
-					'allow_uploads' => false,
+				'channel_defaults' => array(
+					'hide_online' => '0',
+					'disable_uploads' => '0',
+				),
+				'forum_defaults' => array(
+					'hide_online' => '0',
+					'disable_uploads' => '0',
 				),
 				'subscription_api_key' => '',
 				'subscription_secret_key' => '',

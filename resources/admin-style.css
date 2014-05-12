@@ -68,3 +68,11 @@ span.disabled input[type=text]
     display: inline-block;
     margin-right: 12px;
 }
+
+span.checkbox_row {
+    display: block;
+    margin-bottom: 5px;
+}
+span.description {
+    font-style: italic;
+}

@@ -20,5 +20,5 @@ $disable_uploads = isset( $comments_settings['disable_uploads'] ) ? $comments_se
 	<span class="muut_metabox_radio"><input type="radio" name="<?php echo $meta_name; ?>[type]" id="muut_comments_type_threaded" value="threaded" class="muut_metabox_radio" <?php checked( $type, 'threaded' ); ?> /><label for="muut_comments_type_threaded"><?php _e( 'Threaded', 'muut' ); ?></label></span>
 </p>
 <p>
-	<input type="checkbox" name="<?php echo $meta_name; ?>[disable_uploads]" id="muut_comments_disable_uploads" value="1" <?php checked( $disable_uploads, '1' ); ?> /><label for="muut_comments_disable_uploads"><?php _e( 'Disable image uploads', 'muut' ); ?></label>
+	<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[disable_uploads]" id="muut_comments_disable_uploads" value="1" <?php checked( $disable_uploads, '1' ); ?> /><label for="muut_comments_disable_uploads"><?php _e( 'Disable image uploads', 'muut' ); ?></label></span>
 </p>
