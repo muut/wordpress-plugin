@@ -9,7 +9,7 @@ global $post;
 $tab;
 
 $meta_name = $tab['meta_name'];
-$comments_settings = get_post_meta( $post->ID, $meta_name, true );
+$comments_settings = Muut_Post_Utility::getPostOption( $post->ID, 'commenting' );
 $commenting_defaults = muut()->getOption( 'commenting_defaults' );
 
 $type = isset( $comments_settings['type'] ) ? $comments_settings['type'] : $commenting_defaults['type'];
