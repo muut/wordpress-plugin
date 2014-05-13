@@ -114,21 +114,21 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					'label' => __( 'Commenting', 'muut' ),
 					'name' => 'commenting-tab',
 					'post_types' => apply_filters( 'muut_metabox_commenting_tab_post_types', array() ),
-					'meta_name' => 'muut_commenting',
+					'meta_name' => 'commenting',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-commenting.php',
 				),
 				'channel' => array(
 					'label' => __( 'Channel', 'muut' ),
 					'name' => 'channel-tab',
 					'post_types' => apply_filters( 'muut_metabox_channel_tab_post_types', array( 'page' ) ),
-					'meta_name' => 'muut_channel',
+					'meta_name' => 'channel',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-channel.php',
 				),
 				'forum' => array(
 					'label' => __( 'Forum', 'muut' ),
 					'name' => 'forum-tab',
 					'post_types' => apply_filters( 'muut_metabox_forum_tab_post_types', array( 'page' ) ),
-					'meta_name' => 'muut_forum',
+					'meta_name' => 'forum',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-forum.php',
 				),
 			);
@@ -273,6 +273,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 
 			switch( $tab['name'] ) {
 				case 'commenting-tab':
+					$tab_options = array();
 					if ( isset ( $_POST[$tab['meta_name']] ) ) {
 						$tab_options = $_POST[$tab['meta_name']];
 					}
@@ -284,12 +285,15 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 						$tab_options[$boolean_value] = isset( $tab_options[$boolean_value] ) ? $tab_options[$boolean_value] : '0';
 					}
 
-					update_post_meta( $post_id, $tab['meta_name'], $tab_options );
+					Muut_Post_Utility::setPostOption( $post_id, $tab['meta_name'], $tab_options );
+
 				break;
 
 				case 'channel-tab':
+					$tab_options = array();
 					if ( isset( $_POST[$tab['meta_name']] ) ) {
 						$tab_options = $_POST[$tab['meta_name']];
+						$tab_current_options = Muut_Post_Utility::getPostOption( $post_id, $tab['meta_name'] );
 					}
 					$boolean_values = array(
 						'hide_online',
@@ -300,10 +304,40 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 						$tab_options[$boolean_value] = isset( $tab_options[$boolean_value] ) ? $tab_options[$boolean_value] : '0';
 					}
 
-					update_post_meta( $post_id, $tab['meta_name'], $tab_options );
+					$forum_path = isset( $tab_options['forum_path'] ) ? $tab_options['forum_path'] : '';
+					if ( !isset( $tab_options['forum_path'] )
+						|| $tab_options['forum_path'] == '' ) {
+						// If no path is saved yet, let's generate one and save it.
+						if ( !Muut_Post_Utility::getChannelRemotePath( $post_id, true ) ) {
+							$path = $post->post_name;
+							$ancestors = get_post_ancestors( $post );
+
+							foreach ( $ancestors as $ancestor ) {
+								if ( Muut_Post_Utility::isMuutChannelPage( $ancestor ) && Muut_Post_Utility::getChannelRemotePath( $ancestor, true ) ) {
+									$path = Muut_Post_Utility::getChannelRemotePath( $ancestor, true ) . '/' . $path;
+								}
+							}
+						$forum_path = $path;
+						}
+					} elseif ( isset( $tab_options['forum_path'] ) && $tab_options['forum_path'] != '' ) {
+						$path = $tab_options['forum_path'];
+						if ( substr( $path, 0, 1 ) == '/' ) {
+							$path = substr( $path, 1 );
+						}
+						if ( substr( $path, -1 ) == '/' ) {
+							$path = substr( $path, 0, -1 );
+						}
+						$path = implode('/', array_map('rawurlencode', explode( '/', $path ) ) );
+						$forum_path = $path;
+					}
+
+					$tab_options['forum_path'] = $forum_path;
+
+					Muut_Post_Utility::setPostOption( $post_id, $tab['meta_name'], $tab_options );
 				break;
 
 				case 'forum-tab':
+					$tab_options = array();
 					if ( isset( $_POST[$tab['meta_name']] ) ) {
 						$tab_options = $_POST[$tab['meta_name']];
 					}
@@ -316,8 +350,8 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 						$tab_options[$boolean_value] = isset( $tab_options[$boolean_value] ) ? $tab_options[$boolean_value] : '0';
 					}
 
-					update_post_meta( $post_id, $tab['meta_name'], $tab_options );
-					break;
+					Muut_Post_Utility::setPostOption( $post_id, $tab['meta_name'], $tab_options );
+				break;
 			}
 		}
 

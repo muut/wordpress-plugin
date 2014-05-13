@@ -57,8 +57,8 @@ $current_language = muut()->getOption( 'language', 'en' );
 						<label for="muut_enable_proxy_rewrites"><?php printf( __( 'Allow search engines to crawl discussions at %s', 'muut' ), '<a href="' . get_site_url() . '">' . str_replace( array( 'http://', 'https://', ), '', get_site_url() ) . '</a>.' ); ?></label>
 					</td>
 				</tr>
-<?php if ( Muut_Forum_Page_Utility::getForumPageId() ):
-	$forum_page_id = Muut_Forum_Page_Utility::getForumPageId();
+<?php if ( Muut_Post_Utility::getForumPageId() ):
+	$forum_page_id = Muut_Post_Utility::getForumPageId();
 ?>
 				<tr>
 					<td colspan="2">

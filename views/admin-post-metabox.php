@@ -6,14 +6,14 @@
  * @copyright 2014 Muut Inc
  */
 
-$is_forum = Muut_Forum_Page_Utility::isForumPage( get_the_ID() );
+$is_forum = Muut_Post_Utility::isMuutPost( get_the_ID() );
 
 $forum_show_class = '';
 if ( $is_forum != '1' ) {
 	$forum_show_class = 'hidden';
 }
 
-$remote_path = '/' . rawurldecode( Muut_Forum_Page_Utility::getRemoteForumPath( get_the_ID(), true ) );
+$remote_path = '/' . rawurldecode( Muut_Post_Utility::getChannelRemotePath( get_the_ID(), true ) );
 
 $tabs = Muut_Admin_Post_Editor::instance()->getMetaBoxTabs();
 $last_open_tab = get_post_meta( get_the_ID(), 'muut_last_open_tab', true );

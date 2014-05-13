@@ -597,7 +597,7 @@ if ( !class_exists( 'Muut' ) ) {
 		public function printCurrentPageJs() {
 			if ( !is_admin() && get_post() ) {
 				$page_id = get_the_ID();
-				if ( Muut_Forum_Page_Utility::isForumPage( $page_id ) ) {
+				if ( Muut_Post_Utility::isMuutPost( $page_id ) ) {
 					echo '<script type="text/javascript">';
 					if ( $this->getOption( 'forum_page_id', 0 ) == $page_id ) {
 						echo 'var muut_current_page_permalink = "' . get_permalink( $page_id ) . '";';
@@ -937,7 +937,7 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			$return = false;
-			if ( Muut_Forum_Page_Utility::isForumPage( get_the_ID() )
+			if ( Muut_Post_Utility::isMuutPost( get_the_ID() )
 				|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() ) ) {
 				$return = true;
 			}
@@ -957,8 +957,8 @@ if ( !class_exists( 'Muut' ) ) {
 			global $post;
 
 
-			if ( $post->post_type == 'page' && Muut_Forum_Page_Utility::isForumPage( $post->ID ) ) {
-				$content = Muut_Forum_Page_Utility::forumPageEmbedMarkup( $post->ID, false );
+			if ( $post->post_type == 'page' && Muut_Post_Utility::isMuutPost( $post->ID ) ) {
+				$content = Muut_Post_Utility::forumPageEmbedMarkup( $post->ID, false );
 			}
 
 			return $content;

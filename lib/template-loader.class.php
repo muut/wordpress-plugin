@@ -87,7 +87,7 @@ if ( !class_exists( 'Muut_Template_Loader' ) ) {
 		 * @since 3.0
 		 */
 		public function getProperTemplate( $template ) {
-			if ( is_page() && Muut_Forum_Page_Utility::isForumPage( get_the_ID() ) ) {
+			if ( is_page() && Muut_Post_Utility::isMuutPost( get_the_ID() ) ) {
 				//TODO: Allow for other forum templates to get loaded (not just the one).
 				if ( muut()->getOption( 'forum_page_id', false ) == get_the_ID() ) {
 					$template = 'forum-page.php';

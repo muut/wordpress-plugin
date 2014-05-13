@@ -90,6 +90,8 @@ jQuery(document).ready( function($) {
         ui.oldTab.children('input.muut_tab_last_open').val('0');
       },
       active: $('#muut_metabox_tabs_list li.tabs').index()
-  });
+    });
+
+
   }
 });

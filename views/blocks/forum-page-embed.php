@@ -13,7 +13,7 @@ if ( !isset( $settings ) ) {
 $id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
 
 if ( !isset( $path ) ) {
-	$path = Muut_Forum_Page_Utility::getRemoteForumPath( get_the_ID() );
+	$path = Muut_Post_Utility::getChannelRemotePath( get_the_ID() );
 }
 ?>
 <!-- Muut placeholder tag -->

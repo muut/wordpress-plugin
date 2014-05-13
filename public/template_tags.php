@@ -43,7 +43,7 @@ function muut_is_forum_page( $page_id = null ) {
 		$page_id = get_the_ID();
 	}
 
-	return Muut_Forum_Page_Utility::isForumPage( $page_id );
+	return Muut_Post_Utility::isMuutPost( $page_id );
 }
 
 /**
@@ -59,7 +59,7 @@ function muut_get_page_forum_path( $page_id = null ) {
 		$page_id = get_the_ID();
 	}
 
-	return Muut_Forum_Page_Utility::getRemoteForumPath( $page_id );
+	return Muut_Post_Utility::getChannelRemotePath( $page_id );
 }
 
 /**
@@ -76,7 +76,7 @@ function muut_forum_page_embed( $page_id = null, $echo = true ) {
 		$page_id = get_the_ID();
 	}
 
-	return Muut_Forum_Page_Utility::forumPageEmbedMarkup( $page_id, $echo );
+	return Muut_Post_Utility::forumPageEmbedMarkup( $page_id, $echo );
 }
 
 /**

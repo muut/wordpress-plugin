@@ -1,7 +1,7 @@
 <?php
 /**
- * The Forum Page static class that contains all the static methods required to interact with a Forum Page that
- * are Muut-related.
+ * The Forum Page static class that contains all the static methods required to interact with a post that
+ * embeds a Muut forum, channel, or comments in some way.
  *
  * @package   Muut
  * @copyright 2014 Muut Inc
@@ -12,7 +12,7 @@ if ( !defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
-if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
+if ( !class_exists( 'Muut_Post_Utility' ) ) {
 
 	/**
 	 * Muut Forum Page Utility class.
@@ -21,37 +21,28 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 	 * @author  Paul Hughes
 	 * @since   3.0
 	 */
-	class Muut_Forum_Page_Utility
+	class Muut_Post_Utility
 	{
 
 		/**
 		 * Make it impossible to instantiate the class by declaring __construct() as private.
 		 *
-		 * @return Muut_Forum_Page_Utility (Except it can never be called).
+		 * @return Muut_Post_Utility (Except it can never be called).
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
 		private function __construct() {}
 
 		/**
-		 * The meta name for a forum page's remote forum name.
+		 * The meta name for whether a page is a channel page or not.
 		 */
-		const META_REMOTEPATH = 'muut_forum_page_remote_path';
-
-		/**
-		 * The meta name for whether a page is a forum page or not.
-		 */
-		const META_ISFORUMPAGE = 'muut_is_forum_page';
+		const META_ISCHANNELPAGE = 'muut_is_channel_page';
 
 		/**
 		 * The meta name for the super-options meta for individual forum pages.
 		 * This post_meta will contain an array of the specific page options.
 		 */
-		const META_FORUMPAGESETTINGS = 'muut_forum_page_settings';
-
-		/**
-		 * The key for a forum page's specific setting
-		 */
+		const META_POSTSETTINGS = 'muut_post_settings';
 
 		/**
 		 * The method for setting a forum page's remote path.
@@ -62,25 +53,20 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public static function setForumPageRemotePath( $page_id, $path = '' ) {
+		public static function setChannelPageRemotePath( $page_id, $path = '' ) {
 			if ( !is_numeric( $page_id ) || !is_string( $path ) ) {
 				return false;
 			}
 
-			if ( $path == '' ) {
-				delete_post_meta( $page_id, self::META_REMOTEPATH );
-				return true;
-			}
-
-			update_post_meta( $page_id, self::META_REMOTEPATH, $path );
+			self::setPostOption( $page_id, 'channel_remote_path', $path );
 			return true;
 		}
 
 		/**
-		 * Sets the page as a forum page.
+		 * Sets the page as the forum page.
 		 *
-		 * @param int $page_id The page ID we are turning into a forum page.
-		 * @return bool Whether the page was successfully turned into a forum page.
+		 * @param int $page_id The page ID we are turning into the forum page.
+		 * @return bool Whether the page was successfully turned into the forum page.
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
@@ -89,15 +75,17 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 				return false;
 			}
 
-			update_post_meta( $page_id, self::META_ISFORUMPAGE, true );
-			return true;
+			if ( self::getForumPageId() != $page_id ) {
+				muut()->setOption( 'forum_page_id', $page_id );
+				return true;
+			}
 		}
 
 		/**
 		 * Sets page as no longer being a forum page.
 		 *
-		 * @param int $page_id The page ID that we are removing as being a forum page.
-		 * @return bool Whether the page was successfully turned into NO LONGER being a forum page.
+		 * @param int $page_id The page ID that we are removing as being the forum page.
+		 * @return bool Whether the page was successfully turned into NO LONGER being the forum page.
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
@@ -106,91 +94,111 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 				return false;
 			}
 
-			delete_post_meta( $page_id, self::META_ISFORUMPAGE );
-			return true;
+			if ( self::getForumPageId() == $page_id ) {
+				muut()->setOption( 'forum_page_id', '' );
+				return true;
+			}
 		}
 
 		/**
-		 * Returns whether a page is a forum page or not.
+		 * Returns whether a post utilizes Muut (forum page, channel page, etc.).
 		 *
-		 * @param int $page_id The page ID that we are checking if it is a forum page or not.
-		 * @return bool Whether the page is a forum page or not.
+		 * @param int $post_id The post ID that we are checking.
+		 * @return bool Whether the post uses Muut or not.
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public static function isForumPage( $page_id ) {
-			if( is_numeric( $page_id ) && get_post_meta( $page_id, self::META_ISFORUMPAGE, true ) != '' ) {
+		public static function isMuutPost( $post_id ) {
+			if( is_numeric( $post_id ) && muut()->getOption( 'forum_page_id' ) == $post_id ) {
 				$value = true;
 			} else {
 				$value = false;
 			}
-			return apply_filters( 'muut_is_forum_page', $value, $page_id );
+			return apply_filters( 'muut_is_muut_post', $value, $post_id );
 		}
 
 		/**
-		 * Gets the forum page's remote path.
+		 * Returns whether a is a Muut channel page.
 		 *
-		 * @param int $page_id The page ID that we are getting the remote forum path for.
+		 * @param int $post_id The post ID that we are checking.
+		 * @return bool Whether the page is a channel page.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function isMuutChannelPage( $post_id ) {
+			if( is_numeric( $post_id ) && get_post_meta( $post_id, self::META_ISCHANNELPAGE, true ) ) {
+				$value = true;
+			} else {
+				$value = false;
+			}
+			return apply_filters( 'muut_is_channel_page', $value, $post_id );
+		}
+
+		/**
+		 * Gets the channel page's remote path.
+		 *
+		 * @param int $page_id The page ID that we are getting the remote channel path for.
 		 * @param bool $no_suffix Whether to include ':comments' for unthreaded.
 		 * @return string|false Returns the path if one is found for the forum page or false if not.
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public static function getRemoteForumPath( $page_id, $no_suffix = false ) {
+		public static function getChannelRemotePath( $page_id, $no_suffix = false ) {
 			if( !is_numeric( $page_id ) ) {
 				return false;
 			}
 
-			$path = get_post_meta( $page_id, self::META_REMOTEPATH, true );
+			$path = self::getPostOption( $page_id, 'channel_remote_path' );
 
-			if ( muut()->getOption( 'forum_page_id', false ) != $page_id && !self::getForumPageOption( $page_id, 'is_threaded', false ) && !$no_suffix  ) {
+			if ( muut()->getOption( 'forum_page_id', false ) != $page_id && !self::getPostOption( $page_id, 'is_threaded', false ) && !$no_suffix  ) {
 				$path .= ':comments';
 			}
 			return $path;
 		}
 
 		/**
-		 * Sets the other options for a forum page—cannot be called directly.
+		 * Sets the other options for a post using Muut.
 		 *
-		 * @param int $page_id The page ID that we are saving the options for.
+		 * @param int $post_id The post ID that we are saving the options for.
 		 * @param string $option_name The option name for the setting we are saving.
 		 * @param mixed $value The value we are setting for the option.
+		 * @param string $section Whether the option sits in a subsection (deeper in settings array).
 		 * @return bool Whether the options were saved or not.
 		 */
-		public static function setForumPageOption( $page_id, $option_name, $value ) {
-			if ( !is_numeric( $page_id ) || !is_string( $option_name ) ) {
+		public static function setPostOption( $post_id, $option_name, $value, $section = null ) {
+			if ( !is_numeric( $post_id ) || !is_string( $option_name ) ) {
 				return false;
 			}
 
-			$current_settings = get_post_meta( $page_id, self::META_FORUMPAGESETTINGS, true );
+			$current_settings = get_post_meta( $post_id, self::META_POSTSETTINGS, true );
 
-			$new_setting = apply_filters( 'muut_set_page_options', array( $option_name => $value ), $page_id );
+			$new_setting = apply_filters( 'muut_set_post_options', array( $option_name => $value ), $post_id );
 
-			update_post_meta( $page_id, self::META_FORUMPAGESETTINGS, wp_parse_args( $new_setting, $current_settings ) );
+			update_post_meta( $post_id, self::META_POSTSETTINGS, wp_parse_args( $new_setting, $current_settings ) );
 
 			return true;
 		}
 
 		/**
-		 * Gets a given setting for a forum page.
+		 * Gets a given setting for a post using Muut.
 		 *
-		 * @param int $page_id The page ID that we are getting a setting for.
-		 * @param string $option_name The option name that we are getting for the forum page.
+		 * @param int $post_id The post ID that we are getting a setting for.
+		 * @param string $option_name The option name that we are getting for the page using Muut.
 		 * @param string $default The default value if none is returned.
 		 * @return mixed The value of the option.
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public static function getForumPageOption( $page_id, $option_name, $default = '' ) {
-			if ( !is_numeric( $page_id ) || !is_string( $option_name ) ) {
+		public static function getPostOption( $post_id, $option_name, $default = '' ) {
+			if ( !is_numeric( $post_id ) || !is_string( $option_name ) ) {
 				return false;
 			}
 
 			$forum_page_defaults = muut()->getOption( 'forum_page_defaults', array() );
 
-			$current_settings = get_post_meta( $page_id, self::META_FORUMPAGESETTINGS, true );
+			$current_settings = get_post_meta( $post_id, self::META_POSTSETTINGS, true );
 
-			$settings = apply_filters( 'muut_forum_page_settings', wp_parse_args( $current_settings, $forum_page_defaults ), $page_id );
+			$settings = apply_filters( 'muut_get_post_options', wp_parse_args( $current_settings, $forum_page_defaults ), $post_id );
 
 			return isset( $settings[$option_name] ) ? $settings[$option_name] : $default;
 		}
@@ -206,19 +214,19 @@ if ( !class_exists( 'Muut_Forum_Page_Utility' ) ) {
 		 * @since 3.0
 		 */
 		public static function forumPageEmbedMarkup( $page_id, $echo = true ) {
-			if ( !is_numeric( $page_id ) || !self::isForumPage( $page_id ) ) {
+			if ( !is_numeric( $page_id ) || !self::isMuutPost( $page_id ) ) {
 				return false;
 			}
 
-			$path = self::getRemoteForumPath( $page_id );
+			$path = self::getChannelRemotePath( $page_id );
 
 			$settings = ' ';
-			if ( !self::getForumPageOption( $page_id, 'show_online', true ) ) {
+			if ( !self::getPostOption( $page_id, 'show_online', true ) ) {
 				$settings .= 'data-show_online="false" ';
 			} else {
 				$settings .= 'data-show_online="true" ';
 			}
-			if ( !self::getForumPageOption( $page_id, 'allow_uploads', false ) ) {
+			if ( !self::getPostOption( $page_id, 'allow_uploads', false ) ) {
 				$settings .= 'data-upload="false" ';
 			} else {
 				$settings .= 'data-upload="true" ';
