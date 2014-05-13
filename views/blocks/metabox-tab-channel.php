@@ -9,7 +9,7 @@ global $post;
 $tab;
 
 $meta_name = $tab['meta_name'];
-$channel_settings = Muut_Post_Utility::getPostOption( $post->ID, 'channel' );
+$channel_settings = Muut_Post_Utility::getPostOption( $post->ID, 'channel_settings' );
 $channel_defaults = muut()->getOption( 'channel_defaults' );
 
 $hide_online = isset( $channel_settings['hide_online'] ) ? $channel_settings['hide_online'] : $channel_defaults['hide_online'];

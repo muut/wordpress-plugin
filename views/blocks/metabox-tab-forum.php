@@ -9,7 +9,7 @@ global $post;
 $tab;
 
 $meta_name = $tab['meta_name'];
-$forum_settings = get_post_meta( $post->ID, $meta_name, true );
+$forum_settings = Muut_Post_Utility::getPostOption( $post->ID, 'forum_settings' );
 $forum_defaults = muut()->getOption( 'forum_defaults' );
 
 $hide_online = isset( $forum_settings['hide_online'] ) ? $forum_settings['hide_online'] : $forum_defaults['hide_online'];
