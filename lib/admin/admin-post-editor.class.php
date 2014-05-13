@@ -35,6 +35,11 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		protected $defaultTabs;
 
 		/**
+		 * @property array The current tabs.
+		 */
+		protected $metaboxTabs;
+
+		/**
 		 * The singleton method.
 		 *
 		 * @return Muut_Admin_Post_Editor The instance.
@@ -116,6 +121,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					'post_types' => apply_filters( 'muut_metabox_commenting_tab_post_types', array() ),
 					'meta_name' => 'commenting_settings',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-commenting.php',
+					'enabled_callback' => array( $this, 'isCommentingTabEnabled' ),
 				),
 				'channel' => array(
 					'label' => __( 'Channel', 'muut' ),
@@ -123,6 +129,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					'post_types' => apply_filters( 'muut_metabox_channel_tab_post_types', array( 'page' ) ),
 					'meta_name' => 'channel_settings',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-channel.php',
+					'enabled_callback' => array( $this, 'isChannelTabEnabled' ),
 				),
 				'forum' => array(
 					'label' => __( 'Forum', 'muut' ),
@@ -130,6 +137,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					'post_types' => apply_filters( 'muut_metabox_forum_tab_post_types', array( 'page' ) ),
 					'meta_name' => 'forum_settings',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-forum.php',
+					'enabled_callback' => array( $this, 'isForumTabEnabled' ),
 				),
 			);
 		}
@@ -170,6 +178,20 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		}
 
 		/**
+		 * Gets all meta box tabs, regardless of post type.
+		 *
+		 * @return array The tabs.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function getAllMetaBoxTabs() {
+			if ( !isset( $this->metaboxTabs ) ) {
+				$this->metaboxTabs = apply_filters( 'muut_post_editor_metabox_tabs', $this->defaultTabs );
+			}
+			return $this->metaboxTabs;
+		}
+
+		/**
 		 * Gets the meta box tabs to be rendered in the meta box (depending on post type, or other things).
 		 * Filterable, so that tabs can be added or removed.
 		 * The post_types property for tabs is the post types it should be displayed for.
@@ -179,9 +201,9 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public function getMetaBoxTabs() {
+		public function getMetaBoxTabsForCurrentPostType() {
 
-			$all_tabs = apply_filters( 'muut_post_editor_metabox_tabs', $this->defaultTabs );
+			$all_tabs = $this->getAllMetaBoxTabs();
 
 			$post_type = $this->getCurrentPostType();
 
@@ -236,7 +258,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		 * @since 3.0
 		 */
 		public function saveMuutPostSettings( $post_id, $post ) {
-			$tabs = $this->getMetaBoxTabs();
+			$tabs = $this->getMetaBoxTabsForCurrentPostType();
 
 			foreach( $tabs as $tab_slug => $tab ) {
 				// Execute actions for active tabs.
@@ -373,6 +395,84 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					update_post_meta( $post->ID, 'muut_use_muut_commenting', false );
 				}
 			}
+		}
+
+		/**
+		 * Checks if a given tab should be enabled based on its enabled callback function.
+		 *
+		 * @param string $tab_slug The tab we are checking enabled status on.
+		 * @return bool True if the tab should be enabled, false if disabled or failure.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function isTabEnabled( $tab_slug ) {
+			$tabs = $this->getAllMetaBoxTabs();
+
+			if ( isset( $tabs[$tab_slug]['enabled_callback'] ) ) {
+				return call_user_func( $tabs[$tab_slug]['enabled_callback'] );
+			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Enabled callback for the commenting tab.
+		 *
+		 * @return bool True if it should be enabled, False if not.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function isCommentingTabEnabled() {
+			if ( !isset( $this->metaboxTabs['commenting']['enabled'] ) ) {
+				global $post;
+				if ( muut()->getOption( 'replace_comments' ) && $post->comment_status == 'open' ) {
+					$this->metaboxTabs['commenting']['enabled'] = true;
+				} else {
+					$this->metaboxTabs['commenting']['enabled'] = false;
+				}
+			}
+
+			return $this->metaboxTabs['commenting']['enabled'];
+		}
+
+		/**
+		 * Enabled callback for the channel tab.
+		 *
+		 * @return bool True if it should be enabled, False if not.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function isChannelTabEnabled() {
+			if ( !isset( $this->metaboxTabs['channel']['enabled'] ) ) {
+				global $post;
+				if ( muut()->getOption( 'replace_comments' ) && $post->comment_status == 'open' ) {
+					$this->metaboxTabs['channel']['enabled'] = false;
+				} else {
+					$this->metaboxTabs['channel']['enabled'] = true;
+				}
+			}
+
+			return $this->metaboxTabs['channel']['enabled'];
+		}
+
+		/**
+		 * Enabled callback for the forum tab.
+		 *
+		 * @return bool True if it should be enabled, False if not.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function isForumTabEnabled() {
+			if ( !isset( $this->metaboxTabs['forum']['enabled'] ) ) {
+				global $post;
+				if ( muut()->getOption( 'replace_comments' ) && $post->comment_status == 'open' ) {
+					$this->metaboxTabs['forum']['enabled'] = false;
+				} else {
+					$this->metaboxTabs['forum']['enabled'] = true;
+				}
+			}
+
+			return $this->metaboxTabs['forum']['enabled'];
 		}
 	}
 }

@@ -81,7 +81,7 @@ jQuery(document).ready( function($) {
   });
 
   if ($.fn.tabs) {
-    $('#muut_metabox_tabs .hidden').removeClass('hidden');
+    $('#muut_metabox_tabs .muut-tab-panel.hidden').removeClass('hidden');
     $('#muut_metabox_tabs').tabs({
       activate: function(event, ui){
         ui.newTab.addClass('tabs');

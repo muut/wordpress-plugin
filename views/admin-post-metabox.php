@@ -5,8 +5,9 @@
  * @package   Muut
  * @copyright 2014 Muut Inc
  */
+global $post;
 
-$is_forum = Muut_Post_Utility::isMuutPost( get_the_ID() );
+$is_forum = Muut_Post_Utility::isMuutPost( $post->ID );
 
 $forum_show_class = '';
 if ( $is_forum != '1' ) {
@@ -15,7 +16,7 @@ if ( $is_forum != '1' ) {
 
 $remote_path = '/' . rawurldecode( Muut_Post_Utility::getChannelRemotePath( get_the_ID(), true ) );
 
-$tabs = Muut_Admin_Post_Editor::instance()->getMetaBoxTabs();
+$tabs = Muut_Admin_Post_Editor::instance()->getMetaBoxTabsForCurrentPostType();
 $last_open_tab = get_post_meta( get_the_ID(), 'muut_last_open_tab', true );
 
 ?>
@@ -28,8 +29,13 @@ $last_open_tab = get_post_meta( get_the_ID(), 'muut_last_open_tab', true );
 			foreach( $tabs as $slug => $tab ) {
 				$class = '';
 				$active_value = '0';
+				if ( !Muut_Admin_Post_Editor::instance()->isTabEnabled( $slug, $post->ID ) ) {
+					$class .= 'disabled ';
+				} else {
+					$class .= 'enabled ';
+				}
 				if ( ( $last_open_tab && $tab['name'] == $last_open_tab ) || ( !$last_open_tab && $first_tab === true ) ) {
-					$class = 'tabs';
+					$class .= ' tabs';
 					$first_tab = $slug;
 					$active_value = '1';
 					$active_tab = $tab['name'];
@@ -40,9 +46,14 @@ $last_open_tab = get_post_meta( get_the_ID(), 'muut_last_open_tab', true );
 		</ul>
 		<?php
 			foreach( $tabs as $slug => $tab ) {
-				$class = 'wp-tab-panel muut-tab-panel';
+				$class = 'wp-tab-panel muut-tab-panel ';
 				if ( $tab['name'] != $active_tab ) {
-					$class .= " hidden";
+					$class .= 'hidden ';
+				}
+				if ( !Muut_Admin_Post_Editor::instance()->isTabEnabled( $slug, $post->ID ) ) {
+					$class .= 'disabled ';
+				} else {
+					$class .= 'enabled ';
 				}
 				echo '<div id="' . $tab['name'] . '" class="' . $class . '">';
 				include ( $tab['template_location'] );

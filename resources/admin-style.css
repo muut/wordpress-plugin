@@ -39,7 +39,25 @@ span.disabled input[type=text]
     list-style: circle;
 }
 
-.muut-tab-panel {
+.muut-tab-panel.disabled .enabled_tab_wrapper,
+.muut-tab-panel.enabled .disabled_tab_wrapper{
+    display: none;
+}
+
+.muut-tab-panel.disabled .disabled_tab_wrapper,
+.muut-tab-panel.enabled .enabled_tab_wrapper
+{
+    display: block;
+}
+
+#muut_metabox_tabs_list li.disabled a {
+    font-style: italic;
+    color: #333;
+}
+
+#muut_metabox_tabs_list li.disabled a {
+    font-style: italic;
+    color: #333;
 }
 
 .muut-header-logo {
