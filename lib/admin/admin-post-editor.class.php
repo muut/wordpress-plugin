@@ -163,7 +163,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		 */
 		public function addPostMetaBoxes( $post_type ) {
 			$do_not_load_for_post_types = apply_filters( 'muut_do_not_load_metabox_for_post_types', array() );
-			if ( muut()->getForumName() != '' && !in_array( $post_type, (Array) $do_not_load_for_post_types ) ) {
+			if ( muut()->getForumName() != '' && !in_array( $post_type, (Array) $do_not_load_for_post_types ) && $this->getMetaBoxTabsForCurrentPostType() ) {
 				add_meta_box(
 					'muut-is-forum-page',
 					__( 'Muut', 'muut' ),
