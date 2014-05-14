@@ -91,6 +91,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		 * @since 3.0
 		 */
 		public function addFilters() {
+			add_filter( 'muut_post_editor_metabox_tabs', array( $this, 'removeCommentsTabIfDisabled' ) );
 		}
 
 		/**
@@ -481,6 +482,22 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 			}
 
 			return $this->metaboxTabs['forum']['enabled'];
+		}
+
+		/**
+		 * Removes the commenting tab if replace commenting is not enabled.
+		 *
+		 * @param array $tabs The current array of tabs.
+		 * @return array The modified array.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function removeCommentsTabIfDisabled( $tabs ) {
+			if ( isset( $tabs['commenting'] ) && !muut()->getOption( 'replace_comments' ) ) {
+				unset( $tabs['commenting'] );
+			}
+
+			return $tabs;
 		}
 	}
 }
