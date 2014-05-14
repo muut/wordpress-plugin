@@ -11,6 +11,9 @@ $tab;
 $post_type_tabs = Muut_Admin_Post_Editor::instance()->getMetaBoxTabsForCurrentPostType();
 unset( $post_type_tabs[$tab['slug']] );
 
+$post_type_object = get_post_type_object( $post->post_type );
+$post_type_label = $post_type_object->labels->singular_name;
+
 $meta_name = $tab['meta_name'];
 $comments_settings = Muut_Post_Utility::getPostOption( $post->ID, 'commenting_settings' );
 $commenting_defaults = muut()->getOption( 'commenting_defaults' );
@@ -25,6 +28,9 @@ $disable_uploads = isset( $comments_settings['disable_uploads'] ) ? $comments_se
 	</p>
 	<p>
 		<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[disable_uploads]" id="muut_comments_disable_uploads" value="1" <?php checked( $disable_uploads, '1' ); ?> /><label for="muut_comments_disable_uploads"><?php _e( 'Disable image uploads', 'muut' ); ?></label></span>
+	</p>
+	<p>
+		<span class="description"><?php printf( __( 'If you would prefer to use WordPress commenting rather than Muut commenting on this %s, %sclick here%s.', 'muut' ), $post_type_label, '<a href="#" class="disable_muut_commenting_link">', '</a>' ); ?></span>
 	</p>
 </div>
 <div class="disabled_tab_wrapper">

@@ -60,6 +60,11 @@ jQuery(document).ready( function($) {
     e.preventDefault();
   });
 
+  $('a.disable_muut_commenting_link').on('click', function(e) {
+    muut_disable_tab('commenting-tab');
+    e.preventDefault();
+  });
+
   var muut_disable_tab = function( tab_name ) {
     $('#muut_tab_content-' + tab_name + ', li[data-muut_tab=' + tab_name +']').addClass('disabled').removeClass('enabled');
     $('.muut_tab_last_active[name=muut_tab_last_active_' + tab_name +']').val(0);
@@ -87,25 +92,29 @@ jQuery(document).ready( function($) {
     var cancel_string = muut_post_edit_localized.cancel;
     var continue_string = muut_post_edit_localized.continue;
     var muut_tab_enable_dialog = function(callback) {
-      $('#muut_tabs_disable_dialog').dialog({
-        resizable: false,
-        height: 140,
-        modal: true,
-        buttons: [ {
-          text: muut_post_edit_localized.cancel,
-          click: function() {
-            $(this).dialog("close");
-          }
-        },
-        {
-          text: muut_post_edit_localized.continue,
-          click: function() {
-            $(this).dialog("close");
-            callback();
-          }
-        }],
-        dialogClass: 'no_title_modal'
-      });
+      if ( $('#muut_metabox_tabs > .wp-tab-bar > ul > li').size() <= 1 ) {
+        callback();
+      } else {
+        $('#muut_tabs_disable_dialog').dialog({
+          resizable: false,
+          height: 140,
+          modal: true,
+          buttons: [ {
+            text: muut_post_edit_localized.cancel,
+            click: function() {
+              $(this).dialog("close");
+            }
+          },
+          {
+            text: muut_post_edit_localized.continue,
+            click: function() {
+              $(this).dialog("close");
+              callback();
+            }
+          }],
+          dialogClass: 'no_title_modal'
+        });
+      }
     };
   }
 });
