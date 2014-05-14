@@ -8,6 +8,9 @@
 global $post;
 $tab;
 
+$post_type_tabs = Muut_Admin_Post_Editor::instance()->getMetaBoxTabsForCurrentPostType();
+unset( $post_type_tabs[$tab['slug']] );
+
 $meta_name = $tab['meta_name'];
 $comments_settings = Muut_Post_Utility::getPostOption( $post->ID, 'commenting_settings' );
 $commenting_defaults = muut()->getOption( 'commenting_defaults' );
@@ -26,6 +29,6 @@ $disable_uploads = isset( $comments_settings['disable_uploads'] ) ? $comments_se
 </div>
 <div class="disabled_tab_wrapper">
 	<p>
-		<span class="description"><?php printf( __( 'In order to use Muut commenting, you must enable commenting. %sClick here%s to do that now.', 'muut' ), '<a href="#" class="enable_comments_link">', '</a>' ); ?></span>
+		<span class="description"><?php printf( __( 'In order to use Muut commenting, you must enable commenting. %sClick here%s to do that now.', 'muut' ), '<a href="#" class="enable_commenting_link">', '</a>' ); ?></span>
 	</p>
 </div>

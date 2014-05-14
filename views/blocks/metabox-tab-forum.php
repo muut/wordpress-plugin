@@ -26,7 +26,7 @@ $disable_uploads = isset( $forum_settings['disable_uploads'] ) ? $forum_settings
 </div>
 <div class="disabled_tab_wrapper">
 	<p>
-		<span class="description"><?php printf( __( 'In order to embed the forum, you must disable commenting. %sClick here%s to do that now.', 'muut' ), '<a href="#" class="disable_comments_link">', '</a>' ); ?></span>
+		<span class="description"><?php printf( __( '%sClick here%s to enable a forum embed.', 'muut' ), '<a href="#" class="enable_forum_link">', '</a>' ); ?></span>
 	</p>
 	<p>
 		<span class="description"><?php _e( 'This will embed your entire forum with navigation on this page.', 'muut' ); ?></span>

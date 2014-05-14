@@ -458,7 +458,7 @@ if ( !class_exists( 'Muut' ) ) {
 			wp_register_script( 'muut', '//cdn.' . self::MUUTSERVERS . '/' . $muut_version . '/moot.' . $this->getOption( 'language', 'en' ) . '.min.js', array( 'jquery' ), $muut_version, true );
 			wp_register_script( 'muut-admin-functions', $this->pluginUrl . 'resources/admin-functions.js', array( 'jquery' ), '1.0', true );
 			wp_register_script( 'x-editable', $this->pluginUrl . 'vendor/jqueryui-editable/js/jqueryui-editable.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-tooltip', 'jquery-ui-button' ), '1.5.1', true);
-			wp_register_script( 'muut-admin-post-edit', $this->pluginUrl . 'resources/admin-post-edit.js', array( 'jquery' ), '1.0', true );
+			wp_register_script( 'muut-admin-post-edit', $this->pluginUrl . 'resources/admin-post-edit.js', array( 'jquery', 'jquery-ui-dialog' ), '1.0', true );
 
 			wp_register_script( 'muut-frontend-functions', $this->pluginUrl . 'resources/frontend-functions.js', array( 'jquery' ), '1.0', true );
 			wp_register_script( 'muut-sso', $this->pluginUrl . 'resources/muut-sso.js', array( 'jquery', 'muut' ), '1.0', true );
@@ -466,6 +466,7 @@ if ( !class_exists( 'Muut' ) ) {
 			wp_register_style( 'muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
 			wp_register_style( 'x-editable-style', $this->pluginUrl . 'vendor/jqueryui-editable/css/jqueryui-editable.css' );
 			wp_register_style( 'muut-forum-css', '//cdn.' . self::MUUTSERVERS . '/' . $muut_version . '/moot.css', array(), $muut_version );
+			wp_register_style( 'jquery-ui-dialog-css', site_url('wp-includes/css/jquery-ui-dialog.css') );
 
 			wp_register_style( 'muut-font-css', $this->pluginUrl . 'resources/muut-font.css', array(), $muut_version );
 			// Localization rules.
@@ -473,8 +474,11 @@ if ( !class_exists( 'Muut' ) ) {
 				'muut-admin-functions' => array(
 					//'default_path' => sprintf( __( '%sdefault%s', 'muut' ), '/(', ')' ),
 				),
+				'muut-admin-post-edit' => array(
+					'continue' => __( 'Go ahead!', 'muut' ),
+					'cancel' => __( 'Don\'t do that!', 'muut' ),
+				),
 			);
-
 			foreach ( $localizations as $key => $array ) {
 				$new_key = str_replace( '-', '_', $key ) . '_localized';
 

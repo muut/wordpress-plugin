@@ -17,7 +17,9 @@ if ( $is_forum != '1' ) {
 $remote_path = '/' . rawurldecode( Muut_Post_Utility::getChannelRemotePath( get_the_ID(), true ) );
 
 $tabs = Muut_Admin_Post_Editor::instance()->getMetaBoxTabsForCurrentPostType();
-$last_open_tab = get_post_meta( get_the_ID(), 'muut_last_open_tab', true );
+$last_active_tab = get_post_meta( get_the_ID(), 'muut_last_active_tab', true );
+
+$post_type_object = get_post_type_object( get_post_type() );
 
 ?>
 <div id="muut_metabox_tabs">
@@ -25,7 +27,7 @@ $last_open_tab = get_post_meta( get_the_ID(), 'muut_last_open_tab', true );
 		<ul id="muut_metabox_tabs_list" class="category-tabs">
 			<?php
 			$first_tab = true;
-			$active_tab = $last_open_tab;
+			$active_tab = $last_active_tab;
 			foreach( $tabs as $slug => $tab ) {
 				$class = '';
 				$active_value = '0';
@@ -33,14 +35,15 @@ $last_open_tab = get_post_meta( get_the_ID(), 'muut_last_open_tab', true );
 					$class .= 'disabled ';
 				} else {
 					$class .= 'enabled ';
+					$active_tab = $tab['name'];
 				}
-				if ( ( $last_open_tab && $tab['name'] == $last_open_tab ) || ( !$last_open_tab && $first_tab === true ) ) {
+				if ( ( $last_active_tab && $tab['name'] == $last_active_tab ) || ( !$last_active_tab && $first_tab === true ) ) {
 					$class .= ' tabs';
 					$first_tab = $slug;
 					$active_value = '1';
 					$active_tab = $tab['name'];
 				}
-				echo '<li class="' . $class . '" data-muut_tab="' . $tab['name'] . '"><a href="#muut_tab_content-' . $tab['name'] . '">' . $tab['label'] . '</a><input type="hidden" class="muut_tab_last_open" name="muut_last_open_' . $tab['name'] . '" value="' . $active_value . '" /></li>';
+				echo '<li class="' . $class . '" data-muut_tab="' . $tab['name'] . '"><a href="#muut_tab_content-' . $tab['name'] . '" class="muut_metabox_tab">' . $tab['label'] . '</a><input type="hidden" class="muut_tab_last_active" name="muut_tab_last_active_' . $tab['name'] . '" value="' . $active_value . '" /></li>';
 			}
 			?>
 		</ul>
@@ -61,4 +64,7 @@ $last_open_tab = get_post_meta( get_the_ID(), 'muut_last_open_tab', true );
 			}
 		?>
 	</div>
+</div>
+<div id="muut_tabs_disable_dialog" class="hidden">
+	<?php printf( __( 'Enabling this will disable other types of Muut embeds on this %s.', 'muut' ), $post_type_object->labels->singular_name ); ?>
 </div>

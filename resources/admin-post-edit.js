@@ -8,39 +8,66 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 jQuery(document).ready( function($) {
+
+  var muut_post_edit_localized = muut_admin_post_edit_localized;
+
   var muut_toggle_commenting = function() {
     if ($('#comment_status').is(':checked')) {
-      muut_enable_tab('commenting-tab');
-      muut_disable_tab('channel-tab');
-      muut_disable_tab('forum-tab');
+      muut_enable_commenting();
     }
     if (!$('#comment_status').is(':checked')) {
-      muut_disable_tab('commenting-tab');
-      muut_enable_tab('channel-tab');
-      muut_enable_tab('forum-tab');
+      muut_enable_channel();
     }
+  };
+
+  var muut_enable_commenting = function() {
+    $('#comment_status').prop('checked', true);
+    muut_enable_tab('commenting-tab');
+    muut_disable_tab('channel-tab');
+    muut_disable_tab('forum-tab');
+  };
+
+  var muut_enable_channel = function() {
+    $('#comment_status').prop('checked', false);
+    muut_disable_tab('commenting-tab');
+    muut_enable_tab('channel-tab');
+    muut_disable_tab('forum-tab');
+  };
+
+  var muut_enable_forum = function() {
+    $('#comment_status').prop('checked', false);
+    muut_disable_tab('commenting-tab');
+    muut_disable_tab('channel-tab');
+    muut_enable_tab('forum-tab');
   };
 
   $('#comment_status').on('change', function() {
     muut_toggle_commenting();
   });
 
-  $('a.enable_comments_link').on('click', function(e) {
-    $('#comment_status').prop('checked', true).trigger('change');
+  $('a.enable_commenting_link').on('click', function(e) {
+    muut_tab_enable_dialog(muut_enable_commenting);
     e.preventDefault();
   });
 
-  $('a.disable_comments_link').on('click', function(e) {
-    $('#comment_status').prop('checked', false).trigger('change');
+  $('a.enable_channel_link').on('click', function(e) {
+    muut_tab_enable_dialog(muut_enable_channel);
+    e.preventDefault();
+  });
+
+  $('a.enable_forum_link').on('click', function(e) {
+    muut_tab_enable_dialog(muut_enable_forum);
     e.preventDefault();
   });
 
   var muut_disable_tab = function( tab_name ) {
     $('#muut_tab_content-' + tab_name + ', li[data-muut_tab=' + tab_name +']').addClass('disabled').removeClass('enabled');
+    $('.muut_tab_last_active[name=muut_tab_last_active_' + tab_name +']').val(0);
   };
 
   var muut_enable_tab = function( tab_name ) {
     $('#muut_tab_content-' + tab_name + ', li[data-muut_tab=' + tab_name +']').addClass('enabled').removeClass('disabled');
+    $('.muut_tab_last_active[name=muut_tab_last_active_' + tab_name +']').val(1);
   }
 
   if ($.fn.tabs) {
@@ -54,7 +81,31 @@ jQuery(document).ready( function($) {
       },
       active: $('#muut_metabox_tabs_list li.tabs').index()
     });
+  }
 
-
+  if ($.fn.dialog) {
+    var cancel_string = muut_post_edit_localized.cancel;
+    var continue_string = muut_post_edit_localized.continue;
+    var muut_tab_enable_dialog = function(callback) {
+      $('#muut_tabs_disable_dialog').dialog({
+        resizable: false,
+        height: 140,
+        modal: true,
+        buttons: [ {
+          text: muut_post_edit_localized.cancel,
+          click: function() {
+            $(this).dialog("close");
+          }
+        },
+        {
+          text: muut_post_edit_localized.continue,
+          click: function() {
+            $(this).dialog("close");
+            callback();
+          }
+        }],
+        dialogClass: 'no_title_modal'
+      });
+    };
   }
 });

@@ -26,7 +26,7 @@ $disable_uploads = isset( $channel_settings['disable_uploads'] ) ? $channel_sett
 </div>
 <div class="disabled_tab_wrapper">
 	<p>
-		<span class="description"><?php printf( __( 'In order to embed a standalone channel, you must disable commenting. %sClick here%s to do that now.', 'muut' ), '<a href="#" class="disable_comments_link">', '</a>' ); ?></span>
+		<span class="description"><?php printf( __( '%sClick here%s to enable a channel embed.', 'muut' ), '<a href="#" class="enable_channel_link">', '</a>' ); ?></span>
 	</p>
 	<p>
 		<span class="description"><?php _e( 'A channel is a standalone discussion area.', 'muut' ); ?></span>

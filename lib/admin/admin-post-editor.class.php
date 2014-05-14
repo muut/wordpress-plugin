@@ -104,6 +104,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 			wp_enqueue_script ( 'jquery-ui-tabs' );
 			wp_enqueue_script( 'muut-admin-functions' );
 			wp_enqueue_script( 'muut-admin-post-edit' );
+			wp_enqueue_style( 'jquery-ui-dialog-css' );
 			wp_enqueue_style( 'muut-admin-style' );
 		}
 
@@ -118,7 +119,9 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 			$this->defaultTabs = array(
 				'commenting' => array(
 					'label' => __( 'Commenting', 'muut' ),
+					'functionality_label' => __( 'Commenting', 'muut' ),
 					'name' => 'commenting-tab',
+					'slug' => 'commenting',
 					'post_types' => apply_filters( 'muut_metabox_commenting_tab_post_types', array() ),
 					'meta_name' => 'commenting_settings',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-commenting.php',
@@ -126,6 +129,8 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 				),
 				'channel' => array(
 					'label' => __( 'Channel', 'muut' ),
+					'functionality_label' => __( 'Channel embedding', 'muut' ),
+					'slug' => 'channel',
 					'name' => 'channel-tab',
 					'post_types' => apply_filters( 'muut_metabox_channel_tab_post_types', array( 'page' ) ),
 					'meta_name' => 'channel_settings',
@@ -134,7 +139,9 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 				),
 				'forum' => array(
 					'label' => __( 'Forum', 'muut' ),
+					'functionality_label' => __( 'Forum embedding', 'muut' ),
 					'name' => 'forum-tab',
+					'slug' => 'forum',
 					'post_types' => apply_filters( 'muut_metabox_forum_tab_post_types', array( 'page' ) ),
 					'meta_name' => 'forum_settings',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-forum.php',
@@ -264,12 +271,12 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 			foreach( $tabs as $tab_slug => $tab ) {
 				// Execute actions for active tabs.
 				// Next line the $_POST index could be a new hidden, if multiple tabs should be saved.
-				if ( isset( $_POST['muut_last_open_' . $tab['name'] ] ) && $_POST['muut_last_open_' . $tab['name'] ] ) {
+				if ( isset( $_POST['muut_tab_last_active_' . $tab['name'] ] ) && $_POST['muut_tab_last_active_' . $tab['name'] ] ) {
 					do_action( 'muut_save_post_tab', $tab, $post_id, $post );
 					do_action( 'muut_save_post_tab_' . $tab_slug, $tab, $post_id, $post );
 				}
-				if ( isset( $_POST['muut_last_open_' . $tab['name'] ] ) && $_POST['muut_last_open_' . $tab['name'] ] ) {
-					update_post_meta( $post_id, 'muut_last_open_tab', $tab['name'] );
+				if ( isset( $_POST['muut_tab_last_active_' . $tab['name'] ] ) && $_POST['muut_tab_last_active_' . $tab['name'] ] ) {
+					update_post_meta( $post_id, 'muut_last_active_tab', $tab['name'] );
 				}
 			}
 		}
@@ -426,7 +433,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		public function isCommentingTabEnabled() {
 			if ( !isset( $this->metaboxTabs['commenting']['enabled'] ) ) {
 				global $post;
-				if ( muut()->getOption( 'replace_comments' ) && $post->comment_status == 'open' ) {
+				if ( get_post_meta( $post->ID, 'muut_last_active_tab', true ) == $this->metaboxTabs['commenting']['name'] && muut()->getOption( 'replace_comments' ) && $post->comment_status == 'open' ) {
 					$this->metaboxTabs['commenting']['enabled'] = true;
 				} else {
 					$this->metaboxTabs['commenting']['enabled'] = false;
@@ -446,7 +453,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		public function isChannelTabEnabled() {
 			if ( !isset( $this->metaboxTabs['channel']['enabled'] ) ) {
 				global $post;
-				if ( muut()->getOption( 'replace_comments' ) && $post->comment_status == 'open' ) {
+				if ( get_post_meta( $post->ID, 'muut_last_active_tab', true ) != $this->metaboxTabs['channel']['name'] || ( muut()->getOption( 'replace_comments' ) && $post->comment_status == 'open' ) ) {
 					$this->metaboxTabs['channel']['enabled'] = false;
 				} else {
 					$this->metaboxTabs['channel']['enabled'] = true;
@@ -466,7 +473,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		public function isForumTabEnabled() {
 			if ( !isset( $this->metaboxTabs['forum']['enabled'] ) ) {
 				global $post;
-				if ( muut()->getOption( 'replace_comments' ) && $post->comment_status == 'open' ) {
+				if ( get_post_meta( $post->ID, 'muut_last_active_tab', true ) != $this->metaboxTabs['forum']['name'] || ( muut()->getOption( 'replace_comments' )  && $post->comment_status == 'open' ) ) {
 					$this->metaboxTabs['forum']['enabled'] = false;
 				} else {
 					$this->metaboxTabs['forum']['enabled'] = true;
