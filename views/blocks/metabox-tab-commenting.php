@@ -26,6 +26,6 @@ $disable_uploads = isset( $comments_settings['disable_uploads'] ) ? $comments_se
 </div>
 <div class="disabled_tab_wrapper">
 	<p>
-		<span class="description"><?php printf( __( 'In order to use Muut commenting, you must enable commenting. %sClick here%s to do that now.', 'muut' ), '<a href="#" class="disabled_comments_link">', '</a>' ); ?></span>
+		<span class="description"><?php printf( __( 'In order to use Muut commenting, you must enable commenting. %sClick here%s to do that now.', 'muut' ), '<a href="#" class="enable_comments_link">', '</a>' ); ?></span>
 	</p>
 </div>

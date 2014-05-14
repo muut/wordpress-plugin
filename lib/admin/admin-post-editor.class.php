@@ -103,6 +103,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		public function enqueueAdminScripts() {
 			wp_enqueue_script ( 'jquery-ui-tabs' );
 			wp_enqueue_script( 'muut-admin-functions' );
+			wp_enqueue_script( 'muut-admin-post-edit' );
 			wp_enqueue_style( 'muut-admin-style' );
 		}
 

@@ -40,7 +40,7 @@ $last_open_tab = get_post_meta( get_the_ID(), 'muut_last_open_tab', true );
 					$active_value = '1';
 					$active_tab = $tab['name'];
 				}
-				echo '<li class="' . $class . '"><a href="#' . $tab['name'] . '">' . $tab['label'] . '</a><input type="hidden" class="muut_tab_last_open" name="muut_last_open_' . $tab['name'] . '" value="' . $active_value . '" /></li>';
+				echo '<li class="' . $class . '" data-muut_tab="' . $tab['name'] . '"><a href="#muut_tab_content-' . $tab['name'] . '">' . $tab['label'] . '</a><input type="hidden" class="muut_tab_last_open" name="muut_last_open_' . $tab['name'] . '" value="' . $active_value . '" /></li>';
 			}
 			?>
 		</ul>
@@ -55,7 +55,7 @@ $last_open_tab = get_post_meta( get_the_ID(), 'muut_last_open_tab', true );
 				} else {
 					$class .= 'enabled ';
 				}
-				echo '<div id="' . $tab['name'] . '" class="' . $class . '">';
+				echo '<div id="muut_tab_content-' . $tab['name'] . '" class="' . $class . '">';
 				include ( $tab['template_location'] );
 				echo '</div>';
 			}
