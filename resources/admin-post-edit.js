@@ -14,6 +14,7 @@ jQuery(document).ready( function($) {
   var muut_toggle_commenting = function() {
     if ($('#comment_status').is(':checked')) {
       muut_enable_commenting();
+      $('.muut_tab_last_active[name=muut_tab_last_active_commenting-tab]').val(1);
     }
     if (!$('#comment_status').is(':checked')) {
       muut_enable_channel();

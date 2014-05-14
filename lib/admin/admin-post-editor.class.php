@@ -269,6 +269,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		public function saveMuutPostSettings( $post_id, $post ) {
 			$tabs = $this->getMetaBoxTabsForCurrentPostType();
 
+			$has_last_active = false;
 			foreach( $tabs as $tab_slug => $tab ) {
 				// Execute actions for active tabs.
 				// Next line the $_POST index could be a new hidden, if multiple tabs should be saved.
@@ -276,9 +277,13 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					do_action( 'muut_save_post_tab', $tab, $post_id, $post );
 					do_action( 'muut_save_post_tab_' . $tab_slug, $tab, $post_id, $post );
 				}
-				if ( isset( $_POST['muut_tab_last_active_' . $tab['name'] ] ) && $_POST['muut_tab_last_active_' . $tab['name'] ] ) {
+				if ( isset( $_POST['muut_tab_last_active_' . $tab['name'] ] ) && $_POST['muut_tab_last_active_' . $tab['name'] ] == '1' ) {
+					$has_last_active = true;
 					update_post_meta( $post_id, 'muut_last_active_tab', $tab['name'] );
 				}
+			}
+			if ( !$has_last_active ) {
+				update_post_meta( $post_id, 'muut_last_active_tab', '0' );
 			}
 		}
 
@@ -434,7 +439,9 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		public function isCommentingTabEnabled() {
 			if ( !isset( $this->metaboxTabs['commenting']['enabled'] ) ) {
 				global $post;
-				if ( get_post_meta( $post->ID, 'muut_last_active_tab', true ) == $this->metaboxTabs['commenting']['name'] && muut()->getOption( 'replace_comments' ) && $post->comment_status == 'open' ) {
+				$last_active_tab = get_post_meta( $post->ID, 'muut_last_active_tab', true );
+
+				if ( $last_active_tab == $this->metaboxTabs['commenting']['name'] || ( !$last_active_tab && $last_active_tab !== '0' && ( muut()->getOption( 'override_all_comments' ) == true || get_comments( array( 'post_id' => $post->ID, 'count' => true ) ) == 0 ) ) && muut()->getOption( 'replace_comments' ) && $post->comment_status == 'open' ) {
 					$this->metaboxTabs['commenting']['enabled'] = true;
 				} else {
 					$this->metaboxTabs['commenting']['enabled'] = false;
@@ -454,7 +461,9 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		public function isChannelTabEnabled() {
 			if ( !isset( $this->metaboxTabs['channel']['enabled'] ) ) {
 				global $post;
-				if ( get_post_meta( $post->ID, 'muut_last_active_tab', true ) != $this->metaboxTabs['channel']['name'] || ( muut()->getOption( 'replace_comments' ) && $post->comment_status == 'open' ) ) {
+				$last_active_tab = get_post_meta( $post->ID, 'muut_last_active_tab', true );
+
+				if ( $last_active_tab != $this->metaboxTabs['channel']['name'] || ( muut()->getOption( 'replace_comments' ) && $post->comment_status == 'open' ) ) {
 					$this->metaboxTabs['channel']['enabled'] = false;
 				} else {
 					$this->metaboxTabs['channel']['enabled'] = true;
@@ -474,7 +483,9 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		public function isForumTabEnabled() {
 			if ( !isset( $this->metaboxTabs['forum']['enabled'] ) ) {
 				global $post;
-				if ( get_post_meta( $post->ID, 'muut_last_active_tab', true ) != $this->metaboxTabs['forum']['name'] || ( muut()->getOption( 'replace_comments' )  && $post->comment_status == 'open' ) ) {
+				$last_active_tab = get_post_meta( $post->ID, 'muut_last_active_tab', true );
+
+				if ( $last_active_tab != $this->metaboxTabs['forum']['name'] || ( muut()->getOption( 'replace_comments' )  && $post->comment_status == 'open' ) ) {
 					$this->metaboxTabs['forum']['enabled'] = false;
 				} else {
 					$this->metaboxTabs['forum']['enabled'] = true;
