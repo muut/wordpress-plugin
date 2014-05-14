@@ -102,3 +102,7 @@ span.checkbox_row {
 span.description {
     font-style: italic;
 }
+
+.text-input-label {
+    font-weight: bold;
+}
