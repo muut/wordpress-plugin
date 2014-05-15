@@ -230,7 +230,7 @@ if ( !class_exists( 'Muut_Shortcodes' ) ) {
 			$page_slug = sanitize_title( get_the_title() );
 
 			// (bool ? this : that) not working
-			if ( $forum )   return $tag .'">' . $forumname . 'forums</a>';
+			if ( $forum )   return $tag .'">' . $forum_name . 'forums</a>';
 			if ( $threaded ) return $tag .'/wordpress/' . $page_slug . '">Comments</a>';
 			if ( $path )    return $tag . '/' . $path .'">Comments are here</a>';
 			return $tag . '/wordpress:' . $page_slug . '">Comments</a>';
