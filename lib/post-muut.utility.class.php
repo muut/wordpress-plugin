@@ -135,6 +135,23 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		}
 
 		/**
+		 * Returns whether a is a Muut forum page.
+		 *
+		 * @param int $post_id The post ID that we are checking.
+		 * @return bool Whether the page is a forum page.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function isMuutForumPage( $post_id ) {
+			if( is_numeric( $post_id ) && get_post_meta( $post_id, 'muut_last_active_tab', true ) == 'forum-tab' ) {
+				$value = true;
+			} else {
+				$value = false;
+			}
+			return apply_filters( 'muut_is_forum_page', $value, $post_id );
+		}
+
+		/**
 		 * Gets the channel page's remote path.
 		 *
 		 * @param int $page_id The page ID that we are getting the remote channel path for.
@@ -233,15 +250,22 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 				return false;
 			}
 
-			$path = self::getChannelRemotePath( $page_id );
-
 			$settings = ' ';
-			if ( !self::getPostOption( $page_id, 'show_online', true ) ) {
+			if ( self::isMuutChannelPage( $page_id ) ) {
+				$post_options = self::getPostOption( $page_id, 'channel_settings' );
+				$type_of_embed = 'channel';
+			} elseif ( self::isMuutForumPage( $page_id ) ) {
+				$post_options = self::getPostOption( $page_id, 'forum_settings' );
+				$type_of_embed = 'forum';
+			} else {
+				return;
+			}
+			if ( isset( $post_options['hide_online'] ) && $post_options['hide_online'] == true ) {
 				$settings .= 'data-show_online="false" ';
 			} else {
 				$settings .= 'data-show_online="true" ';
 			}
-			if ( !self::getPostOption( $page_id, 'allow_uploads', false ) ) {
+			if ( isset( $post_options['disable_uploads'] ) && $post_options['disable_uploads'] == true ) {
 				$settings .= 'data-upload="false" ';
 			} else {
 				$settings .= 'data-upload="true" ';
@@ -250,19 +274,17 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 			$settings .= 'title="' . get_the_title( $page_id ) . '" ';
 			$settings .= 'data-channel="' . get_the_title( $page_id ) . '" ';
 
-			if ( $path === false )
-				return false;
-
-			if ( muut()->getOption( 'forum_page_id', false ) == $page_id ) {
+			if ( $type_of_embed == 'channel' ) {
+				$path = self::getChannelRemotePath( $page_id );
+				$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
+				$embed = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . muut()->getForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
+			} elseif ( $type_of_embed == 'forum' ) {
 				ob_start();
 					include ( muut()->getPluginPath() . 'views/blocks/forum-page-embed.php' );
 				$embed = ob_get_clean();
 			} else {
-				$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
-
-				$embed = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . muut()->getForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
+				return;
 			}
-
 			if ( $echo ) {
 				echo $embed;
 			} else {
