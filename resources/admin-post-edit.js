@@ -36,7 +36,7 @@ jQuery(document).ready( function($) {
   };
 
   var muut_enable_forum = function() {
-    $('#comment_status').prop('checked', false);
+
     muut_disable_tab('commenting-tab');
     muut_disable_tab('channel-tab');
     muut_enable_tab('forum-tab');
@@ -46,18 +46,32 @@ jQuery(document).ready( function($) {
     muut_toggle_commenting();
   });
 
-  $('a.enable_commenting_link').on('click', function(e) {
-    muut_tab_enable_dialog(muut_enable_commenting);
+  $('input.muut_enable_commenting_tab').on('change', function(e) {
+    if ( $(this).is(':checked') ) {
+      muut_enable_commenting();
+    } else {
+      muut_disable_tab('commenting-tab');
+    }
+    //muut_tab_enable_dialog(muut_enable_commenting);
     e.preventDefault();
   });
 
-  $('a.enable_channel_link').on('click', function(e) {
-    muut_tab_enable_dialog(muut_enable_channel);
+  $('input.muut_enable_channel_tab').on('change', function(e) {
+    if ( $(this).is(':checked') ) {
+      muut_enable_channel();
+    } else {
+      muut_disable_tab('channel-tab');
+    }
+    //muut_tab_enable_dialog(muut_enable_channel);
     e.preventDefault();
   });
 
-  $('a.enable_forum_link').on('click', function(e) {
-    muut_tab_enable_dialog(muut_enable_forum);
+  $('input.muut_enable_forum_tab').on('change', function(e) {
+    if ( $(this).is(':checked') ) {
+      muut_enable_forum();
+    } else {
+      muut_disable_tab('forum-tab');
+    }    //muut_tab_enable_dialog(muut_enable_forum);
     e.preventDefault();
   });
 
@@ -68,11 +82,13 @@ jQuery(document).ready( function($) {
 
   var muut_disable_tab = function( tab_name ) {
     $('#muut_tab_content-' + tab_name + ', li[data-muut_tab=' + tab_name +']').addClass('disabled').removeClass('enabled');
+    $('#muut_enable_tab-' + tab_name).prop('checked', false);
     $('.muut_tab_last_active[name=muut_tab_last_active_' + tab_name +']').val(0);
   };
 
   var muut_enable_tab = function( tab_name ) {
     $('#muut_tab_content-' + tab_name + ', li[data-muut_tab=' + tab_name +']').addClass('enabled').removeClass('disabled');
+    $('#muut_enable_tab-' + tab_name).prop('checked', true);
     $('.muut_tab_last_active[name=muut_tab_last_active_' + tab_name +']').val(1);
   }
 

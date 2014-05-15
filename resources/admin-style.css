@@ -39,6 +39,10 @@ span.disabled input[type=text]
     list-style: circle;
 }
 
+.muut-tab-panel {
+    max-height: none;
+}
+
 .muut-tab-panel.disabled .enabled_tab_wrapper,
 .muut-tab-panel.enabled .disabled_tab_wrapper{
     display: none;
