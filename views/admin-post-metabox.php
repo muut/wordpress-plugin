@@ -40,10 +40,12 @@ $post_type_object = get_post_type_object( get_post_type() );
 				if ( ( $last_active_tab && $tab['name'] == $last_active_tab ) || ( !$last_active_tab && $first_tab === true ) ) {
 					$class .= ' tabs';
 					$first_tab = $slug;
-					$active_value = '1';
-					$active_tab = $tab['name'];
+					if ( $last_active_tab === '' ) {
+						$active_value = '1';
+						$active_tab = $tab['name'];
+					}
 				}
-				echo '<li class="' . $class . '" data-muut_tab="' . $tab['name'] . '"><a href="#muut_tab_content-' . $tab['name'] . '" class="muut_metabox_tab">' . $tab['label'] . '</a><input type="hidden" class="muut_tab_last_active" name="muut_tab_last_active_' . $tab['name'] . '" value="' . $active_value . '" /></li>';
+				echo '<li class="' . $class . '" id="muut_tab-' . $tab['name'] . '" data-muut_tab="' . $tab['name'] . '"><a href="#muut_tab_content-' . $tab['name'] . '" class="muut_metabox_tab">' . $tab['label'] . '</a><input type="hidden" class="muut_tab_last_active" name="muut_tab_last_active_' . $tab['name'] . '" value="' . $active_value . '" /></li>';
 			}
 			?>
 		</ul>
@@ -58,7 +60,11 @@ $post_type_object = get_post_type_object( get_post_type() );
 				} else {
 					$class .= 'enabled ';
 				}
-				echo '<div id="muut_tab_content-' . $tab['name'] . '" class="' . $class . '">';
+				echo '<div id="muut_tab_content-' . $tab['name'] . '" class="' . $class . '">'; ?>
+				<p>
+					<span class="checkbox_row"><input type="checkbox" name="<?php echo $tab['meta_name']; ?>[enabled-tab]" class="muut_enable_<?php echo $tab['name']; ?>" id="muut_enable_tab-<?php echo $tab['name']; ?>" <?php checked( $active_tab, $tab['name'] ); ?> value="1" /><label for="muut_enable_tab-<?php echo $tab['name']; ?>"><?php echo $tab['enable_text']; ?></label></span>
+				</p>
+				<?php
 				include ( $tab['template_location'] );
 				echo '</div>';
 			}

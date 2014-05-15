@@ -127,6 +127,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					'meta_name' => 'commenting_settings',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-commenting.php',
 					'enabled_callback' => array( $this, 'isCommentingTabEnabled' ),
+					'enable_text' => __( 'Enable commenting', 'muut' ),
 				),
 				'channel' => array(
 					'label' => __( 'Channel', 'muut' ),
@@ -137,6 +138,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					'meta_name' => 'channel_settings',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-channel.php',
 					'enabled_callback' => array( $this, 'isChannelTabEnabled' ),
+					'enable_text' => __( 'Enable channel (a standalone discussion area)', 'muut' ),
 				),
 				'forum' => array(
 					'label' => __( 'Forum', 'muut' ),
@@ -147,6 +149,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					'meta_name' => 'forum_settings',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-forum.php',
 					'enabled_callback' => array( $this, 'isForumTabEnabled' ),
+					'enable_text' => __( 'Enable forum', 'muut' ),
 				),
 			);
 		}

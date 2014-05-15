@@ -15,10 +15,15 @@ jQuery(document).ready( function($) {
     if ($('#comment_status').is(':checked')) {
       muut_enable_commenting();
       $('.muut_tab_last_active[name=muut_tab_last_active_commenting-tab]').val(1);
+      muut_set_current_tab( 'commenting-tab' );
     }
     if (!$('#comment_status').is(':checked')) {
-      muut_enable_channel();
+      muut_disable_tab('commenting-tab');
     }
+  };
+
+  var muut_set_current_tab = function( tab_name ) {
+    $('#muut_tab-' + tab_name + ' a.muut_metabox_tab').click();
   };
 
   var muut_enable_commenting = function() {
@@ -46,7 +51,7 @@ jQuery(document).ready( function($) {
     muut_toggle_commenting();
   });
 
-  $('input.muut_enable_commenting_tab').on('change', function(e) {
+  $('input.muut_enable_commenting-tab').on('change', function(e) {
     if ( $(this).is(':checked') ) {
       muut_enable_commenting();
     } else {
@@ -56,7 +61,7 @@ jQuery(document).ready( function($) {
     e.preventDefault();
   });
 
-  $('input.muut_enable_channel_tab').on('change', function(e) {
+  $('input.muut_enable_channel-tab').on('change', function(e) {
     if ( $(this).is(':checked') ) {
       muut_enable_channel();
     } else {
@@ -66,7 +71,7 @@ jQuery(document).ready( function($) {
     e.preventDefault();
   });
 
-  $('input.muut_enable_forum_tab').on('change', function(e) {
+  $('input.muut_enable_forum-tab').on('change', function(e) {
     if ( $(this).is(':checked') ) {
       muut_enable_forum();
     } else {
