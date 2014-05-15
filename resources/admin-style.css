@@ -54,16 +54,6 @@ span.disabled input[type=text]
     margin-bottom: 5px;
 }
 
-#muut_metabox_tabs_list li.disabled a {
-    font-style: italic;
-    color: #333;
-}
-
-#muut_metabox_tabs_list li.disabled a {
-    font-style: italic;
-    color: #333;
-}
-
 .no_title_modal .ui-dialog-titlebar {
     display: none;
 }
