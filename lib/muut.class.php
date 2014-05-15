@@ -962,7 +962,7 @@ if ( !class_exists( 'Muut' ) ) {
 			global $post;
 
 
-			if ( $post->post_type == 'page' && Muut_Post_Utility::isMuutPost( $post->ID ) ) {
+			if ( $post->post_type == 'page' && ( Muut_Post_Utility::isMuutChannelPage( $post->ID ) || Muut_Post_Utility::isMuutForumPage( $post->ID ) ) ) {
 				$content = Muut_Post_Utility::forumPageEmbedMarkup( $post->ID, false );
 			}
 
