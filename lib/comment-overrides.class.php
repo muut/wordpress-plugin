@@ -92,7 +92,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 
 			$domain = get_post_meta( $post_id, 'muut_post_domain', true );
 
-			$post_commenting_options = get_post_meta( $post_id, 'muut_commenting', true );
+			$post_commenting_options = Muut_Post_Utility::getPostOption( $post_id, 'commenting_settings' );
 
 			if ( $domain == '' ) {
 				// Assign the domain name to the post for permanent reference.
@@ -128,8 +128,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			if ( muut()->getOption( 'replace_comments', false )
 				&& !in_array( $post->post_type, $disabled_post_types ) ) {
 
-				if ( ( !muut()->getOption( 'override_all_comments', false ) && get_post_meta( $post->ID, 'muut_use_muut_commenting', true ) && get_comments_number( $post->ID ) == 0 )
-					|| muut()->getOption( 'override_all_comments', false ) ) {
+				if ( Muut_Post_Utility::isMuutCommentingPost( $post->ID ) ) {
 					// TODO: Make it so it checks if the post type is supposed to be overridden.
 					$template = Muut_Template_Loader::instance()->locateTemplate( 'comments.php' );
 				}
@@ -157,7 +156,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			$post_type = get_post_type_object( get_post_type( $post_id ) );
 			$post_type_name = $post_type->labels->singular_name;
 
-			$post_commenting_options = get_post_meta( $post_id, 'muut_commenting', true );
+			$post_commenting_options = Muut_Post_Utility::getPostOption( $post_id, 'commenting_settings' );
 
 			$settings = 'data-show_online="false" data-channel="' . __( 'Comments', 'muut' ) . '" title="' . $post_type_name . ': ' . get_the_title( $post_id ) . '" ';
 

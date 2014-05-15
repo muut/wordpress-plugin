@@ -109,7 +109,7 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		 * @since 3.0
 		 */
 		public static function isMuutPost( $post_id ) {
-			if( is_numeric( $post_id ) && muut()->getOption( 'forum_page_id' ) == $post_id ) {
+			if( is_numeric( $post_id ) && get_post_meta( $post_id, 'muut_last_active_tab', true ) ) {
 				$value = true;
 			} else {
 				$value = false;
@@ -126,7 +126,7 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		 * @since 3.0
 		 */
 		public static function isMuutChannelPage( $post_id ) {
-			if( is_numeric( $post_id ) && get_post_meta( $post_id, self::META_ISCHANNELPAGE, true ) ) {
+			if( is_numeric( $post_id ) && get_post_meta( $post_id, 'muut_last_active_tab', true ) == 'channel-tab' ) {
 				$value = true;
 			} else {
 				$value = false;
@@ -148,12 +148,27 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 				return false;
 			}
 
-			$path = self::getPostOption( $page_id, 'channel_remote_path' );
+			$page_channel_options = Muut_Post_Utility::getPostOption( $page_id, 'channel_settings' );
 
-			if ( muut()->getOption( 'forum_page_id', false ) != $page_id && !self::getPostOption( $page_id, 'is_threaded', false ) && !$no_suffix  ) {
-				$path .= ':comments';
-			}
+			$path = isset( $page_channel_options['channel_path'] ) ? $page_channel_options['channel_path'] : '';
+
 			return $path;
+		}
+
+		/**
+		 * Checks if comments and Muut commenting are enabled for a post.
+		 *
+		 * @param int $post_id The post ID we are checking.
+		 * @return bool True if muut commenting is being used, false if not.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public static function isMuutCommentingPost( $post_id ) {
+			if ( muut()->getOption( 'replace_comments' ) && get_post_meta( $post_id, 'muut_last_active_tab', true ) == 'commenting-tab' && get_post( $post_id )->comment_status == 'open' ) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		/**
