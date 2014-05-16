@@ -604,7 +604,7 @@ if ( !class_exists( 'Muut' ) ) {
 				$page_id = get_the_ID();
 				if ( Muut_Post_Utility::isMuutPost( $page_id ) ) {
 					echo '<script type="text/javascript">';
-					if ( $this->getOption( 'forum_page_id', 0 ) == $page_id ) {
+					if ( Muut_Post_Utility::getForumPageId() == $page_id ) {
 						echo 'var muut_current_page_permalink = "' . get_permalink( $page_id ) . '";';
 						echo 'var muut_show_comments_in_nav = ' . $this->getOption( 'show_comments_in_forum' ) . ';';
 						echo 'var muut_comments_base_domain = "' . $this->getOption( 'comments_base_domain' ) . '";';
@@ -916,7 +916,7 @@ if ( !class_exists( 'Muut' ) ) {
 				$classes[] = 'muut-enabled';
 				$classes[] = 'has-muut';
 				$classes[] = 'has-moot';
-				if ( $this->getOption( 'forum_page_id', '0' ) == get_the_ID() ) {
+				if ( Muut_Post_Utility::getForumPageId() == get_the_ID() ) {
 					$classes[] = 'muut-forum-home';
 				}
 			}

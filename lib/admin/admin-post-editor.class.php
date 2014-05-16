@@ -273,6 +273,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 			$tabs = $this->getMetaBoxTabsForCurrentPostType();
 
 			$has_last_active = false;
+			$last_active = '0';
 			foreach( $tabs as $tab_slug => $tab ) {
 				// Execute actions for active tabs.
 				// Next line the $_POST index could be a new hidden, if multiple tabs should be saved.
@@ -282,11 +283,15 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 				}
 				if ( isset( $_POST['muut_tab_last_active_' . $tab['name'] ] ) && $_POST['muut_tab_last_active_' . $tab['name'] ] == '1' ) {
 					$has_last_active = true;
+					$last_active = $tab['name'];
 					update_post_meta( $post_id, 'muut_last_active_tab', $tab['name'] );
 				}
 			}
 			if ( !$has_last_active ) {
 				update_post_meta( $post_id, 'muut_last_active_tab', '0' );
+			}
+			if ( ( !$last_active || $last_active != 'forum-tab' ) && Muut_Post_Utility::getForumPageId() == $post_id ) {
+				Muut_Post_Utility::removeAsForumPage( $post_id );
 			}
 		}
 
@@ -309,7 +314,6 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 			if ( !in_array( $tab['name'], $muut_tabs_to_save ) || ( !empty( $tab['post_types'] ) && !in_array( $post->post_type, (Array) $tab['post_types'] ) ) ) {
 				return;
 			}
-
 			switch( $tab['name'] ) {
 				case 'commenting-tab':
 					$tab_options = array();
@@ -390,6 +394,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					}
 
 					Muut_Post_Utility::setPostOption( $post_id, $tab['meta_name'], $tab_options );
+					Muut_Post_Utility::setAsForumPage( $post_id );
 				break;
 			}
 		}

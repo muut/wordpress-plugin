@@ -61,9 +61,6 @@ $post_type_object = get_post_type_object( get_post_type() );
 					$class .= 'enabled ';
 				}
 				echo '<div id="muut_tab_content-' . $tab['name'] . '" class="' . $class . '">'; ?>
-				<p>
-					<span class="checkbox_row"><input type="checkbox" name="<?php echo $tab['meta_name']; ?>[enabled-tab]" class="muut_enable_<?php echo $tab['name']; ?>" id="muut_enable_tab-<?php echo $tab['name']; ?>" <?php checked( $active_tab, $tab['name'] ); ?> value="1" /><label for="muut_enable_tab-<?php echo $tab['name']; ?>"><?php echo $tab['enable_text']; ?></label></span>
-				</p>
 				<?php
 				include ( $tab['template_location'] );
 				echo '</div>';

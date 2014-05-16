@@ -17,6 +17,9 @@ $disable_uploads = isset( $channel_settings['disable_uploads'] ) ? $channel_sett
 $channel_path = isset( $channel_settings['channel_path'] ) ? '/' . $channel_settings['channel_path'] : '';
 
 ?>
+<p>
+	<span class="checkbox_row"><input type="checkbox" name="<?php echo $tab['meta_name']; ?>[enabled-tab]" class="muut_enable_<?php echo $tab['name']; ?>" id="muut_enable_tab-<?php echo $tab['name']; ?>" <?php checked( $active_tab, $tab['name'] ); ?> value="1" /><label for="muut_enable_tab-<?php echo $tab['name']; ?>"><?php echo $tab['enable_text']; ?></label></span>
+</p>
 <div class="enabled_tab_wrapper">
 	<p>
 		<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[hide_online]" id="muut_channel_hide_online" value="1" <?php checked( $hide_online, '1' ); ?> /><label for="muut_channel_hide_online"><?php _e( 'Hide online users', 'muut' ); ?></label></span>
