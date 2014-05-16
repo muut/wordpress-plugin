@@ -43,7 +43,7 @@ function muut_is_forum_page( $page_id = null ) {
 		$page_id = get_the_ID();
 	}
 
-	return Muut_Post_Utility::isMuutPost( $page_id );
+	return Muut_Post_Utility::isMuutForumPage( $page_id );
 }
 
 /**

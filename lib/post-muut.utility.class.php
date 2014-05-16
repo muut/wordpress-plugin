@@ -301,7 +301,12 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		 * @since 3.0
 		 */
 		public static function getForumPageId() {
-			return muut()->getOption( 'forum_page_id', false );
+			$forum_page_id = muut()->getOption( 'forum_page_id', false );
+			if ( 'publish' != get_post_status( $forum_page_id ) ) {
+				return false;
+			} else {
+				return $forum_page_id;
+			}
 		}
 	}
 }
