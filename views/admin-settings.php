@@ -77,10 +77,10 @@ $current_language = muut()->getOption( 'language', 'en' );
 						<label for="muut_replace_comments"><?php _e( 'Use Muut for post commenting', 'muut' ); ?></label>
 					</td>
 				</tr>
-				<tr>
+				<tr data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')">
 					<td colspan="2">
 						<input name="setting[override_all_comments]" type="checkbox" id="muut_override_all_comments" value="1" <?php checked( '1', muut()->getOption( 'override_all_comments', '0' ) ); ?> />
-						<label for="muut_override_all_comments"><?php _e( 'Override comments on existing posts', 'muut' ); ?></label>
+						<label for="muut_override_all_comments"><?php _e( 'Use Muut commenting on posts with existing comments (data not deleted)', 'muut' ); ?></label>
 					</td>
 				</tr>
 			</tbody>
