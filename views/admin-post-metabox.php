@@ -36,6 +36,7 @@ $post_type_object = get_post_type_object( get_post_type() );
 				} else {
 					$class .= 'enabled ';
 					$active_tab = $tab['name'];
+					$active_value = '1';
 				}
 				if ( ( $last_active_tab && $tab['name'] == $last_active_tab ) || ( !$last_active_tab && $first_tab === true ) ) {
 					$class .= ' tabs';
