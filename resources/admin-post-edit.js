@@ -41,7 +41,7 @@ jQuery(document).ready( function($) {
   };
 
   var muut_enable_forum = function() {
-
+    $('#comment_status').prop('checked', false);
     muut_disable_tab('commenting-tab');
     muut_disable_tab('channel-tab');
     muut_enable_tab('forum-tab');
