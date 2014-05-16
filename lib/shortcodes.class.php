@@ -66,6 +66,7 @@ if ( !class_exists( 'Muut_Shortcodes' ) ) {
 		protected function addActions() {
 			add_action( 'admin_head', array( $this, 'maybeShowShortcodeNotice' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ) );
+			add_action( 'muut_save_post_tab_commenting-tab', array( $this, 'maybeDisableComments' ), 10, 3 );
 		}
 
 		/**
@@ -201,6 +202,31 @@ if ( !class_exists( 'Muut_Shortcodes' ) ) {
 
 			// Nowadays this actually does nothing.
 			return '<span id="no-moot"></span>';
+		}
+
+		/**
+		 * Turns off commenting is the no-muut shortcodes is being used on post save.
+		 *
+		 * @param array $tab The tab we are saving.
+		 * @param int $post_id The id of the post we are saving.
+		 * @param WP_Post $post The post object.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function maybeDisableComments( $tab, $post_id, $post ) {
+			if ( has_shortcode( $post->post_content, 'no-moot' ) || has_shortcode( $post->post_content, 'no-muut' ) ) {
+				if ( isset( $post->comment_status ) && $post->comment_status == 'open' ) {
+					$post_args = array(
+						'ID' => $post->ID,
+						'comment_status' => 'closed',
+					);
+					wp_update_post( $post_args );
+					if ( get_post_meta( $post_id, 'muut_last_active_tab', true ) == 'commenting-tab' ) {
+						update_post_meta( $post_id, 'muut_last_active_tab', '0' );
+					}
+				}
+			}
 		}
 
 		/**

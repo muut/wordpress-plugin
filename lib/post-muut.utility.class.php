@@ -179,7 +179,8 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 			if ( muut()->getOption( 'replace_comments' )
 				&& ( get_post_meta( $post_id, 'muut_last_active_tab', true ) == 'commenting-tab'
 					|| ( !get_post_meta( $post_id, 'muut_last_active_tab', true )
-						&& ( get_comments( array( 'post_id' => $post_id, 'count' => true ) ) == 0 )
+						&& ( ( get_comments( array( 'post_id' => $post_id, 'count' => true ) ) == 0 )
+							&& get_post( $post_id )->post_status == 'auto-draft' )
 							|| muut()->getOption( 'override_all_comments' ) ) )
 				&& get_post( $post_id )->comment_status == 'open' ) {
 				return true;

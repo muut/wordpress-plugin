@@ -277,14 +277,14 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 			foreach( $tabs as $tab_slug => $tab ) {
 				// Execute actions for active tabs.
 				// Next line the $_POST index could be a new hidden, if multiple tabs should be saved.
-				if ( isset( $_POST['muut_tab_last_active_' . $tab['name'] ] ) && $_POST['muut_tab_last_active_' . $tab['name'] ] ) {
-					do_action( 'muut_save_post_tab', $tab, $post_id, $post );
-					do_action( 'muut_save_post_tab_' . $tab_slug, $tab, $post_id, $post );
-				}
 				if ( isset( $_POST['muut_tab_last_active_' . $tab['name'] ] ) && $_POST['muut_tab_last_active_' . $tab['name'] ] == '1' ) {
 					$has_last_active = true;
 					$last_active = $tab['name'];
 					update_post_meta( $post_id, 'muut_last_active_tab', $tab['name'] );
+				}
+				if ( isset( $_POST['muut_tab_last_active_' . $tab['name'] ] ) && $_POST['muut_tab_last_active_' . $tab['name'] ] ) {
+					do_action( 'muut_save_post_tab', $tab, $post_id, $post );
+					do_action( 'muut_save_post_tab_' . $tab['name'], $tab, $post_id, $post );
 				}
 			}
 			if ( !$has_last_active ) {

@@ -41,7 +41,7 @@ $post_type_object = get_post_type_object( get_post_type() );
 				if ( ( $last_active_tab && $tab['name'] == $last_active_tab ) || ( !$last_active_tab && $first_tab === true ) ) {
 					$class .= ' tabs';
 					$first_tab = $slug;
-					if ( $last_active_tab === '' ) {
+					if ( $post->post_status == 'auto-draft' ) {
 						$active_value = '1';
 						$active_tab = $tab['name'];
 					}
