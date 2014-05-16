@@ -34,11 +34,6 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		private function __construct() {}
 
 		/**
-		 * The meta name for whether a page is a channel page or not.
-		 */
-		const META_ISCHANNELPAGE = 'muut_is_channel_page';
-
-		/**
 		 * The meta name for the super-options meta for individual forum pages.
 		 * This post_meta will contain an array of the specific page options.
 		 */
@@ -181,7 +176,12 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		 * @since 3.0
 		 */
 		public static function isMuutCommentingPost( $post_id ) {
-			if ( muut()->getOption( 'replace_comments' ) && get_post_meta( $post_id, 'muut_last_active_tab', true ) == 'commenting-tab' && get_post( $post_id )->comment_status == 'open' ) {
+			if ( muut()->getOption( 'replace_comments' )
+				&& ( get_post_meta( $post_id, 'muut_last_active_tab', true ) == 'commenting-tab'
+					|| ( !get_post_meta( $post_id, 'muut_last_active_tab', true )
+						&& ( get_comments( array( 'post_id' => $post_id, 'count' => true ) ) == 0 )
+							|| muut()->getOption( 'override_all_comments' ) ) )
+				&& get_post( $post_id )->comment_status == 'open' ) {
 				return true;
 			} else {
 				return false;

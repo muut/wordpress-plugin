@@ -127,7 +127,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					'meta_name' => 'commenting_settings',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-commenting.php',
 					'enabled_callback' => array( $this, 'isCommentingTabEnabled' ),
-					'enable_text' => __( 'Enable commenting', 'muut' ),
+					'enable_text' => __( 'Enable Muut commenting', 'muut' ),
 				),
 				'channel' => array(
 					'label' => __( 'Channel', 'muut' ),
@@ -449,7 +449,8 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 				global $post;
 				$last_active_tab = get_post_meta( $post->ID, 'muut_last_active_tab', true );
 
-				if ( $last_active_tab == $this->metaboxTabs['commenting']['name'] || ( !$last_active_tab && $last_active_tab !== '0' && ( muut()->getOption( 'override_all_comments' ) == true || get_comments( array( 'post_id' => $post->ID, 'count' => true ) ) == 0 ) ) && muut()->getOption( 'replace_comments' ) && $post->comment_status == 'open' ) {
+				if ( $last_active_tab == $this->metaboxTabs['commenting']['name']
+					|| Muut_Post_Utility::isMuutCommentingPost( $post->ID ) ) {
 					$this->metaboxTabs['commenting']['enabled'] = true;
 				} else {
 					$this->metaboxTabs['commenting']['enabled'] = false;

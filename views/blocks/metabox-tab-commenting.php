@@ -22,7 +22,7 @@ $type = isset( $comments_settings['type'] ) ? $comments_settings['type'] : $comm
 $disable_uploads = isset( $comments_settings['disable_uploads'] ) ? $comments_settings['disable_uploads'] : $commenting_defaults['disable_uploads'];
 ?>
 <p>
-	<span class="checkbox_row"><input type="checkbox" name="<?php echo $tab['meta_name']; ?>[enabled-tab]" class="muut_enable_<?php echo $tab['name']; ?>" id="muut_enable_tab-<?php echo $tab['name']; ?>" <?php checked( $active_tab, $tab['name'] ); ?> value="1" /><label for="muut_enable_tab-<?php echo $tab['name']; ?>"><?php echo $tab['enable_text']; ?></label></span>
+	<span class="checkbox_row"><input type="checkbox" name="<?php echo $tab['meta_name']; ?>[enabled-tab]" class="muut_enable_<?php echo $tab['name']; ?>" id="muut_enable_tab-<?php echo $tab['name']; ?>" <?php checked( true, Muut_Post_Utility::isMuutCommentingPost( $post->ID ) ); ?> value="1" /><label for="muut_enable_tab-<?php echo $tab['name']; ?>"><?php echo $tab['enable_text']; ?></label></span>
 </p>
 <div class="enabled_tab_wrapper">
 	<p>
