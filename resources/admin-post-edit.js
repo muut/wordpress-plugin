@@ -12,12 +12,13 @@ jQuery(document).ready( function($) {
   var muut_post_edit_localized = muut_admin_post_edit_localized;
 
   var muut_toggle_commenting = function() {
-    if ($('#comment_status').is(':checked')) {
+    var comment_status_checkbox = $('#comment_status');
+    if (comment_status_checkbox.is(':checked')) {
       muut_enable_commenting();
       $('.muut_tab_last_active[name=muut_tab_last_active_commenting-tab]').val(1);
       muut_set_current_tab( 'commenting-tab' );
     }
-    if (!$('#comment_status').is(':checked')) {
+    if (!comment_status_checkbox.is(':checked')) {
       muut_disable_tab('commenting-tab');
     }
   };

@@ -8,7 +8,8 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 jQuery( function($) {
-  if ( ( $('body').hasClass( 'muut-enabled' ) || $('body').hasClass( 'has-muut' ) || $('body').hasClass( 'has-moot' ) ) && typeof( muut_conf ) != 'undefined' ) {
+  var body = $('body');
+  if ( ( body.hasClass( 'muut-enabled' ) || body.hasClass( 'has-muut' ) || body.hasClass( 'has-moot' ) ) && typeof( muut_conf ) != 'undefined' ) {
     $('.muut_sso').muut(muut_conf);
   }
 });
