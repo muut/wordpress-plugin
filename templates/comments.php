@@ -8,11 +8,6 @@
  * @package Muut
  * @copyright 2014 Muut Inc
  */
-
-
-get_header();
-
-$comments_path = Muut_Comment_Overrides::instance()->getCommentsPath( get_the_ID(), true );
 ?>
 <div id="comments" class="comments-area">
 	<?php muut_comments_override_anchor(); ?>
