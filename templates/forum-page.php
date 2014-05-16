@@ -17,7 +17,7 @@ get_header();
 			<div id="content" class="site-content" role="main">
 				<?php while ( have_posts() ) : the_post();
 					if ( muut_is_forum_page() ) {
-						muut_forum_page_embed();
+						muut_page_embed();
 					}
 				endwhile; ?>
 			</div><!-- #content -->

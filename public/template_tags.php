@@ -54,7 +54,7 @@ function muut_is_forum_page( $page_id = null ) {
  * @author Paul Hughes
  * @since 3.0
  */
-function muut_get_page_forum_path( $page_id = null ) {
+function muut_get_channel_remote_path( $page_id = null ) {
 	if ( is_null( $page_id ) ) {
 		$page_id = get_the_ID();
 	}
@@ -71,7 +71,7 @@ function muut_get_page_forum_path( $page_id = null ) {
  * @author Paul Hughes
  * @since 3.0
  */
-function muut_forum_page_embed( $page_id = null, $echo = true ) {
+function muut_page_embed( $page_id = null, $echo = true ) {
 	if ( is_null( $page_id ) ) {
 		$page_id = get_the_ID();
 	}
