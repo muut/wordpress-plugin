@@ -57,7 +57,6 @@ jQuery(document).ready( function($) {
     } else {
       muut_disable_tab('commenting-tab');
     }
-    //muut_tab_enable_dialog(muut_enable_commenting);
     e.preventDefault();
   });
 
@@ -67,7 +66,6 @@ jQuery(document).ready( function($) {
     } else {
       muut_disable_tab('channel-tab');
     }
-    //muut_tab_enable_dialog(muut_enable_channel);
     e.preventDefault();
   });
 
@@ -76,7 +74,7 @@ jQuery(document).ready( function($) {
       muut_enable_forum();
     } else {
       muut_disable_tab('forum-tab');
-    }    //muut_tab_enable_dialog(muut_enable_forum);
+    }
     e.preventDefault();
   });
 
@@ -95,7 +93,7 @@ jQuery(document).ready( function($) {
     $('#muut_tab_content-' + tab_name + ', li[data-muut_tab=' + tab_name +']').addClass('enabled').removeClass('disabled');
     $('#muut_enable_tab-' + tab_name).prop('checked', true);
     $('.muut_tab_last_active[name=muut_tab_last_active_' + tab_name +']').val(1);
-  }
+  };
 
   if ($.fn.tabs) {
     $('#muut_metabox_tabs .muut-tab-panel.hidden').removeClass('hidden');
@@ -108,35 +106,5 @@ jQuery(document).ready( function($) {
       },
       active: $('#muut_metabox_tabs_list li.tabs').index()
     });
-  }
-
-  if ($.fn.dialog) {
-    var cancel_string = muut_post_edit_localized.cancel;
-    var continue_string = muut_post_edit_localized.continue;
-    var muut_tab_enable_dialog = function(callback) {
-      if ( $('#muut_metabox_tabs > .wp-tab-bar > ul > li').size() <= 1 ) {
-        callback();
-      } else {
-        $('#muut_tabs_disable_dialog').dialog({
-          resizable: false,
-          height: 140,
-          modal: true,
-          buttons: [ {
-            text: muut_post_edit_localized.cancel,
-            click: function() {
-              $(this).dialog("close");
-            }
-          },
-          {
-            text: muut_post_edit_localized.continue,
-            click: function() {
-              $(this).dialog("close");
-              callback();
-            }
-          }],
-          dialogClass: 'no_title_modal'
-        });
-      }
-    };
   }
 });
