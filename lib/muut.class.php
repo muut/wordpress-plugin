@@ -502,7 +502,6 @@ if ( !class_exists( 'Muut' ) ) {
 		/**
 		 * Gets the default value of a given option.
 		 *
-		 * @param string $option_name Gets the default value of a given Muut option.
 		 * @return array The array of default values for the Muut options.
 		 * @author Paul Hughes
 		 * @since 3.0
@@ -1003,6 +1002,7 @@ if ( !class_exists( 'Muut' ) ) {
 		/**
 		 * Executes a given develop-mode action.
 		 *
+		 * @param string $action The action to execute.
 		 * @return void
 		 * @author Paul Hughes
 		 * @since 3.0

@@ -293,6 +293,13 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 			}
 		}
 
+		/**
+		 * Gets the ID of the page that is being used as the main forum page.
+		 *
+		 * @return int|false The ID of the forum page, or false on failure.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
 		public static function getForumPageId() {
 			return muut()->getOption( 'forum_page_id', false );
 		}
