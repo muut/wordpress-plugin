@@ -83,6 +83,12 @@ $current_language = muut()->getOption( 'language', 'en' );
 						<label for="muut_override_all_comments"><?php _e( 'Use Muut commenting on posts with existing comments (data not deleted)', 'muut' ); ?></label>
 					</th>
 				</tr>
+				<tr data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')">
+					<th class="th-full" colspan="2">
+						<input name="setting[show_comments_in_forum]" type="checkbox" id="muut_show_comments_in_forum" value="1" <?php checked( '1', muut()->getOption( 'show_comments_in_forum', '0' ) ); ?> />
+						<label for="muut_show_comments_in_forum"><?php _e( 'Show Comments channel in forum navigation', 'muut' ); ?></label>
+					</th>
+				</tr>
 			</tbody>
 		</table>
 		<h3 class="title"><?php _e( 'Single Sign-on', 'muut' ); ?></h3>

@@ -521,7 +521,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'replace_comments' => true,
 				'use_threaded_commenting' => false,
 				'override_all_comments' => false,
-				'show_comments_in_forum' => false,
+				'show_comments_in_forum' => '0',
 				'commenting_defaults' => array(
 					'type' => 'flat',
 					'disable_uploads' => '0',
@@ -605,8 +605,10 @@ if ( !class_exists( 'Muut' ) ) {
 					echo '<script type="text/javascript">';
 					if ( Muut_Post_Utility::getForumPageId() == $page_id ) {
 						echo 'var muut_current_page_permalink = "' . get_permalink( $page_id ) . '";';
-						echo 'var muut_show_comments_in_nav = ' . $this->getOption( 'show_comments_in_forum' ) . ';';
 						echo 'var muut_comments_base_domain = "' . $this->getOption( 'comments_base_domain' ) . '";';
+						if ( $this->getOption( 'replace_comments' ) ) {
+							echo 'var muut_show_comments_in_nav = ' . $this->getOption( 'show_comments_in_forum', '0' ) . ';';
+						}
 					}
 					echo '</script>';
 				}

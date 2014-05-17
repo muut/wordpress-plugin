@@ -13,7 +13,7 @@ jQuery(document).ready( function($) {
   var body = $('body');
   if ( body.hasClass('muut-forum-home') && !body.hasClass('muut-custom-nav') && typeof muut_show_comments_in_nav != 'undefined' && muut_show_comments_in_nav ) {
     muut().on( 'init', function() {
-      $(".m-forums").append('<p><a href="#!/' + muut_comments_base_domain + '" title="Comments" class="unlisted">Comments</a></p>');
+      $(".m-forums").append('<p><a href="#!/' + muut_comments_base_domain + '" title="Comments" data-channel="Comments"  class="unlisted">Comments</a></p>');
     });
   }
 });
