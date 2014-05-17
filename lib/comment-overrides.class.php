@@ -74,6 +74,8 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 		 */
 		protected function addFilters() {
 			add_filter( 'comments_template', array( $this, 'commentsTemplate' ) );
+			add_filter( 'get_comments_link', array( $this, 'commentsLink' ), 10, 2 );
+			add_filter( 'get_comments_number', array( $this, 'commentsNumberFix' ), 10, 2 );
 		}
 
 		/**
@@ -175,13 +177,49 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			if ( !$path )
 			return false;
 
-			$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
-			$anchor = '<section id="comments"><a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a></section>';
+			$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '_comments"' : '';
+			$anchor = '<div id="respond"><section id="muut_comments"><a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a></section></div>';
 			if ( $echo ) {
 				echo $anchor;
 			} else {
 				return $anchor;
 			}
+		}
+
+		/**
+		 * Filters the link for the WP get_comments_link function. Posts with Muut comments should link to
+		 * their anchor.
+		 *
+		 * @param string $link The current link.
+		 * @param int $post_id The post ID.
+		 * @return string The filtered link.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function commentsLink( $link, $post_id ) {
+			if ( Muut_Post_Utility::isMuutCommentingPost( $post_id ) ) {
+				$link = get_permalink( $post_id ) . '#' . muut()->getWrapperCssId() . '_comments';
+			}
+
+			return $link;
+		}
+
+		/**
+		 * For posts that have Muut commenting enabled, set the number of comments to zero so that it does not
+		 * (in most themes) show a comment count, but rather sticks with "Leave a reply."
+		 *
+		 * @param int $count The current comment count
+		 * @param int $post_id The post ID.
+		 * @return int The filtered count.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function commentsNumberFix( $count, $post_id ) {
+			if ( Muut_Post_Utility::isMuutCommentingPost( $post_id ) ) {
+				$count = 0;
+			}
+
+			return $count;
 		}
 	}
 }
