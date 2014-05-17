@@ -49,6 +49,11 @@ if ( !class_exists( 'Muut' ) ) {
 		const MUUTSERVERS = 'muut.com';
 
 		/**
+		 * The Muut API base URI.
+		 */
+		const MUUTAPISERVER = 'api.muut.com';
+
+		/**
 		 * @property Whether develop mode was executed.
 		 */
 		private $developMode;

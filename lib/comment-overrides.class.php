@@ -75,7 +75,8 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 		protected function addFilters() {
 			add_filter( 'comments_template', array( $this, 'commentsTemplate' ) );
 			add_filter( 'get_comments_link', array( $this, 'commentsLink' ), 10, 2 );
-			add_filter( 'get_comments_number', array( $this, 'commentsNumberFix' ), 10, 2 );
+			add_filter( 'get_comments_number', array( $this, 'muutCommentsNumber' ), 10, 2 );
+			add_filter( 'the_posts', array( $this, 'fetchCommentCountForMuutPosts' ) );
 		}
 
 		/**
@@ -208,18 +209,79 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 		 * For posts that have Muut commenting enabled, set the number of comments to zero so that it does not
 		 * (in most themes) show a comment count, but rather sticks with "Leave a reply."
 		 *
-		 * @param int $count The current comment count
+		 * @param int $count The current comment count.
 		 * @param int $post_id The post ID.
 		 * @return int The filtered count.
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public function commentsNumberFix( $count, $post_id ) {
+		public function muutCommentsNumber( $count, $post_id ) {
 			if ( Muut_Post_Utility::isMuutCommentingPost( $post_id ) ) {
-				$count = 0;
+				// If there is no cached value, let's go get it.
+				if ( wp_cache_get( "muut-comments-{$post_id}" , 'counts' ) === false ) {
+					$post = get_post( $post_id );
+
+					if ( is_a( $post, 'WP_Post' ) ) {
+						$this->fetchCommentCountForMuutPosts( array( $post ) );
+					}
+				}
+
+				$count = wp_cache_get( "muut-comments-{$post_id}" , 'counts' );
 			}
 
 			return $count;
+		}
+
+		/**
+		 * Gets (and caches) the comment counts for posts in the main query.
+		 *
+		 * @param array $posts The array of WP_Post objects that were fetched in the main query.
+		 * @return array The same array.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function fetchCommentCountForMuutPosts( $posts ) {
+			// Only execute this functionality if "do not fetch" is not set.
+			// That filter can be used (set to true) to prevent any of this from executing.
+			if ( !apply_filters( 'muut_do_not_fetch_post_counts', false ) && is_main_query() ) {
+				$post_count_queue = array();
+				foreach ( $posts as $post ) {
+					if ( Muut_Post_Utility::isMuutCommentingPost( $post->ID ) && wp_cache_get( "muut-comments-{$post->ID}" , 'counts' ) === false ) {
+						$path = '/' . $this->getCommentsPath( $post->ID, true );
+						$post_count_queue[$post->ID] = $path;
+					}
+				}
+
+				// As long as there is at least one post that uses Muut commenting and doesn't have a cached value...
+				if ( count( $post_count_queue ) > 0 ) {
+					global $wp_version;
+					$api_endpoint = 'https://' . Muut::MUUTAPISERVER . '/postcounts';
+					$api_args = '?path=' . join( '&path=', $post_count_queue );
+
+					$api_call = $api_endpoint . $api_args;
+
+					$fetch_args = array(
+						'user-agent' => 'WordPress/' . $wp_version . '; ' . get_bloginfo( 'url' ) . ' MuutForum/' . muut()->getForumName(),
+					);
+					$response = wp_remote_get( $api_call, $fetch_args );
+
+					if ( wp_remote_retrieve_response_code( $response ) == 200 ) {
+						$body = wp_remote_retrieve_body( $response );
+
+						$return_array = json_decode( $body );
+
+						// Cache values for each returned post comment count.
+						if ( !is_null( $return_array ) ) {
+							$post_array = array_flip( $post_count_queue );
+							foreach ( $post_array as $url => $id ) {
+								wp_cache_set( "muut-comments-{$id}", $return_array->$url->size, 'counts' );
+							}
+						}
+					}
+				}
+			}
+
+			return $posts;
 		}
 	}
 }
