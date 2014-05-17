@@ -478,6 +478,9 @@ if ( !class_exists( 'Muut' ) ) {
 					'continue' => __( 'Go ahead!', 'muut' ),
 					'cancel' => __( 'Don\'t do that!', 'muut' ),
 				),
+				'muut-frontend-functions' => array(
+					'comments' => __( 'Comments', 'muut' ),
+				),
 			);
 			foreach ( $localizations as $key => $array ) {
 				$new_key = str_replace( '-', '_', $key ) . '_localized';
