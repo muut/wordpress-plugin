@@ -20,6 +20,13 @@ span.disabled input[type=text]
     margin-top: 10px;
 }
 
+span.right-justify-float {
+    float:right;
+    font-weight: normal;
+    margin-right: -18px;
+    margin-top: 2px;
+}
+
 #muut_forum_page_advanced_options {
     display: none;
 }

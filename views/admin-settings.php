@@ -23,10 +23,10 @@ $current_language = muut()->getOption( 'language', 'en' );
 			<tbody>
 				<tr>
 					<th scope="row">
-						<label for="muut_forum_name"><?php _e( 'Forum Name', 'muut' ); ?></label>
+						<label for="muut_forum_name"><?php _e( 'Forum Name', 'muut' ); ?><span class="right-justify-float"><?php echo trailingslashit( Muut::MUUTSERVERS ); ?></span></label>
 					</th>
 					<td>
-						<?php echo trailingslashit( Muut::MUUTSERVERS ); ?><input name="setting[forum_name]" type="text" id="muut_forum_name" value="<?php echo muut()->getForumName(); ?>" />
+						<input name="setting[forum_name]" type="text" id="muut_forum_name" value="<?php echo muut()->getForumName(); ?>" />
 					</td>
 				</tr>
 <?php if ( !muut()->getForumName() ): ?>
@@ -52,18 +52,18 @@ $current_language = muut()->getOption( 'language', 'en' );
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2">
+					<th class="th-full" colspan="2">
 						<input name="setting[enable_proxy_rewrites]" type="checkbox" id="muut_enable_proxy_rewrites" value="1" <?php checked( '1', muut()->getOption( 'enable_proxy_rewrites', '1' ) ); ?> />
-						<label for="muut_enable_proxy_rewrites"><?php printf( __( 'Allow search engines to crawl discussions at %s', 'muut' ), '<a href="' . get_site_url() . '">' . str_replace( array( 'http://', 'https://', ), '', get_site_url() ) . '</a>.' ); ?></label>
-					</td>
+						<label for="muut_enable_proxy_rewrites"><?php printf( __( 'Allow search engines to crawl discussions at %s', 'muut' ), '<strong>' . str_replace( array( 'http://', 'https://', ), '', get_site_url() ) . '</strong>.' ); ?></label>
+					</th>
 				</tr>
 <?php if ( Muut_Post_Utility::getForumPageId() ):
 	$forum_page_id = Muut_Post_Utility::getForumPageId();
 ?>
 				<tr>
-					<td colspan="2">
+					<th class="th-full" colspan="2">
 						<p class="description"><?php printf( __( 'Current forum page is %s', 'muut' ), '<a href="' . get_edit_post_link( $forum_page_id ) . '">' . get_the_title( $forum_page_id ) . '</a>.' ); ?></p>
-					</td>
+					</th>
 				</tr>
 <?php endif; ?>
 			</tbody>
@@ -72,16 +72,16 @@ $current_language = muut()->getOption( 'language', 'en' );
 		<table class="form-table">
 			<tbody>
 				<tr>
-					<td colspan="2">
+					<th class="th-full" colspan="2">
 						<input name="setting[replace_comments]" type="checkbox" id="muut_replace_comments" value="1" <?php checked( '1', muut()->getOption( 'replace_comments', '1' ) ); ?> />
 						<label for="muut_replace_comments"><?php _e( 'Use Muut for post commenting', 'muut' ); ?></label>
-					</td>
+					</th>
 				</tr>
 				<tr data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')">
-					<td colspan="2">
+					<th class="th-full" colspan="2">
 						<input name="setting[override_all_comments]" type="checkbox" id="muut_override_all_comments" value="1" <?php checked( '1', muut()->getOption( 'override_all_comments', '0' ) ); ?> />
 						<label for="muut_override_all_comments"><?php _e( 'Use Muut commenting on posts with existing comments (data not deleted)', 'muut' ); ?></label>
-					</td>
+					</th>
 				</tr>
 			</tbody>
 		</table>
@@ -90,10 +90,10 @@ $current_language = muut()->getOption( 'language', 'en' );
 		<table class="form-table">
 			<tbody>
 			<tr>
-				<td colspan="2">
+				<th class="th-full" colspan="2">
 					<input name="setting[subscription_use_sso]" type="checkbox" id="muut_subscription_use_sso" value="1" <?php checked( '1', muut()->getOption( 'subscription_use_sso', '0' ) ); ?> />
 					<label for="muut_subscription_use_sso"><?php _e( 'Enabled', 'muut' ); ?></label>
-				</td>
+				</th>
 			</tr>
 			<tr class="<?php echo $sso_field_class; ?>" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':checked()')">
 				<th scope="row">
@@ -113,7 +113,7 @@ $current_language = muut()->getOption( 'language', 'en' );
 			</tr>
 			</tbody>
 		</table>
-		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php _e( 'Upgrade to Muut Developer to use the WordPress authentication system for your forum. No logging in twice—WordPress users automatically become Muut users.', 'muut' ); ?></p>
+		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( 'Upgrade to Muut Developer to use the WordPress authentication system for your forum.%s No logging in twice—WordPress users automatically become Muut users.', 'muut' ), '<br />' ); ?></p>
 		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Developer%s', 'muut' ), '<a target="_blank" href="https://muut.com/pricing/">', '</a>' ); ?></p>
 		<p class="submit">
 			<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
