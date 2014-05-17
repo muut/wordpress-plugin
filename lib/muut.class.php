@@ -131,7 +131,7 @@ if ( !class_exists( 'Muut' ) ) {
 			$this->pluginPath = trailingslashit( dirname( dirname( __FILE__ ) ) );
 			$this->pluginUrl = trailingslashit( plugins_url( '', dirname( __FILE__ ) ) );
 			$this->wrapperClass = 'muut';
-			$this->wrapperId = '';
+			$this->wrapperId = 'muut';
 			$this->adminNotices = array();
 
 			$this->loadLibraries();
@@ -522,8 +522,8 @@ if ( !class_exists( 'Muut' ) ) {
 				// TODO: Make this match whatever language is set for the site.
 				'language' => $default_lang,
 				'replace_comments' => true,
-				'use_threaded_commenting' => false,
-				'override_all_comments' => false,
+				'use_threaded_commenting' => '0',
+				'override_all_comments' => '0',
 				'show_comments_in_forum' => '0',
 				'commenting_defaults' => array(
 					'type' => 'flat',
