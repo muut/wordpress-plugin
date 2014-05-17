@@ -65,6 +65,13 @@ span.right-justify-float {
     margin-bottom: 5px;
 }
 
+#muut_metabox_tabs_list li.ui-state-active a,
+#muut_metabox_tabs_list li.ui-state-hover a,
+#muut_metabox_tabs_list li.ui-state-focus:focus
+{
+    outline: none;
+}
+
 .no_title_modal .ui-dialog-titlebar {
     display: none;
 }
