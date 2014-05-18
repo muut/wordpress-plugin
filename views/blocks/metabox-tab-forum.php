@@ -12,8 +12,12 @@ $meta_name = $tab['meta_name'];
 $forum_settings = Muut_Post_Utility::getPostOption( $post->ID, 'forum_settings' );
 $forum_defaults = muut()->getOption( 'forum_defaults' );
 
+$forum_update_default = muut()->getOption( 'show_comments_in_forum_default' );
+$forum_defaults['show_comments_in_forum'] = $forum_update_default ? $forum_update_default : $forum_defaults['show_comments_in_forum'];
+
 $hide_online = isset( $forum_settings['hide_online'] ) ? $forum_settings['hide_online'] : $forum_defaults['hide_online'];
 $disable_uploads = isset( $forum_settings['disable_uploads'] ) ? $forum_settings['disable_uploads'] : $forum_defaults['disable_uploads'];
+$forum_show_comments = isset( $forum_settings['show_comments_in_forum'] ) ? $forum_settings['show_comments_in_forum'] : $forum_defaults['show_comments_in_forum'];
 ?>
 <?php $forum_page_id = Muut_Post_Utility::getForumPageId();
 if ( !$forum_page_id || $forum_page_id == $post->ID ) { ?>
@@ -29,6 +33,9 @@ if ( !$forum_page_id || $forum_page_id == $post->ID ) { ?>
 	<p>
 		<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[hide_online]" id="muut_forum_hide_online" value="1" <?php checked( $hide_online, '1' ); ?> /><label for="muut_forum_hide_online"><?php _e( 'Hide online users', 'muut' ); ?></label></span>
 		<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[disable_uploads]" id="muut_forum_disable_uploads" value="1" <?php checked( $disable_uploads, '1' ); ?> /><label for="muut_forum_disable_uploads"><?php _e( 'Disable image uploads', 'muut' ); ?></label></span>
+	</p>
+	<p>
+		<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[show_comments_in_forum]" id="muut_forum_show_comments_in_forum" value="1" <?php checked( $forum_show_comments, '1' ); ?> /><label for="muut_forum_show_comments_in_forum"><?php _e( 'Show Comments in Forum navigation', 'muut' ); ?></label></span>
 	</p>
 </div>
 <div class="disabled_tab_wrapper">

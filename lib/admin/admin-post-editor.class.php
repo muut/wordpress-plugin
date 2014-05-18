@@ -387,10 +387,17 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					$boolean_values = array(
 						'hide_online',
 						'disable_uploads',
+						'show_comments_in_forum',
 					);
 
 					foreach ( $boolean_values as $boolean_value ) {
 						$tab_options[$boolean_value] = isset( $tab_options[$boolean_value] ) ? $tab_options[$boolean_value] : '0';
+					}
+
+					// Remove the default setting for showing comments in forum, if it was copied
+					// over from an older version of the plugin.
+					if ( muut()->getOption( 'show_comments_in_forum_default' ) ) {
+						muut()->setOption( 'show_comments_in_forum_default', null );
 					}
 
 					Muut_Post_Utility::setPostOption( $post_id, $tab['meta_name'], $tab_options );

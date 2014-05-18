@@ -227,11 +227,9 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 				return false;
 			}
 
-			$forum_page_defaults = muut()->getOption( 'forum_page_defaults', array() );
-
 			$current_settings = get_post_meta( $post_id, self::META_POSTSETTINGS, true );
 
-			$settings = apply_filters( 'muut_get_post_options', wp_parse_args( $current_settings, $forum_page_defaults ), $post_id );
+			$settings = apply_filters( 'muut_get_post_options', $current_settings, $post_id );
 
 			return isset( $settings[$option_name] ) ? $settings[$option_name] : $default;
 		}

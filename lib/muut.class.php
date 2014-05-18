@@ -529,7 +529,6 @@ if ( !class_exists( 'Muut' ) ) {
 				'replace_comments' => true,
 				'use_threaded_commenting' => '0',
 				'override_all_comments' => '0',
-				'show_comments_in_forum' => '0',
 				'commenting_defaults' => array(
 					'type' => 'flat',
 					'disable_uploads' => '0',
@@ -542,6 +541,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'forum_defaults' => array(
 					'hide_online' => '0',
 					'disable_uploads' => '0',
+					'show_comments_in_forum' => '0',
 				),
 				'subscription_api_key' => '',
 				'subscription_secret_key' => '',
@@ -612,10 +612,12 @@ if ( !class_exists( 'Muut' ) ) {
 				if ( Muut_Post_Utility::isMuutPost( $page_id ) ) {
 					echo '<script type="text/javascript">';
 					if ( Muut_Post_Utility::getForumPageId() == $page_id ) {
+						$forum_settings = Muut_Post_Utility::getPostOption( $page_id, 'forum_settings' );
 						echo 'var muut_current_page_permalink = "' . get_permalink( $page_id ) . '";';
 						echo 'var muut_comments_base_domain = "' . $this->getOption( 'comments_base_domain' ) . '";';
 						if ( $this->getOption( 'replace_comments' ) ) {
-							echo 'var muut_show_comments_in_nav = ' . $this->getOption( 'show_comments_in_forum', '0' ) . ';';
+							echo 'var muut_show_comments_in_nav = ' .  $forum_settings['show_comments_in_forum'] . ';';
+						Muut_Post_Utility::getPostOption( $page_id, 'forum_settings' );
 						}
 					}
 					echo '</script>';
@@ -830,7 +832,6 @@ if ( !class_exists( 'Muut' ) ) {
 				'replace_comments',
 				'use_threaded_commenting',
 				'override_all_comments',
-				'show_comments_in_forum',
 				'is_threaded_default',
 				'show_online_default',
 				'allow_uploads_default',
@@ -846,14 +847,6 @@ if ( !class_exists( 'Muut' ) ) {
 				|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != $this->getOption( 'enable_proxy_rewrites' ) ) ) {
 				flush_rewrite_rules( true );
 			}
-
-			// Add depth to the settings that need to be further in on the actual settings array.
-			$settings['forum_page_defaults']['is_threaded'] = $settings['is_threaded_default'];
-			$settings['forum_page_defaults']['show_online'] = $settings['show_online_default'];
-			$settings['forum_page_defaults']['allow_uploads'] = $settings['allow_uploads_default'];
-			unset( $settings['is_threaded_default'] );
-			unset( $settings['show_online_default'] );
-			unset( $settings['allow_uploads_default'] );
 
 			// If the Secret Key setting does not get submitted (i.e. is disabled), make sure to erase its value.
 			$settings['subscription_secret_key'] = isset( $settings['subscription_secret_key']) ? $settings['subscription_secret_key'] : '';
