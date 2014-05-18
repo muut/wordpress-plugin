@@ -34,6 +34,8 @@ function muut_initialize_plugin() {
 	} else {
 		add_action( 'admin_notices', 'muut_show_plugin_load_fail_message' );
 	}
+	$plugin_dir = trailingslashit( basename( dirname( __FILE__ ) ) );
+	load_plugin_textdomain( 'muut', false, $plugin_dir . 'lang/');
 }
 
 function muut_show_plugin_load_fail_message() {
