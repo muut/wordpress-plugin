@@ -33,9 +33,7 @@ if ( !$forum_page_id || $forum_page_id == $post->ID ) { ?>
 	<p>
 		<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[hide_online]" id="muut_forum_hide_online" value="1" <?php checked( $hide_online, '1' ); ?> /><label for="muut_forum_hide_online"><?php _e( 'Hide online users', 'muut' ); ?></label></span>
 		<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[disable_uploads]" id="muut_forum_disable_uploads" value="1" <?php checked( $disable_uploads, '1' ); ?> /><label for="muut_forum_disable_uploads"><?php _e( 'Disable image uploads', 'muut' ); ?></label></span>
-	</p>
-	<p>
-		<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[show_comments_in_forum]" id="muut_forum_show_comments_in_forum" value="1" <?php checked( $forum_show_comments, '1' ); ?> /><label for="muut_forum_show_comments_in_forum"><?php _e( 'Show Comments in Forum navigation', 'muut' ); ?></label></span>
+		<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[show_comments_in_forum]" id="muut_forum_show_comments_in_forum" value="1" <?php checked( $forum_show_comments, '1' ); ?> /><label for="muut_forum_show_comments_in_forum"><?php _e( 'Show Comments', 'muut' ); ?></label></span>
 	</p>
 </div>
 <div class="disabled_tab_wrapper">
