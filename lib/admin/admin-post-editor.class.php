@@ -349,19 +349,18 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 
 					$channel_path = isset( $tab_options['channel_path'] ) ? $tab_options['channel_path'] : '';
 					if ( !isset( $tab_options['channel_path'] )
-						|| $tab_options['channel_path'] == '' ) {
+						|| $tab_options['channel_path'] == ''
+						|| !$tab_options['channel_path'] ) {
 						// If no path is saved yet, let's generate one and save it.
-						if ( !Muut_Post_Utility::getChannelRemotePath( $post_id, true ) ) {
-							$path = sanitize_title( $post->post_name );
-							$ancestors = get_post_ancestors( $post );
+						$path = sanitize_title( $post->post_name );
+						$ancestors = get_post_ancestors( $post );
 
-							foreach ( $ancestors as $ancestor ) {
-								if ( Muut_Post_Utility::isMuutChannelPage( $ancestor ) && Muut_Post_Utility::getChannelRemotePath( $ancestor, true ) ) {
-									$path = Muut_Post_Utility::getChannelRemotePath( $ancestor, true ) . '/' . $path;
-								}
+						foreach ( $ancestors as $ancestor ) {
+							if ( Muut_Post_Utility::isMuutChannelPage( $ancestor ) && Muut_Post_Utility::getChannelRemotePath( $ancestor, true ) ) {
+								$path = Muut_Post_Utility::getChannelRemotePath( $ancestor, true ) . '/' . $path;
 							}
-						$channel_path = $path;
 						}
+						$channel_path = $path;
 					} elseif ( isset( $tab_options['channel_path'] ) && $tab_options['channel_path'] != '' ) {
 						$path = $tab_options['channel_path'];
 						if ( substr( $path, 0, 1 ) == '/' ) {
