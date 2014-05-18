@@ -9,6 +9,8 @@
  * @copyright 2014 Muut Inc
  */
 ?>
-<div id="comments" class="comments-area">
-	<?php muut_comments_override_anchor(); ?>
-</div>
+<section id="comments" class="comments">
+	<div id="comments-div" class="comments-area">
+		<?php muut_comments_override_anchor(); ?>
+	</div>
+</section>
