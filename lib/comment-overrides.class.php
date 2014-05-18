@@ -262,19 +262,24 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 
 					$fetch_args = array(
 						'user-agent' => 'WordPress/' . $wp_version . '; ' . get_bloginfo( 'url' ) . ' MuutForum/' . muut()->getForumName(),
+						'timeout' => apply_filters( 'muut_api_post_counts_timeout', '2' ),
 					);
 					$response = wp_remote_get( $api_call, $fetch_args );
 
-					if ( wp_remote_retrieve_response_code( $response ) == 200 ) {
-						$body = wp_remote_retrieve_body( $response );
+					if ( is_wp_error( $response ) ) {
+						error_log( 'Something went wrong fetching Muut API: ' . $response->get_error_message() );
+					} else {
+						if ( wp_remote_retrieve_response_code( $response ) == 200 ) {
+							$body = wp_remote_retrieve_body( $response );
 
-						$return_array = json_decode( $body );
+							$return_array = json_decode( $body );
 
-						// Cache values for each returned post comment count.
-						if ( !is_null( $return_array ) ) {
-							$post_array = array_flip( $post_count_queue );
-							foreach ( $post_array as $url => $id ) {
-								wp_cache_set( "muut-comments-{$id}", $return_array->$url->size, 'counts' );
+							// Cache values for each returned post comment count.
+							if ( !is_null( $return_array ) ) {
+								$post_array = array_flip( $post_count_queue );
+								foreach ( $post_array as $url => $id ) {
+									wp_cache_set( "muut-comments-{$id}", $return_array->$url->size, 'counts' );
+								}
 							}
 						}
 					}
