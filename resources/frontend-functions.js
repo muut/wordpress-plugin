@@ -16,5 +16,11 @@ jQuery(document).ready( function($) {
     muut().on( 'init', function() {
       $(".m-forums").append('<p><a href="#!/' + muut_comments_base_domain + '" title="' + muut_frontend_strings.comments + '" data-channel="' + muut_frontend_strings.comments + '"  class="unlisted">' + muut_frontend_strings.comments + '</a></p>');
     });
+    // Make sure the title of the comments page is "Comments".
+    muut().on( 'load', function(page) {
+      if (typeof( muut_comments_base_domain ) == 'string' && page.relativePath == '/' + muut_comments_base_domain) {
+        page.title = "Comments";
+      }
+    });
   }
 });
