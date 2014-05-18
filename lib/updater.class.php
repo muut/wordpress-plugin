@@ -194,6 +194,9 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 		 */
 		public function updateVersionNumber( $old_version, $new_version ) {
 			muut()->setOption( 'current_version', $new_version );
+			$update_timestamps = muut()->getOption( 'update_timestamps', array() );
+			$update_timestamps[$new_version] = time();
+			muut()->setOption( 'update_timestamps', $update_timestamps );
 		}
 	}
 }
