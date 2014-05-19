@@ -1,5 +1,5 @@
 === Muut ===
-Contributors: PaulHughes01, tipiirai
+Contributors: PaulHughes01, tipiirai, jannelehtinen
 Tags: forum, commenting, realtime, discussion
 Requires at least: 3.6
 Tested up to: 3.9.1
