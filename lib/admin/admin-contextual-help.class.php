@@ -92,16 +92,34 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 				'callback' => array( $this, 'renderSettingsHelpOverviewTabContent' ),
 			);
 
+			$help_general_tab_args = array(
+				'id' => 'muut_settings_help_general_tab',
+				'title' => __( 'General', 'muut' ),
+				'callback' => array( $this, 'renderSettingsHelpGeneralTabContent' ),
+			);
+
+			$help_commenting_tab_args = array(
+				'id' => 'muut_settings_help_commenting_tab',
+				'title' => __( 'Commenting', 'muut' ),
+				'callback' => array( $this, 'renderSettingsHelpCommentingTabContent' ),
+			);
+
 			$help_sso_tab_args = array(
 				'id' => 'muut_settings_help_sso_tab',
 				'title' => __( 'Single Sign-On', 'muut' ),
 				'callback' => array( $this, 'renderSettingsHelpSsoTabContent' ),
 			);
 
+			// Add the help tabs for the Muut Settings page.
 			$screen->add_help_tab( $help_overview_tab_args );
+
+			$screen->add_help_tab( $help_general_tab_args );
+
+			$screen->add_help_tab( $help_commenting_tab_args );
 
 			$screen->add_help_tab( $help_sso_tab_args );
 
+			// Set the "For More Information" sidebar up as well.
 			ob_start();
 				include( muut()->getPluginPath() . 'views/blocks/help-tab-settings-sidebar.php' );
 			$settings_help_sidebar_content = ob_get_clean();
@@ -110,7 +128,7 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 		}
 
 		/**
-		 * Renders the content for the help tab on the main Muut settings page.
+		 * Renders the content for the Overview help tab on the main Muut settings page.
 		 *
 		 * @param WP_Screen $screen The current screen.
 		 * @param array $tab The current tab array.
@@ -123,7 +141,33 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 		}
 
 		/**
-		 * Renders the content for the help tab on the main Muut settings page.
+		 * Renders the content for the General help tab on the main Muut settings page.
+		 *
+		 * @param WP_Screen $screen The current screen.
+		 * @param array $tab The current tab array.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function renderSettingsHelpGeneralTabContent( $screen, $tab ) {
+			include( muut()->getPluginPath() . 'views/blocks/help-tab-settings-general.php' );
+		}
+
+		/**
+		 * Renders the content for the Commenting help tab on the main Muut settings page.
+		 *
+		 * @param WP_Screen $screen The current screen.
+		 * @param array $tab The current tab array.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function renderSettingsHelpCommentingTabContent( $screen, $tab ) {
+			include( muut()->getPluginPath() . 'views/blocks/help-tab-settings-commenting.php' );
+		}
+
+		/**
+		 * Renders the content for the SSO help tab on the main Muut settings page.
 		 *
 		 * @param WP_Screen $screen The current screen.
 		 * @param array $tab The current tab array.
