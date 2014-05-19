@@ -998,7 +998,7 @@ if ( !class_exists( 'Muut' ) ) {
 
 					$this->developAction( $_GET['muut_development_action'] );
 				}
-				add_action( 'in_admin_header', array( $this, 'developSettingsBox' ) );
+				add_action( 'admin_notices', array( $this, 'developSettingsBox' ), 5 );
 			}
 		}
 
