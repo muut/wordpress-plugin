@@ -128,7 +128,8 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			global $post;
 			$disabled_post_types = apply_filters( 'muut_disabled_comment_override_post_types', array() );
 
-			if ( muut()->getOption( 'replace_comments', false )
+			if ( muut()->getForumName() != ''
+				&& muut()->getOption( 'replace_comments', false )
 				&& !in_array( $post->post_type, $disabled_post_types ) ) {
 
 				if ( Muut_Post_Utility::isMuutCommentingPost( $post->ID ) ) {
