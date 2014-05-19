@@ -63,6 +63,17 @@ function muut_is_forum_page( $page_id = null ) {
 }
 
 /**
+ * Gets the ID of the page set as the forum page.
+ *
+ * @return int|false Returns the ID of the page set as the main forum page, or false if not set.
+ * @author Paul Hughes
+ * @since 3.0
+ */
+function muut_get_forum_page_id() {
+	return Muut_Post_Utility::getForumPageId();
+}
+
+/**
  * Checks if the given page is a Channel embed.
  *
  * @param int $page_id The ID of the page we are checking (defaults to the current page).
