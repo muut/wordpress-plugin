@@ -62,7 +62,12 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 		 * @since 3.0
 		 */
 		public function addActions() {
+			// Add the contextual help tab items for the main Muut settings page.
 			add_action( 'load-toplevel_page_muut', array( $this, 'addMuutSettingsHelp' ) );
+
+			// Add the contextual help tab items for the post editor (the Muut meta box).
+			add_action( 'load-post.php', array( $this, 'addMuutPostEditorHelp' ) );
+			add_action( 'load-post-new.php', array( $this, 'addMuutPostEditorHelp' ) );
 		}
 
 		/**
@@ -177,6 +182,81 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 		 */
 		public function renderSettingsHelpSsoTabContent( $screen, $tab ) {
 			include( muut()->getPluginPath() . 'views/blocks/help-tab-settings-sso.php' );
+		}
+
+		/**
+		 * Adds the contextual help tab items to the post/page editing page.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function addMuutPostEditorHelp() {
+			$screen = get_current_screen();
+
+			$tabs = Muut_Admin_Post_Editor::instance()->getMetaBoxTabsForCurrentPostType();
+
+			$help_tabs = array(
+				'commenting-tab' => array(
+					'id' => 'muut_post_editor_help_commenting_tab',
+					'title' => __( 'Muut Commenting', 'muut' ),
+					'callback' => array( $this, 'renderPostEditorHelpCommentingTabContent' ),
+				),
+				'channel-tab' => array(
+					'id' => 'muut_post_editor_help_channel_tab',
+					'title' => __( 'Muut Channel', 'muut' ),
+					'callback' => array( $this, 'renderPostEditorHelpChannelTabContent' ),
+				),
+				'forum-tab' => array(
+					'id' => 'muut_post_editor_help_forum_tab',
+					'title' => __( 'Muut Forum', 'muut' ),
+					'callback' => array( $this, 'renderPostEditorHelpForumTabContent' ),
+				),
+			);
+
+			// Add the help tabs for the post editor, depending on which tabs are visible/being used.
+			foreach ( $tabs as $tab ) {
+				$screen->add_help_tab( $help_tabs[$tab['name']] );
+			}
+		}
+
+		/**
+		 * Renders the content for the Commenting-meta-box-tab help tab on the post editor.
+		 *
+		 * @param WP_Screen $screen The current screen.
+		 * @param array $tab The current tab array.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function renderPostEditorHelpCommentingTabContent( $screen, $tab ) {
+			include( muut()->getPluginPath() . 'views/blocks/help-tab-post-editor-commenting.php' );
+		}
+
+		/**
+		 * Renders the content for the Channel-meta-box-tab help tab on the post editor.
+		 *
+		 * @param WP_Screen $screen The current screen.
+		 * @param array $tab The current tab array.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function renderPostEditorHelpChannelTabContent( $screen, $tab ) {
+			include( muut()->getPluginPath() . 'views/blocks/help-tab-post-editor-channel.php' );
+		}
+
+		/**
+		 * Renders the content for the Forum-meta-box-tab help tab on the post editor.
+		 *
+		 * @param WP_Screen $screen The current screen.
+		 * @param array $tab The current tab array.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function renderPostEditorHelpForumTabContent( $screen, $tab ) {
+			include( muut()->getPluginPath() . 'views/blocks/help-tab-post-editor-forum.php' );
 		}
 	}
 }
