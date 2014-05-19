@@ -106,6 +106,22 @@ function muut_get_channel_remote_path( $page_id = null ) {
 }
 
 /**
+ * Checks if a given post uses Muut commenting.
+ *
+ * @param int $post_id The ID of the post we are checking.
+ * @return bool Whether the post uses Muut commenting.
+ * @author Paul Hughes
+ * @since 3.0
+ */
+function muut_uses_muut_commenting( $post_id = null ) {
+	if ( is_null( $post_id ) ){
+		$post_id = get_the_ID();
+	}
+
+	return Muut_Post_Utility::isMuutCommentingPost( $post_id );
+}
+
+/**
  * Get embed anchor for page.
  *
  * @param int $page_id The ID of the page we are getting the anchor for.
