@@ -207,6 +207,24 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		}
 
 		/**
+		 * Initializes the admin contextual help menu class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function initContextualHelp() {
+			$class = 'Muut_Admin_Contextual_Help';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/admin/admin-contextual-help.class.php' );
+				if ( class_exists( $class ) ) {
+					Muut_Admin_Contextual_Help::instance();
+				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
 		 * Checks some things in the admin and, from there, knows which libraries to initialize.
 		 *
 		 * @return void
@@ -217,6 +235,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			if ( version_compare( Muut::VERSION, muut()->getOption( 'current_version', '0' ), '>' ) ) {
 				$this->initUpdater();
 			}
+			$this->initContextualHelp();
 		}
 	}
 }
