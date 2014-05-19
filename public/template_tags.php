@@ -31,9 +31,25 @@ function muut_get_forum_name() {
 }
 
 /**
- * Checks if the give page is a Muut forum page.
+ * Checks if a post uses Muut in some way (is a channel embed, uses commenting, etc.
  *
- * @param int $page_id The ID of the page we are checking.
+ * @param int $post_id The ID of the post we are checking (defaults to current post).
+ * @return bool Whether the post uses Muut or not.
+ * @author Paul Hughes
+ * @since 3.0
+ */
+function muut_post_uses_muut( $post_id = null ) {
+	if ( is_null( $post_id ) ){
+		$post_id = get_the_ID();
+	}
+
+	return Muut_Post_Utility::isMuutPost( $post_id );
+}
+
+/**
+ * Checks if the given page is th Muut forum page.
+ *
+ * @param int $page_id The ID of the page we are checking (defaults to the current page).
  * @return bool Whether the page is a Muut forum page or not.
  * @author Paul Hughes
  * @since 3.0
@@ -47,9 +63,25 @@ function muut_is_forum_page( $page_id = null ) {
 }
 
 /**
- * Gets the forum name saved for a given forum page.
+ * Checks if the given page is a Channel embed.
  *
- * @param int $page_id The ID of the page we are retrieving the forum for.
+ * @param int $page_id The ID of the page we are checking (defaults to the current page).
+ * @return bool Whether the page is a Muut channel embed page.
+ * @author Paul Hughes
+ * @since 3.0
+ */
+function muut_is_channel_page( $page_id = null ) {
+	if ( is_null( $page_id ) ){
+		$page_id = get_the_ID();
+	}
+
+	return Muut_Post_Utility::isMuutChannelPage( $page_id );
+}
+
+/**
+ * Gets the path for a given Channel page.
+ *
+ * @param int $page_id The ID of the page we are retrieving the path for.
  * @return string|false The name of the remote forum registered to the page or false if it is not a forum page.
  * @author Paul Hughes
  * @since 3.0
