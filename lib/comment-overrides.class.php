@@ -267,7 +267,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 					);
 					$response = wp_remote_get( $api_call, $fetch_args );
 
-					if ( is_wp_error( $response ) ) {
+					if ( is_wp_error( $response ) && ( muut()->isInDevelopMode() || !apply_filters( 'muut_suppress_api_errors', true ) ) ) {
 						error_log( 'Something went wrong fetching Muut API: ' . $response->get_error_message() );
 					} else {
 						if ( wp_remote_retrieve_response_code( $response ) == 200 ) {

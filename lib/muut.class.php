@@ -1043,6 +1043,17 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 		}
 
+		/**
+		 * Checks if Muut is in develop mode.
+		 *
+		 * @return bool Whether Muut is in develop mode.
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function isInDevelopMode() {
+			return $this->developMode;
+		}
+
 
 	}
 	/**
