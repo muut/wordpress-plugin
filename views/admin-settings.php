@@ -10,11 +10,10 @@ $current_language = muut()->getOption( 'language', 'en' );
 ?>
 
 <div class="wrap">
-	<h2><?php _e( 'Muut', 'muut' ); ?></h2>
-	<form method="post">
+	<h2><?php _e( 'Muut', 'muut' ); ?> <span class="admin-subheader-to-right"><?php _e( 'Forums and commenting re-imagined.', 'muut' ); ?></span></h2>
+	<form method="post" id="muut_settings_form">
 		<input type="hidden" name="muut_settings_save" value="true" />
 		<?php wp_nonce_field( 'muut_settings_save', 'muut_settings_nonce' ); ?>
-		<h3><?php _e( 'Forums and commenting re-imagined.', 'muut' ); ?></h3>
 <?php if ( !muut()->getForumName() ): ?>
 		<p><?php printf( __( 'Please enter the name of your Muut forum. If you don\'t have one, please %ssetup now%s!', 'muut' ), '<a href="https://muut.com/setup/" target="_blank">', '</a>' ); ?></p>
 		<p><?php _e( 'You can have any number of forums, users, or commenting pages. No traffic limits: 10, 1,000, or 100,000,000 loads a day, for free.', 'muut' ); ?></p>

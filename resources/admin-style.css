@@ -20,6 +20,22 @@ span.disabled input[type=text]
     margin-top: 10px;
 }
 
+span.admin-subheader-to-right {
+    font-size: .6em;
+    margin-left: 15px;
+    color: #999;
+}
+
+#muut_settings_form table.form-table th,
+#muut_settings_form table.form-table td {
+    padding: 8px 20px 8px 0;
+    vertical-align: middle;
+}
+
+#muut_settings_form h3.title {
+    margin-top: 2.5em;
+}
+
 span.right-justify-float {
     float:right;
     font-weight: normal;
