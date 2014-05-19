@@ -84,7 +84,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 		}
 
 		/**
-		 * The method for adding all filters regarding the custom navigation admin.
+		 * The method for adding all filters regarding the admin post editing.
 		 *
 		 * @return void
 		 * @author Paul Hughes
