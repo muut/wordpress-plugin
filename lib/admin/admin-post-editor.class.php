@@ -127,7 +127,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 					'meta_name' => 'commenting_settings',
 					'template_location' => muut()->getPluginPath() . 'views/blocks/metabox-tab-commenting.php',
 					'enabled_callback' => array( $this, 'isCommentingTabEnabled' ),
-					'enable_text' => __( 'Enable Muut commenting', 'muut' ),
+					'enable_text' => __( 'Use Muut for commenting', 'muut' ),
 				),
 				'channel' => array(
 					'label' => __( 'Channel', 'muut' ),
