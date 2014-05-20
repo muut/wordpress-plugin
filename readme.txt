@@ -41,7 +41,10 @@ You can, although we are planning to make it easier in a future release. For now
 
 == Screenshots ==
 
-TODO: Add screenshots here.
+1. A Muut forum
+2. Muut post commenting
+3. Muut settings page
+4. Muut post/page editor panel
 
 == Upgrade Notice ==
 
