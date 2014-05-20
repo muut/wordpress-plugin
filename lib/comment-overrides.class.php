@@ -103,10 +103,15 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 				update_post_meta( $post_id, 'muut_post_domain', apply_filters( 'muut_post_comments_domain', $domain, $post_id ) );
 			}
 
-			$path = $domain . '/' . $post_id;
-
-			if ( !isset( $post_commenting_options['type'] ) || $post_commenting_options['type'] == 'flat' ) {
-				$path .= ':comments';
+			$post = get_post( $post_id );
+			$update_timestamps = muut()->getOption( 'update_timestamps', array() );
+			if ( isset( $update_timestamps['3.0'] ) && get_post_time( 'U', false, $post ) < $update_timestamps['3.0'] ) {
+				$path = $domain . ':' . sanitize_title( $post->post_title );
+			} else {
+				$path = $domain . '/' . $post_id;
+				if ( !isset( $post_commenting_options['type'] ) || $post_commenting_options['type'] == 'flat' ) {
+					$path .= ':comments';
+				}
 			}
 
 			if ( !$full_path ) {
