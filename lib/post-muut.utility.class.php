@@ -185,11 +185,11 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 					|| ( !get_post_meta( $post_id, 'muut_last_active_tab', true )
 						&& ( ( ( $comment_count == 0
 							&& $post->post_status == 'auto-draft' ) )
-							|| muut()->getOption( 'override_all_comments' ) )
+							|| muut()->getOption( 'override_all_comments' )
 						|| ( get_post_modified_time( 'U', false, $post_id ) < $updated_to_3_timestamp
 							&& !has_shortcode( $post->post_content, 'muut' ) && !has_shortcode( $post->post_content, 'moot' )
 							&& $comment_count == 0 ) ) )
-				&& get_post( $post_id )->comment_status == 'open' ) {
+				&& get_post( $post_id )->comment_status == 'open' ) ) {
 				return true;
 			} else {
 				// For old posts, ones that existed before upgrade, lets set the comment status to closed
