@@ -1,0 +1,515 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Muut\n"
+"POT-Creation-Date: 2014-05-20 11:26-0500\n"
+"PO-Revision-Date: 2014-05-20 11:27-0500\n"
+"Last-Translator: Paul Hughes <paul@paulalexanderhughes.com>\n"
+"Language-Team: Paul Hughes <paul@paulalexanderhughes.com>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.5\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: lib/admin/admin-contextual-help.class.php:96
+msgid "Overview"
+msgstr ""
+
+#: lib/admin/admin-contextual-help.class.php:102
+msgid "General"
+msgstr ""
+
+#: lib/admin/admin-contextual-help.class.php:108
+#: lib/admin/admin-post-editor.class.php:122
+#: lib/admin/admin-post-editor.class.php:123 views/admin-settings.php:70
+msgid "Commenting"
+msgstr ""
+
+#: lib/admin/admin-contextual-help.class.php:114
+msgid "Single Sign-On"
+msgstr ""
+
+#: lib/admin/admin-contextual-help.class.php:202
+msgid "Muut Commenting"
+msgstr ""
+
+#: lib/admin/admin-contextual-help.class.php:207
+msgid "Muut Channel"
+msgstr ""
+
+#: lib/admin/admin-contextual-help.class.php:212
+msgid "Muut Forum"
+msgstr ""
+
+#: lib/admin/admin-post-editor.class.php:130
+msgid "Use Muut for commenting"
+msgstr ""
+
+#: lib/admin/admin-post-editor.class.php:133
+msgid "Channel"
+msgstr ""
+
+#: lib/admin/admin-post-editor.class.php:134
+msgid "Channel embedding"
+msgstr ""
+
+#: lib/admin/admin-post-editor.class.php:141
+msgid "Enable channel (a standalone discussion area)"
+msgstr ""
+
+#: lib/admin/admin-post-editor.class.php:144
+msgid "Forum"
+msgstr ""
+
+#: lib/admin/admin-post-editor.class.php:145
+msgid "Forum embedding"
+msgstr ""
+
+#: lib/admin/admin-post-editor.class.php:152
+#: views/blocks/help-tab-post-editor-forum.php:14
+msgid "Enable forum"
+msgstr ""
+
+#: lib/admin/admin-post-editor.class.php:172 lib/muut.class.php:866
+#: lib/muut.class.php:867 views/admin-settings.php:13
+msgid "Muut"
+msgstr ""
+
+#: lib/comment-overrides.class.php:175 lib/comment-overrides.class.php:188
+#: lib/muut.class.php:487 lib/post-muut.utility.class.php:299
+msgid "Comments"
+msgstr ""
+
+#: lib/muut.class.php:483
+msgid "Go ahead!"
+msgstr ""
+
+#: lib/muut.class.php:484
+msgid "Don't do that!"
+msgstr ""
+
+#: lib/muut.class.php:638
+msgid "Arabic"
+msgstr ""
+
+#: lib/muut.class.php:639
+msgid "Brazil Portuguese"
+msgstr ""
+
+#: lib/muut.class.php:640
+msgid "Bulgarian"
+msgstr ""
+
+#: lib/muut.class.php:641
+msgid "Chinese"
+msgstr ""
+
+#: lib/muut.class.php:642
+msgid "Chinese / Taiwan"
+msgstr ""
+
+#: lib/muut.class.php:643
+msgid "Dutch"
+msgstr ""
+
+#: lib/muut.class.php:644
+msgid "English"
+msgstr ""
+
+#: lib/muut.class.php:645
+msgid "Finnish"
+msgstr ""
+
+#: lib/muut.class.php:646
+msgid "French"
+msgstr ""
+
+#: lib/muut.class.php:647
+msgid "German"
+msgstr ""
+
+#: lib/muut.class.php:648
+msgid "Hungarian"
+msgstr ""
+
+#: lib/muut.class.php:649
+msgid "Hebrew"
+msgstr ""
+
+#: lib/muut.class.php:650
+msgid "Indonesian"
+msgstr ""
+
+#: lib/muut.class.php:651
+msgid "Japanese"
+msgstr ""
+
+#: lib/muut.class.php:652
+msgid "Korean"
+msgstr ""
+
+#: lib/muut.class.php:653
+msgid "Polish"
+msgstr ""
+
+#: lib/muut.class.php:654
+msgid "Russian"
+msgstr ""
+
+#: lib/muut.class.php:655
+msgid "Spanish"
+msgstr ""
+
+#: lib/muut.class.php:656
+msgid "Swedish"
+msgstr ""
+
+#: lib/muut.class.php:657
+msgid "Tamil"
+msgstr ""
+
+#: lib/muut.class.php:658
+msgid "Turkish"
+msgstr ""
+
+#: lib/muut.class.php:809
+msgid "Settings successfully saved."
+msgstr ""
+
+#: lib/muut.class.php:812
+msgid "Failed to save settings."
+msgstr ""
+
+#: lib/shortcodes.class.php:142
+#, php-format
+msgid ""
+"%sMuut Notice:%s It looks like you're using old shortcodes in this post. "
+"Check out our new %sadmin page%s to check out your alternatives, as we will "
+"not be supporting shortcodes much longer!"
+msgstr ""
+
+#: lib/shortcodes.class.php:155
+#, php-format
+msgid ""
+"%sMuut Notice:%s The [no-moot]/[no-muut] shortcode has been replaced by "
+"simply deactivating comments for a given page or post. You can do that in "
+"the Discussion metabox on this editor and then remove the shortcode from the "
+"content."
+msgstr ""
+
+#: muut.php:43
+#, php-format
+msgid "%sMuut%s plugin failed to initialize.%s"
+msgstr ""
+
+#: views/admin-post-metabox.php:73
+#, php-format
+msgid "Enabling this will disable other types of Muut embeds on this %s."
+msgstr ""
+
+#: views/admin-settings.php:13
+msgid "Forums and commenting re-imagined."
+msgstr ""
+
+#: views/admin-settings.php:18
+#, php-format
+msgid ""
+"Please enter the name of your Muut forum. If you don't have one, please "
+"%ssetup now%s!"
+msgstr ""
+
+#: views/admin-settings.php:19
+msgid ""
+"You can have any number of forums, users, or commenting pages. No traffic "
+"limits: 10, 1,000, or 100,000,000 loads a day, for free."
+msgstr ""
+
+#: views/admin-settings.php:25 views/blocks/help-tab-settings-general.php:11
+msgid "Forum Name"
+msgstr ""
+
+#: views/admin-settings.php:36
+msgid "Continue"
+msgstr ""
+
+#: views/admin-settings.php:41 views/blocks/help-tab-settings-general.php:15
+msgid "Language"
+msgstr ""
+
+#: views/admin-settings.php:56
+#, php-format
+msgid "Allow search engines to crawl discussions at %s"
+msgstr ""
+
+#: views/admin-settings.php:64 views/blocks/metabox-tab-forum.php:29
+#, php-format
+msgid "Current forum page is %s"
+msgstr ""
+
+#: views/admin-settings.php:76
+#: views/blocks/help-tab-settings-commenting.php:11
+msgid "Use Muut for post commenting"
+msgstr ""
+
+#: views/admin-settings.php:82
+msgid "Use Muut commenting on posts with existing comments (data not deleted)"
+msgstr ""
+
+#: views/admin-settings.php:87
+msgid "Single Sign-on"
+msgstr ""
+
+#: views/admin-settings.php:94
+msgid "Enabled"
+msgstr ""
+
+#: views/admin-settings.php:99
+msgid "API Key"
+msgstr ""
+
+#: views/admin-settings.php:107
+msgid "Secret Key"
+msgstr ""
+
+#: views/admin-settings.php:115
+#, php-format
+msgid ""
+"Upgrade to Muut Developer to use the WordPress authentication system for "
+"your forum.%s No logging in twice—WordPress users automatically become Muut "
+"users."
+msgstr ""
+
+#: views/admin-settings.php:116
+#, php-format
+msgid "%sUpgrade to Developer%s"
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-channel.php:10
+msgid ""
+"This tab is used to embed a single channel at this location. It acts like "
+"Channels on the main forum, but the forum's navigation is not visible. It "
+"will generate the channel path and name by default, based on the page slug, "
+"or you can enter a custom channel path if you want to embed an existing one, "
+"for example."
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-channel.php:14
+#, php-format
+msgid "Enable channel%s (a standalone discussion area)"
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-channel.php:15
+msgid ""
+"Check this to enable a standalone Muut channel embed for the page. This will "
+"deactivate the other two tabs."
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-channel.php:18
+#: views/blocks/help-tab-post-editor-forum.php:18
+#: views/blocks/metabox-tab-channel.php:25
+#: views/blocks/metabox-tab-forum.php:34
+msgid "Hide online users"
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-channel.php:19
+#: views/blocks/help-tab-post-editor-forum.php:19
+msgid ""
+"Hides the \"Online users\" section. Online status (green dot) is still shown "
+"in the avatars for users who didn't hide it."
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-channel.php:22
+#: views/blocks/help-tab-post-editor-commenting.php:26
+#: views/blocks/help-tab-post-editor-forum.php:22
+#: views/blocks/metabox-tab-channel.php:26
+#: views/blocks/metabox-tab-commenting.php:33
+#: views/blocks/metabox-tab-forum.php:35
+msgid "Disable image uploads"
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-channel.php:23
+#: views/blocks/help-tab-post-editor-commenting.php:27
+#: views/blocks/help-tab-post-editor-forum.php:23
+msgid ""
+"Linking to external images is still possible when uploads are disabled. "
+"Images are always displayed in gallery view."
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-commenting.php:10
+msgid ""
+"This tab can be used to set up Muut commenting on the page (or post). It is "
+"the only tab that is visible on all post types (not just pages)."
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-commenting.php:14
+msgid "Enable Muut commenting"
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-commenting.php:15
+msgid ""
+"Check this to enable Muut commenting for the page or post. If on a page, it "
+"will deactivate the other two tabs."
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-commenting.php:18
+#, php-format
+msgid "Flat%s commenting"
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-commenting.php:19
+msgid ""
+"A commenting section where all the posts appear in a single thread and will "
+"be listed in chronological order from top to bottom."
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-commenting.php:22
+#, php-format
+msgid "Threaded%s commenting"
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-commenting.php:23
+msgid ""
+"A commenting section where top level comments can have one level of replies. "
+"The threads with the newest replies appear on top."
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-forum.php:10
+msgid ""
+"By using this tab, you will embed the full Muut forum using the rich user "
+"interface, which also allows a truly customizable look and feel using CSS."
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-forum.php:15
+msgid ""
+"Check this to enable the embed for the full Muut forum. It includes Muut's "
+"rich interface that is completely customizable with CSS."
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-forum.php:26
+msgid "Show Comments"
+msgstr ""
+
+#: views/blocks/help-tab-post-editor-forum.php:27
+#, php-format
+msgid ""
+"Shows a channel called %sComments%s at the bottom of the forum navigation "
+"that contains every active commenting section from posts and pages on the "
+"website. Comment threads that a user participated in or watched will always "
+"show up in her personal \"My feed\" regardless of this setting."
+msgstr ""
+
+#: views/blocks/help-tab-settings-commenting.php:12
+msgid "Replaces default Wordpress commenting."
+msgstr ""
+
+#: views/blocks/help-tab-settings-commenting.php:15
+msgid "Use Muut commenting on posts with existing comments"
+msgstr ""
+
+#: views/blocks/help-tab-settings-commenting.php:16
+#, php-format
+msgid ""
+"Posts that already have comments using the default WordPress discussion "
+"system will not default to using Muut. This can be changed on a post-by-post "
+"bases using the %sCommenting%s tab in the Muut metabox for that post."
+msgstr ""
+
+#: views/blocks/help-tab-settings-general.php:12
+#, php-format
+msgid ""
+"This is the forum name you registered with Muut.%sForum name:%smyforumname%s"
+msgstr ""
+
+#: views/blocks/help-tab-settings-general.php:16
+#, php-format
+msgid ""
+"This is the language for all the Muut embeds. The plugin itself uses the "
+"language set for your entire WordPress website. Not seeing your language? "
+"Find out how to provide it yourself %shere!%s"
+msgstr ""
+
+#: views/blocks/help-tab-settings-general.php:19
+msgid "Allow search engines to crawl discussions at"
+msgstr ""
+
+#: views/blocks/help-tab-settings-general.php:20
+msgid ""
+"This setting should generally not be touched. When checked, it allows search "
+"engines to index your discussions under your domain as well."
+msgstr ""
+
+#: views/blocks/help-tab-settings-overview.php:9
+#, php-format
+msgid ""
+"If you have already have a Muut forum, you can enter your forum name on the "
+"settings page right away. If not, you'll have to set up a %snew forum%s at "
+"the Muut website first."
+msgstr ""
+
+#: views/blocks/help-tab-settings-overview.php:10
+msgid ""
+"Once you have saved your forum, you can edit the other various settings for "
+"your implementation and you can go ahead and add a new page."
+msgstr ""
+
+#: views/blocks/help-tab-settings-sidebar.php:10
+msgid "For more information"
+msgstr ""
+
+#: views/blocks/help-tab-settings-sidebar.php:13
+msgid "Muut Documentation"
+msgstr ""
+
+#: views/blocks/help-tab-settings-sidebar.php:16
+msgid "Setup New Forum"
+msgstr ""
+
+#: views/blocks/help-tab-settings-sso.php:10
+#, php-format
+msgid ""
+"Single Sign-On (SSO) let's you use WordPress registration and login instead "
+"of Muut's. For this to work you need to %supgrade%s your forums to support "
+"SSO and then input the public/private keypair to the settings."
+msgstr ""
+
+#: views/blocks/help-tab-settings-sso.php:13
+msgid ""
+"Grab the keys directly from the forum frontend (either on your embed or at "
+"muut.com) by clicking the \"Settings\" link and then opening the \"Developer"
+"\" tab."
+msgstr ""
+
+#: views/blocks/help-tab-settings-sso.php:16
+msgid ""
+"After these fields are filled the SSO is enabled on all the forum and "
+"commenting instances: be it automatically generated or installed with "
+"shortcode."
+msgstr ""
+
+#: views/blocks/metabox-tab-channel.php:30
+msgid "Channel Path"
+msgstr ""
+
+#: views/blocks/metabox-tab-channel.php:31
+#, php-format
+msgid "%sdefault%s"
+msgstr ""
+
+#: views/blocks/metabox-tab-commenting.php:29
+msgid "Flat"
+msgstr ""
+
+#: views/blocks/metabox-tab-commenting.php:30
+msgid "Threaded"
+msgstr ""
+
+#: views/blocks/metabox-tab-forum.php:36
+msgid "Access comments from navigation"
+msgstr ""

@@ -1,0 +1,133 @@
+.muut_settings .form-table {
+    margin-left: 30px;
+}
+
+.muut_settings .form-table tr,
+.muut_settings .form-table th {
+    vertical-align: top;
+}
+
+.muut_settings .form-table tr.disabled th,
+.muut_settings .form-table tr.disabled td,
+p.disabled,
+span.disabled,
+span.disabled input[type=text]
+{
+    color: #999;
+}
+
+#muut_page_forum_settings {
+    margin-top: 10px;
+}
+
+span.admin-subheader-to-right {
+    font-size: .6em;
+    margin-left: 15px;
+    color: #999;
+}
+
+#muut_settings_form table.form-table th,
+#muut_settings_form table.form-table td {
+    padding: 8px 20px 8px 0;
+    vertical-align: middle;
+}
+
+#muut_settings_form h3.title {
+    margin-top: 2.5em;
+}
+
+span.right-justify-float {
+    float:right;
+    font-weight: normal;
+    margin-right: -18px;
+    margin-top: 2px;
+}
+
+#muut_forum_page_advanced_options {
+    display: none;
+}
+
+.muut_admin_wrapper p,
+.muut_admin_wrapper ul li {
+    line-height: 1.9em;
+}
+
+.muut_admin_wrapper span.bullet-title {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.muut_admin_wrapper ul {
+    margin-left: 40px;
+    list-style: circle;
+}
+
+.muut-tab-panel {
+    max-height: none;
+}
+
+.muut-tab-panel.disabled .enabled_tab_wrapper,
+.muut-tab-panel.enabled .disabled_tab_wrapper{
+    display: none;
+}
+
+.muut-tab-panel.disabled .disabled_tab_wrapper,
+.muut-tab-panel.enabled .enabled_tab_wrapper
+{
+    display: block;
+}
+
+#muut_metabox_tabs_list {
+    margin-bottom: 5px;
+}
+
+#muut_metabox_tabs_list li.ui-state-active a,
+#muut_metabox_tabs_list li.ui-state-hover a,
+#muut_metabox_tabs_list li.ui-state-focus:focus
+{
+    outline: none;
+}
+
+.no_title_modal .ui-dialog-titlebar {
+    display: none;
+}
+
+.muut-header-logo {
+    float: left;
+    margin: 10px 10px 10px 0;
+    height: 57px;
+    width: 57px;
+    background-image: url( '//muut.com/apple-touch-icon-57x57-precomposed.png' );
+}
+
+#muut_develop_actions_wrapper {
+    padding: 10px;
+}
+
+#muut_develop_actions {
+    background-color: #FFD6AD;
+    border: 1px solid #FF9933;
+    padding: 8px;
+    margin-top: 30px;
+}
+
+#muut_develop_actions a {
+    font-weight: bold;
+}
+
+.muut_metabox_radio {
+    display: inline-block;
+    margin-right: 12px;
+}
+
+span.checkbox_row {
+    display: block;
+    margin-bottom: 5px;
+}
+span.description {
+    font-style: italic;
+}
+
+.text-input-label {
+    font-weight: bold;
+}
