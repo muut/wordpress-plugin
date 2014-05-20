@@ -25,10 +25,12 @@ $channel_path = isset( $channel_settings['channel_path'] ) ? '/' . $channel_sett
 		<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[hide_online]" id="muut_channel_hide_online" value="1" <?php checked( $hide_online, '1' ); ?> /><label for="muut_channel_hide_online"><?php _e( 'Hide online users', 'muut' ); ?></label></span>
 		<span class="checkbox_row"><input type="checkbox" name="<?php echo $meta_name; ?>[disable_uploads]" id="muut_channel_disable_uploads" value="1" <?php checked( $disable_uploads, '1' ); ?> /><label for="muut_channel_disable_uploads"><?php _e( 'Disable image uploads', 'muut' ); ?></label></span>
 	</p>
+	<?php if ( apply_filters( 'muut_show_channel_tab_channel_path_field', false ) ) { ?>
 	<p>
 		<label for="muut_channel_channel_path" class="text-input-label"><?php _e( 'Channel Path', 'muut' ); ?></label>
 		<input type="text" name="<?php echo $meta_name; ?>[channel_path]" id="muut_channel_channel_path" value="<?php echo $channel_path; ?>" placeholder="<?php printf( __( '%sdefault%s', 'muut' ), '/(', ')' ); ?>" />
 	</p>
+	<?php } ?>
 </div>
 <div class="disabled_tab_wrapper">
 	<?php do_action( 'muut_disabled_tab_content', $tab['name'] ); ?>
