@@ -3,7 +3,7 @@
 Plugin Name: Muut
 Plugin URI: http://wordpress.org/plugins/muut/
 Description: A complete re-imagining of what online discussions should be. Realtime forums and commenting for WordPress.
-Version: 3.0-alpha
+Version: 3.0
 Author: Muut, Inc.
 Author URI: http://muut.com
 Text Domain: muut
