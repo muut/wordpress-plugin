@@ -111,13 +111,15 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 		 * @since 3.0
 		 */
 		public function doVersionThresholdActions() {
-			do_action( 'muut_before_plugin_update_actions', $this->oldVersion, $this->newVersion );
-			foreach ( $this->versionThresholds as $version ) {
-				if (version_compare( $this->oldVersion, $version, '<' ) ) {
-					do_action( 'muut_plugin_update', $version );
+			if ( $this->oldVersion > 0 ) {
+				do_action( 'muut_before_plugin_update_actions', $this->oldVersion, $this->newVersion );
+				foreach ( $this->versionThresholds as $version ) {
+					if (version_compare( $this->oldVersion, $version, '<' ) ) {
+						do_action( 'muut_plugin_update', $version );
+					}
 				}
+				do_action( 'muut_after_plugin_update_actions', $this->oldVersion, $this->newVersion );
 			}
-			do_action( 'muut_after_plugin_update_actions', $this->oldVersion, $this->newVersion );
 		}
 
 		/**
@@ -153,7 +155,6 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 					if ( get_option( 'muut_forum_name', '' ) != '' && $this->oldVersion == '0' ) {
 						$this->oldVersion = '2.0.13';
 					}
-
 					$new_settings = array(
 						'forum_name' => get_option( 'muut_forum_name', '' ),
 						'language' => get_option( 'muut_language', '' ),
