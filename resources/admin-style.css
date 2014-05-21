@@ -36,6 +36,10 @@ span.admin-subheader-to-right {
     margin-top: 2.5em;
 }
 
+#muut_settings_form p {
+    max-width: 650px;
+}
+
 span.right-justify-float {
     float:right;
     font-weight: normal;
