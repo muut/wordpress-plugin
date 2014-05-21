@@ -67,13 +67,12 @@ jQuery(document).ready( function($) {
   // The syntax is to set a tr data-muut_requires attribute to the id of another element in the page.
   // It will run a check that is the function (in string form) stored in the same tr's data-muut_require_func attribute.
   // If true, it enables assigns that tr the class "disabled" and any inputs in that tr are disabled.
-  $('body.toplevel_page_muut tr[data-muut_requires], body.toplevel_page_muut .muut_requires_input_block').each(function(){
+  $('body.toplevel_page_muut tr[data-muut_requires], ' +
+    'body.toplevel_page_muut th[data-muut_requires], ' +
+    'body.toplevel_page_muut .muut_requires_input_block').each(function(){
     $(this).check_requires_fields();
   });
 
-  $('body.post-type-page span.muut_requires_input_block').each(function () {
-    $(this).check_requires_fields();
-  });
 
   // Functionality for the Advanced Options.
   $('#muut_forum_page_advanced_options_link').on('click', function() {
