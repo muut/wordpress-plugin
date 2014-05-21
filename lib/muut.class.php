@@ -327,7 +327,7 @@ if ( !class_exists( 'Muut' ) ) {
 					'<IfModule mod_rewrite.c>',
 					'RewriteEngine On',
 					'RewriteBase /',
-					'RewriteRule ^i/(' . $this->getForumName() . ')(/.*)?$ http://' . self::MUUTSERVERS . '/i/$1$2 [P]',
+					'RewriteRule ^i/(' . $this->getForumName() . ')(/.*)?$ ' . $this->getProxyContentServer() . '/$1$2 [P]',
 					'RewriteRule ^m/(.*)$ http://' . self::MUUTSERVERS . '/m/$1 [P]',
 					'</IfModule>',
 				);
@@ -354,7 +354,7 @@ if ( !class_exists( 'Muut' ) ) {
 		public function addProxyRewritesFilter( $rules ) {
 			$permastruct = get_option( 'permalink_structure', '' );
 
-			$muut_rules = "RewriteRule ^i/(" . $this->getForumName() . ")(/.*)?\$ http://" . self::MUUTSERVERS . "/i/\$1\$2 [P]\n";
+			$muut_rules = "RewriteRule ^i/(" . $this->getForumName() . ")(/.*)?\$ " . $this->getProxyContentServer() . "/\$1\$2 [P]\n";
 			$muut_rules .=	"RewriteRule ^m/(.*)$ http://" . self::MUUTSERVERS . "/m/\$1 [P]";
 
 			if ( $permastruct == '' ) {
@@ -389,6 +389,25 @@ if ( !class_exists( 'Muut' ) ) {
 				add_action( 'admin_head', array( $this, 'maybeAddRewriteRules' ) );
 			}
 			return $hard_flush;
+		}
+
+		/**
+		 * Gets proxy content server, with the http/https call for it.
+		 *
+		 * @return string The proxy content server.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getProxyContentServer() {
+			$proxy_server = 'http://';
+			if ( apply_filters( 'use_https_for_proxy', false ) ) {
+				$proxy_server = 'https://';
+			}
+			$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' )
+				? $this->getOption( 'custom_s3_bucket_name' )
+				: self::MUUTSERVERS . '/i';
+
+			return $proxy_server;
 		}
 
 		/**
@@ -847,7 +866,10 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			if ( ( isset( $settings['forum_name'] ) && $settings['forum_name'] != $this->getForumName() )
-				|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != $this->getOption( 'enable_proxy_rewrites' ) ) ) {
+				|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != $this->getOption( 'enable_proxy_rewrites' ) )
+				|| ( isset( $settings['use_custom_s3_bucket'] ) && (
+					$settings['use_custom_s3_bucket'] != $this->getOption( 'use_custom_s3_bucket' )
+					|| $settings['custom_s3_bucket_name'] != $this->getOption( 'custom_s3_bucket_name' ) ) ) ) {
 				flush_rewrite_rules( true );
 			}
 
