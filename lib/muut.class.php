@@ -547,6 +547,8 @@ if ( !class_exists( 'Muut' ) ) {
 				'subscription_secret_key' => '',
 				'subscription_use_sso' => false,
 				'enable_proxy_rewrites' => '1',
+				'use_custom_s3_bucket' => '0',
+				'custom_s3_bucket_name' => '',
 				'comments_base_domain' => $_SERVER['SERVER_NAME'],
 			) );
 
@@ -837,6 +839,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'allow_uploads_default',
 				'subscription_use_sso',
 				'enable_proxy_rewrites',
+				'use_custom_s3_bucket',
 			) );
 
 			foreach ( $boolean_settings as $boolean_setting ) {
