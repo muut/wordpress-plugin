@@ -769,7 +769,9 @@ if ( !class_exists( 'Muut' ) ) {
 
 			$options = $apply_filters ? apply_filters( 'muut_save_options', $options ) : $options;
 
-			if ( update_option( self::OPTIONNAME, $options ) ) {
+			$current_options = get_option( self::OPTIONNAME );
+
+			if ( $options == $current_options || update_option( self::OPTIONNAME, $options ) ) {
 				$this->options = null; // Refresh options array.
 				return true;
 			} else {
