@@ -225,7 +225,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		}
 
 		/**
-		 * Initializes the Field Validation untility class.
+		 * Initializes the Field Validation utility class.
 		 *
 		 * @return void
 		 * @author Paul Hughes
