@@ -50,12 +50,6 @@ $current_language = muut()->getOption( 'language', 'en' );
 						</select>
 					</td>
 				</tr>
-				<tr>
-					<th class="th-full" colspan="2">
-						<input name="setting[enable_proxy_rewrites]" type="checkbox" id="muut_enable_proxy_rewrites" value="1" <?php checked( '1', muut()->getOption( 'enable_proxy_rewrites', '1' ) ); ?> />
-						<label for="muut_enable_proxy_rewrites"><?php printf( __( 'Allow search engines to crawl discussions at %s', 'muut' ), '<strong>' . str_replace( array( 'http://', 'https://', ), '', get_site_url() ) . '</strong>.' ); ?></label>
-					</th>
-				</tr>
 <?php if ( Muut_Post_Utility::getForumPageId() ):
 	$forum_page_id = Muut_Post_Utility::getForumPageId();
 ?>
@@ -84,7 +78,39 @@ $current_language = muut()->getOption( 'language', 'en' );
 				</tr>
 			</tbody>
 		</table>
-		<h3 class="title"><?php _e( 'Single Sign-on', 'muut' ); ?></h3>
+	<h3 class="title"><?php _e( 'Search Engine Optimization (SEO)', 'muut' ); ?></h3>
+	<?php $custom_s3_field_class = muut()->getOption( 'enable_proxy_rewrites' ) ? '' : 'hidden'; ?>
+	<table class="form-table">
+		<tbody>
+		<tr>
+			<th class="th-full" colspan="2">
+				<input name="setting[enable_proxy_rewrites]" type="checkbox" id="muut_enable_proxy_rewrites" value="1" <?php checked( '1', muut()->getOption( 'enable_proxy_rewrites', '1' ) ); ?> />
+				<label for="muut_enable_proxy_rewrites"><?php printf( __( 'Allow search engines to crawl discussions at %s', 'muut' ), '<strong>' . str_replace( array( 'http://', 'https://', ), '', get_site_url() ) . '</strong>.' ); ?></label>
+			</th>
+		</tr>
+		<tr class="<?php echo $custom_s3_field_class; ?> indented" data-muut_requires="muut_enable_proxy_rewrites" data-muut_require_func="is(':checked()')">
+			<th class="th-full" colspan="2">
+				<input name="setting[use_custom_s3_bucket]" type="checkbox" id="muut_use_custom_s3_bucket" value="1" <?php checked( '1', muut()->getOption( 'use_custom_s3_bucket', '0' ) ); ?> />
+				<label for="muut_use_custom_s3_bucket"><?php printf( __( 'Serve from your own S3 Bucket (%sRequires Developer Subscription%s)', 'muut' ), '<a target="_blank" href="https://muut.com/pricing/">', '</a>' ); ?></label>
+			</th>
+		</tr>
+		<tr class="<?php echo $custom_s3_field_class; ?> indented" data-muut_requires="muut_use_custom_s3_bucket" data-muut_require_func="is(':checked()')">
+			<th scope="row">
+				<label for="muut_custom_s3_bucket_name"><?php _e( 'S3 Bucket Name', 'muut' ); ?></label>
+			</th>
+			<td>
+				<input name="setting[custom_s3_bucket_name]" type="text" id="muut_custom_s3_bucket_name" placeholder="s3.bucket.name" value="<?php echo muut()->getOption( 'custom_s3_bucket_name', '' ); ?>" />
+			</td>
+		</tr>
+		<?php $show_s3_bucket_input = muut()->getOption( 'use_custom_s3_bucket' ) ? '' : 'hidden'; ?>
+		<tr class="<?php echo $show_s3_bucket_input; ?> indented show_slow" data-muut_requires="muut_use_custom_s3_bucket" data-muut_require_func="is(':checked()')">
+			<td colspan="2">
+				<span class="description"><?php _e( 'The bucket name you enter must be the same S3 bucket registered for the forum in the Muut settings', 'muut' ); ?></span>
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	<h3 class="title"><?php _e( 'Single Sign-on', 'muut' ); ?></h3>
 		<?php $sso_field_class = muut()->getOption( 'subscription_use_sso' ) ? '' : 'hidden'; ?>
 		<table class="form-table">
 			<tbody>
@@ -114,28 +140,6 @@ $current_language = muut()->getOption( 'language', 'en' );
 		</table>
 		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( 'Upgrade to Muut Developer to use the WordPress authentication system for your forum.%s No logging in twice—WordPress users automatically become Muut users.', 'muut' ), '<br />' ); ?></p>
 		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Developer%s', 'muut' ), '<a target="_blank" href="https://muut.com/pricing/">', '</a>' ); ?></p>
-	<h3 class="title"><?php _e( 'Custom S3 Bucket', 'muut' ); ?></h3>
-	<?php $custom_s3_field_class = muut()->getOption( 'use_custom_s3_bucket' ) ? '' : 'hidden'; ?>
-	<table class="form-table">
-		<tbody>
-		<tr>
-			<th class="th-full" colspan="2">
-				<input name="setting[use_custom_s3_bucket]" type="checkbox" id="muut_use_custom_s3_bucket" value="1" <?php checked( '1', muut()->getOption( 'use_custom_s3_bucket', '0' ) ); ?> />
-				<label for="muut_use_custom_s3_bucket"><?php _e( 'Enabled', 'muut' ); ?></label>
-			</th>
-		</tr>
-		<tr class="<?php echo $custom_s3_field_class; ?>" data-muut_requires="muut_use_custom_s3_bucket" data-muut_require_func="is(':checked()')">
-			<th scope="row">
-				<label for="muut_custom_s3_bucket_name"><?php _e( 'S3 Bucket Name', 'muut' ); ?></label>
-			</th>
-			<td>
-				<input name="setting[custom_s3_bucket_name]" type="text" id="muut_custom_s3_bucket_name" placeholder="s3.bucket.name" value="<?php echo muut()->getOption( 'custom_s3_bucket_name', '' ); ?>" />
-			</td>
-		</tr>
-		</tbody>
-	</table>
-	<p class="muut_requires_input_block" data-muut_requires="muut_use_custom_s3_bucket" data-muut_require_func="is(':not(:checked)')"><?php printf( __( 'If you have a developer subscription and have set up a custom S3 Bucket for your Muut forum, you can serve content directly from that bucket rather than from %s. Once enabled, the bucket name you enter must be the same S3 bucket registered for the forum in the Muut settings.', 'muut' ), Muut::MUUTSERVERS ); ?></p>
-	<p class="muut_requires_input_block" data-muut_requires="muut_use_custom_s3_bucket" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Developer%s', 'muut' ), '<a target="_blank" href="https://muut.com/pricing/">', '</a>' ); ?></p>
 	<p class="submit">
 			<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
 		</p>

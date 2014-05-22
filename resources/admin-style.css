@@ -32,6 +32,11 @@ span.admin-subheader-to-right {
     vertical-align: middle;
 }
 
+#muut_settings_form table.form-table tr.indented td,
+#muut_settings_form table.form-table tr.indented th {
+    padding-left: 20px;
+}
+
 #muut_settings_form h3.title {
     margin-top: 2.5em;
 }
