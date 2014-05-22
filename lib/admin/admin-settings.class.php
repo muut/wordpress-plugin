@@ -241,24 +241,26 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 			switch( $name ) {
 				case 'custom_s3_bucket_name':
 					$submitted_settings = $this->getSubmittedSettings();
-					if ( isset( $submitted_settings['forum_name'] ) ) {
-						$forum_name = $submitted_settings['forum_name'];
-					} elseif ( muut()->getForumName() != '' ) {
-						$forum_name = muut()->getForumName();
-					} else {
-						$forum_name = '';
-					}
-					$url = $value . '/' . $forum_name;
-					$valid = Muut_Field_Validation::validateExternalUri( $url );
-					if ( !$valid ) {
-						$error_args = array(
-							'name' => $name,
-							'message' => __( 'Custom S3 Bucket name must be associated with a valid server.'),
-							'field' => 'muut_custom_s3_bucket_name',
-							'new_value' => $value,
-							'old_value' => get_option( $name ),
-						);
-						$this->addErrorToQueue( $error_args );
+					if ( isset( $submitted_settings['use_custom_s3_bucket'] ) && isset( $submitted_settings['enable_proxy_rewrites'] ) && $submitted_settings['use_custom_s3_bucket'] && $submitted_settings['enable_proxy_rewrites'] ) {
+						if ( isset( $submitted_settings['forum_name'] ) ) {
+							$forum_name = $submitted_settings['forum_name'];
+						} elseif ( muut()->getForumName() != '' ) {
+							$forum_name = muut()->getForumName();
+						} else {
+							$forum_name = '';
+						}
+						$url = $value . '/' . $forum_name;
+						$valid = Muut_Field_Validation::validateExternalUri( $url );
+						if ( !$valid ) {
+							$error_args = array(
+								'name' => $name,
+								'message' => __( 'Custom S3 Bucket name must be associated with a valid server.'),
+								'field' => 'muut_custom_s3_bucket_name',
+								'new_value' => $value,
+								'old_value' => get_option( $name ),
+							);
+							$this->addErrorToQueue( $error_args );
+						}
 					}
 					break;
 			}
