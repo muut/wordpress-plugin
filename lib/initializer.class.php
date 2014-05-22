@@ -240,6 +240,24 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		}
 
 		/**
+		 * Initializes the Admin Settings class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function initAdminSettings() {
+			$class = 'Muut_Admin_Settings';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/admin/admin-settings.class.php' );
+				if ( class_exists( $class ) ) {
+					Muut_Admin_Settings::instance();
+				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
 		 * Checks some things in the admin and, from there, knows which libraries to initialize.
 		 *
 		 * @return void
@@ -249,6 +267,9 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		public function adminInits() {
 			if ( version_compare( Muut::VERSION, muut()->getOption( 'current_version', '0' ), '>' ) ) {
 				$this->initUpdater();
+			}
+			if ( isset( $_GET['page'] ) && $_GET['page'] == 'muut' ) {
+				$this->initAdminSettings();
 			}
 			$this->initContextualHelp();
 			$this->initFieldValidationUtility();
