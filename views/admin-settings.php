@@ -50,15 +50,6 @@ $current_language = muut()->getOption( 'language', 'en' );
 						</select>
 					</td>
 				</tr>
-<?php if ( Muut_Post_Utility::getForumPageId() ):
-	$forum_page_id = Muut_Post_Utility::getForumPageId();
-?>
-				<tr>
-					<th class="th-full" colspan="2">
-						<p class="description"><?php printf( __( 'Current forum page is %s', 'muut' ), '<a href="' . get_edit_post_link( $forum_page_id ) . '">' . get_the_title( $forum_page_id ) . '</a>.' ); ?></p>
-					</th>
-				</tr>
-<?php endif; ?>
 			</tbody>
 		</table>
 		<h3 class="title"><?php _e( 'Commenting', 'muut' ); ?></h3>
