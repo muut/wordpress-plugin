@@ -159,7 +159,6 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'admin_init', array( $this, 'maybeAddRewriteRules' ) );
 			add_action( 'admin_menu', array( $this, 'createAdminMenuItems' ) );
 			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ) );
-			add_action( 'load-toplevel_page_' . self::SLUG, array( $this, 'saveSettings' ) );
 			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
 
 			add_action( 'init', array( $this, 'registerScriptsAndStyles' ) );
@@ -805,78 +804,6 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			return $this->setOptions( wp_parse_args( $option, $current_options ) );
-		}
-
-		/**
-		 * Saves the settings specified on the Muut settings page.
-		 *
-		 * @return void
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		public function saveSettings() {
-			if ( isset( $_POST['muut_settings_save'] )
-				&& $_POST['muut_settings_save'] == 'true'
-				&& check_admin_referer( 'muut_settings_save', 'muut_settings_nonce' )
-			) {
-				$old_options = $this->getOptions();
-
-				$settings = $this->settingsValidate( $_POST['setting'] );
-
-				// Save all the options by passing an array into setOption.
-				// Save all the options by passing an array into setOption.
-				if ( $this->setOption( $settings ) || $old_options == $this->getOptions() ) {
-					// Display success notice if they were updated or matched the previous settings.
-					$this->queueAdminNotice( 'updated', __( 'Settings successfully saved.', 'muut' ) );
-				} else {
-					// Display error if the settings failed to save.
-					$this->queueAdminNotice( 'error', __( 'Failed to save settings.', 'muut' ) );
-				}
-			}
-		}
-
-		/**
-		 * Deals with settings-specific validation functionality.
-		 *
-		 * @param array $settings an array of key => value pairs that define what settings are being changed to.
-		 * @return array A modified array defining the settings after validation.
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		protected function settingsValidate( $settings ) {
-
-			if ( isset( $_POST['initial_save'] ) ) {
-				return apply_filters( 'muut_settings_initial_save', apply_filters( 'muut_settings_validated', $settings ) );
-			}
-
-			$boolean_settings = apply_filters( 'muut_boolean_settings', array(
-				'replace_comments',
-				'use_threaded_commenting',
-				'override_all_comments',
-				'is_threaded_default',
-				'show_online_default',
-				'allow_uploads_default',
-				'subscription_use_sso',
-				'enable_proxy_rewrites',
-				'use_custom_s3_bucket',
-			) );
-
-			foreach ( $boolean_settings as $boolean_setting ) {
-				$settings[$boolean_setting] = isset( $settings[$boolean_setting]) ? $settings[$boolean_setting] : '0';
-			}
-
-			if ( ( isset( $settings['forum_name'] ) && $settings['forum_name'] != $this->getForumName() )
-				|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != $this->getOption( 'enable_proxy_rewrites' ) )
-				|| ( isset( $settings['use_custom_s3_bucket'] ) && (
-					$settings['use_custom_s3_bucket'] != $this->getOption( 'use_custom_s3_bucket' )
-					|| $settings['custom_s3_bucket_name'] != $this->getOption( 'custom_s3_bucket_name' ) ) ) ) {
-				flush_rewrite_rules( true );
-			}
-
-			// If the Secret Key setting does not get submitted (i.e. is disabled), make sure to erase its value.
-			$settings['subscription_secret_key'] = isset( $settings['subscription_secret_key']) ? $settings['subscription_secret_key'] : '';
-
-			return apply_filters( 'muut_settings_validated', $settings );
 		}
 
 		/**
