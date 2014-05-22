@@ -225,6 +225,21 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		}
 
 		/**
+		 * Initializes the Field Validation untility class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function initFieldValidationUtility() {
+			$class = 'Muut_Field_Validation';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/admin/admin-field-validation.utility.class.php' );
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
 		 * Checks some things in the admin and, from there, knows which libraries to initialize.
 		 *
 		 * @return void
@@ -236,6 +251,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 				$this->initUpdater();
 			}
 			$this->initContextualHelp();
+			$this->initFieldValidationUtility();
 		}
 	}
 }
