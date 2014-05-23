@@ -101,7 +101,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 		<tr class="<?php echo $custom_s3_field_class; ?> indented" data-muut_requires="muut_enable_proxy_rewrites" data-muut_require_func="is(':checked()')">
 			<th class="th-full" colspan="2">
 				<input name="setting[use_custom_s3_bucket]" type="checkbox" id="muut_use_custom_s3_bucket" value="1" <?php checked( '1', $display_values['use_custom_s3_bucket'] ); ?> />
-				<label for="muut_use_custom_s3_bucket"><?php printf( __( 'Serve from your own S3 Bucket (%sRequires Developer Subscription%s)', 'muut' ), '<a target="_blank" href="https://muut.com/pricing/">', '</a>' ); ?></label>
+				<label for="muut_use_custom_s3_bucket"><?php printf( __( 'Serve from your own S3 Bucket (%sRequires Developer Subscription%s)', 'muut' ), '<a class="muut_upgrade_to_developer_link" href="#">', '</a>' ); ?></label>
 			</th>
 		</tr>
 		<tr class="<?php echo $custom_s3_field_class; ?> indented" data-muut_requires="muut_use_custom_s3_bucket" data-muut_require_func="is(':checked()')">
@@ -149,7 +149,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 			</tbody>
 		</table>
 		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( 'Upgrade to Muut Developer to use the WordPress authentication system for your forum.%s No logging in twice—WordPress users automatically become Muut users.', 'muut' ), '<br />' ); ?></p>
-		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Developer%s', 'muut' ), '<a target="_blank" href="https://muut.com/pricing/">', '</a>' ); ?></p>
+		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Developer%s', 'muut' ), '<a class="muut_upgrade_to_developer_link" href="#">', '</a>' ); ?></p>
 	<p class="submit">
 			<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
 		</p>
