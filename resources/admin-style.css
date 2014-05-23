@@ -140,3 +140,8 @@ span.description {
 .text-input-label {
     font-weight: bold;
 }
+
+#muut_settings_form .muut_error_field {
+    border-color: #ff7777;
+    background-color: #ffF5f5;
+}

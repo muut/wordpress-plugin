@@ -75,6 +75,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 			add_action( 'load-toplevel_page_' . Muut::SLUG, array( $this, 'saveSettings' ) );
 			add_action( 'admin_notices', array( $this, 'prepareAdminNotices' ), 9 );
 			add_action( 'muut_validate_setting', array( $this, 'validateSettings' ), 10, 2 );
+			add_action( 'admin_print_scripts', array( $this, 'printJsFieldNames') );
 		}
 
 		/**
@@ -254,18 +255,42 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 						if ( !$valid ) {
 							$error_args = array(
 								'name' => $name,
-								'message' => __( 'Custom S3 Bucket name must be associated with a valid server.'),
+								'message' => __( 'Custom S3 Bucket name must be associated with a valid server. Make sure it matches the bucket you set up with Muut from your forum page settings.'),
 								'field' => 'muut_custom_s3_bucket_name',
 								'new_value' => $value,
 								'old_value' => get_option( $name ),
 							);
 							$this->addErrorToQueue( $error_args );
+
+							$value = $submitted_settings['custom_s3_bucket_name'];
 						}
 					}
 					break;
 			}
 
 			return $value;
+		}
+
+		/**
+		 * Prints the field names that need to be assigned the "muut_field_error" class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function printJsFieldNames() {
+			if ( count( $this->errorQueue ) > 0 ) {
+				error_log( 'got there' );
+				$error_fields = array();
+				foreach ( $this->errorQueue as $error ) {
+					$error_fields[] = $error['field'];
+				}
+
+				$error_field_list = '"' . join( '"," ', $error_fields ) . '"';
+				echo '<script type="text/javascript">';
+				echo 'var muut_error_fields = [' . $error_field_list . '];';
+				echo '</script>';
+			}
 		}
 
 		/**
