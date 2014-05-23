@@ -76,19 +76,6 @@ jQuery(document).ready( function($) {
   };
   check_all_requires_fields();
 
-  $('#muut_enable_proxy_rewrites').on('change', function() {
-    if (!$(this).is(':checked') && $('#muut_use_custom_s3_bucket').is(':checked')) {
-      $('#muut_use_custom_s3_bucket').prop('checked', false);
-      check_all_requires_fields();
-    }
-  });
-
-  $('#muut_use_custom_s3_bucket').on('change', function() {
-    if ($(this).is(':checked') && !$('#muut_enable_proxy_rewrites').is(':checked')) {
-      $('#muut_enable_proxy_rewrites').prop('checked', true);
-    }
-  });
-
   // Functionality for the Advanced Options.
   $('#muut_forum_page_advanced_options_link').on('click', function() {
     $('#muut_forum_page_advanced_options').toggle();
