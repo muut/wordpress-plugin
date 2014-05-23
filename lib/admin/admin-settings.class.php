@@ -74,7 +74,6 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		public function addActions() {
 			add_action( 'load-toplevel_page_' . Muut::SLUG, array( $this, 'saveSettings' ) );
 			add_action( 'admin_notices', array( $this, 'prepareAdminNotices' ), 9 );
-			add_action( 'muut_validate_setting', array( $this, 'validateSettings' ), 10, 2 );
 			add_action( 'admin_print_scripts', array( $this, 'printJsFieldNames') );
 		}
 
@@ -86,7 +85,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 * @since 3.0
 		 */
 		public function addFilters() {
-
+			add_filter( 'muut_validate_setting', array( $this, 'validateSettings' ), 10, 2 );
 		}
 
 		/**
@@ -133,6 +132,17 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		}
 
 		/**
+		 * Gets the error queue.
+		 *
+		 * @return array The error queue
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getErrorQueue() {
+			return apply_filters( 'muut_get_error_queue', $this->errorQueue );
+		}
+
+		/**
 		 * Deals with settings-specific validation functionality.
 		 *
 		 * @param array $settings an array of key => value pairs that define what settings are being changed to.
@@ -173,9 +183,9 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 			// If the Secret Key setting does not get submitted (i.e. is disabled), make sure to erase its value.
 			$settings['subscription_secret_key'] = isset( $settings['subscription_secret_key']) ? $settings['subscription_secret_key'] : '';
 
-			foreach ( $settings as $name => $value ) {
-				apply_filters( 'muut_validate_setting_' . $name, $value );
-				apply_filters( 'muut_validate_setting', $value, $name );
+			foreach ( $settings as $name => &$value ) {
+				$value = apply_filters( 'muut_validate_setting_' . $name, $value );
+				$value = apply_filters( 'muut_validate_setting', $value, $name );
 			}
 
 			return apply_filters( 'muut_settings_validated', $settings );
@@ -258,11 +268,11 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 								'message' => __( 'Custom S3 Bucket name must be associated with a valid server. Make sure it matches the bucket you set up with Muut from your forum page settings.'),
 								'field' => 'muut_custom_s3_bucket_name',
 								'new_value' => $value,
-								'old_value' => get_option( $name ),
+								'old_value' => muut()->getOption( $name ),
 							);
 							$this->addErrorToQueue( $error_args );
 
-							$value = $submitted_settings['custom_s3_bucket_name'];
+							$value = $error_args['old_value'];
 						}
 					}
 					break;
@@ -276,11 +286,10 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since 3.0
+		 * @since NEXT_RELEASE
 		 */
 		public function printJsFieldNames() {
 			if ( count( $this->errorQueue ) > 0 ) {
-				error_log( 'got there' );
 				$error_fields = array();
 				foreach ( $this->errorQueue as $error ) {
 					$error_fields[] = $error['field'];
