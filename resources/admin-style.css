@@ -145,3 +145,8 @@ span.description {
     border-color: #ff7777;
     background-color: #ffF5f5;
 }
+
+#muut_s3_requirement_paragraph {
+    visibility: hidden;
+    position: absolute;
+}

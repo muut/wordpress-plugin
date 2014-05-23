@@ -113,7 +113,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 			</td>
 		</tr>
 		<?php $show_s3_bucket_input = muut()->getOption( 'use_custom_s3_bucket' ) ? '' : 'hidden'; ?>
-		<tr class="<?php echo $show_s3_bucket_input; ?> indented show_slow" data-muut_requires="muut_use_custom_s3_bucket" data-muut_require_func="is(':checked()')">
+		<tr class="<?php echo $show_s3_bucket_input; ?> indented show_slow" id="muut_s3_requirement_paragraph" data-muut_requires="muut_use_custom_s3_bucket" data-muut_require_func="is(':checked()')">
 			<td colspan="2">
 				<span class="description"><?php _e( 'The bucket name you enter must be the same S3 bucket registered for the forum in the Muut settings', 'muut' ); ?></span>
 			</td>

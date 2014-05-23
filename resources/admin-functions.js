@@ -94,8 +94,14 @@ jQuery(document).ready( function($) {
     $('#muut_forum_page_advanced_options').toggle();
   });
 
+  $('#muut_custom_s3_bucket_name').on('focus', function() {
+      $('#muut_s3_requirement_paragraph').css('visibility', 'visible');
+  }).on('focusout', function() {
+    $('#muut_s3_requirement_paragraph').css('visibility', 'hidden');
+  });
+
   // Functionality for outlining fields with errors on the settings page.
-  if ( muut_error_fields instanceof Array ) {
+  if ( typeof muut_error_fields !== 'undefined' && muut_error_fields instanceof Array ) {
     for(index=0; index<muut_error_fields.length; index++) {
       $('#' + muut_error_fields[index]).addClass('muut_error_field').on('focusin', function(e){
         $(this).on('keydown', function(e) {
