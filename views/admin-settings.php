@@ -61,7 +61,7 @@ $current_language = muut()->getOption( 'language', 'en' );
 						<label for="muut_replace_comments"><?php _e( 'Use Muut for post commenting', 'muut' ); ?></label>
 					</th>
 				</tr>
-				<tr data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')">
+				<tr class="indented" data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')">
 					<th class="th-full" colspan="2">
 						<input name="setting[override_all_comments]" type="checkbox" id="muut_override_all_comments" value="1" <?php checked( '1', muut()->getOption( 'override_all_comments', '0' ) ); ?> />
 						<label for="muut_override_all_comments"><?php _e( 'Use Muut commenting on posts with existing comments (data not deleted)', 'muut' ); ?></label>
@@ -111,7 +111,7 @@ $current_language = muut()->getOption( 'language', 'en' );
 					<label for="muut_subscription_use_sso"><?php _e( 'Enabled', 'muut' ); ?></label>
 				</th>
 			</tr>
-			<tr class="<?php echo $sso_field_class; ?>" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':checked()')">
+			<tr class="<?php echo $sso_field_class; ?> indented" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':checked()')">
 				<th scope="row">
 					<label for="muut_subscription_api_key"><?php _e( 'API Key', 'muut' ); ?></label>
 				</th>
@@ -119,7 +119,7 @@ $current_language = muut()->getOption( 'language', 'en' );
 					<input name="setting[subscription_api_key]" type="text" id="muut_subscription_api_key" value="<?php echo muut()->getOption( 'subscription_api_key', '' ); ?>" />
 				</td>
 			</tr>
-			<tr class="<?php echo $sso_field_class; ?>" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':checked()')">
+			<tr class="<?php echo $sso_field_class; ?> indented" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':checked()')">
 				<th scope="row">
 					<label for="muut_subscription_secret_key"><?php _e( 'Secret Key', 'muut' ); ?></label>
 				</th>
