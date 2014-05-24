@@ -79,6 +79,11 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			add_action( 'admin_init', array( $this, 'adminInits' ), 3 );
 			add_action( 'load-post.php', array( $this, 'initPostEditor') );
 			add_action( 'load-post-new.php', array( $this, 'initPostEditor') );
+
+			// If the escaped fragment parameter has been passed in the URL (google bot).
+			if ( isset( $_GET['_escaped_fragment_'] ) ) {
+				add_action( 'init', array( $this, 'initEscapedFragments' ) );
+			}
 		}
 
 		/**
@@ -183,6 +188,24 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 				require_once( muut()->getPluginPath() . 'lib/shortcodes.class.php' );
 				if ( class_exists( $class ) ) {
 					Muut_Shortcodes::instance();
+				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the Muut Escaped Fragments class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function initEscapedFragments() {
+			$class = 'Muut_Escaped_Fragments';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/escaped-fragments.class.php' );
+				if ( class_exists( $class ) ) {
+					Muut_Escaped_Fragments::instance();
 				}
 				$this->alreadyInit[] = $class;
 			}
