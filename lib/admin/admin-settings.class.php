@@ -18,7 +18,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
-	 * @since   3.0
+	 * @since   NEXT_RELEASE
 	 */
 	class Muut_Admin_Settings
 	{
@@ -43,7 +43,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return Muut_Admin_Settings The instance.
 		 * @author Paul Hughes
-		 * @since  3.0
+		 * @since  NEXT_RELEASE
 		 */
 		public static function instance() {
 			if ( !is_a( self::$instance, __CLASS__ ) ) {
@@ -57,7 +57,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return Muut_Admin_Settings
 		 * @author Paul Hughes
-		 * @since  3.0
+		 * @since  NEXT_RELEASE
 		 */
 		protected function __construct() {
 			$this->addActions();
@@ -69,7 +69,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since 3.0
+		 * @since NEXT_RELEASE
 		 */
 		public function addActions() {
 			add_action( 'load-toplevel_page_' . Muut::SLUG, array( $this, 'saveSettings' ) );
@@ -82,7 +82,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since 3.0
+		 * @since NEXT_RELEASE
 		 */
 		public function addFilters() {
 			add_filter( 'muut_validate_setting', array( $this, 'validateSettings' ), 10, 2 );
