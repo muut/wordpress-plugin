@@ -82,7 +82,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 
 			// If the escaped fragment parameter has been passed in the URL (google bot).
 			if ( isset( $_GET['_escaped_fragment_'] ) ) {
-				add_action( 'init', array( $this, 'initEscapedFragments' ) );
+				add_action( 'init', array( $this, 'initEscapedFragments' ), 5 );
 			}
 		}
 
