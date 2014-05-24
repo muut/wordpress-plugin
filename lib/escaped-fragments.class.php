@@ -52,8 +52,6 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		protected function __construct() {
 			$this->addActions();
 			$this->addFilters();
-
-			exit( 'Initialized' );
 		}
 
 		/**
