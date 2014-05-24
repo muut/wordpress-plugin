@@ -168,6 +168,39 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		}
 
 		/**
+		 * Gets a channel page's full index URI.
+		 *
+		 * @param int $page_id The page we are getting the remote URI for.
+		 * @return string The full index URI.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public static function getChannelIndexUri( $page_id ) {
+			if( !is_numeric( $page_id ) ) {
+				return false;
+			}
+
+			$base_uri = self::getForumIndexUri();
+
+			$uri = $base_uri . self::getChannelRemotePath( $page_id );
+
+			return apply_filters( 'muut_channel_index_uri', $uri, $page_id );
+		}
+
+		/**
+		 * Gets the forum's full index URI (muut.com or the s3 bucket content index, plus the path).
+		 *
+		 * @return string The full forum index URI.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public static function getForumIndexUri() {
+			$uri = muut()->getProxyContentServer() . '/' . muut()->getForumName() . '/';
+
+			return apply_filters( 'muut_forum_index_uri', $uri );
+		}
+
+		/**
 		 * Checks if comments and Muut commenting are enabled for a post.
 		 *
 		 * @param int $post_id The post ID we are checking.
@@ -297,13 +330,17 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 				$path = self::getChannelRemotePath( $page_id );
 				$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
 				$embed = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . muut()->getForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
+				$embed = apply_filters( 'muut_channel_embed_content', $embed, $page_id );
 			} elseif ( $type_of_embed == 'forum' ) {
 				ob_start();
 					include ( muut()->getPluginPath() . 'views/blocks/forum-page-embed.php' );
 				$embed = ob_get_clean();
+				$embed = apply_filters( 'muut_forum_page_embed_content', $embed, $page_id );
 			} else {
 				return;
 			}
+
+			$embed = apply_filters( 'muut_embed_content', $embed, $page_id );
 			if ( $echo ) {
 				echo $embed;
 			} else {
