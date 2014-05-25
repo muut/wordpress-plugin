@@ -113,7 +113,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function filterChannelIndexContent( $content, $page_id ) {
-			/*if ( $this->isUsingEscapedFragments() )  {
+			if ( $this->isUsingEscapedFragments() )  {
 				global $wp_version;
 
 				$index_uri = Muut_Post_Utility::getChannelIndexUri( $page_id );
@@ -132,7 +132,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 						$content = $response_content;
 					}
 				}
-			}*/
+			}
 
 			return $content;
 		}
