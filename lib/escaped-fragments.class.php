@@ -113,12 +113,11 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function filterChannelIndexContent( $content, $page_id ) {
-			if ( $this->isUsingEscapedFragments() )  {
+			/*if ( $this->isUsingEscapedFragments() )  {
 				global $wp_version;
 
 				$index_uri = Muut_Post_Utility::getChannelIndexUri( $page_id );
 
-				error_log( $index_uri );
 				$request_args = array(
 					'timeout' => 6,
 					'user-agent' => 'WordPress/' . $wp_version . '; Muut Plugin/' . Muut::MUUTVERSION .'; ' . home_url(),
@@ -129,10 +128,10 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 					$response_content = wp_remote_retrieve_body( $request_for_index );
 
 					if ( $response_content != '' ) {
-						$content = $response_content;
+					//	$content = $this->getIndexContent( $response_content );
 					}
 				}
-			}
+			}*/
 
 			return $content;
 		}
@@ -166,7 +165,6 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 
 				$index_uri = Muut_Comment_Overrides::instance()->getCommentsIndexUri( $post_id );
 
-				error_log( $index_uri );
 				$request_args = array(
 					'timeout' => 6,
 					'user-agent' => 'WordPress/' . $wp_version . '; Muut Plugin/' . Muut::MUUTVERSION .'; ' . home_url(),
@@ -175,13 +173,36 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 
 				if ( wp_remote_retrieve_response_code( $request_for_index ) == 200 ) {
 					$response_content = wp_remote_retrieve_body( $request_for_index );
-
 					if ( $response_content != '' ) {
-						$content = $response_content;
+						$content = $this->getFlatIndexContent( $response_content );
 					}
 				}
 			}
 			return $content;
 		}
+
+		/**
+		 * Grabs the proper markup from the return body (just the muuts) that should be rendered.
+		 *
+		 * @param string $content The markup we will be filtering.
+		 * @return string The content we actually want to display.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function getFlatIndexContent( $content ) {
+			// Make sure to only get the content we want.
+			$new_content = $content;
+			$new_content = substr( strstr( $new_content, '</header>' ), 9 );
+			$new_content = substr( $new_content, 0, strpos( $new_content, '<body>' ) );
+
+			if ( $new_content ) {
+				$content = $new_content;
+			}
+			return $content;
+		}
+
+		/**
+		 * Grabs the proper markup from the return body of the Muut indexes
+		 */
 	}
 }
