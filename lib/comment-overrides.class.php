@@ -208,7 +208,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 
 			$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '_comments"' : '';
 			$anchor = '<div id="respond"><section id="muut_comments"><a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a></section></div>';
-			$anchor = apply_filters( 'muut_comment_overrides_embed_content', $anchor, $post_id );
+			$anchor = apply_filters( 'muut_comment_overrides_embed_content', $anchor, $post_id, $post_commenting_options['type'] );
 
 
 			if ( $echo ) {

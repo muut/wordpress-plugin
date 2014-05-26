@@ -80,7 +80,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		protected function addFilters() {
 			add_filter( 'muut_channel_embed_content', array( $this, 'filterChannelIndexContent' ), 10, 2 );
 			add_filter( 'muut_forum_page_embed_content', array( $this, 'filterForumPageIndexContent' ), 10, 2 );
-			add_filter( 'muut_comment_overrides_embed_content', array( $this, 'filterCommentsOverrideIndexContent' ), 10, 2 );
+			add_filter( 'muut_comment_overrides_embed_content', array( $this, 'filterCommentsOverrideIndexContent' ), 10, 3 );
 		}
 
 		/**
@@ -113,7 +113,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function filterChannelIndexContent( $content, $page_id ) {
-			/*if ( $this->isUsingEscapedFragments() )  {
+			if ( $this->isUsingEscapedFragments() )  {
 				global $wp_version;
 
 				$index_uri = Muut_Post_Utility::getChannelIndexUri( $page_id );
@@ -128,10 +128,10 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 					$response_content = wp_remote_retrieve_body( $request_for_index );
 
 					if ( $response_content != '' ) {
-					//	$content = $this->getIndexContent( $response_content );
+						$content = $this->getThreadedIndexContent( $response_content );
 					}
 				}
-			}*/
+			}
 
 			return $content;
 		}
@@ -159,7 +159,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
-		public function filterCommentsOverrideIndexContent( $content, $post_id ) {
+		public function filterCommentsOverrideIndexContent( $content, $post_id, $type ) {
 			if ( $this->isUsingEscapedFragments() )  {
 				global $wp_version;
 
@@ -174,7 +174,17 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 				if ( wp_remote_retrieve_response_code( $request_for_index ) == 200 ) {
 					$response_content = wp_remote_retrieve_body( $request_for_index );
 					if ( $response_content != '' ) {
-						$content = $this->getFlatIndexContent( $response_content );
+						switch ( $type ) {
+							case 'threaded':
+								$remote_path = Muut_Comment_Overrides::instance()->getCommentsPath( $post_id );
+								$content = $this->getThreadedIndexContent( $response_content, $remote_path );
+								break;
+							case 'flat':
+							default:
+								$content = $this->getFlatIndexContent( $response_content );
+								break;
+
+						}
 					}
 				}
 			}
@@ -202,7 +212,30 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		}
 
 		/**
-		 * Grabs the proper markup from the return body of the Muut indexes
+		 * Grabs the proper markup from the return body of the Muut indexes for Non-flat channels.
+		 *
+		 * @param string $content The markup we will be filtering.
+		 * @return string The content we actually want to display.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
 		 */
+		protected function getThreadedIndexContent( $content, $remote_path = '' ) {
+			// Make sure to only get the content we want.
+			$new_content = $content;
+			$new_content = strstr( $new_content, '<ul id="moots">' );
+			$new_content = substr( $new_content, 0, strpos( $new_content, '</body>' ) );
+
+			if ( $remote_path != '' ) {
+				$remote_path = substr( $remote_path, 0, strrpos( $remote_path, '/' ) + 1 );
+			}
+
+			// Replace links within the threaded response with new hasbang urls (to lead to the "share" location.
+			$new_content = str_replace( '<a href="./', '<a href="' . get_permalink() . '#!/' . $remote_path, $new_content );
+
+			if ( $new_content ) {
+				$content = $new_content;
+			}
+			return $content;
+		}
 	}
 }
