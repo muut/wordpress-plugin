@@ -116,7 +116,13 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 			if ( $this->isUsingEscapedFragments() )  {
 				global $wp_version;
 
-				$index_uri = Muut_Post_Utility::getChannelIndexUri( $page_id );
+				if ( $_GET['_escaped_fragment_'] && strrpos( $_GET['_escaped_fragment_'], ':' ) > strrpos( $_GET['_escaped_fragment_'], '/' ) ) {
+					$type = 'flat';
+					$index_uri = Muut_Post_Utility::getChannelIndexUri( $page_id ) . $remote_path = substr( $_GET['_escaped_fragment_'], strrpos( $_GET['_escaped_fragment_'], ':' ) );
+				} else {
+					$type = 'threaded';
+					$index_uri = Muut_Post_Utility::getChannelIndexUri( $page_id );
+				}
 
 				$request_args = array(
 					'timeout' => 6,
@@ -128,7 +134,20 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 					$response_content = wp_remote_retrieve_body( $request_for_index );
 
 					if ( $response_content != '' ) {
-						$content = $this->getThreadedIndexContent( $response_content );
+						if ( $_GET['_escaped_fragment_'] != '' ) {
+							$remote_path = $_GET['_escaped_fragment_'];
+						} else {
+							$remote_path = Muut_Post_Utility::getChannelRemotePath( $page_id );
+						}
+						switch ( $type ) {
+							case 'flat':
+								$content = $this->getFlatIndexContent( $response_content );
+								break;
+							case 'threaded':
+							default:
+								$content = $this->getThreadedIndexContent( $response_content, $remote_path );
+								break;
+						}
 					}
 				}
 			}
@@ -163,8 +182,13 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 			if ( $this->isUsingEscapedFragments() )  {
 				global $wp_version;
 
-				$index_uri = Muut_Comment_Overrides::instance()->getCommentsIndexUri( $post_id );
-
+				if ( $_GET['_escaped_fragment_'] && strrpos( $_GET['_escaped_fragment_'], ':' ) > strrpos( $_GET['_escaped_fragment_'], '/' ) ) {
+					$type = 'flat';
+					$index_uri = Muut_Comment_Overrides::instance()->getCommentsIndexUri( $post_id ) . $remote_path = substr( $_GET['_escaped_fragment_'], strrpos( $_GET['_escaped_fragment_'], ':' ) );
+				} else {
+					$type = 'threaded';
+					$index_uri = Muut_Comment_Overrides::instance()->getCommentsIndexUri( $post_id );
+				}
 				$request_args = array(
 					'timeout' => 6,
 					'user-agent' => 'WordPress/' . $wp_version . '; Muut Plugin/' . Muut::MUUTVERSION .'; ' . home_url(),
@@ -177,7 +201,8 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 						switch ( $type ) {
 							case 'threaded':
 								$remote_path = Muut_Comment_Overrides::instance()->getCommentsPath( $post_id );
-								$content = $this->getThreadedIndexContent( $response_content, $remote_path );
+								$remote_path = substr( $remote_path, 0, strrpos( $remote_path, '/' ) + 1 );
+								$content =  $this->getThreadedIndexContent( $response_content, $remote_path );
 								break;
 							case 'flat':
 							default:
