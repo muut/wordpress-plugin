@@ -322,12 +322,12 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 				ob_start();
 					include ( muut()->getPluginPath() . 'views/blocks/forum-page-embed.php' );
 				$embed = ob_get_clean();
-				$embed = apply_filters( 'muut_forum_page_embed_content', $embed, $page_id, $path );
+				$embed = apply_filters( 'muut_forum_page_embed_content', $embed, $page_id );
 			} else {
 				return;
 			}
 
-			$embed = apply_filters( 'muut_embed_content', $embed, $page_id, $path );
+			$embed = apply_filters( 'muut_embed_content', $embed, $page_id );
 			if ( $echo ) {
 				echo $embed;
 			} else {

@@ -183,8 +183,6 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 
 			$uri = muut()->getForumIndexUri( $force_muut_server ) . $path;
 
-			error_log( $uri );
-
 			$request_for_index = wp_remote_get( $uri, $request_args );
 
 			$content = '';
