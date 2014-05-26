@@ -180,24 +180,11 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 				return false;
 			}
 
-			$base_uri = self::getForumIndexUri();
+			$base_uri = muut()->getForumIndexUri();
 
 			$uri = $base_uri . self::getChannelRemotePath( $page_id );
 
 			return apply_filters( 'muut_channel_index_uri', $uri, $page_id );
-		}
-
-		/**
-		 * Gets the forum's full index URI (muut.com or the s3 bucket content index, plus the path).
-		 *
-		 * @return string The full forum index URI.
-		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
-		 */
-		public static function getForumIndexUri() {
-			$uri = muut()->getProxyContentServer() . '/' . muut()->getForumName() . '/';
-
-			return apply_filters( 'muut_forum_index_uri', $uri );
 		}
 
 		/**
@@ -335,12 +322,12 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 				ob_start();
 					include ( muut()->getPluginPath() . 'views/blocks/forum-page-embed.php' );
 				$embed = ob_get_clean();
-				$embed = apply_filters( 'muut_forum_page_embed_content', $embed, $page_id );
+				$embed = apply_filters( 'muut_forum_page_embed_content', $embed, $page_id, $path );
 			} else {
 				return;
 			}
 
-			$embed = apply_filters( 'muut_embed_content', $embed, $page_id );
+			$embed = apply_filters( 'muut_embed_content', $embed, $page_id, $path );
 			if ( $echo ) {
 				echo $embed;
 			} else {

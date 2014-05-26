@@ -393,20 +393,36 @@ if ( !class_exists( 'Muut' ) ) {
 		/**
 		 * Gets proxy content server, with the http/https call for it.
 		 *
+		 * @param bool $force_muut_server Will force going to Muut server if set to true (rather than any s3 bucket or whatnot).
 		 * @return string The proxy content server.
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
-		public function getProxyContentServer() {
+		public function getProxyContentServer( $force_muut_server = false ) {
 			$proxy_server = 'http://';
 			if ( apply_filters( 'use_https_for_proxy', false ) ) {
 				$proxy_server = 'https://';
 			}
-			$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' )
+			$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
 				? $this->getOption( 'custom_s3_bucket_name' )
 				: self::MUUTSERVERS . '/i';
 
 			return $proxy_server;
+		}
+
+
+		/**
+		 * Gets the forum's full index URI (muut.com or the s3 bucket content index, plus the path).
+		 *
+		 * @param bool $force_muut_server Will force going to Muut server if set to true (rather than any s3 bucket or whatnot).
+		 * @return string The full forum index URI.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getForumIndexUri( $force_muut_server = false ) {
+			$uri = $this->getProxyContentServer( $force_muut_server ) . '/' . $this->getForumName() . '/';
+
+			return apply_filters( 'muut_forum_index_uri', $uri );
 		}
 
 		/**

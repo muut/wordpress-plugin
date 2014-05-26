@@ -116,42 +116,14 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 			if ( $this->isUsingEscapedFragments() )  {
 				global $wp_version;
 
-				if ( $_GET['_escaped_fragment_'] && strrpos( $_GET['_escaped_fragment_'], ':' ) > strrpos( $_GET['_escaped_fragment_'], '/' ) ) {
-					$type = 'flat';
-					$index_uri = Muut_Post_Utility::getChannelIndexUri( $page_id ) . $remote_path = substr( $_GET['_escaped_fragment_'], strrpos( $_GET['_escaped_fragment_'], ':' ) );
+				if ( $_GET['_escaped_fragment_'] ) {
+					$remote_path = $_GET['_escaped_fragment_'][0] == '/' ? substr( $_GET['_escaped_fragment_'], 1 ) : $_GET['_escaped_fragment_'];
 				} else {
-					$type = 'threaded';
-					$index_uri = Muut_Post_Utility::getChannelIndexUri( $page_id );
+					$remote_path = Muut_Post_Utility::getChannelRemotePath( $page_id );
 				}
 
-				$request_args = array(
-					'timeout' => 6,
-					'user-agent' => 'WordPress/' . $wp_version . '; Muut Plugin/' . Muut::MUUTVERSION .'; ' . home_url(),
-				);
-				$request_for_index = wp_remote_get( $index_uri, $request_args );
-
-				if ( wp_remote_retrieve_response_code( $request_for_index ) == 200 ) {
-					$response_content = wp_remote_retrieve_body( $request_for_index );
-
-					if ( $response_content != '' ) {
-						if ( $_GET['_escaped_fragment_'] != '' ) {
-							$remote_path = $_GET['_escaped_fragment_'];
-						} else {
-							$remote_path = Muut_Post_Utility::getChannelRemotePath( $page_id );
-						}
-						switch ( $type ) {
-							case 'flat':
-								$content = $this->getFlatIndexContent( $response_content );
-								break;
-							case 'threaded':
-							default:
-								$content = $this->getThreadedIndexContent( $response_content, $remote_path );
-								break;
-						}
-					}
-				}
+				$content = $this->getIndexContentForPath( $remote_path );
 			}
-
 			return $content;
 		}
 
@@ -182,35 +154,49 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 			if ( $this->isUsingEscapedFragments() )  {
 				global $wp_version;
 
-				if ( $_GET['_escaped_fragment_'] && strrpos( $_GET['_escaped_fragment_'], ':' ) > strrpos( $_GET['_escaped_fragment_'], '/' ) ) {
-					$type = 'flat';
-					$index_uri = Muut_Comment_Overrides::instance()->getCommentsIndexUri( $post_id ) . $remote_path = substr( $_GET['_escaped_fragment_'], strrpos( $_GET['_escaped_fragment_'], ':' ) );
+				if ( $_GET['_escaped_fragment_'] ) {
+					$remote_path = substr( $_GET['_escaped_fragment_'], strrpos( $_GET['_escaped_fragment_'], ':' ) );
 				} else {
-					$type = 'threaded';
-					$index_uri = Muut_Comment_Overrides::instance()->getCommentsIndexUri( $post_id );
+					$remote_path = Muut_Comment_Overrides::instance()->getCommentsPath( $post_id );
 				}
-				$request_args = array(
-					'timeout' => 6,
-					'user-agent' => 'WordPress/' . $wp_version . '; Muut Plugin/' . Muut::MUUTVERSION .'; ' . home_url(),
-				);
-				$request_for_index = wp_remote_get( $index_uri, $request_args );
 
-				if ( wp_remote_retrieve_response_code( $request_for_index ) == 200 ) {
-					$response_content = wp_remote_retrieve_body( $request_for_index );
-					if ( $response_content != '' ) {
-						switch ( $type ) {
-							case 'threaded':
-								$remote_path = Muut_Comment_Overrides::instance()->getCommentsPath( $post_id );
-								$remote_path = substr( $remote_path, 0, strrpos( $remote_path, '/' ) + 1 );
-								$content =  $this->getThreadedIndexContent( $response_content, $remote_path );
-								break;
-							case 'flat':
-							default:
-								$content = $this->getFlatIndexContent( $response_content );
-								break;
+				$content = $this->getIndexContentForPath( $remote_path );
+			}
+			return $content;
+		}
 
-						}
-					}
+		/**
+		 * Gets the body content of an index request for a given Muut path (relative path).
+		 *
+		 * @param string $path The path (relative to the registered forum name).
+		 * @param bool $force_muut_server Will bypass any S3 bucket or other setup and go directly to the muut.com index.
+		 * @return string The content.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getIndexContentForPath( $path, $force_muut_server = false ) {
+			global $wp_version;
+			$request_args = apply_filters( 'muut_request_path_index_content_args', array(
+				'timeout' => 6,
+				'user-agent' => 'WordPress/' . $wp_version . '; Muut Plugin/' . Muut::MUUTVERSION .'; ' . home_url(),
+			) );
+
+			$uri = muut()->getForumIndexUri( $force_muut_server ) . $path;
+
+			error_log( $uri );
+
+			$request_for_index = wp_remote_get( $uri, $request_args );
+
+			$content = '';
+			if ( wp_remote_retrieve_response_code( $request_for_index ) == 200 ) {
+				$response_content = wp_remote_retrieve_body( $request_for_index );
+
+				$colon_pos = strrpos( $path, ':' );
+				$last_slash_pos = strrpos( $path, '/' );
+				if ( $colon_pos && ( $colon_pos > $last_slash_pos || !$last_slash_pos ) ) {
+					$content = $this->getFlatIndexContent( $response_content );
+				} else {
+					$content = $this->getThreadedIndexContent( $response_content, $path );
 				}
 			}
 			return $content;
@@ -251,7 +237,12 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 			$new_content = substr( $new_content, 0, strpos( $new_content, '</body>' ) );
 
 			if ( $remote_path != '' ) {
-				$remote_path = substr( $remote_path, 0, strrpos( $remote_path, '/' ) + 1 );
+				$slash_strpos = strrpos( $remote_path, '/' );
+				if ( $slash_strpos ) {
+					$remote_path = substr( $remote_path, 0, $slash_strpos + 1 );
+				} else {
+					$remote_path = '';
+				}
 			}
 
 			// Replace links within the threaded response with new hasbang urls (to lead to the "share" location.

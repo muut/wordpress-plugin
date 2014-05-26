@@ -136,7 +136,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 				return false;
 			}
 
-			$base_uri = Muut_Post_Utility::getForumIndexUri();
+			$base_uri = muut()->getForumIndexUri();
 
 			$uri = $base_uri . $this->getCommentsPath( $post_id, false );
 
@@ -207,9 +207,10 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			return false;
 
 			$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '_comments"' : '';
+			$type = isset( $post_commenting_options['type'] ) && $post_commenting_options['type'] ? $post_commenting_options['type'] : 'flat';
 			$anchor = '<div id="respond"><section id="muut_comments"><a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a></section></div>';
-			$anchor = apply_filters( 'muut_comment_overrides_embed_content', $anchor, $post_id, $post_commenting_options['type'] );
-
+			$anchor = apply_filters( 'muut_comment_overrides_embed_content', $anchor, $post_id, $type );
+			$anchor = apply_filters( 'muut_embed_content', $anchor, $post_id, $type );
 
 			if ( $echo ) {
 				echo $anchor;
