@@ -133,7 +133,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function filterChannelIndexContent( $content, $page_id ) {
-			if ( $this->isUsingEscapedFragments() )  {
+			if ( $this->isUsingEscapedFragments() && apply_filters( 'muut_index_channels_on_channel_pages', true ) )  {
 				$this->context = 'channel';
 
 				if ( $_GET['_escaped_fragment_'] ) {
