@@ -182,10 +182,15 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 */
 		public function filterCommentsOverrideIndexContent( $content, $post_id, $type ) {
 			if ( $this->isUsingEscapedFragments() )  {
-				$this->context = 'commenting';
+				$post_commenting_options = Muut_Post_Utility::getPostOption( $post_id, 'commenting_settings' );
+				if ( $post_commenting_options['type'] == 'threaded' ) {
+					$this->context = 'threaded-commenting';
+				} else {
+					$this->context = 'flat-commenting';
+				}
 
 				if ( $_GET['_escaped_fragment_'] ) {
-					$remote_path = substr( $_GET['_escaped_fragment_'], strrpos( $_GET['_escaped_fragment_'], ':' ) );
+					$remote_path = $_GET['_escaped_fragment_'];
 				} else {
 					$remote_path = Muut_Comment_Overrides::instance()->getCommentsPath( $post_id );
 				}
@@ -274,7 +279,11 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		protected function getFlatIndexContent( $content ) {
 			// Make sure to only get the content we want.
 			$new_content = $content;
-			$new_content = strstr( $new_content, '<article class="seed">' );
+			if ( $this->context == 'channel' || $this->context == 'threaded-commenting' ) {
+				$new_content = strstr( $new_content, '<div id="title">' );
+			} else {
+				$new_content = strstr( $new_content, '<article class="seed">' );
+			}
 			$new_content = substr( $new_content, 0, strpos( $new_content, '<body>' ) );
 
 			if ( $new_content ) {
@@ -294,7 +303,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		protected function getThreadedIndexContent( $content, $remote_path = '' ) {
 			// Make sure to only get the content we want.
 			$new_content = $content;
-			if ( $this->context == 'channel' || $this->context == 'commenting' ) {
+			if ( $this->context == 'channel' || $this->context == 'flat-commenting' ) {
 				$new_content = strstr( $new_content, '<ul id="moots">' );
 			} else {
 				$new_content = strstr( $new_content, '<div id="title">' );
