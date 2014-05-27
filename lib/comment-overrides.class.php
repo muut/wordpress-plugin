@@ -121,6 +121,28 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			}
 		}
 
+
+
+		/**
+		 * Gets a comment section's full index URI.
+		 *
+		 * @param int $post_id The post whose comment section remote URI we are fetching.
+		 * @return string The full index URI.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getCommentsIndexUri( $post_id ) {
+			if( !is_numeric( $post_id ) ) {
+				return false;
+			}
+
+			$base_uri = muut()->getForumIndexUri();
+
+			$uri = $base_uri . $this->getCommentsPath( $post_id, false );
+
+			return apply_filters( 'muut_comments_index_uri', $uri, $post_id );
+		}
+
 		/**
 		 * Gets the proper comments template when overrides are on.
 		 *
@@ -185,7 +207,11 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			return false;
 
 			$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '_comments"' : '';
+			$type = isset( $post_commenting_options['type'] ) && $post_commenting_options['type'] ? $post_commenting_options['type'] : 'flat';
 			$anchor = '<div id="respond"><section id="muut_comments"><a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a></section></div>';
+			$anchor = apply_filters( 'muut_comment_overrides_embed_content', $anchor, $post_id, $type );
+			$anchor = apply_filters( 'muut_embed_content', $anchor, $post_id, $type );
+
 			if ( $echo ) {
 				echo $anchor;
 			} else {
