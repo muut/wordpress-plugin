@@ -272,7 +272,8 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 							);
 							$this->addErrorToQueue( $error_args );
 
-							$value = $error_args['old_value'];
+							// Unset the value, so nothing *breaks* (defaults to Muut.com indexing).
+							$value = '';
 						}
 					}
 					break;
