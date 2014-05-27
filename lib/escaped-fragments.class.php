@@ -79,7 +79,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 */
 		protected function addFilters() {
 			add_filter( 'muut_channel_embed_content', array( $this, 'filterChannelIndexContent' ), 10, 2 );
-			add_filter( 'muut_forum_page_embed_content', array( $this, 'filterForumPageIndexContent' ), 10, 2 );
+			add_filter( 'muut_forum_page_embed_content', array( $this, 'filterForumIndexContent' ), 10, 2 );
 			add_filter( 'muut_comment_overrides_embed_content', array( $this, 'filterCommentsOverrideIndexContent' ), 10, 3 );
 		}
 
@@ -114,7 +114,6 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 */
 		public function filterChannelIndexContent( $content, $page_id ) {
 			if ( $this->isUsingEscapedFragments() )  {
-				global $wp_version;
 
 				if ( $_GET['_escaped_fragment_'] ) {
 					$remote_path = $_GET['_escaped_fragment_'][0] == '/' ? substr( $_GET['_escaped_fragment_'], 1 ) : $_GET['_escaped_fragment_'];
@@ -137,7 +136,15 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function filterForumIndexContent( $content, $page_id ) {
+			if ( $this->isUsingEscapedFragments() ) {
+				if ( $_GET['_escaped_fragment_'] ) {
+					$remote_path = $_GET['_escaped_fragment_'][0] == '/' ? substr( $_GET['_escaped_fragment_'], 1 ) : $_GET['_escaped_fragment_'];
+				} else {
+					$remote_path = '';
+				}
 
+				$content = $this->getIndexContentForPath( $remote_path );
+			}
 			return $content;
 		}
 
@@ -152,7 +159,6 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 */
 		public function filterCommentsOverrideIndexContent( $content, $post_id, $type ) {
 			if ( $this->isUsingEscapedFragments() )  {
-				global $wp_version;
 
 				if ( $_GET['_escaped_fragment_'] ) {
 					$remote_path = substr( $_GET['_escaped_fragment_'], strrpos( $_GET['_escaped_fragment_'], ':' ) );
@@ -181,7 +187,13 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 				'user-agent' => 'WordPress/' . $wp_version . '; Muut Plugin/' . Muut::MUUTVERSION .'; ' . home_url(),
 			) );
 
-			$uri = muut()->getForumIndexUri( $force_muut_server ) . $path;
+			$base_uri = muut()->getForumIndexUri( $force_muut_server );
+
+			if ( $path == '' ) {
+				$base_uri = untrailingslashit( $base_uri );
+			}
+
+			$uri = $base_uri . $path;
 
 			$request_for_index = wp_remote_get( $uri, $request_args );
 
@@ -189,13 +201,40 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 			if ( wp_remote_retrieve_response_code( $request_for_index ) == 200 ) {
 				$response_content = wp_remote_retrieve_body( $request_for_index );
 
-				$colon_pos = strrpos( $path, ':' );
-				$last_slash_pos = strrpos( $path, '/' );
-				if ( $colon_pos && ( $colon_pos > $last_slash_pos || !$last_slash_pos ) ) {
-					$content = $this->getFlatIndexContent( $response_content );
+				if ( $path == '' ) {
+					$content = $this->getForumIndexContent( $response_content );
 				} else {
-					$content = $this->getThreadedIndexContent( $response_content, $path );
+					$colon_pos = strrpos( $path, ':' );
+					$last_slash_pos = strrpos( $path, '/' );
+					if ( $colon_pos && ( $colon_pos > $last_slash_pos || !$last_slash_pos ) ) {
+						$content = $this->getFlatIndexContent( $response_content );
+					} else {
+						$content = $this->getThreadedIndexContent( $response_content, $path );
+					}
 				}
+			}
+			return $content;
+		}
+
+		/**
+		 * Grabs the proper markup from the return body for Forum root that should be rendered.
+		 *
+		 * @param string $content The markup we will be filtering.
+		 * @return string The content we actually want to display.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function getForumIndexContent( $content ) {
+			// Make sure to only get the content we want.
+			$new_content = $content;
+			$new_content = strstr( $new_content, '<ul id="forums">' );
+			$new_content = substr( $new_content, 0, strpos( $new_content, '</body>' ) );
+
+			// Replace links within the threaded response with new hasbang urls (to lead to the "share" location.
+			$new_content = str_replace( '<a href="/i/' . muut()->getForumName() . '/', '<a href="' . get_permalink() . '#!/', $new_content );
+
+			if ( $new_content ) {
+				$content = $new_content;
 			}
 			return $content;
 		}
@@ -231,7 +270,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		protected function getThreadedIndexContent( $content, $remote_path = '' ) {
 			// Make sure to only get the content we want.
 			$new_content = $content;
-			$new_content = strstr( $new_content, '<ul id="moots">' );
+			$new_content = strstr( $new_content, '<div id="title">' );
 			$new_content = substr( $new_content, 0, strpos( $new_content, '</body>' ) );
 
 			if ( $remote_path != '' ) {
