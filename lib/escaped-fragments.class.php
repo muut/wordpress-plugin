@@ -67,7 +67,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @since  NEXT_RELEASE
 		 */
 		protected function addActions() {
-
+			add_action( 'wp_head', array( $this, 'printEscapedFragmentMetaRequire' ) );
 		}
 
 		/**
@@ -81,6 +81,20 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 			add_filter( 'muut_channel_embed_content', array( $this, 'filterChannelIndexContent' ), 10, 2 );
 			add_filter( 'muut_forum_page_embed_content', array( $this, 'filterForumIndexContent' ), 10, 2 );
 			add_filter( 'muut_comment_overrides_embed_content', array( $this, 'filterCommentsOverrideIndexContent' ), 10, 3 );
+		}
+
+		/**
+		 * Prints the proper meta tag to make sure that googlebots run this page with the _escaped_fragment_ parameter.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function printEscapedFragmentMetaRequire() {
+			global $post;
+			if ( isset( $post ) && is_singular() && ( Muut_Post_Utility::isMuutPost( $post->ID ) || Muut_Post_Utility::isMuutCommentingPost( $post->ID ) ) ) {
+				echo '<meta name="fragment" content="!">';
+			}
 		}
 
 		/**
