@@ -198,23 +198,26 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		public static function isMuutCommentingPost( $post_id ) {
 			$post = get_post( $post_id );
 			$comment_count = get_comments( array( 'post_id' => $post_id, 'count' => true ) );
-			$updated_to_3_timestamp = muut_get_option('update_timestamps');
-			$updated_to_3_timestamp = isset( $updated_to_3_timestamp['3.0'] ) ? $updated_to_3_timestamp['3.0'] : '0';
+			$latest_update_array = muut_get_option('update_timestamps', array() );
+			$latest_update_timestamp = array_pop( $latest_update_array );
+			$latest_update_timestamp = $latest_update_timestamp ? $latest_update_timestamp : '0';
 			if ( muut()->getOption( 'replace_comments' )
 				&& ( get_post_meta( $post_id, 'muut_last_active_tab', true ) == 'commenting-tab'
 					|| ( !get_post_meta( $post_id, 'muut_last_active_tab', true )
 						&& ( ( ( $comment_count == 0
 							&& $post->post_status == 'auto-draft' ) )
 							|| muut()->getOption( 'override_all_comments' )
-						|| ( get_post_modified_time( 'U', false, $post_id ) < $updated_to_3_timestamp
+						|| ( get_post_modified_time( 'U', false, $post_id ) < $latest_update_timestamp
 							&& !has_shortcode( $post->post_content, 'muut' ) && !has_shortcode( $post->post_content, 'moot' )
 							&& $comment_count == 0 ) ) )
-				&& get_post( $post_id )->comment_status == 'open' ) ) {
+				&& get_post( $post_id )->comment_status == 'open' )
+				&& ( get_post_meta( $post_id, 'muut_last_active_tab', true ) !== '0'
+					|| $post->post_status == 'auto-draft' ) ){
 				return true;
 			} else {
 				// For old posts, ones that existed before upgrade, lets set the comment status to closed
 				// if they have an old shortcode, so that WP comments don't show up either.
-				if ( get_post_modified_time( 'U', false, $post_id ) < $updated_to_3_timestamp
+				if ( get_post_modified_time( 'U', false, $post_id ) < $latest_update_timestamp
 					&& $post->comment_status == 'open'
 					&& ( has_shortcode( $post->post_content, 'muut' )
 					|| has_shortcode( $post->post_content, 'moot' ) ) ) {
