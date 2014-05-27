@@ -34,6 +34,12 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		protected $maybeDoEscapedFragments;
 
 		/**
+		 * @property string The context of the embed for which we are getting the index:
+		 * 						channel, forum, or commenting representing the page embed.
+		 */
+		protected $context;
+
+		/**
 		 * The singleton method.
 		 *
 		 * @return Muut_Escaped_Fragments The instance.
@@ -128,6 +134,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 */
 		public function filterChannelIndexContent( $content, $page_id ) {
 			if ( $this->isUsingEscapedFragments() )  {
+				$this->context = 'channel';
 
 				if ( $_GET['_escaped_fragment_'] ) {
 					$remote_path = $_GET['_escaped_fragment_'][0] == '/' ? substr( $_GET['_escaped_fragment_'], 1 ) : $_GET['_escaped_fragment_'];
@@ -151,6 +158,8 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 */
 		public function filterForumIndexContent( $content, $page_id ) {
 			if ( $this->isUsingEscapedFragments() ) {
+				$this->context = 'forum';
+
 				if ( $_GET['_escaped_fragment_'] ) {
 					$remote_path = $_GET['_escaped_fragment_'][0] == '/' ? substr( $_GET['_escaped_fragment_'], 1 ) : $_GET['_escaped_fragment_'];
 				} else {
@@ -173,6 +182,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 */
 		public function filterCommentsOverrideIndexContent( $content, $post_id, $type ) {
 			if ( $this->isUsingEscapedFragments() )  {
+				$this->context = 'commenting';
 
 				if ( $_GET['_escaped_fragment_'] ) {
 					$remote_path = substr( $_GET['_escaped_fragment_'], strrpos( $_GET['_escaped_fragment_'], ':' ) );
@@ -284,7 +294,11 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		protected function getThreadedIndexContent( $content, $remote_path = '' ) {
 			// Make sure to only get the content we want.
 			$new_content = $content;
-			$new_content = strstr( $new_content, '<div id="title">' );
+			if ( $this->context == 'channel' ) {
+				$new_content = strstr( $new_content, '<ul id="moots">' );
+			} else {
+				$new_content = strstr( $new_content, '<div id="title">' );
+			}
 			$new_content = substr( $new_content, 0, strpos( $new_content, '</body>' ) );
 
 			if ( $remote_path != '' ) {
