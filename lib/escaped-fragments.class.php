@@ -274,7 +274,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		protected function getFlatIndexContent( $content ) {
 			// Make sure to only get the content we want.
 			$new_content = $content;
-			$new_content = substr( strstr( $new_content, '</header>' ), 9 );
+			$new_content = strstr( $new_content, '<article class="seed">' );
 			$new_content = substr( $new_content, 0, strpos( $new_content, '<body>' ) );
 
 			if ( $new_content ) {
