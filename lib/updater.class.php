@@ -118,8 +118,9 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 						do_action( 'muut_plugin_update', $version );
 					}
 				}
-				do_action( 'muut_after_plugin_update_actions', $this->oldVersion, $this->newVersion );
 			}
+			do_action( 'muut_after_plugin_update_actions', $this->oldVersion, $this->newVersion );
+
 		}
 
 		/**
