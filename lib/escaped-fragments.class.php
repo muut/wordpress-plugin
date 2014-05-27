@@ -279,7 +279,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		protected function getFlatIndexContent( $content ) {
 			// Make sure to only get the content we want.
 			$new_content = $content;
-			if ( $this->context == 'channel' || $this->context == 'threaded-commenting' ) {
+			if ( $this->context == 'channel' || $this->context == 'threaded-commenting' || $this->context == 'forum' ) {
 				$new_content = strstr( $new_content, '<div id="title">' );
 			} else {
 				$new_content = strstr( $new_content, '<article class="seed">' );
