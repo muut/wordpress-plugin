@@ -1,6 +1,13 @@
 <?php
 /**
  * Set up environment for the Muut plugin tests suite.
+ *
+ * COPY THIS FILE AND RENAME to `bootstrap.php` in this directory.
+ */
+
+/**
+ * ===================================
+ * EDIT THE FOLLOWING TWO DECLARATIONS
  */
 
 /**
@@ -12,6 +19,17 @@ define( 'WP_TESTS_DIR', '/Path/To/WordPress/Tests/Install/tests/phpunit/' );
  * The path to the main file of the plugin to test.
  */
 define( 'TEST_PLUGIN_FILE', '/Path/To/WordPress/Tests/Install/src/wp-content/plugins/muut/muut.php' );
+
+/**
+ * DON'T EDIT ANYTHING ELSE
+ * ========================
+ */
+
+/**
+ * Don't need to modify this, just using it so that references to it work ok.
+ */
+$_SERVER['SERVER_NAME'] = 'example.com';
+
 
 /**
  * The WordPress tests functions.
