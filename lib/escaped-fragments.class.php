@@ -294,7 +294,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		protected function getThreadedIndexContent( $content, $remote_path = '' ) {
 			// Make sure to only get the content we want.
 			$new_content = $content;
-			if ( $this->context == 'channel' ) {
+			if ( $this->context == 'channel' || $this->context == 'commenting' ) {
 				$new_content = strstr( $new_content, '<ul id="moots">' );
 			} else {
 				$new_content = strstr( $new_content, '<div id="title">' );
