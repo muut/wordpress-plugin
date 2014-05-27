@@ -94,7 +94,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 			if ( !isset( $this->maybeDoEscapedFragments ) ) {
 				global $post;
 
-				if ( isset ( $post ) && is_a( $post, 'WP_Post' ) && ( Muut_Post_Utility::isMuutPost( $post->ID ) || Muut_Post_Utility::isMuutCommentingPost( $post->ID ) ) ) {
+				if ( isset( $_GET['_escaped_fragment_'] ) && isset ( $post ) && is_a( $post, 'WP_Post' ) && ( Muut_Post_Utility::isMuutPost( $post->ID ) || Muut_Post_Utility::isMuutCommentingPost( $post->ID ) ) ) {
 					$this->maybeDoEscapedFragments = true;
 				} else {
 					$this->maybeDoEscapedFragments = false;
