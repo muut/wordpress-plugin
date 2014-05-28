@@ -122,12 +122,13 @@ $display_values = wp_parse_args( $error_values, $current_values );
 	</table>
 	<h3 class="title"><?php _e( 'Single Sign-on', 'muut' ); ?></h3>
 		<?php $sso_field_class = $display_values['subscription_use_sso'] ? '' : 'hidden'; ?>
+		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Muut Developer%s to use the WordPress authentication system for your forum.%s No logging in twice—WordPress users automatically become Muut users.', 'muut' ), '<a class="muut_upgrade_to_developer_link" href="#">', '</a>', '<br />' ); ?></p>
 		<table class="form-table">
 			<tbody>
 			<tr>
 				<th class="th-full" colspan="2">
 					<input name="setting[subscription_use_sso]" type="checkbox" id="muut_subscription_use_sso" value="1" <?php checked( '1', $display_values['subscription_use_sso'] ); ?> />
-					<label for="muut_subscription_use_sso"><?php _e( 'Enabled', 'muut' ); ?></label>
+					<label for="muut_subscription_use_sso"><?php _e( 'Enable', 'muut' ); ?></label>
 				</th>
 			</tr>
 			<tr class="<?php echo $sso_field_class; ?> indented" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':checked()')">
@@ -148,9 +149,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 			</tr>
 			</tbody>
 		</table>
-		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( 'Upgrade to Muut Developer to use the WordPress authentication system for your forum.%s No logging in twice—WordPress users automatically become Muut users.', 'muut' ), '<br />' ); ?></p>
-		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Developer%s', 'muut' ), '<a class="muut_upgrade_to_developer_link" href="#">', '</a>' ); ?></p>
-	<p class="submit">
+		<p class="submit">
 			<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
 		</p>
 		<?php endif; ?>
