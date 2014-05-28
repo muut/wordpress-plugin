@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Muut\n"
-"POT-Creation-Date: 2014-05-20 11:26-0500\n"
-"PO-Revision-Date: 2014-05-20 11:27-0500\n"
+"POT-Creation-Date: 2014-05-28 10:45-0500\n"
+"PO-Revision-Date: 2014-05-28 10:45-0500\n"
 "Last-Translator: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language-Team: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language: en_US\n"
@@ -28,23 +28,27 @@ msgstr ""
 
 #: lib/admin/admin-contextual-help.class.php:108
 #: lib/admin/admin-post-editor.class.php:122
-#: lib/admin/admin-post-editor.class.php:123 views/admin-settings.php:70
+#: lib/admin/admin-post-editor.class.php:123 views/admin-settings.php:74
 msgid "Commenting"
 msgstr ""
 
 #: lib/admin/admin-contextual-help.class.php:114
+msgid "SEO"
+msgstr ""
+
+#: lib/admin/admin-contextual-help.class.php:120
 msgid "Single Sign-On"
 msgstr ""
 
-#: lib/admin/admin-contextual-help.class.php:202
+#: lib/admin/admin-contextual-help.class.php:223
 msgid "Muut Commenting"
 msgstr ""
 
-#: lib/admin/admin-contextual-help.class.php:207
+#: lib/admin/admin-contextual-help.class.php:228
 msgid "Muut Channel"
 msgstr ""
 
-#: lib/admin/admin-contextual-help.class.php:212
+#: lib/admin/admin-contextual-help.class.php:233
 msgid "Muut Forum"
 msgstr ""
 
@@ -77,114 +81,124 @@ msgstr ""
 msgid "Enable forum"
 msgstr ""
 
-#: lib/admin/admin-post-editor.class.php:172 lib/muut.class.php:866
-#: lib/muut.class.php:867 views/admin-settings.php:13
+#: lib/admin/admin-post-editor.class.php:172 lib/muut.class.php:836
+#: lib/muut.class.php:837 views/admin-settings.php:32
 msgid "Muut"
 msgstr ""
 
-#: lib/comment-overrides.class.php:175 lib/comment-overrides.class.php:188
-#: lib/muut.class.php:487 lib/post-muut.utility.class.php:299
-msgid "Comments"
+#: lib/admin/admin-settings.class.php:111
+msgid "Settings successfully saved, other than the errors below:"
 msgstr ""
 
-#: lib/muut.class.php:483
-msgid "Go ahead!"
-msgstr ""
-
-#: lib/muut.class.php:484
-msgid "Don't do that!"
-msgstr ""
-
-#: lib/muut.class.php:638
-msgid "Arabic"
-msgstr ""
-
-#: lib/muut.class.php:639
-msgid "Brazil Portuguese"
-msgstr ""
-
-#: lib/muut.class.php:640
-msgid "Bulgarian"
-msgstr ""
-
-#: lib/muut.class.php:641
-msgid "Chinese"
-msgstr ""
-
-#: lib/muut.class.php:642
-msgid "Chinese / Taiwan"
-msgstr ""
-
-#: lib/muut.class.php:643
-msgid "Dutch"
-msgstr ""
-
-#: lib/muut.class.php:644
-msgid "English"
-msgstr ""
-
-#: lib/muut.class.php:645
-msgid "Finnish"
-msgstr ""
-
-#: lib/muut.class.php:646
-msgid "French"
-msgstr ""
-
-#: lib/muut.class.php:647
-msgid "German"
-msgstr ""
-
-#: lib/muut.class.php:648
-msgid "Hungarian"
-msgstr ""
-
-#: lib/muut.class.php:649
-msgid "Hebrew"
-msgstr ""
-
-#: lib/muut.class.php:650
-msgid "Indonesian"
-msgstr ""
-
-#: lib/muut.class.php:651
-msgid "Japanese"
-msgstr ""
-
-#: lib/muut.class.php:652
-msgid "Korean"
-msgstr ""
-
-#: lib/muut.class.php:653
-msgid "Polish"
-msgstr ""
-
-#: lib/muut.class.php:654
-msgid "Russian"
-msgstr ""
-
-#: lib/muut.class.php:655
-msgid "Spanish"
-msgstr ""
-
-#: lib/muut.class.php:656
-msgid "Swedish"
-msgstr ""
-
-#: lib/muut.class.php:657
-msgid "Tamil"
-msgstr ""
-
-#: lib/muut.class.php:658
-msgid "Turkish"
-msgstr ""
-
-#: lib/muut.class.php:809
+#: lib/admin/admin-settings.class.php:114
 msgid "Settings successfully saved."
 msgstr ""
 
-#: lib/muut.class.php:812
+#: lib/admin/admin-settings.class.php:118
 msgid "Failed to save settings."
+msgstr ""
+
+#: lib/admin/admin-settings.class.php:268
+msgid ""
+"Custom S3 Bucket name must be associated with a valid server. Make sure it "
+"matches the bucket you set up with Muut from your forum page settings."
+msgstr ""
+
+#: lib/comment-overrides.class.php:197 lib/comment-overrides.class.php:211
+#: lib/muut.class.php:521 lib/post-muut.utility.class.php:322
+msgid "Comments"
+msgstr ""
+
+#: lib/muut.class.php:517
+msgid "Go ahead!"
+msgstr ""
+
+#: lib/muut.class.php:518
+msgid "Don't do that!"
+msgstr ""
+
+#: lib/muut.class.php:674
+msgid "Arabic"
+msgstr ""
+
+#: lib/muut.class.php:675
+msgid "Brazil Portuguese"
+msgstr ""
+
+#: lib/muut.class.php:676
+msgid "Bulgarian"
+msgstr ""
+
+#: lib/muut.class.php:677
+msgid "Chinese"
+msgstr ""
+
+#: lib/muut.class.php:678
+msgid "Chinese / Taiwan"
+msgstr ""
+
+#: lib/muut.class.php:679
+msgid "Dutch"
+msgstr ""
+
+#: lib/muut.class.php:680
+msgid "English"
+msgstr ""
+
+#: lib/muut.class.php:681
+msgid "Finnish"
+msgstr ""
+
+#: lib/muut.class.php:682
+msgid "French"
+msgstr ""
+
+#: lib/muut.class.php:683
+msgid "German"
+msgstr ""
+
+#: lib/muut.class.php:684
+msgid "Hungarian"
+msgstr ""
+
+#: lib/muut.class.php:685
+msgid "Hebrew"
+msgstr ""
+
+#: lib/muut.class.php:686
+msgid "Indonesian"
+msgstr ""
+
+#: lib/muut.class.php:687
+msgid "Japanese"
+msgstr ""
+
+#: lib/muut.class.php:688
+msgid "Korean"
+msgstr ""
+
+#: lib/muut.class.php:689
+msgid "Polish"
+msgstr ""
+
+#: lib/muut.class.php:690
+msgid "Russian"
+msgstr ""
+
+#: lib/muut.class.php:691
+msgid "Spanish"
+msgstr ""
+
+#: lib/muut.class.php:692
+msgid "Swedish"
+msgstr ""
+
+#: lib/muut.class.php:693
+msgid "Tamil"
+msgstr ""
+
+#: lib/muut.class.php:694
+msgid "Turkish"
 msgstr ""
 
 #: lib/shortcodes.class.php:142
@@ -214,81 +228,90 @@ msgstr ""
 msgid "Enabling this will disable other types of Muut embeds on this %s."
 msgstr ""
 
-#: views/admin-settings.php:13
+#: views/admin-settings.php:32
 msgid "Forums and commenting re-imagined."
 msgstr ""
 
-#: views/admin-settings.php:18
+#: views/admin-settings.php:37
 #, php-format
 msgid ""
 "Please enter the name of your Muut forum. If you don't have one, please "
 "%ssetup now%s!"
 msgstr ""
 
-#: views/admin-settings.php:19
+#: views/admin-settings.php:38
 msgid ""
 "You can have any number of forums, users, or commenting pages. No traffic "
 "limits: 10, 1,000, or 100,000,000 loads a day, for free."
 msgstr ""
 
-#: views/admin-settings.php:25 views/blocks/help-tab-settings-general.php:11
+#: views/admin-settings.php:44 views/blocks/help-tab-settings-general.php:11
 msgid "Forum Name"
 msgstr ""
 
-#: views/admin-settings.php:36
+#: views/admin-settings.php:55
 msgid "Continue"
 msgstr ""
 
-#: views/admin-settings.php:41 views/blocks/help-tab-settings-general.php:15
+#: views/admin-settings.php:60 views/blocks/help-tab-settings-general.php:15
 msgid "Language"
 msgstr ""
 
-#: views/admin-settings.php:56
-#, php-format
-msgid "Allow search engines to crawl discussions at %s"
-msgstr ""
-
-#: views/admin-settings.php:64 views/blocks/metabox-tab-forum.php:29
-#, php-format
-msgid "Current forum page is %s"
-msgstr ""
-
-#: views/admin-settings.php:76
+#: views/admin-settings.php:80
 #: views/blocks/help-tab-settings-commenting.php:11
 msgid "Use Muut for post commenting"
 msgstr ""
 
-#: views/admin-settings.php:82
+#: views/admin-settings.php:86
 msgid "Use Muut commenting on posts with existing comments (data not deleted)"
 msgstr ""
 
-#: views/admin-settings.php:87
+#: views/admin-settings.php:91
+msgid "Search Engine Optimization (SEO)"
+msgstr ""
+
+#: views/admin-settings.php:98
+#, php-format
+msgid "Allow search engines to crawl discussions at %s"
+msgstr ""
+
+#: views/admin-settings.php:104
+#, php-format
+msgid "Serve from your own S3 Bucket (%sRequires Developer Subscription%s)"
+msgstr ""
+
+#: views/admin-settings.php:109
+msgid "S3 Bucket Name"
+msgstr ""
+
+#: views/admin-settings.php:118
+msgid ""
+"The bucket name you enter must be the same S3 bucket registered for the "
+"forum in the Muut settings"
+msgstr ""
+
+#: views/admin-settings.php:123
 msgid "Single Sign-on"
 msgstr ""
 
-#: views/admin-settings.php:94
-msgid "Enabled"
-msgstr ""
-
-#: views/admin-settings.php:99
-msgid "API Key"
-msgstr ""
-
-#: views/admin-settings.php:107
-msgid "Secret Key"
-msgstr ""
-
-#: views/admin-settings.php:115
+#: views/admin-settings.php:125
 #, php-format
 msgid ""
-"Upgrade to Muut Developer to use the WordPress authentication system for "
+"%sUpgrade to Muut Developer%s to use the WordPress authentication system for "
 "your forum.%s No logging in twice—WordPress users automatically become Muut "
 "users."
 msgstr ""
 
-#: views/admin-settings.php:116
-#, php-format
-msgid "%sUpgrade to Developer%s"
+#: views/admin-settings.php:131
+msgid "Enable"
+msgstr ""
+
+#: views/admin-settings.php:136
+msgid "API Key"
+msgstr ""
+
+#: views/admin-settings.php:144
+msgid "Secret Key"
 msgstr ""
 
 #: views/blocks/help-tab-post-editor-channel.php:10
@@ -435,16 +458,6 @@ msgid ""
 "Find out how to provide it yourself %shere!%s"
 msgstr ""
 
-#: views/blocks/help-tab-settings-general.php:19
-msgid "Allow search engines to crawl discussions at"
-msgstr ""
-
-#: views/blocks/help-tab-settings-general.php:20
-msgid ""
-"This setting should generally not be touched. When checked, it allows search "
-"engines to index your discussions under your domain as well."
-msgstr ""
-
 #: views/blocks/help-tab-settings-overview.php:9
 #, php-format
 msgid ""
@@ -457,6 +470,29 @@ msgstr ""
 msgid ""
 "Once you have saved your forum, you can edit the other various settings for "
 "your implementation and you can go ahead and add a new page."
+msgstr ""
+
+#: views/blocks/help-tab-settings-seo.php:11
+msgid "Allow search engines to crawl discussions at"
+msgstr ""
+
+#: views/blocks/help-tab-settings-seo.php:12
+msgid ""
+"This setting should generally not be touched. When checked, it allows search "
+"engines to index your discussions under your domain as well."
+msgstr ""
+
+#: views/blocks/help-tab-settings-seo.php:16
+msgid "Serve from your own S3 Bucket"
+msgstr ""
+
+#: views/blocks/help-tab-settings-seo.php:17
+#, php-format
+msgid ""
+"If you have a developer subscription and have set up a custom S3 Bucket for "
+"your Muut forum, you can serve content directly from that bucket rather than "
+"from %s. Once enabled, the bucket name you enter must be the same S3 bucket "
+"registered for the forum in the Muut settings."
 msgstr ""
 
 #: views/blocks/help-tab-settings-sidebar.php:10
@@ -508,6 +544,11 @@ msgstr ""
 
 #: views/blocks/metabox-tab-commenting.php:30
 msgid "Threaded"
+msgstr ""
+
+#: views/blocks/metabox-tab-forum.php:29
+#, php-format
+msgid "Current forum page is %s"
 msgstr ""
 
 #: views/blocks/metabox-tab-forum.php:36
