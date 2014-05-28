@@ -109,6 +109,12 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 				'callback' => array( $this, 'renderSettingsHelpCommentingTabContent' ),
 			);
 
+			$help_seo_tab_args = array(
+				'id' => 'muut_settings_help_seo_tab',
+				'title' => __( 'SEO', 'muut' ),
+				'callback' => array( $this, 'renderSettingsHelpSeoTabContent' ),
+			);
+
 			$help_sso_tab_args = array(
 				'id' => 'muut_settings_help_sso_tab',
 				'title' => __( 'Single Sign-On', 'muut' ),
@@ -121,6 +127,8 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 			$screen->add_help_tab( $help_general_tab_args );
 
 			$screen->add_help_tab( $help_commenting_tab_args );
+
+			$screen->add_help_tab( $help_seo_tab_args );
 
 			$screen->add_help_tab( $help_sso_tab_args );
 
@@ -169,6 +177,19 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 		 */
 		public function renderSettingsHelpCommentingTabContent( $screen, $tab ) {
 			include( muut()->getPluginPath() . 'views/blocks/help-tab-settings-commenting.php' );
+		}
+
+		/**
+		 * Renders the content for the SEO help tab on the main Muut settings page.
+		 *
+		 * @param WP_Screen $screen The current screen.
+		 * @param array $tab The current tab array.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function renderSettingsHelpSeoTabContent( $screen, $tab ) {
+			include( muut()->getPluginPath() . 'views/blocks/help-tab-settings-seo.php' );
 		}
 
 		/**
