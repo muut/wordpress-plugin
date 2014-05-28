@@ -1,7 +1,7 @@
 === Muut ===
 Contributors: PaulHughes01, tipiirai, jannelehtinen
 Tags: forum, commenting, realtime, discussion
-Requires at least: 3.6
+Requires at least: 3.7
 Tested up to: 3.9.1
 Stable tag: 3.0
 License: MIT
