@@ -79,6 +79,9 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			add_action( 'admin_init', array( $this, 'adminInits' ), 3 );
 			add_action( 'load-post.php', array( $this, 'initPostEditor') );
 			add_action( 'load-post-new.php', array( $this, 'initPostEditor') );
+
+			// If the escaped fragment parameter has been passed in the URL (google bot).
+			add_action( 'init', array( $this, 'initEscapedFragments' ), 5 );
 		}
 
 		/**
@@ -189,6 +192,24 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		}
 
 		/**
+		 * Initializes the Muut Escaped Fragments class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function initEscapedFragments() {
+			$class = 'Muut_Escaped_Fragments';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/escaped-fragments.class.php' );
+				if ( class_exists( $class ) ) {
+					Muut_Escaped_Fragments::instance();
+				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
 		 * Initializes the admin post editor.
 		 *
 		 * @return void
@@ -225,6 +246,39 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		}
 
 		/**
+		 * Initializes the Field Validation utility class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.1
+		 */
+		public function initFieldValidationUtility() {
+			$class = 'Muut_Field_Validation';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/admin/admin-field-validation.utility.class.php' );
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the Admin Settings class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.1
+		 */
+		public function initAdminSettings() {
+			$class = 'Muut_Admin_Settings';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/admin/admin-settings.class.php' );
+				if ( class_exists( $class ) ) {
+					Muut_Admin_Settings::instance();
+				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
 		 * Checks some things in the admin and, from there, knows which libraries to initialize.
 		 *
 		 * @return void
@@ -235,7 +289,11 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			if ( version_compare( Muut::VERSION, muut()->getOption( 'current_version', '0' ), '>' ) ) {
 				$this->initUpdater();
 			}
+			if ( isset( $_GET['page'] ) && $_GET['page'] == 'muut' ) {
+				$this->initAdminSettings();
+			}
 			$this->initContextualHelp();
+			$this->initFieldValidationUtility();
 		}
 	}
 }

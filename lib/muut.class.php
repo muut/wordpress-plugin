@@ -26,7 +26,7 @@ if ( !class_exists( 'Muut' ) ) {
 		/**
 		 * The current version of urGuru
 		 */
-		const VERSION = '3.0';
+		const VERSION = '3.0.1';
 
 		/**
 		 * The version of Muut this was released with.
@@ -159,7 +159,6 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'admin_init', array( $this, 'maybeAddRewriteRules' ) );
 			add_action( 'admin_menu', array( $this, 'createAdminMenuItems' ) );
 			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ) );
-			add_action( 'load-toplevel_page_' . self::SLUG, array( $this, 'saveSettings' ) );
 			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
 
 			add_action( 'init', array( $this, 'registerScriptsAndStyles' ) );
@@ -327,7 +326,7 @@ if ( !class_exists( 'Muut' ) ) {
 					'<IfModule mod_rewrite.c>',
 					'RewriteEngine On',
 					'RewriteBase /',
-					'RewriteRule ^i/(' . $this->getForumName() . ')(/.*)?$ http://' . self::MUUTSERVERS . '/i/$1$2 [P]',
+					'RewriteRule ^i/(' . $this->getForumName() . ')(/.*)?$ ' . $this->getProxyContentServer() . '/$1$2 [P]',
 					'RewriteRule ^m/(.*)$ http://' . self::MUUTSERVERS . '/m/$1 [P]',
 					'</IfModule>',
 				);
@@ -354,7 +353,7 @@ if ( !class_exists( 'Muut' ) ) {
 		public function addProxyRewritesFilter( $rules ) {
 			$permastruct = get_option( 'permalink_structure', '' );
 
-			$muut_rules = "RewriteRule ^i/(" . $this->getForumName() . ")(/.*)?\$ http://" . self::MUUTSERVERS . "/i/\$1\$2 [P]\n";
+			$muut_rules = "RewriteRule ^i/(" . $this->getForumName() . ")(/.*)?\$ " . $this->getProxyContentServer() . "/\$1\$2 [P]\n";
 			$muut_rules .=	"RewriteRule ^m/(.*)$ http://" . self::MUUTSERVERS . "/m/\$1 [P]";
 
 			if ( $permastruct == '' ) {
@@ -389,6 +388,41 @@ if ( !class_exists( 'Muut' ) ) {
 				add_action( 'admin_head', array( $this, 'maybeAddRewriteRules' ) );
 			}
 			return $hard_flush;
+		}
+
+		/**
+		 * Gets proxy content server, with the http/https call for it.
+		 *
+		 * @param bool $force_muut_server Will force going to Muut server if set to true (rather than any s3 bucket or whatnot).
+		 * @return string The proxy content server.
+		 * @author Paul Hughes
+		 * @since 3.0.1
+		 */
+		public function getProxyContentServer( $force_muut_server = false ) {
+			$proxy_server = 'http://';
+			if ( apply_filters( 'use_https_for_proxy', false ) ) {
+				$proxy_server = 'https://';
+			}
+			$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
+				? $this->getOption( 'custom_s3_bucket_name' )
+				: self::MUUTSERVERS . '/i';
+
+			return $proxy_server;
+		}
+
+
+		/**
+		 * Gets the forum's full index URI (muut.com or the s3 bucket content index, plus the path).
+		 *
+		 * @param bool $force_muut_server Will force going to Muut server if set to true (rather than any s3 bucket or whatnot).
+		 * @return string The full forum index URI.
+		 * @author Paul Hughes
+		 * @since 3.0.1
+		 */
+		public function getForumIndexUri( $force_muut_server = false ) {
+			$uri = $this->getProxyContentServer( $force_muut_server ) . '/' . $this->getForumName() . '/';
+
+			return apply_filters( 'muut_forum_index_uri', $uri );
 		}
 
 		/**
@@ -547,6 +581,8 @@ if ( !class_exists( 'Muut' ) ) {
 				'subscription_secret_key' => '',
 				'subscription_use_sso' => false,
 				'enable_proxy_rewrites' => '1',
+				'use_custom_s3_bucket' => '0',
+				'custom_s3_bucket_name' => '',
 				'comments_base_domain' => $_SERVER['SERVER_NAME'],
 			) );
 
@@ -749,7 +785,9 @@ if ( !class_exists( 'Muut' ) ) {
 
 			$options = $apply_filters ? apply_filters( 'muut_save_options', $options ) : $options;
 
-			if ( update_option( self::OPTIONNAME, $options ) ) {
+			$current_options = get_option( self::OPTIONNAME );
+
+			if ( $options == $current_options || update_option( self::OPTIONNAME, $options ) ) {
 				$this->options = null; // Refresh options array.
 				return true;
 			} else {
@@ -784,74 +822,6 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			return $this->setOptions( wp_parse_args( $option, $current_options ) );
-		}
-
-		/**
-		 * Saves the settings specified on the Muut settings page.
-		 *
-		 * @return void
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		public function saveSettings() {
-			if ( isset( $_POST['muut_settings_save'] )
-				&& $_POST['muut_settings_save'] == 'true'
-				&& check_admin_referer( 'muut_settings_save', 'muut_settings_nonce' )
-			) {
-				$old_options = $this->getOptions();
-
-				$settings = $this->settingsValidate( $_POST['setting'] );
-
-				// Save all the options by passing an array into setOption.
-				// Save all the options by passing an array into setOption.
-				if ( $this->setOption( $settings ) || $old_options == $this->getOptions() ) {
-					// Display success notice if they were updated or matched the previous settings.
-					$this->queueAdminNotice( 'updated', __( 'Settings successfully saved.', 'muut' ) );
-				} else {
-					// Display error if the settings failed to save.
-					$this->queueAdminNotice( 'error', __( 'Failed to save settings.', 'muut' ) );
-				}
-			}
-		}
-
-		/**
-		 * Deals with settings-specific validation functionality.
-		 *
-		 * @param array $settings an array of key => value pairs that define what settings are being changed to.
-		 * @return array A modified array defining the settings after validation.
-		 * @author Paul Hughes
-		 * @since 3.0
-		 */
-		protected function settingsValidate( $settings ) {
-
-			if ( isset( $_POST['initial_save'] ) ) {
-				return apply_filters( 'muut_settings_initial_save', apply_filters( 'muut_settings_validated', $settings ) );
-			}
-
-			$boolean_settings = apply_filters( 'muut_boolean_settings', array(
-				'replace_comments',
-				'use_threaded_commenting',
-				'override_all_comments',
-				'is_threaded_default',
-				'show_online_default',
-				'allow_uploads_default',
-				'subscription_use_sso',
-				'enable_proxy_rewrites',
-			) );
-
-			foreach ( $boolean_settings as $boolean_setting ) {
-				$settings[$boolean_setting] = isset( $settings[$boolean_setting]) ? $settings[$boolean_setting] : '0';
-			}
-
-			if ( ( isset( $settings['forum_name'] ) && $settings['forum_name'] != $this->getForumName() )
-				|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != $this->getOption( 'enable_proxy_rewrites' ) ) ) {
-				flush_rewrite_rules( true );
-			}
-
-			// If the Secret Key setting does not get submitted (i.e. is disabled), make sure to erase its value.
-			$settings['subscription_secret_key'] = isset( $settings['subscription_secret_key']) ? $settings['subscription_secret_key'] : '';
-
-			return apply_filters( 'muut_settings_validated', $settings );
 		}
 
 		/**

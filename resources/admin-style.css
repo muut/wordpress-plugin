@@ -32,8 +32,17 @@ span.admin-subheader-to-right {
     vertical-align: middle;
 }
 
+#muut_settings_form table.form-table tr.indented td,
+#muut_settings_form table.form-table tr.indented th {
+    padding-left: 20px;
+}
+
 #muut_settings_form h3.title {
-    margin-top: 2.5em;
+    margin: 2.5em 0 .5em;
+}
+
+#muut_settings_form p {
+    max-width: 650px;
 }
 
 span.right-justify-float {
@@ -130,4 +139,14 @@ span.description {
 
 .text-input-label {
     font-weight: bold;
+}
+
+#muut_settings_form .muut_error_field {
+    border-color: #ff7777;
+    background-color: #ffF5f5;
+}
+
+#muut_s3_requirement_paragraph {
+    visibility: hidden;
+    position: absolute;
 }

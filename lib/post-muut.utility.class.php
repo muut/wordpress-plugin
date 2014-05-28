@@ -168,6 +168,26 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		}
 
 		/**
+		 * Gets a channel page's full index URI.
+		 *
+		 * @param int $page_id The page we are getting the remote URI for.
+		 * @return string The full index URI.
+		 * @author Paul Hughes
+		 * @since 3.0.1
+		 */
+		public static function getChannelIndexUri( $page_id ) {
+			if( !is_numeric( $page_id ) ) {
+				return false;
+			}
+
+			$base_uri = muut()->getForumIndexUri();
+
+			$uri = $base_uri . self::getChannelRemotePath( $page_id );
+
+			return apply_filters( 'muut_channel_index_uri', $uri, $page_id );
+		}
+
+		/**
 		 * Checks if comments and Muut commenting are enabled for a post.
 		 *
 		 * @param int $post_id The post ID we are checking.
@@ -178,23 +198,26 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		public static function isMuutCommentingPost( $post_id ) {
 			$post = get_post( $post_id );
 			$comment_count = get_comments( array( 'post_id' => $post_id, 'count' => true ) );
-			$updated_to_3_timestamp = muut_get_option('update_timestamps');
-			$updated_to_3_timestamp = isset( $updated_to_3_timestamp['3.0'] ) ? $updated_to_3_timestamp['3.0'] : '0';
+			$latest_update_array = muut_get_option('update_timestamps', array() );
+			$latest_update_timestamp = array_pop( $latest_update_array );
+			$latest_update_timestamp = $latest_update_timestamp ? $latest_update_timestamp : '0';
 			if ( muut()->getOption( 'replace_comments' )
 				&& ( get_post_meta( $post_id, 'muut_last_active_tab', true ) == 'commenting-tab'
 					|| ( !get_post_meta( $post_id, 'muut_last_active_tab', true )
 						&& ( ( ( $comment_count == 0
 							&& $post->post_status == 'auto-draft' ) )
 							|| muut()->getOption( 'override_all_comments' )
-						|| ( get_post_modified_time( 'U', false, $post_id ) < $updated_to_3_timestamp
+						|| ( get_post_modified_time( 'U', false, $post_id ) < $latest_update_timestamp
 							&& !has_shortcode( $post->post_content, 'muut' ) && !has_shortcode( $post->post_content, 'moot' )
 							&& $comment_count == 0 ) ) )
-				&& get_post( $post_id )->comment_status == 'open' ) ) {
+				&& get_post( $post_id )->comment_status == 'open' )
+				&& ( get_post_meta( $post_id, 'muut_last_active_tab', true ) !== '0'
+					|| $post->post_status == 'auto-draft' ) ){
 				return true;
 			} else {
 				// For old posts, ones that existed before upgrade, lets set the comment status to closed
 				// if they have an old shortcode, so that WP comments don't show up either.
-				if ( get_post_modified_time( 'U', false, $post_id ) < $updated_to_3_timestamp
+				if ( get_post_modified_time( 'U', false, $post_id ) < $latest_update_timestamp
 					&& $post->comment_status == 'open'
 					&& ( has_shortcode( $post->post_content, 'muut' )
 					|| has_shortcode( $post->post_content, 'moot' ) ) ) {
@@ -297,13 +320,17 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 				$path = self::getChannelRemotePath( $page_id );
 				$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
 				$embed = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . muut()->getForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
+				$embed = apply_filters( 'muut_channel_embed_content', $embed, $page_id );
 			} elseif ( $type_of_embed == 'forum' ) {
 				ob_start();
 					include ( muut()->getPluginPath() . 'views/blocks/forum-page-embed.php' );
 				$embed = ob_get_clean();
+				$embed = apply_filters( 'muut_forum_page_embed_content', $embed, $page_id );
 			} else {
 				return;
 			}
+
+			$embed = apply_filters( 'muut_embed_content', $embed, $page_id );
 			if ( $echo ) {
 				echo $embed;
 			} else {

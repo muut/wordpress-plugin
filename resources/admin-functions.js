@@ -67,12 +67,26 @@ jQuery(document).ready( function($) {
   // The syntax is to set a tr data-muut_requires attribute to the id of another element in the page.
   // It will run a check that is the function (in string form) stored in the same tr's data-muut_require_func attribute.
   // If true, it enables assigns that tr the class "disabled" and any inputs in that tr are disabled.
-  $('body.toplevel_page_muut tr[data-muut_requires], body.toplevel_page_muut .muut_requires_input_block').each(function(){
-    $(this).check_requires_fields();
+  var check_all_requires_fields = function() {
+    $('body.toplevel_page_muut tr[data-muut_requires], ' +
+      'body.toplevel_page_muut th[data-muut_requires], ' +
+      'body.toplevel_page_muut .muut_requires_input_block').each(function(){
+      $(this).check_requires_fields();
+    });
+  };
+  check_all_requires_fields();
+
+  $('#muut_enable_proxy_rewrites').on('change', function() {
+    if (!$(this).is(':checked') && $('#muut_use_custom_s3_bucket').is(':checked')) {
+      $('#muut_use_custom_s3_bucket').prop('checked', false);
+      check_all_requires_fields();
+    }
   });
 
-  $('body.post-type-page span.muut_requires_input_block').each(function () {
-    $(this).check_requires_fields();
+  $('#muut_use_custom_s3_bucket').on('change', function() {
+    if ($(this).is(':checked') && !$('#muut_enable_proxy_rewrites').is(':checked')) {
+      $('#muut_enable_proxy_rewrites').prop('checked', true);
+    }
   });
 
   // Functionality for the Advanced Options.
@@ -80,4 +94,27 @@ jQuery(document).ready( function($) {
     $('#muut_forum_page_advanced_options').toggle();
   });
 
+  $('#muut_custom_s3_bucket_name').on('focus', function() {
+      $('#muut_s3_requirement_paragraph').css('visibility', 'visible');
+  }).on('focusout', function() {
+    $('#muut_s3_requirement_paragraph').css('visibility', 'hidden');
+  });
+
+  // Functionality for outlining fields with errors on the settings page.
+  if ( typeof muut_error_fields !== 'undefined' && muut_error_fields instanceof Array ) {
+    for(index=0; index<muut_error_fields.length; index++) {
+      $('#' + muut_error_fields[index]).addClass('muut_error_field').on('focusin', function(e){
+        $(this).on('keydown', function(e) {
+          $(this).removeClass('muut_error_field');
+        });
+      });
+    }
+  }
+
+  // Upgrade to developer links should open the upgrade window.
+  $('a.muut_upgrade_to_developer_link').on('click', function(e){
+    var muut_upgrade_url = 'https://muut.com/pricing/?' + $('#muut_forum_name').val() + '/developer';
+    window.open(muut_upgrade_url,"","width=1000,height=750,status=0,scrollbars=0,menubar=0");
+    e.preventDefault();
+  });
 });
