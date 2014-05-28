@@ -396,7 +396,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @param bool $force_muut_server Will force going to Muut server if set to true (rather than any s3 bucket or whatnot).
 		 * @return string The proxy content server.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function getProxyContentServer( $force_muut_server = false ) {
 			$proxy_server = 'http://';
@@ -417,7 +417,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @param bool $force_muut_server Will force going to Muut server if set to true (rather than any s3 bucket or whatnot).
 		 * @return string The full forum index URI.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function getForumIndexUri( $force_muut_server = false ) {
 			$uri = $this->getProxyContentServer( $force_muut_server ) . '/' . $this->getForumName() . '/';

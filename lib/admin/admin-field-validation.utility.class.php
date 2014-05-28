@@ -19,7 +19,7 @@ if ( !class_exists( 'Muut_Field_Validation' ) ) {
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
-	 * @since   NEXT_RELEASE
+	 * @since   3.0.1
 	 */
 	class Muut_Field_Validation
 	{
@@ -29,7 +29,7 @@ if ( !class_exists( 'Muut_Field_Validation' ) ) {
 		 *
 		 * @return Muut_Field_Validation (Except it can never be called).
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		private function __construct() {}
 
@@ -42,7 +42,7 @@ if ( !class_exists( 'Muut_Field_Validation' ) ) {
 		 *                    'timeout' => (float) The number of seconds before timeout (default 5)
 		 * @return bool Whether the field is valid or not.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public static function validateExternalUri( $value, $args = array() ) {
 			if ( !is_string( $value ) ) {

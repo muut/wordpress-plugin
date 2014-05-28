@@ -250,7 +250,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function initFieldValidationUtility() {
 			$class = 'Muut_Field_Validation';
@@ -265,7 +265,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function initAdminSettings() {
 			$class = 'Muut_Admin_Settings';

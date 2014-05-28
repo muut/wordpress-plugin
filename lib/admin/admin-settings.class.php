@@ -18,7 +18,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
-	 * @since   NEXT_RELEASE
+	 * @since   3.0.1
 	 */
 	class Muut_Admin_Settings
 	{
@@ -43,7 +43,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return Muut_Admin_Settings The instance.
 		 * @author Paul Hughes
-		 * @since  NEXT_RELEASE
+		 * @since  3.0.1
 		 */
 		public static function instance() {
 			if ( !is_a( self::$instance, __CLASS__ ) ) {
@@ -57,7 +57,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return Muut_Admin_Settings
 		 * @author Paul Hughes
-		 * @since  NEXT_RELEASE
+		 * @since  3.0.1
 		 */
 		protected function __construct() {
 			$this->addActions();
@@ -69,7 +69,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function addActions() {
 			add_action( 'load-toplevel_page_' . Muut::SLUG, array( $this, 'saveSettings' ) );
@@ -82,7 +82,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function addFilters() {
 			add_filter( 'muut_validate_setting', array( $this, 'validateSettings' ), 10, 2 );
@@ -125,7 +125,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return array The submitted settings.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function getSubmittedSettings() {
 			return $this->submittedSettings;
@@ -136,7 +136,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return array The error queue
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function getErrorQueue() {
 			return apply_filters( 'muut_get_error_queue', $this->errorQueue );
@@ -206,7 +206,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *                            message field (to generate a simple error string).
 		 * @return bool Whether the queuing was successful.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function addErrorToQueue( $error ) {
 			if ( !is_array( $error) && !is_string( $error ) ) {
@@ -246,7 +246,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 * @param string $name The name (and key) of the submitted setting.
 		 * @return mixed The filtered value.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function validateSettings( $value, $name ) {
 			switch( $name ) {
@@ -287,7 +287,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function printJsFieldNames() {
 			if ( count( $this->errorQueue ) > 0 ) {
@@ -308,7 +308,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function prepareAdminNotices() {
 			foreach( $this->errorQueue as $name => $error ) {

@@ -173,7 +173,7 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		 * @param int $page_id The page we are getting the remote URI for.
 		 * @return string The full index URI.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public static function getChannelIndexUri( $page_id ) {
 			if( !is_numeric( $page_id ) ) {

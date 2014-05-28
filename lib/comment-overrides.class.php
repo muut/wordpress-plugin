@@ -129,7 +129,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 		 * @param int $post_id The post whose comment section remote URI we are fetching.
 		 * @return string The full index URI.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function getCommentsIndexUri( $post_id ) {
 			if( !is_numeric( $post_id ) ) {
