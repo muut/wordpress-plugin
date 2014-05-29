@@ -41,7 +41,10 @@ jQuery(document).ready( function($) {
     $('#page_template').prop('disabled', false);
   });
 
-  // If a given setting is dependent upon another one's value, style/disable or enable it properly.
+  /********************************************/
+  /* CODE FOR MUUT SETTINGS PAGE              */
+  /********************************************/
+  // If a given setting is dependent upon another one's value, hide or show it properly.
   // See explanation below these two function declarations.
   $.fn.check_requires_fields = function() {
     var requires_element = $( '#' + this.data('muut_requires') );
@@ -50,16 +53,15 @@ jQuery(document).ready( function($) {
     requires_element.change();
   };
 
+  // Should not be called directly, is used by the check_requires_fields function (above).
   $.fn.set_requires_fields = function( event ) {
     var passed_function = event.data.passed_function;
     var parent = event.data.parent;
     var current = event.data.current;
     if ( eval( 'parent.' + passed_function ) ) {
       current.removeClass( 'hidden' );
-      //current.find('input').prop('disabled', false);
     } else {
       current.addClass( 'hidden' );
-      //current.find('input').prop('disabled', true);
     }
   };
 
@@ -74,30 +76,27 @@ jQuery(document).ready( function($) {
       $(this).check_requires_fields();
     });
   };
+
+  // Run the check-all-requires-fields function (defined above) once on page load.
   check_all_requires_fields();
 
-  $('#muut_enable_proxy_rewrites').on('change', function() {
-    if (!$(this).is(':checked') && $('#muut_use_custom_s3_bucket').is(':checked')) {
-      $('#muut_use_custom_s3_bucket').prop('checked', false);
-      check_all_requires_fields();
+  // If enable proxy rewrites becomes unchecked and the use custom s3 bucket is checked, uncheck it.
+  // Then check requires fields.
+  var muut_enable_proxy_rewrites_checkbox = $('#muut_enable_proxy_rewrites');
+  var muut_use_custom_s3_bucket_checkbox = $('#muut_use_custom_s3_bucket');
+  muut_enable_proxy_rewrites_checkbox.on('change', function() {
+    if (!$(this).is(':checked') && muut_use_custom_s3_bucket_checkbox.is(':checked')) {
+      muut_use_custom_s3_bucket_checkbox.prop('checked', false);
+      muut_use_custom_s3_bucket_checkbox.check_requires_fields();
     }
   });
 
-  $('#muut_use_custom_s3_bucket').on('change', function() {
-    if ($(this).is(':checked') && !$('#muut_enable_proxy_rewrites').is(':checked')) {
-      $('#muut_enable_proxy_rewrites').prop('checked', true);
-    }
-  });
-
-  // Functionality for the Advanced Options.
-  $('#muut_forum_page_advanced_options_link').on('click', function() {
-    $('#muut_forum_page_advanced_options').toggle();
-  });
-
+  // When The custom S3 bucket field has focus, display the descriptive text line explaining what it needs to be.
+  var custom_s3_bucket_description_paragraph = $('#muut_s3_requirement_paragraph');
   $('#muut_custom_s3_bucket_name').on('focus', function() {
-      $('#muut_s3_requirement_paragraph').css('visibility', 'visible');
+    custom_s3_bucket_description_paragraph.css('visibility', 'visible');
   }).on('focusout', function() {
-    $('#muut_s3_requirement_paragraph').css('visibility', 'hidden');
+    custom_s3_bucket_description_paragraph.css('visibility', 'hidden');
   });
 
   // Functionality for outlining fields with errors on the settings page.
