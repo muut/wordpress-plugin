@@ -17,6 +17,10 @@ if ( $is_forum != '1' ) {
 $remote_path = '/' . rawurldecode( Muut_Post_Utility::getChannelRemotePath( get_the_ID(), true ) );
 
 $tabs = Muut_Admin_Post_Editor::instance()->getMetaBoxTabsForCurrentPostType();
+$tab_names = array();
+foreach( $tabs as $tab ) {
+	$tab_names[] = $tab['name'];
+}
 $last_active_tab = get_post_meta( get_the_ID(), 'muut_last_active_tab', true );
 
 $post_type_object = get_post_type_object( get_post_type() );
@@ -38,12 +42,12 @@ $post_type_object = get_post_type_object( get_post_type() );
 					$active_tab = $tab['name'];
 					$active_value = '1';
 				}
-				if ( ( $last_active_tab && $tab['name'] == $last_active_tab ) || ( !$last_active_tab && $first_tab === true ) ) {
+				if ( ( $last_active_tab && $tab['name'] == $last_active_tab ) || ( ( !$last_active_tab || !in_array( $last_active_tab, $tab_names ) ) && $first_tab === true ) ) {
 					$class .= ' tabs';
 					$first_tab = $slug;
 					if ( $post->post_status == 'auto-draft' && $tab['name'] == 'commenting-tab' ) {
-						$active_value = '1';
 						$active_tab = $tab['name'];
+						$active_value = '1';
 					}
 				}
 				echo '<li class="' . $class . '" id="muut_tab-' . $tab['name'] . '" data-muut_tab="' . $tab['name'] . '"><a href="#muut_tab_content-' . $tab['name'] . '" class="muut_metabox_tab">' . $tab['label'] . '</a><input type="hidden" class="muut_tab_last_active" name="muut_tab_last_active_' . $tab['name'] . '" value="' . $active_value . '" /></li>';
