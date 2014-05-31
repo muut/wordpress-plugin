@@ -29,7 +29,13 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		function __construct() {
-			// Constructor stuff.
+			parent::__construct(
+				'muut_channel_embed_widget',
+				__( 'Muut Channel', 'muut' ),
+				array(
+					'description' => __( 'Use this to embed a specific channel in a widget area.', 'muut' ),
+				)
+			);
 		}
 
 		/**

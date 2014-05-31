@@ -82,6 +82,9 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 
 			// If the escaped fragment parameter has been passed in the URL (google bot).
 			add_action( 'init', array( $this, 'initEscapedFragments' ), 5 );
+
+			// Initialize the widgets.
+			add_action( 'widgets_init', array( $this, 'initWidgetChannelEmbed' ) );
 		}
 
 		/**
@@ -257,6 +260,22 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			if ( !in_array( $class, $this->alreadyInit ) ) {
 				require_once( muut()->getPluginPath() . 'lib/admin/admin-field-validation.utility.class.php' );
 				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initialize the Channel Embed widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function initWidgetChannelEmbed() {
+			$class = 'Muut_Widget_Channel_Embed';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/widgets/widget-channel-embed.class.php' );
+				$this->alreadyInit[] = $class;
+				register_widget( 'Muut_Widget_Channel_Embed' );
 			}
 		}
 
