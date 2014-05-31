@@ -362,15 +362,7 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 						}
 						$channel_path = $path;
 					} elseif ( isset( $tab_options['channel_path'] ) && $tab_options['channel_path'] != '' ) {
-						$path = $tab_options['channel_path'];
-						if ( substr( $path, 0, 1 ) == '/' ) {
-							$path = substr( $path, 1 );
-						}
-						if ( substr( $path, -1 ) == '/' ) {
-							$path = substr( $path, 0, -1 );
-						}
-						$path = implode('/', array_map('rawurlencode', explode( '/', $path ) ) );
-						$channel_path = $path;
+						$channel_path = Muut_Post_Utility::sanitizeMuutPath( $tab_options['channel_path'] );
 					}
 
 					$tab_options['channel_path'] = $channel_path;

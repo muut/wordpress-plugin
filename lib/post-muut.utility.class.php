@@ -353,5 +353,24 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 				return $forum_page_id;
 			}
 		}
+
+		/**
+		 * Sanitizes a Muut remote path for storage.
+		 *
+		 * @param string $path The current channel path.
+		 * @return string The sanitized path.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public static function sanitizeMuutPath( $path ) {
+			if ( substr( $path, 0, 1 ) == '/' ) {
+				$path = substr( $path, 1 );
+			}
+			if ( substr( $path, -1 ) == '/' ) {
+				$path = substr( $path, 0, -1 );
+			}
+			$path =  str_replace( '%3A', ':', implode('/', array_map('rawurlencode', explode( '/', $path ) ) ) );
+			return $path;
+		}
 	}
 }
