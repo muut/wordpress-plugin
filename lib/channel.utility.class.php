@@ -67,7 +67,12 @@ if ( !class_exists( 'Muut_Channel_Utility' ) ) {
 			$embed = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" ' . $settings . ' href="' . muut()->getContentPathPrefix() . 'i/' . muut()->getForumName() . '/' . $path . '">' . __( 'Comments', 'muut' ) . '</a>';
 			$embed = apply_filters( 'muut_channel_embed_content', $embed, $path );
 
-			return $embed;
+			if ( $echo ) {
+				echo $embed;
+				return;
+			} else {
+				return $embed;
+			}
 		}
 	}
 

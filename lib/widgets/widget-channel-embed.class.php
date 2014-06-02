@@ -48,7 +48,24 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function widget( $args, $instance ) {
-			// Output the frontend widget content.
+			if ( Muut_Post_Utility::isMuutPost( get_the_ID() ) || Muut_Post_Utility::isMuutCommentingPost( get_the_ID() ) ) {
+				return;
+			}
+			if ( isset( $instance['hide_online'] ) ) {
+				$embed_args['show-online'] = !$instance['hide_online'] ? 'true' : 'false';
+			}
+			if ( isset( $instance['disable_uploads'] ) ) {
+				$embed_args['allow-uploads'] = !$instance['disable_uploads'] ? 'true' : 'false';
+			}
+
+			$embed_args['title'] = isset( $instance['title'] ) ? $instance['title'] : '';
+			$embed_args['channel'] = $instance['title'] ? $instance['title'] : '';
+			$path = $instance['muut_path'];
+
+			echo $args['before_widget'];
+			echo $args['before_title'] . $embed_args['title'] . $args['after_title'];
+			Muut_Channel_Utility::getChannelEmbedMarkup( $path, $embed_args, true );
+			echo $args['after_widget'];
 		}
 
 		/**

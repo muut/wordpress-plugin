@@ -961,7 +961,8 @@ if ( !class_exists( 'Muut' ) ) {
 
 			$return = false;
 			if ( Muut_Post_Utility::isMuutPost( get_the_ID() )
-				|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() ) ) {
+				|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() )
+				|| is_active_widget( false, false, 'muut_channel_embed_widget' ) ) {
 				$return = true;
 			}
 
