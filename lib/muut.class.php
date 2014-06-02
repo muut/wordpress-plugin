@@ -590,6 +590,31 @@ if ( !class_exists( 'Muut' ) ) {
 		}
 
 		/**
+		 * Gets the proper embed attribute name from a given embed argument name.
+		 *
+		 * @param string $argument The argument we are getting the proper embed attribute.
+		 * @return string The proper embed attribute.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getMuutEmbedAttribute( $argument ) {
+			$embed_parameters = array(
+				'show-online' => 'data-show_online',
+				'allow-uploads' => 'data-upload',
+				'title' => 'title',
+				'channel' => 'data-channel',
+			);
+
+			$parameter_name = $argument;
+
+			if ( in_array( $argument, array_keys( $embed_parameters ) ) ) {
+				$parameter_name = $embed_parameters[$argument];
+			}
+
+			return $parameter_name;
+		}
+
+		/**
 		 * Enqueues the admin-side scripts we will be using.
 		 *
 		 * @return void

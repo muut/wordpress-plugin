@@ -302,25 +302,21 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 			} else {
 				return;
 			}
-			if ( isset( $post_options['hide_online'] ) && $post_options['hide_online'] == true ) {
-				$settings .= 'data-show_online="false" ';
-			} else {
-				$settings .= 'data-show_online="true" ';
+			if ( isset( $post_options['hide_online'] ) ) {
+				$show_online = !$post_options['hide_online'] ? 'true' : 'false';
+				$settings .= muut()->getMuutEmbedAttribute( 'show-online' ) . '="' . $show_online . '" ';
 			}
-			if ( isset( $post_options['disable_uploads'] ) && $post_options['disable_uploads'] == true ) {
-				$settings .= 'data-upload="false" ';
-			} else {
-				$settings .= 'data-upload="true" ';
+			if ( isset( $post_options['disable_uploads'] ) ) {
+				$allow_uploads = !$post_options['disable_uploads'] ? 'true' : 'false';
+				$settings .= muut()->getMuutEmbedAttribute( 'allow-uploads' ) . '="' . $allow_uploads . '" ';
 			}
 
-			$settings .= 'title="' . get_the_title( $page_id ) . '" ';
-			$settings .= 'data-channel="' . get_the_title( $page_id ) . '" ';
+			$settings .= muut()->getMuutEmbedAttribute( 'title' ) . '="' . get_the_title( $page_id ) . '" ';
+			$settings .= muut()->getMuutEmbedAttribute( 'channel' ) . '="' . get_the_title( $page_id ) . '" ';
 
 			if ( $type_of_embed == 'channel' ) {
 				$path = self::getChannelRemotePathForPage( $page_id );
-				$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
-				$embed = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . muut()->getForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
-				$embed = apply_filters( 'muut_channel_embed_content', $embed, $page_id );
+
 			} elseif ( $type_of_embed == 'forum' ) {
 				ob_start();
 					include ( muut()->getPluginPath() . 'views/blocks/forum-page-embed.php' );
