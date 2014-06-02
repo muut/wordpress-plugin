@@ -615,6 +615,24 @@ if ( !class_exists( 'Muut' ) ) {
 		}
 
 		/**
+		 * Gets a string of embed settings from args (the attributes for the embed markup).
+		 *
+		 * @param array $args The arguments we are translating to a setting string.
+		 * @return string The settings string of attributes to place in embed tag.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getEmbedAttributesString( $args = array() ) {
+			$settings = '';
+			foreach ( $args as $attribute => $value ) {
+				$attribute = muut()->getMuutEmbedAttribute( $attribute );
+				$settings .= ' ' . $attribute . '="' . $value .'"';
+			}
+
+			return $settings;
+		}
+
+		/**
 		 * Enqueues the admin-side scripts we will be using.
 		 *
 		 * @return void

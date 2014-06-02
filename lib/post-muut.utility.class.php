@@ -303,16 +303,16 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 				return;
 			}
 			if ( isset( $post_options['hide_online'] ) ) {
-				$show_online = !$post_options['hide_online'] ? 'true' : 'false';
-				$settings .= muut()->getMuutEmbedAttribute( 'show-online' ) . '="' . $show_online . '" ';
+				$args['show-online'] = !$post_options['hide_online'] ? 'true' : 'false';
 			}
 			if ( isset( $post_options['disable_uploads'] ) ) {
-				$allow_uploads = !$post_options['disable_uploads'] ? 'true' : 'false';
-				$settings .= muut()->getMuutEmbedAttribute( 'allow-uploads' ) . '="' . $allow_uploads . '" ';
+				$args['allow-uploads'] = !$post_options['disable_uploads'] ? 'true' : 'false';
 			}
 
-			$settings .= muut()->getMuutEmbedAttribute( 'title' ) . '="' . get_the_title( $page_id ) . '" ';
-			$settings .= muut()->getMuutEmbedAttribute( 'channel' ) . '="' . get_the_title( $page_id ) . '" ';
+			$args['title'] = get_the_title( $page_id );
+			$args['channel'] = get_the_title( $page_id );
+
+			$settings = muut()->getEmbedAttributesString( $args );
 
 			if ( $type_of_embed == 'channel' ) {
 				$path = self::getChannelRemotePathForPage( $page_id );
