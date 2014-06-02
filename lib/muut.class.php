@@ -503,6 +503,7 @@ if ( !class_exists( 'Muut' ) ) {
 			wp_register_script( 'muut-sso', $this->pluginUrl . 'resources/muut-sso.js', array( 'jquery', 'muut' ), '1.0', true );
 
 			wp_register_style( 'muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
+			wp_register_style( 'muut-frontend-style', $this->pluginUrl . 'resources/frontend-style.css' );
 			wp_register_style( 'x-editable-style', $this->pluginUrl . 'vendor/jqueryui-editable/css/jqueryui-editable.css' );
 			wp_register_style( 'muut-forum-css', '//cdn.' . self::MUUTSERVERS . '/' . $muut_version . '/moot.css', array(), $muut_version );
 			wp_register_style( 'jquery-ui-dialog-css', site_url('wp-includes/css/jquery-ui-dialog.css') );
@@ -590,6 +591,49 @@ if ( !class_exists( 'Muut' ) ) {
 		}
 
 		/**
+		 * Gets the proper embed attribute name from a given embed argument name.
+		 *
+		 * @param string $argument The argument we are getting the proper embed attribute.
+		 * @return string The proper embed attribute.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getMuutEmbedAttribute( $argument ) {
+			$embed_parameters = array(
+				'show-online' => 'data-show_online',
+				'allow-uploads' => 'data-upload',
+				'title' => 'title',
+				'channel' => 'data-channel',
+			);
+
+			$parameter_name = $argument;
+
+			if ( in_array( $argument, array_keys( $embed_parameters ) ) ) {
+				$parameter_name = $embed_parameters[$argument];
+			}
+
+			return $parameter_name;
+		}
+
+		/**
+		 * Gets a string of embed settings from args (the attributes for the embed markup).
+		 *
+		 * @param array $args The arguments we are translating to a setting string.
+		 * @return string The settings string of attributes to place in embed tag.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getEmbedAttributesString( $args = array() ) {
+			$settings = '';
+			foreach ( $args as $attribute => $value ) {
+				$attribute = muut()->getMuutEmbedAttribute( $attribute );
+				$settings .= ' ' . $attribute . '="' . $value .'"';
+			}
+
+			return $settings;
+		}
+
+		/**
 		 * Enqueues the admin-side scripts we will be using.
 		 *
 		 * @return void
@@ -599,6 +643,7 @@ if ( !class_exists( 'Muut' ) ) {
 		public function enqueueAdminScripts() {
 			$screen = get_current_screen();
 			if ( $screen->id == 'page'
+				|| $screen->id == 'widgets'
 				|| $screen->id == self::SLUG . '_page_muut_settings'
 				|| $screen->id == 'toplevel_page_muut' ) {
 				wp_enqueue_script( 'muut-admin-functions' );
@@ -629,6 +674,7 @@ if ( !class_exists( 'Muut' ) ) {
 			if ( $this->needsMuutResources() ) {
 				wp_enqueue_script( 'muut' );
 				wp_enqueue_style( 'muut-forum-css' );
+				wp_enqueue_style( 'muut-frontend-style' );
 				wp_enqueue_script( 'muut-frontend-functions' );
 			}
 
@@ -915,7 +961,8 @@ if ( !class_exists( 'Muut' ) ) {
 
 			$return = false;
 			if ( Muut_Post_Utility::isMuutPost( get_the_ID() )
-				|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() ) ) {
+				|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() )
+				|| is_active_widget( false, false, 'muut_channel_embed_widget' ) ) {
 				$return = true;
 			}
 
