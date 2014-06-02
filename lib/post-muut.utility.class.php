@@ -317,6 +317,7 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 			if ( $type_of_embed == 'channel' ) {
 				$path = self::getChannelRemotePathForPage( $page_id );
 
+				$embed = Muut_Channel_Utility::getChannelEmbedMarkup( $path, $args );
 			} elseif ( $type_of_embed == 'forum' ) {
 				ob_start();
 					include ( muut()->getPluginPath() . 'views/blocks/forum-page-embed.php' );
