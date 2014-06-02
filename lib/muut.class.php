@@ -503,6 +503,7 @@ if ( !class_exists( 'Muut' ) ) {
 			wp_register_script( 'muut-sso', $this->pluginUrl . 'resources/muut-sso.js', array( 'jquery', 'muut' ), '1.0', true );
 
 			wp_register_style( 'muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
+			wp_register_style( 'muut-frontend-style', $this->pluginUrl . 'resources/frontend-style.css' );
 			wp_register_style( 'x-editable-style', $this->pluginUrl . 'vendor/jqueryui-editable/css/jqueryui-editable.css' );
 			wp_register_style( 'muut-forum-css', '//cdn.' . self::MUUTSERVERS . '/' . $muut_version . '/moot.css', array(), $muut_version );
 			wp_register_style( 'jquery-ui-dialog-css', site_url('wp-includes/css/jquery-ui-dialog.css') );
@@ -673,6 +674,7 @@ if ( !class_exists( 'Muut' ) ) {
 			if ( $this->needsMuutResources() ) {
 				wp_enqueue_script( 'muut' );
 				wp_enqueue_style( 'muut-forum-css' );
+				wp_enqueue_style( 'muut-frontend-style' );
 				wp_enqueue_script( 'muut-frontend-functions' );
 			}
 
