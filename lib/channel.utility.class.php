@@ -32,6 +32,22 @@ if ( !class_exists( 'Muut_Channel_Utility' ) ) {
 		 */
 		private function __construct() {}
 
+		/**
+		 * Gets a channel's full index URI.
+		 *
+		 * @param string $path The channel path.
+		 * @return string The full index URI.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public static function getChannelIndexUri( $path ) {
+
+			$base_uri = muut()->getForumIndexUri();
+
+			$uri = $base_uri . $path;
+
+			return apply_filters( 'muut_channel_index_uri', $uri, $path );
+		}
 
 	}
 

@@ -180,11 +180,11 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 				return false;
 			}
 
-			$base_uri = muut()->getForumIndexUri();
+			$path = self::getChannelRemotePathForPage( $page_id );
 
-			$uri = $base_uri . self::getChannelRemotePathForPage( $page_id );
+			$uri = Muut_Channel_Utility::getChannelIndexUri( $path );
 
-			return apply_filters( 'muut_channel_index_uri', $uri, $page_id );
+			return apply_filters( 'muut_channel_page_index_uri', $uri, $page_id );
 		}
 
 		/**
