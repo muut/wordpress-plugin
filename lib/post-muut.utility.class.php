@@ -48,7 +48,7 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public static function setChannelPageRemotePath( $page_id, $path = '' ) {
+		public static function setChannelRemotePathForPage( $page_id, $path = '' ) {
 			if ( !is_numeric( $page_id ) || !is_string( $path ) ) {
 				return false;
 			}
@@ -155,7 +155,7 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public static function getChannelRemotePath( $page_id, $no_suffix = false ) {
+		public static function getChannelRemotePathForPage( $page_id, $no_suffix = false ) {
 			if( !is_numeric( $page_id ) ) {
 				return false;
 			}
@@ -175,14 +175,14 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0.1
 		 */
-		public static function getChannelIndexUri( $page_id ) {
+		public static function getChannelIndexUriForPage( $page_id ) {
 			if( !is_numeric( $page_id ) ) {
 				return false;
 			}
 
 			$base_uri = muut()->getForumIndexUri();
 
-			$uri = $base_uri . self::getChannelRemotePath( $page_id );
+			$uri = $base_uri . self::getChannelRemotePathForPage( $page_id );
 
 			return apply_filters( 'muut_channel_index_uri', $uri, $page_id );
 		}
@@ -317,7 +317,7 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 			$settings .= 'data-channel="' . get_the_title( $page_id ) . '" ';
 
 			if ( $type_of_embed == 'channel' ) {
-				$path = self::getChannelRemotePath( $page_id );
+				$path = self::getChannelRemotePathForPage( $page_id );
 				$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
 				$embed = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . muut()->getForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
 				$embed = apply_filters( 'muut_channel_embed_content', $embed, $page_id );

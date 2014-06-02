@@ -356,8 +356,8 @@ if ( !class_exists( 'Muut_Admin_Post_Editor' ) ) {
 						$ancestors = get_post_ancestors( $post );
 
 						foreach ( $ancestors as $ancestor ) {
-							if ( Muut_Post_Utility::isMuutChannelPage( $ancestor ) && Muut_Post_Utility::getChannelRemotePath( $ancestor, true ) ) {
-								$path = Muut_Post_Utility::getChannelRemotePath( $ancestor, true ) . '/' . $path;
+							if ( Muut_Post_Utility::isMuutChannelPage( $ancestor ) && Muut_Post_Utility::getChannelRemotePathForPage( $ancestor, true ) ) {
+								$path = Muut_Post_Utility::getChannelRemotePathForPage( $ancestor, true ) . '/' . $path;
 							}
 						}
 						$channel_path = $path;
