@@ -69,6 +69,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		protected function addInitListeners() {
 			add_action( 'template_redirect', array( $this, 'initTemplateLoader' ) );
 			add_action( 'init', array( $this, 'initMuutPostUtility' ) );
+			add_action( 'init', array( $this, 'initChannelUtility' ) );
 			add_action( 'init', array( $this, 'initCommentOverrides' ) );
 			add_action( 'init', array( $this, 'initDeveloperSubscription' ) );
 			add_filter( 'comments_template', array( $this, 'initTemplateLoader' ) );
@@ -259,6 +260,21 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			$class = 'Muut_Field_Validation';
 			if ( !in_array( $class, $this->alreadyInit ) ) {
 				require_once( muut()->getPluginPath() . 'lib/admin/admin-field-validation.utility.class.php' );
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the Channel utility class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function initChannelUtility() {
+			$class = 'Muut_Channel_Utility';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/channel.utility.class.php' );
 				$this->alreadyInit[] = $class;
 			}
 		}
