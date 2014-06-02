@@ -51,9 +51,10 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 			if ( Muut_Post_Utility::isMuutPost( get_the_ID() ) || Muut_Post_Utility::isMuutCommentingPost( get_the_ID() ) ) {
 				return;
 			}
-			if ( isset( $instance['hide_online'] ) ) {
-				$embed_args['show-online'] = !$instance['hide_online'] ? 'true' : 'false';
-			}
+
+			// Default to always NOT showing online users. Can be modified with filter.
+			$embed_args['show-online'] = apply_filters( 'muut_channel_embed_widget_show_online', false, $args, $instance );
+
 			if ( isset( $instance['disable_uploads'] ) ) {
 				$embed_args['allow-uploads'] = !$instance['disable_uploads'] ? 'true' : 'false';
 			}
@@ -92,7 +93,6 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		public function update( $new_instance, $old_instance ) {
 			$instance = array();
 			$instance['title'] = !empty( $new_instance['title'] ) ? strip_tags( $new_instance['title'] ) : '';
-			$instance['hide_online'] = !empty( $new_instance['hide_online'] ) ? $new_instance['hide_online'] : '0';
 			$instance['disable_uploads'] = !empty( $new_instance['disable_uploads'] ) ? $new_instance['disable_uploads'] : '0';
 
 			// Make sure that the path is saved as SOMETHING.
