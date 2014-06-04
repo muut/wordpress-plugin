@@ -48,7 +48,10 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function widget( $args, $instance ) {
-			/* Widget Display */
+			echo $args['before_widget'];
+			echo $args['before_title'] . __( 'Online Users', 'muut' ) . $args['after_title'];
+			include( muut()->getPluginPath() . 'views/widgets/widget-online-users.php' );
+			echo $args['after_widget'];
 		}
 
 		/**
