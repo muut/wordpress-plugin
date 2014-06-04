@@ -7,12 +7,26 @@
 /* Channel Embed Widget */
 .widget_muut_channel_embed_widget .m-page {
     font-size: 14px;
+    line-height: 14px;
     margin-bottom: -90px;
 }
 
 #muut-widget-channel-embed-wrapper a.m-facelink,
 #muut-widget-channel-embed-wrapper a.m-online {
     margin-right: .4em;
+}
+
+#muut-widget-online-users-wrapper .m-users {
+}
+
+#muut-widget-online-users-wrapper .m-logged-users a.m-facelink,
+#muut-widget-online-users-wrapper .m-logged-users a.m-online {
+    margin: 0 .4em .5em;
+    box-sizing: border-box;
+}
+
+#muut-widget-online-users-wrapper .m-logged-users img.m-face {
+    vertical-align: baseline;
 }
 
 #muut-widget-channel-embed-wrapper .m-logged .m-login {

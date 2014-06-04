@@ -12,6 +12,8 @@
  *
  */
 ?>
-<div class="muut_widget_wrapper muut_widget_online_users_wrapper">
-	<p>Online Users Widget</p>
+<div id="muut-widget-online-users-wrapper" class="muut_widget_wrapper muut_widget_online_users_wrapper">
+	<div class="m-users">
+		<div class="m-logged-users"></div>
+	</div>
 </div>
