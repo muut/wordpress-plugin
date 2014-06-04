@@ -1,0 +1,79 @@
+<?php
+/**
+ * The Online Users widget.
+ *
+ * @package   Muut
+ * @copyright 2014 Muut Inc
+ */
+
+// Don't load directly
+if ( !defined( 'ABSPATH' ) ) {
+	die( '-1' );
+}
+
+if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
+	/**
+	 * Muut Online Users widget class.
+	 *
+	 * @package Muut
+	 * @author  Paul Hughes
+	 * @since   NEXT_RELEASE
+	 */
+	class Muut_Widget_Online_Users extends WP_Widget {
+
+		/**
+		 * The class constructor.
+		 *
+		 * @return Muut_Widget_Online_Users
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		function __construct() {
+			parent::__construct(
+				'muut_online_users_widget',
+				__( 'Muut Online Users', 'muut' ),
+				array(
+					'description' => __( 'Use this to show the online users in a widget.', 'muut' ),
+				)
+			);
+		}
+
+		/**
+		 * Render the widget frontend output.
+		 *
+		 * @param array $args The sidebar arguments.
+		 * @param array $instance The widget instance parameters.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function widget( $args, $instance ) {
+			/* Widget Display */
+		}
+
+		/**
+		 * Render the admin form for widget customization.
+		 *
+		 * @param array $instance The widget instance parameters.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function form( $instance ) {
+			include( muut()->getPluginPath() . 'views/widgets/admin-widget-online-users.php' );
+		}
+
+		/**
+		 * Process the widget arguments to save the customization for that instance.
+		 *
+		 * @param array $new_instance The changed/new arguments.
+		 * @param array $old_instance The previous/old arguments.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function update( $new_instance, $old_instance ) {
+			/* Update function. */
+		}
+	}
+}
