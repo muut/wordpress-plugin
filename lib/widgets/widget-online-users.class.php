@@ -48,6 +48,12 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function widget( $args, $instance ) {
+			// Make sure the Muut resources get loaded (only stuff in the footer will work, as this happens
+			// partway through page load.
+			add_filter( 'muut_requires_muut_resources', '__return_true' );
+			muut()->enqueueFrontendScripts();
+
+			// Render widget.
 			echo $args['before_widget'];
 			echo $args['before_title'] . __( 'Online Users', 'muut' ) . $args['after_title'];
 			include( muut()->getPluginPath() . 'views/widgets/widget-online-users.php' );

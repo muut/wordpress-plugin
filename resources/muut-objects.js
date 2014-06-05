@@ -12,6 +12,12 @@ var muut_object = {
   online_users: []
 };
 jQuery(document).ready(function($) {
+  // Embed the hidden Muut for widgets and pages where we need to load it in the background.
+  if (typeof muut() == 'undefined' && typeof muut_load_empty != 'undefined' && muut_load_empty ) {
+    $('#muut_hidden_embed_div').muut(muut_conf);
+  }
+
+  // Once Muut is loaded...
   muut().on('load', function() {
     // Functionality for the online users widget.
     var widget_online_users_wrapper = $('#muut-widget-online-users-wrapper');
@@ -42,6 +48,7 @@ jQuery(document).ready(function($) {
   });
 });
 
+// Function that contains the template for avatars.
 var get_user_avatar_html = function(user) {
   var html = '<a class="m-facelink m-is-admin m-user-online_' + user.username +'" href="#!/' + user.path + '" data-href="#!/' + user.path + '"><img class="m-face" src="' + user.img + '"></a><span class="m-tooltip" style="top: -18px; left: -25px;">' + user.displayname + '</span>';
   return html;
