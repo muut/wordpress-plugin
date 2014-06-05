@@ -167,6 +167,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ), 11 );
 
 			add_action( 'wp_print_scripts', array( $this, 'printCurrentPageJs' ) );
+			add_action( 'wp_footer', array( $this, 'printHiddenMuutDiv' ) );
 		}
 
 		/**
@@ -705,8 +706,24 @@ if ( !class_exists( 'Muut' ) ) {
 						}
 					}
 					echo '</script>';
+				} elseif( is_active_widget( false, false, 'muut_online_users_widget' ) ) {
+					echo '<script type="text/javascript">';
+						echo 'var muut_conf = { url: "' . $this->getForumIndexUri() . '", path: "/' . $this->getOption( 'comments_base_domain') . ':hidden-base-forum-thread" };';
+						echo 'var muut_load_empty = true;';
+					echo '</script>';
 				}
 			}
+		}
+
+		/**
+		 * Prints a hidden div that will allow us to "embed" Muut on pages where we don't need to actually see any of it.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function printHiddenMuutDiv() {
+			echo '<div id="muut_hidden_embed_div" style="display: none;"></div>';
 		}
 
 		/**
@@ -962,9 +979,8 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			$return = false;
-			if ( Muut_Post_Utility::isMuutPost( get_the_ID() )
-				|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() )
-				|| is_active_widget( false, false, 'muut_channel_embed_widget' ) ) {
+			if ( Muut_Post_Utility::isMuutPost( $page_id )
+				|| Muut_Post_Utility::isMuutCommentingPost( $page_id ) ) {
 				$return = true;
 			}
 
