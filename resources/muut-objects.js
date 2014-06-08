@@ -12,6 +12,7 @@ var muut_object = {
   online_users: []
 };
 jQuery(document).ready(function($) {
+  var muut_objects_strings = muut_objects_localized;
   // Embed the hidden Muut for widgets and pages where we need to load it in the background.
   if (typeof muut() == 'undefined' && typeof muut_load_empty != 'undefined' && muut_load_empty ) {
     $('#muut_hidden_embed_div').muut(muut_conf);
@@ -25,10 +26,18 @@ jQuery(document).ready(function($) {
       // The custom trigger listeners.
       $(muut_object).on('add_online_user', function(e, user) {
         online_user_html = get_user_avatar_html(user);
-        widget_online_users_wrapper.find('.m-logged-users').append(online_user_html);
+        var user_faces = widget_online_users_wrapper.find('.m-logged-users').append(online_user_html).find('.m-facelink');
+        var new_user_face = user_faces[user_faces.length - 1];
+        $(new_user_face).mootboost(500);
+        $(new_user_face).usertooltip();
       });
+      //console.log($.fn.tooltip2);
       $(muut_object).on('remove_online_user', function(e, user) {
-        widget_online_users_wrapper.find('.m-user-online_' + user.username).remove();
+        if(user.path.substr(0,1) == '@') {
+          var username = user.path.substr(1);
+        }
+        console.log(username);
+        widget_online_users_wrapper.find('.m-user-online_' + username).fadeOut(500, function() { $(this).remove() });
       });
       // For the websockets that Muut is using.
       muut().channel.on('enter', function(user) {
@@ -44,12 +53,36 @@ jQuery(document).ready(function($) {
         load_online_users_initial_html += get_user_avatar_html(user);
       });
       widget_online_users_wrapper.find('.m-logged-users').append(load_online_users_initial_html);
+      $.each(widget_online_users_wrapper.find('.m-facelink'), function() {
+        $(this).usertooltip();
+      });
+    }
+
+  });
+
+  $.fn.extend({
+    usertooltip: function() {
+      $(this).tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0});
+      if($(this).hasClass('m-is-admin')) {
+        $(this).find(".m-tooltip").append("<em> (" + muut_objects_strings.admin + ")</em>");
+      }
     }
   });
 });
 
 // Function that contains the template for avatars.
 var get_user_avatar_html = function(user) {
-  var html = '<a class="m-facelink m-is-admin m-user-online_' + user.username +'" href="#!/' + user.path + '" data-href="#!/' + user.path + '"><img class="m-face" src="' + user.img + '"></a><span class="m-tooltip" style="top: -18px; left: -25px;">' + user.displayname + '</span>';
+  var is_admin_class = '';
+  if(user.is_admin) {
+    is_admin_class = 'm-is-admin ';
+  }
+
+  // Construct the actual username without the '@'.
+  if(user.path.substr(0,1) == '@') {
+    var username = user.path.substr(1);
+  }
+
+  // Return the HTML for the face.
+  var html = '<a class="m-facelink ' + is_admin_class + 'm-online m-user-online_' + username +'" title="' + user.displayname + '" href="#!/' + user.path + '" data-href="#!/' + user.path + '"><img class="m-face" src="' + user.img + '"></a>';
   return html;
 };

@@ -523,6 +523,9 @@ if ( !class_exists( 'Muut' ) ) {
 				'muut-frontend-functions' => array(
 					'comments' => __( 'Comments', 'muut' ),
 				),
+				'muut-objects' => array(
+					'admin' => __( 'Admin', 'muut' ),
+				),
 			);
 			foreach ( $localizations as $key => $array ) {
 				$new_key = str_replace( '-', '_', $key ) . '_localized';

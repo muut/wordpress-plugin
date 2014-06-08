@@ -13,7 +13,11 @@
 
 #muut-widget-channel-embed-wrapper a.m-facelink,
 #muut-widget-channel-embed-wrapper a.m-online {
-    margin-right: .4em;
+    margin-right: .2em;
+}
+
+#muut-widget-online-users-wrapper a.m-facelink.m-hovered img.m-face {
+    box-shadow: 0 0 .2em #1fadc5;
 }
 
 #muut-widget-online-users-wrapper .m-users {
@@ -21,12 +25,19 @@
 
 #muut-widget-online-users-wrapper .m-logged-users a.m-facelink,
 #muut-widget-online-users-wrapper .m-logged-users a.m-online {
-    margin: 0 .4em .5em;
-    box-sizing: border-box;
+    position: relative;
+    float: none;
+    margin: 0 .2em .5em;
+}
+
+#muut-widget-online-users-wrapper .m-logged-users a.m-facelink {
+    height: 2.3em;
+    width: 2.3em;
 }
 
 #muut-widget-online-users-wrapper .m-logged-users img.m-face {
     vertical-align: baseline;
+    box-sizing: border-box;
 }
 
 #muut-widget-channel-embed-wrapper .m-logged .m-login {
