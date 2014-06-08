@@ -31,12 +31,10 @@ jQuery(document).ready(function($) {
         $(new_user_face).mootboost(500);
         $(new_user_face).usertooltip();
       });
-      //console.log($.fn.tooltip2);
       $(muut_object).on('remove_online_user', function(e, user) {
         if(user.path.substr(0,1) == '@') {
           var username = user.path.substr(1);
         }
-        console.log(username);
         widget_online_users_wrapper.find('.m-user-online_' + username).fadeOut(500, function() { $(this).remove() });
       });
       // For the websockets that Muut is using.
