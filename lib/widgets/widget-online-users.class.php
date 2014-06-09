@@ -53,9 +53,14 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 			add_filter( 'muut_requires_muut_resources', '__return_true' );
 			muut()->enqueueFrontendScripts();
 
+			$num_online_html = '';
+			if ( $instance['show_number_online'] ) {
+				$num_online_html = '<span class="num-logged-in"></span>';
+			}
+
 			// Render widget.
 			echo $args['before_widget'];
-			echo $args['before_title'] . __( 'Online Users', 'muut' ) . $args['after_title'];
+			echo $args['before_title'] . __( 'Online Users', 'muut' ) . $num_online_html . $args['after_title'];
 			include( muut()->getPluginPath() . 'views/widgets/widget-online-users.php' );
 			echo $args['after_widget'];
 		}
@@ -83,6 +88,7 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 */
 		public function update( $new_instance, $old_instance ) {
 			$instance = array();
+			$instance['show_number_online'] = !empty( $new_instance['show_number_online'] ) ? $new_instance['show_number_online'] : '0';
 			$instance['show_anonymous'] = !empty( $new_instance['show_anonymous'] ) ? $new_instance['show_anonymous'] : '0';
 
 			return $instance;

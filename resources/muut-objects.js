@@ -23,9 +23,14 @@ jQuery(document).ready(function($) {
     // Functionality for the online users widget.
     var widget_online_users_wrapper = $('#muut-widget-online-users-wrapper');
     var anon_count_wrapper = widget_online_users_wrapper.find('.m-anon-count');
+    var num_logged_in_span = $('.widget_muut_online_users_widget').find('.num-logged-in');
     var show_anon_count = false;
+    var show_num_logged_in = false;
     if ( anon_count_wrapper.length > 0 ) {
       show_anon_count = true;
+    }
+    if ( num_logged_in_span.length > 0 ) {
+      show_num_logged_in = true;
     }
     if (widget_online_users_wrapper.length > 0) {
       // The custom trigger listeners.
@@ -37,6 +42,7 @@ jQuery(document).ready(function($) {
         $(new_user_face).mootboost(500);
         $(new_user_face).usertooltip();
         update_anon_count();
+        update_num_logged_in();
       });
       $(muut_object).on('remove_online_user', function(e, user) {
         if(user.path.substr(0,1) == '@') {
@@ -44,6 +50,7 @@ jQuery(document).ready(function($) {
         }
         widget_online_users_wrapper.find('.m-user-online_' + username).fadeOut(500, function() { $(this).remove() });
         update_anon_count();
+        update_num_logged_in();
       });
       // For the websockets that Muut is using.
       muut().channel.on('enter', function(user) {
@@ -67,6 +74,9 @@ jQuery(document).ready(function($) {
         var anon_users_html = '+<em>' + muut_object.anon_count + '</em> ' + muut_objects_strings.anonymous_users;
         anon_count_wrapper.append(anon_users_html);
       }
+      if ( show_num_logged_in ) {
+        num_logged_in_span.text(muut().online.length);
+      }
       widget_online_users_wrapper.find('.m-logged-users').append(load_online_users_initial_html);
       $.each(widget_online_users_wrapper.find('.m-facelink'), function() {
         $(this).usertooltip();
@@ -82,6 +92,12 @@ jQuery(document).ready(function($) {
         }
 
         anon_count_wrapper.find('em').text(muut().anon_count);
+      }
+    };
+
+    var update_num_logged_in = function() {
+      if ( show_num_logged_in ) {
+        num_logged_in_span.text(muut().online.length);
       }
     };
   });
