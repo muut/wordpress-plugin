@@ -525,6 +525,7 @@ if ( !class_exists( 'Muut' ) ) {
 				),
 				'muut-objects' => array(
 					'admin' => __( 'Admin', 'muut' ),
+					'anonymous_users' => _x( 'anonymous', 'anonymous users', 'muut' ),
 				),
 			);
 			foreach ( $localizations as $key => $array ) {

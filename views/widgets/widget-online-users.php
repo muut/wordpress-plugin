@@ -11,9 +11,14 @@
  * Knowing that, `$this` represents that widget instance.
  *
  */
+
+
 ?>
 <div id="muut-widget-online-users-wrapper" class="muut_widget_wrapper muut_widget_online_users_wrapper">
 	<div class="m-users">
 		<div class="m-logged-users"></div>
+		<?php if ( isset( $instance['show_anonymous'] ) && $instance['show_anonymous'] ) { ?>
+		<div class="m-anon-count"></div>
+		<?php } ?>
 	</div>
 </div>

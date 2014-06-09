@@ -10,5 +10,9 @@
  * This file assumes that we are within an instance of the Muut_Widget_Online_Users class (which extends WP_Widget).
  * Knowing that, `$this` represents that widget instance.
  */
+
+$show_anonymous = !isset( $instance['show_anonymous'] ) ? '1' : $instance['show_anonymous'];
 ?>
-<p>This widget has no applicable settings yet.</p>
+<p>
+	<span class="checkbox_row"><input type="checkbox" id="<?php echo $this->get_field_id( 'show_anonymous' ); ?>" name="<?php echo $this->get_field_name( 'show_anonymous' ); ?>" value="1" <?php checked( $show_anonymous, '1' ); ?> /><label for="<?php echo $this->get_field_id( 'show_anonymous' ); ?>"><?php _e( 'Show anonymous user count', 'muut' ); ?></label></span>
+</p>

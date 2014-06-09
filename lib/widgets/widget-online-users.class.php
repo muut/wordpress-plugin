@@ -82,7 +82,10 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function update( $new_instance, $old_instance ) {
-			/* Update function. */
+			$instance = array();
+			$instance['show_anonymous'] = !empty( $new_instance['show_anonymous'] ) ? $new_instance['show_anonymous'] : '0';
+
+			return $instance;
 		}
 	}
 }
