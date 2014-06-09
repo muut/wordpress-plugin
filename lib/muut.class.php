@@ -709,10 +709,11 @@ if ( !class_exists( 'Muut' ) ) {
 						}
 					}
 					echo '</script>';
-				} elseif( is_active_widget( false, false, 'muut_online_users_widget' ) ) {
+				}
+				if( is_active_widget( false, false, 'muut_online_users_widget' ) ) {
 					echo '<script type="text/javascript">';
 						echo 'var muut_conf = { url: "' . $this->getForumIndexUri() . '", path: "/' . $this->getOption( 'comments_base_domain') . ':hidden-base-forum-thread" };';
-						echo 'var muut_load_empty = true;';
+						echo 'var muut_force_load = true;';
 					echo '</script>';
 				}
 			}

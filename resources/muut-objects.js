@@ -14,7 +14,7 @@ var muut_object = {
 jQuery(document).ready(function($) {
   var muut_objects_strings = muut_objects_localized;
   // Embed the hidden Muut for widgets and pages where we need to load it in the background.
-  if (typeof muut() == 'undefined' && typeof muut_load_empty != 'undefined' && muut_load_empty ) {
+  if (typeof muut() == 'undefined' && typeof muut_force_load != 'undefined' && muut_force_load ) {
     $('#muut_hidden_embed_div').muut(muut_conf);
   }
 
