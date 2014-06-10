@@ -11,9 +11,15 @@
  * Knowing that, `$this` represents that widget instance.
  */
 
+$title = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
+
 $show_anonymous = !isset( $instance['show_anonymous'] ) ? '1' : $instance['show_anonymous'];
 $show_number_online = !isset( $instance['show_number_online'] ) ? '1' : $instance['show_number_online'];
 ?>
+<p>
+	<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Display Title:', 'muut' ); ?></label>
+	<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
+</p>
 <p>
 	<span class="checkbox_row"><input type="checkbox" id="<?php echo $this->get_field_id( 'show_number_online' ); ?>" name="<?php echo $this->get_field_name( 'show_number_online' ); ?>" value="1" <?php checked( $show_number_online, '1' ); ?> /><label for="<?php echo $this->get_field_id( 'show_number_online' ); ?>"><?php _e( 'Show number of logged in users', 'muut' ); ?></label></span>
 </p>
