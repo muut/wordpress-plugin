@@ -909,13 +909,9 @@ if ( !class_exists( 'Muut' ) ) {
 				$page_id = get_the_ID();
 			}
 
-			if ( !is_numeric( $page_id ) ) {
-				return false;
-			}
-
 			$return = false;
-			if ( Muut_Post_Utility::isMuutPost( get_the_ID() )
-				|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() ) ) {
+			if ( is_numeric( $page_id ) && ( Muut_Post_Utility::isMuutPost( $page_id )
+				|| Muut_Post_Utility::isMuutCommentingPost( $page_id ) ) ) {
 				$return = true;
 			}
 
