@@ -52,6 +52,11 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 				return;
 			}
 
+			// Make sure the Muut resources get loaded (only stuff in the footer will work, as this happens
+			// partway through page load.
+			add_filter( 'muut_requires_muut_resources', '__return_true' );
+			muut()->enqueueFrontendScripts();
+
 			// Default to always NOT showing online users. Can be modified with filter.
 			$embed_args['show-online'] = apply_filters( 'muut_channel_embed_widget_show_online', false, $args, $instance );
 
