@@ -86,6 +86,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 
 			// Initialize the widgets.
 			add_action( 'widgets_init', array( $this, 'initWidgetChannelEmbed' ) );
+			add_action( 'widgets_init', array( $this, 'initWidgetOnlineUsers' ) );
 		}
 
 		/**
@@ -292,6 +293,22 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 				require_once( muut()->getPluginPath() . 'lib/widgets/widget-channel-embed.class.php' );
 				$this->alreadyInit[] = $class;
 				register_widget( 'Muut_Widget_Channel_Embed' );
+			}
+		}
+
+		/**
+		 * Initialize the Online Users widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function initWidgetOnlineUsers() {
+			$class = 'Muut_Widget_Online_Users';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/widgets/widget-online-users.class.php' );
+				$this->alreadyInit[] = $class;
+				register_widget( 'Muut_Widget_Online_Users' );
 			}
 		}
 

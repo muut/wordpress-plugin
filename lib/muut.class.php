@@ -167,6 +167,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ), 11 );
 
 			add_action( 'wp_print_scripts', array( $this, 'printCurrentPageJs' ) );
+			add_action( 'wp_footer', array( $this, 'printHiddenMuutDiv' ) );
 		}
 
 		/**
@@ -501,6 +502,7 @@ if ( !class_exists( 'Muut' ) ) {
 
 			wp_register_script( 'muut-frontend-functions', $this->pluginUrl . 'resources/frontend-functions.js', array( 'jquery' ), '1.0', true );
 			wp_register_script( 'muut-sso', $this->pluginUrl . 'resources/muut-sso.js', array( 'jquery', 'muut' ), '1.0', true );
+			wp_register_script( 'muut-objects', $this->pluginUrl . 'resources/muut-objects.js', array( 'jquery', 'muut-frontend-functions' ), '1.0', true );
 
 			wp_register_style( 'muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
 			wp_register_style( 'muut-frontend-style', $this->pluginUrl . 'resources/frontend-style.css' );
@@ -520,6 +522,10 @@ if ( !class_exists( 'Muut' ) ) {
 				),
 				'muut-frontend-functions' => array(
 					'comments' => __( 'Comments', 'muut' ),
+				),
+				'muut-objects' => array(
+					'admin' => __( 'Admin', 'muut' ),
+					'anonymous_users' => _x( 'anonymous', 'anonymous users', 'muut' ),
 				),
 			);
 			foreach ( $localizations as $key => $array ) {
@@ -676,6 +682,7 @@ if ( !class_exists( 'Muut' ) ) {
 				wp_enqueue_style( 'muut-forum-css' );
 				wp_enqueue_style( 'muut-frontend-style' );
 				wp_enqueue_script( 'muut-frontend-functions' );
+				wp_enqueue_script( 'muut-objects' );
 			}
 
 
@@ -704,7 +711,24 @@ if ( !class_exists( 'Muut' ) ) {
 					}
 					echo '</script>';
 				}
+				if( is_active_widget( false, false, 'muut_online_users_widget' ) ) {
+					echo '<script type="text/javascript">';
+						echo 'var muut_widget_conf = { url: "' . $this->getForumIndexUri() . '", path: "/' . $this->getOption( 'comments_base_domain') . ':hidden-base-forum-thread" };';
+						echo 'var muut_force_load = true;';
+					echo '</script>';
+				}
 			}
+		}
+
+		/**
+		 * Prints a hidden div that will allow us to "embed" Muut on pages where we don't need to actually see any of it.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function printHiddenMuutDiv() {
+			echo '<div id="muut_hidden_embed_div" style="display: none;"></div>';
 		}
 
 		/**

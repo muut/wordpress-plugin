@@ -68,6 +68,7 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 			$embed_args['channel'] = $instance['title'] ? $instance['title'] : '';
 			$path = $instance['muut_path'];
 
+			// Render widget.
 			echo $args['before_widget'];
 			echo $args['before_title'] . $embed_args['title'] . $args['after_title'];
 			echo '<div id="muut-widget-channel-embed-wrapper" class="muut_widget_wrapper muut_widget_channel_embed_wrapper">';

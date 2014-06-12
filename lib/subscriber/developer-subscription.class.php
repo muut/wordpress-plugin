@@ -195,8 +195,6 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 				echo 'message: "' . $this->getSsoMessage() . '"';
 				echo '}';
 				echo '};';
-			} else {
-				echo 'var muut_conf = {};';
 			}
 			echo '</script>';
 		}

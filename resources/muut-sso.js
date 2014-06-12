@@ -9,7 +9,7 @@
  */
 jQuery( function($) {
   var body = $('body');
-  if ( ( body.hasClass( 'muut-enabled' ) || body.hasClass( 'has-muut' ) || body.hasClass( 'has-moot' ) ) && typeof( muut_conf ) != 'undefined' ) {
+  if ( ( body.hasClass( 'muut-enabled' ) || body.hasClass( 'has-muut' ) || body.hasClass( 'has-moot' ) ) && typeof muut_conf != 'undefined' && typeof muut() != 'undefined' ) {
     $('.muut_sso').muut(muut_conf);
   }
 });
