@@ -54,7 +54,7 @@ jQuery(document).ready(function($) {
         if(user.path.substr(0,1) == '@') {
           var username = user.path.substr(1);
         }
-        var username_for_selector = username.replace(':', '\\:');
+        var username_for_selector = (username.replace(':', '\\:')).replace(' ', '_');
         widget_online_users_wrapper.find('.m-user-online_' + username_for_selector).fadeOut(500, function() { $(this).remove() });
         update_anon_count();
         update_num_logged_in();
@@ -131,7 +131,8 @@ var get_user_avatar_html = function(user) {
     var username = user.path.substr(1);
   }
 
+  var username_for_class = username.replace(' ', '_');
   // Return the HTML for the face.
-  var html = '<a class="m-facelink ' + is_admin_class + 'm-online m-user-online_' + username +'" title="' + user.displayname + '" href="#!/' + user.path + '" data-href="#!/' + user.path + '"><img class="m-face" src="' + user.img + '"></a>';
+  var html = '<a class="m-facelink ' + is_admin_class + 'm-online m-user-online_' + username_for_class +'" title="' + user.displayname + '" href="#!/' + user.path + '" data-href="#!/' + user.path + '"><img class="m-face" src="' + user.img + '"></a>';
   return html;
 };
