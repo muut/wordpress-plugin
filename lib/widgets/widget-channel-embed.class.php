@@ -48,7 +48,7 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function widget( $args, $instance ) {
-			if ( Muut_Post_Utility::isMuutPost( get_the_ID() ) || Muut_Post_Utility::isMuutCommentingPost( get_the_ID() ) ) {
+			if ( !is_home() && ( Muut_Post_Utility::isMuutPost( get_the_ID() ) || Muut_Post_Utility::isMuutCommentingPost( get_the_ID() ) ) ) {
 				return;
 			}
 
