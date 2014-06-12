@@ -118,6 +118,7 @@ jQuery(document).ready( function($) {
     $('#muut_enable_tab-' + tab_name).prop('checked', false);
     $('.muut_tab_last_active[name=muut_tab_last_active_' + tab_name +']').val(0);
     $(muut_tab_events_object).trigger('tab_disable', [ tab_name ]);
+    muut_toggle_page_template();
   };
 
   // Generalized function to enable a specific tab.
@@ -126,7 +127,30 @@ jQuery(document).ready( function($) {
     $('#muut_enable_tab-' + tab_name).prop('checked', true);
     $('.muut_tab_last_active[name=muut_tab_last_active_' + tab_name +']').val(1);
     $(muut_tab_events_object).trigger('tab_enable', [ tab_name ]);
+    muut_toggle_page_template();
   };
+
+  // Disable or enable the page template field
+  var muut_toggle_page_template = function() {
+    if ( $('#muut_enable_tab-channel-tab').is(':checked') || $('#muut_enable_tab-forum-tab').is(':checked')) {
+      $('#page_template').prop('disabled', 'disabled');
+      // Make sure the page template is set as default, even though we are disabling the dropdown.
+      $('<input />').attr('type', 'hidden')
+        .attr('name', "page_template")
+        .attr('value', "default")
+        .appendTo('#post');
+
+      $('#page_template option').filter( function() {
+        return $(this).val() == 'default';
+      }).prop('selected', true);
+    } else {
+      $('#post').find('input[name="page_template"][type="hidden"]').remove();
+      $('#page_template').prop('disabled', false);
+    }
+  };
+
+  // Execute on load.
+  muut_toggle_page_template();
 
   // Check if jQuery Tabs UI API is enabled before executing related functionality.
   if ($.fn.tabs) {
