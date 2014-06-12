@@ -15,6 +15,12 @@ jQuery(document).ready(function($) {
   var muut_objects_strings = muut_objects_localized;
   // Embed the hidden Muut for widgets and pages where we need to load it in the background.
   if (typeof muut() == 'undefined' && typeof muut_force_load != 'undefined' && muut_force_load ) {
+    if( typeof muut_conf == 'object') {
+      $.extend(muut_conf, muut_widget_conf);
+    } else {
+      muut_conf = muut_widget_conf;
+    }
+
     $('#muut_hidden_embed_div').muut(muut_conf);
   }
 
@@ -48,7 +54,8 @@ jQuery(document).ready(function($) {
         if(user.path.substr(0,1) == '@') {
           var username = user.path.substr(1);
         }
-        widget_online_users_wrapper.find('.m-user-online_' + username).fadeOut(500, function() { $(this).remove() });
+        var username_for_selector = username.replace(':', '\\:');
+        widget_online_users_wrapper.find('.m-user-online_' + username_for_selector).fadeOut(500, function() { $(this).remove() });
         update_anon_count();
         update_num_logged_in();
       });
