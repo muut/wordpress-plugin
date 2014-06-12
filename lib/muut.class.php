@@ -678,6 +678,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function enqueueFrontendScripts() {
 			if ( $this->needsMuutResources() ) {
+				do_action( 'muut_before_scripts_enqueued' );
 				wp_enqueue_script( 'muut' );
 				wp_enqueue_style( 'muut-forum-css' );
 				wp_enqueue_style( 'muut-frontend-style' );
