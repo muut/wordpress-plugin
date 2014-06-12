@@ -139,7 +139,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 				if ( $_GET['_escaped_fragment_'] ) {
 					$remote_path = $_GET['_escaped_fragment_'][0] == '/' ? substr( $_GET['_escaped_fragment_'], 1 ) : $_GET['_escaped_fragment_'];
 				} else {
-					$remote_path = Muut_Post_Utility::getChannelRemotePath( $page_id );
+					$remote_path = Muut_Post_Utility::getChannelRemotePathForPage( $page_id );
 				}
 
 				$content = $this->getIndexContentForPath( $remote_path );

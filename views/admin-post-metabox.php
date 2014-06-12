@@ -14,7 +14,7 @@ if ( $is_forum != '1' ) {
 	$forum_show_class = 'hidden';
 }
 
-$remote_path = '/' . rawurldecode( Muut_Post_Utility::getChannelRemotePath( get_the_ID(), true ) );
+$remote_path = '/' . rawurldecode( Muut_Post_Utility::getChannelRemotePathForPage( get_the_ID(), true ) );
 
 $tabs = Muut_Admin_Post_Editor::instance()->getMetaBoxTabsForCurrentPostType();
 $tab_names = array();
