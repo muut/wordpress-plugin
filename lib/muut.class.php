@@ -158,6 +158,8 @@ if ( !class_exists( 'Muut' ) ) {
 		protected function addActions() {
 			add_action( 'admin_init', array( $this, 'maybeAddRewriteRules' ) );
 			add_action( 'admin_menu', array( $this, 'createAdminMenuItems' ) );
+			add_action( 'admin_init', array( $this, 'runActivationFunctions' ) );
+
 			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ) );
 			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
 
@@ -591,6 +593,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'use_custom_s3_bucket' => '0',
 				'custom_s3_bucket_name' => '',
 				'comments_base_domain' => $_SERVER['SERVER_NAME'],
+				'activation_timestamp' => '0',
 			) );
 
 			return $defaults;
@@ -1092,6 +1095,20 @@ if ( !class_exists( 'Muut' ) ) {
 		}
 
 
+		/**
+		 * Check if the plugin was just activated, in which case update/store the activation timestamp.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function runActivationFunctions() {
+			$just_activated = get_option( 'muut_plugin_just_activated', '' );
+			if ( is_numeric( $just_activated ) ) {
+				muut()->setOption( 'activation_timestamp', $just_activated );
+				delete_option( 'muut_plugin_just_activated' );
+			}
+		}
 	}
 	/**
 	 * END MAIN CLASS
