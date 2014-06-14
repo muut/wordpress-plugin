@@ -612,6 +612,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'show-online' => 'data-show_online',
 				'allow-uploads' => 'data-upload',
 				'title' => 'title',
+				'share' => 'data-share',
 				'channel' => 'data-channel',
 			);
 
