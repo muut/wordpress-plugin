@@ -90,6 +90,13 @@ jQuery(document).ready(function($) {
       });
     }
 
+    muut().user.on('logout', function(event) {
+      $('.muut').muut();
+    });
+    muut().channel.on('login', function(event) {
+      $('.muut').muut('feed');
+    });
+
     var update_anon_count = function() {
       if ( show_anon_count ) {
         if (muut().anon_count == 0 && !anon_count_wrapper.hasClass('hidden')) {
