@@ -1,4 +1,4 @@
-=== Muut ===
+=== Muut - Commenting and Forums Re-Imagined ===
 Contributors: PaulHughes01, tipiirai, jannelehtinen
 Tags: forum, commenting, realtime, discussion
 Requires at least: 3.7
@@ -29,7 +29,7 @@ Whether you’re setting up for the first time or have just updated to the new v
 * Micro format optimized static content
 * Static content served from your domain
 * Custom S3 bucket support for Developer accounts
-* Escaped fragment support ([more info]) for Google
+* Escaped fragment support for Google
 
 You can find more information about Muut at our [website](https://muut.com) and read the full [plugin documentation](https://muut.com/docs/wordpress.html).
 
