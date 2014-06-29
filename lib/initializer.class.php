@@ -72,6 +72,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			add_action( 'init', array( $this, 'initChannelUtility' ) );
 			add_action( 'init', array( $this, 'initCommentOverrides' ) );
 			add_action( 'init', array( $this, 'initDeveloperSubscription' ) );
+			add_action( 'init', array( $this, 'initWebhooks' ) );
 			add_filter( 'comments_template', array( $this, 'initTemplateLoader' ) );
 
 			// Deprecating these, scheduled for full removal.
@@ -160,6 +161,23 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			}
 		}
 
+		/**
+		 * Initializes the Webhooks class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function initWebhooks() {
+			$class = 'Muut_Webhooks';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/subscriber/webhooks.class.php');
+				if ( class_exists( $class ) ) {
+					Muut_Webhooks::instance();
+				}
+				$this->alreadyInit[] = $class;
+			}
+		}
 		/**
 		 * Initializes the plugin Updater class, to pass along old options and other functionality.
 		 *
