@@ -105,7 +105,24 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 					status_header( 412 );
 					exit;
 				}
+
 			}
+		}
+
+		/**
+		 * Returns the request body content formatted as an array.
+		 *
+		 * @return array The request body content.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function getRequestBody() {
+			$body = file_get_contents('php://input');
+
+			if ( !empty( $body ) ) {
+				$request = json_decode( $body );
+			}
+			return $request;
 		}
 
 		/**
@@ -129,5 +146,28 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		public function isWebhooksActivated() {
 			return muut()->getOption( 'use_webhooks' );
 		}
+
+		/**
+		 * Gets the expected webhook events.
+		 *
+		 * @return array An array of webhook events.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getWebhookEventsList() {
+			return apply_filters( 'muut_webhook_events_list', array(
+				'enter',
+				'leave',
+				'like',
+				'unlike',
+				'remove',
+				'spam',
+				'unspam',
+				'reply',
+				'post', // This is what 'moot' will be.
+				'moot', // This one will be disappearing in favor of 'post'.
+			) );
+		}
+
 	}
 }
