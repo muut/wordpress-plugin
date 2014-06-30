@@ -609,6 +609,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'custom_s3_bucket_name' => '',
 				'comments_base_domain' => $_SERVER['SERVER_NAME'],
 				'activation_timestamp' => '0',
+				'use_webhooks' => '0',
 			) );
 
 			return $defaults;

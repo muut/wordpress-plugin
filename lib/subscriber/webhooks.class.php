@@ -115,5 +115,16 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		public function getEndpointSlug() {
 			return apply_filters( 'muut_webhooks_endpoint_slug', self::DEFAULT_ENDPOINT_SLUG );
 		}
+
+		/**
+		 * Checks if webhooks are activated.
+		 *
+		 * @return bool Whether webhooks are activated or not.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function isWebhooksActivated() {
+			return muut()->getOption( 'use_webhooks' );
+		}
 	}
 }
