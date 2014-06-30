@@ -22,6 +22,8 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 	 */
 	class Muut_Webhooks
 	{
+		const DEFAULT_ENDPOINT_SLUG = 'muut-webhooks';
+
 		/**
 		 * @static
 		 * @property Muut_Webhooks The instance of the class.
@@ -62,7 +64,9 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function addActions() {
+			add_action( 'admin_init', array( $this, 'addWebhooksEndpoint' ) );
 
+			add_action( 'template_redirect', array( $this, 'receiveRequest' ) );
 		}
 
 		/**
@@ -74,6 +78,42 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 */
 		public function addFilters() {
 
+		}
+
+		/**
+		 * Adds the webhooks endpoint for receiving Muut HTTP requests.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function addWebhooksEndpoint() {
+			add_rewrite_rule( '^' . $this->getEndpointSlug() . '/?', 'index.php?muut_action=webhooks', 'top' );
+		}
+
+		/**
+		 * Begins request processing if the muut_action query var is passed
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function receiveRequest() {
+			if ( get_query_var( 'muut_action' ) == 'webhooks' ) {
+				exit( print_r( $_SERVER, true ) );
+			}
+		}
+
+
+		/**
+		 * Gets and filters the endpoint slug.
+		 *
+		 * @return string The endpoint slug.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getEndpointSlug() {
+			return apply_filters( 'muut_webhooks_endpoint_slug', self::DEFAULT_ENDPOINT_SLUG );
 		}
 	}
 }
