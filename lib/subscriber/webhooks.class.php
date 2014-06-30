@@ -99,11 +99,14 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function receiveRequest() {
-			if ( get_query_var( 'muut_action' ) == 'webhooks' ) {
-				exit( print_r( $_SERVER, true ) );
+			if ( get_query_var( 'muut_action' ) == 'webhooks' && $this->isWebhooksActivated() ) {
+				// If Muut headers are not present, return 412.
+				if ( false ) { // TODO: Modify this conditional to require the Muut headers: !isset( $_SERVER['HTTP_X_MUUT_FORUM'] ) ) {
+					status_header( 412 );
+					exit;
+				}
 			}
 		}
-
 
 		/**
 		 * Gets and filters the endpoint slug.
