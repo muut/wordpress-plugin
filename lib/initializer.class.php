@@ -166,7 +166,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since 3.0
+		 * @since NEXT_RELEASE
 		 */
 		public function initWebhooks() {
 			$class = 'Muut_Webhooks';
@@ -178,6 +178,25 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 				$this->alreadyInit[] = $class;
 			}
 		}
+
+		/**
+		 * Initializes the Custom Post Types class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function initCustomPostTypes() {
+			$class= 'Muut_Custom_Post_Types';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/custom-post-types.class.php');
+				if ( class_exists( $class ) ) {
+					Muut_Custom_Post_Types::instance();
+				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
 		/**
 		 * Initializes the plugin Updater class, to pass along old options and other functionality.
 		 *

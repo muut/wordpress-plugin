@@ -64,6 +64,9 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 */
 		protected function __construct() {
 			$this->secret = muut()->getOption( 'webhooks_secret' );
+			if ( $this->isWebhooksActivated() ) {
+				Muut_Initializer::instance()->initCustomPostTypes();
+			}
 			$this->addActions();
 			$this->addFilters();
 		}
