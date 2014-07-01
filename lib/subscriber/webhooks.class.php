@@ -112,11 +112,15 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 */
 		public function receiveRequest() {
 			if ( get_query_var( 'muut_action' ) == 'webhooks' && $this->isWebhooksActivated() ) {
-				// If Muut headers are not present, return 412.
-				if ( false ) { // TODO: Modify this conditional to require the Muut headers: !isset( $_SERVER['HTTP_X_MUUT_FORUM'] ) ) {
-					status_header( 412 );
+
+				$status_code = $this->validateRequest();
+
+				//error_log( 'Request status: ' . $status_code );
+				if ( $status_code != 200 ) {
+					status_header( $status_code );
 					exit;
 				}
+
 				// Display the payload.
 				//error_log( $this->getRequestBody( true ) );
 				// Display the X-Muut-Signature header value.
@@ -219,6 +223,28 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			}
 
 			return $result;
+		}
+
+		/**
+		 * Validate HTTP request from Muut.
+		 *
+		 * @return int Whether the request is valid or not, the HTTP status code.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function validateRequest() {
+			if ( !isset( $_SERVER['HTTP_X_MUUT_SIGNATURE'] ) ) {
+				return 412;
+			}
+			$request = $this->getRequestBody( true );
+
+			$signature = hash_hmac( 'sha1', $request, $this->secret );
+
+			if ( $signature != $_SERVER['HTTP_X_MUUT_SIGNATURE'] ) {
+				return 403;
+			}
+
+			return 200;
 		}
 
 		/**
