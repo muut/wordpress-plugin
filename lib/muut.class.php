@@ -799,10 +799,10 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function queueAdminNotice( $type, $content ) {
-			$this->adminNotices[] = array(
+			array_unshift( $this->adminNotices, array(
 				'type' => $type,
 				'content' => $content,
-			);
+			) );
 		}
 
 		/**
