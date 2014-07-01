@@ -106,9 +106,9 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 					exit;
 				}
 				// Display the payload.
-				// error_log( $this->getRequestBody() );
+				//error_log( $this->getRequestBody( true ) );
 				// Display the X-Muut-Signature header value.
-				// error_log( $_SERVER['HTTP_X_MUUT_SIGNATURE'] );
+				//error_log( $_SERVER['HTTP_X_MUUT_SIGNATURE'] );
 			}
 		}
 
@@ -119,12 +119,16 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
-		protected function getRequestBody() {
+		protected function getRequestBody( $raw = false ) {
 			$body = file_get_contents('php://input');
 
 			$request = false;
 			if ( !empty( $body ) ) {
-				$request = json_decode( $body );
+				if ( !$raw ) {
+					$request = json_decode( $body );
+				} else {
+					$request = $body;
+				}
 			}
 			return $request;
 		}
