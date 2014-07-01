@@ -31,6 +31,17 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		protected static $instance;
 
 		/**
+		 * @property string The raw request body.
+		 */
+		protected $raw_request;
+
+		/**
+		 * @private
+		 * @property string The shared secret.
+		 */
+		private $secret;
+
+		/**
 		 * The singleton method.
 		 *
 		 * @return Muut_Webhooks The instance.
@@ -52,6 +63,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @since  NEXT_RELEASE
 		 */
 		protected function __construct() {
+			$this->secret = muut()->getOption( 'webhooks_secret' );
 			$this->addActions();
 			$this->addFilters();
 		}
@@ -77,7 +89,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function addFilters() {
-
+			add_filter( 'muut_validate_setting_use_webhooks', array( $this, 'executeSettingSave' ) );
 		}
 
 		/**
@@ -127,7 +139,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 				if ( !$raw ) {
 					$request = json_decode( $body );
 				} else {
-					$request = $body;
+					$request = $this->raw_request = $body;
 				}
 			}
 			return $request;
@@ -153,6 +165,60 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 */
 		public function isWebhooksActivated() {
 			return muut()->getOption( 'use_webhooks' );
+		}
+
+		/**
+		 * On saving, lets make sure to create (or check for) a webhooks shared secret for the user to enter on the
+		 * Muut settings end.
+		 *
+		 * @param int $value Whether the use_webhooks setting is being saved as active or not.
+		 * @return int $value The same value—we aren't messing with it.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function executeSettingSave( $value ) {
+			if ( $value == 1 && !muut()->getOption( 'use_webhooks' ) ) {
+				$this->secret = $this->generateSecret();
+				add_filter( 'muut_settings_validated', array( $this, 'saveSecret' ) );
+				$notice_message = sprintf( __( 'You can now use the following secret in your Muut webhook settings: %s', 'muut' ), '<b>' . $this->secret . '</b>' );
+				muut()->queueAdminNotice( 'updated', $notice_message );
+			}
+
+			return $value;
+		}
+
+		/**
+		 * Adds the current instance's shared secret to the settings being saved.
+		 *
+		 * @param array $settings The current settings array.
+		 * @return array The filtered settings array.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function saveSecret( $settings ) {
+			$settings['webhooks_secret'] = $this->secret;
+
+			return $settings;
+		}
+
+		/**
+		 * Generate a (random) secret for shared secret use with Muut.
+		 *
+		 * @return string The secret.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function generateSecret() {
+			$validCharacters = "abcdefghijklmnopqrstuxyvwzABCDEFGHIJKLMNOPQRSTUXYVWZ+-*#&@!?";
+			$validCharNumber = strlen($validCharacters);
+
+			$result = "";
+			for ( $i = 0; $i < 20; $i++ ) {
+				$index = mt_rand( 0, $validCharNumber - 1 );
+				$result .= $validCharacters[$index];
+			}
+
+			return $result;
 		}
 
 		/**

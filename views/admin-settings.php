@@ -23,6 +23,7 @@ $current_values = array(
 	'subscription_api_key' => muut()->getOption( 'subscription_api_key', '' ),
 	'subscription_secret_key' => muut()->getOption( 'subscription_secret_key', '' ),
 	'use_webhooks' => muut()->getOption( 'use_webhooks', '' ),
+	'webhooks_secret' => muut()->getOption( 'webhooks_secret', '' ),
 );
 
 $display_values = wp_parse_args( $error_values, $current_values );
@@ -151,7 +152,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 		</table>
 	<h3 class="title"><?php _e( 'Webhooks', 'muut' ); ?></h3>
 	<?php $sso_field_class = $display_values['subscription_use_sso'] ? '' : 'hidden'; ?>
-	<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Muut Developer%s to use webhooks to listen for events on your forum.', 'muut' ), '<a class="muut_upgrade_to_developer_link" href="#">', '</a>'); ?></p>
+	<p class="muut_requires_input_block" data-muut_requires="muut_use_webhooks" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Muut Developer%s to use webhooks to listen for events on your forum.', 'muut' ), '<a class="muut_upgrade_to_developer_link" href="#">', '</a>'); ?></p>
 	<table class="form-table">
 		<tbody>
 		<tr>
@@ -159,6 +160,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 				<input name="setting[use_webhooks]" type="checkbox" id="muut_use_webhooks" value="1" <?php checked( '1', $display_values['use_webhooks'] ); ?> />
 				<label for="muut_use_webhooks"><?php _e( 'Enable', 'muut' ); ?></label>
 				<p class="muut_requires_input_block" data-muut_requires="muut_use_webhooks" data-muut_require_func="is(':checked')"><?php printf( __( 'Enter the url %s/muut-webhooks/%s in your Muut forum webhooks settings, with all events selected.', 'muut' ), '<b>' . site_url(), '</b>' ); ?></p>
+				<?php if ( $current_values['webhooks_secret'] && $current_values['use_webhooks'] ) { ?><p class="muut_requires_input_block" data-muut_requires="muut_use_webhooks" data-muut_require_func="is(':checked')"><?php printf( __( 'Enter the the following secret as the webhooks secret in the Muut settings: %s', 'muut' ), '<b>' . $current_values['webhooks_secret'] . '</b>' ); ?></p><?php } ?>
 			</th>
 		</tr>
 		</tbody>

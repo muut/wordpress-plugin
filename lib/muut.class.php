@@ -610,6 +610,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'comments_base_domain' => $_SERVER['SERVER_NAME'],
 				'activation_timestamp' => '0',
 				'use_webhooks' => '0',
+				'webhooks_secret' => '',
 			) );
 
 			return $defaults;
