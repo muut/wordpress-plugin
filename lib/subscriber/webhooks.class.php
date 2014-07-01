@@ -105,7 +105,10 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 					status_header( 412 );
 					exit;
 				}
-
+				// Display the payload.
+				// error_log( $this->getRequestBody() );
+				// Display the X-Muut-Signature header value.
+				// error_log( $_SERVER['HTTP_X_MUUT_SIGNATURE
 			}
 		}
 
@@ -119,6 +122,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		protected function getRequestBody() {
 			$body = file_get_contents('php://input');
 
+			$request = false;
 			if ( !empty( $body ) ) {
 				$request = json_decode( $body );
 			}
@@ -148,24 +152,59 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		}
 
 		/**
-		 * Gets the expected webhook events.
+		 * Gets the expected webhook events and the returned array structure for each.
 		 *
 		 * @return array An array of webhook events.
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
-		public function getWebhookEventsList() {
-			return apply_filters( 'muut_webhook_events_list', array(
-				'enter',
-				'leave',
-				'like',
-				'unlike',
-				'remove',
-				'spam',
-				'unspam',
-				'reply',
-				'post', // This is what 'moot' will be.
-				'moot', // This one will be disappearing in favor of 'post'.
+		public function getWebhookEventsStructure() {
+			return apply_filters( 'muut_webhook_events_structure', array(
+				'enter' => array(
+					'event',
+					'user',
+					'arg1',
+				),
+				'leave' => array(
+					'event',
+					'user',
+					'arg1',
+				),
+				'like' => array(
+					'event',
+					'path',
+					'user',
+				),
+				'unlike' => array(
+					'event',
+					'path',
+					'user',
+				),
+				'remove' => array(
+					'event',
+					'path',
+					'user',
+				),
+				'spam' => array(
+					'event',
+					'path',
+					'user',
+				),
+				'unspam' => array(
+					'event',
+					'path',
+					'user',
+				),
+				'reply' => array(
+					'event',
+					'path',
+					'post',
+				),
+				'post' => array(
+					'event',
+					'location',
+					'thread',
+				),
 			) );
 		}
 
