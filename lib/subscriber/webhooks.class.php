@@ -183,6 +183,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			}
 
 			//error_log( print_r( $parsed, true ) );
+			return $parsed;
 		}
 
 		/**

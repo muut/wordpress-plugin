@@ -168,8 +168,9 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 			extract( $args );
 
 			$post_args = array(
+				'post_title' => $title,
 				'post_content' => $body,
-				'post_name' => $path,
+				'post_name' => urlencode( $path ),
 				'post_type' => self::MUUT_THREAD_CPT_NAME,
 				'post_status' => self::MUUT_PUBLIC_POST_STATUS,
 			);
