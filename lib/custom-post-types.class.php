@@ -23,6 +23,15 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 	 */
 	class Muut_Custom_Post_Types
 	{
+		const MUUT_THREAD_CPT_NAME = 'muut_thread';
+
+		const MUUT_REPLY_CPT_NAME = 'muut_reply';
+
+		const MUUT_PUBLIC_POST_STATUS = 'muut_public';
+
+		const MUUT_SPAM_POST_STATUS = 'muut_spam';
+
+
 		/**
 		 * @static
 		 * @property Muut_Custom_Post_Types The instance of the class.
@@ -63,6 +72,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		 * @since  3.0
 		 */
 		protected function addActions() {
+			add_action( 'init', array( $this, 'registerCustomPostStatuses' ) );
 			add_action( 'init', array( $this, 'registerCustomPostTypes' ) );
 		}
 
@@ -86,32 +96,97 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		 */
 		public function registerCustomPostTypes() {
 			// Only worrying about a couple of these, since the post type is TOTALLY not public at all.
-			$muutPostLabels = array(
+			$muut_post_labels = array(
 				'name' => __( 'Muut Threads', 'muut' ),
 				'singular_name' => __( 'Muut Thread', 'muut' ),
 			);
 
-			$muutPostArgs = apply_filters( 'muut_thread_cpt_args', array(
+			$muut_post_args = apply_filters( 'muut_thread_cpt_args', array(
 				'label' => __( 'Muut Threads', 'muut' ),
-				'labels' => $muutPostLabels,
+				'labels' => $muut_post_labels,
 				'description' => __( 'This post type is not for public use, but is mainly for storing Muut thread data passed to it via webhooks.', 'muut' ),
 				'public' => false,
 			) );
 
-			$muutReplyLabels = array(
+			$muut_reply_labels = array(
 				'name' => __( 'Muut Replies', 'muut' ),
 				'singular_name' => __( 'Muut Reply', 'muut' ),
 			);
 
-			$muutReplyArgs = apply_filters( 'muut_reply_cpt_args', array(
+			$muut_reply_args = apply_filters( 'muut_reply_cpt_args', array(
 				'label' => __( 'Muut Replies', 'muut' ),
-				'labels' => $muutReplyLabels,
+				'labels' => $muut_reply_labels,
 				'description' => __( 'This post type is not for public use, but is mainly for storing Muut reply data passed to it via webhooks.', 'muut' ),
 				'public' => false,
 			) );
 
-			register_post_type( 'muut_post', $muutPostArgs );
-			register_post_type( 'muut_reply', $muutReplyArgs );
+			register_post_type( self::MUUT_THREAD_CPT_NAME, $muut_post_args );
+			register_post_type( self::MUUT_REPLY_CPT_NAME, $muut_reply_args );
 		}
+
+		/**
+		 * Register the custom post types post statuses.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function registerCustomPostStatuses() {
+			$muut_post_status_public_args = apply_filters( 'muut_public_post_status_args', array(
+				'label' => __( 'Public Muut Post', 'muut' ),
+				'public' => false,
+			) );
+
+			$muut_post_status_spam_args = apply_filters( 'muut_spam_post_status_args', array(
+				'label' => __( 'Spammed Muut Post', 'muut' ),
+				'public' => false,
+			) );
+
+			register_post_status( self::MUUT_PUBLIC_POST_STATUS, $muut_post_status_public_args );
+			register_post_status( self::MUUT_SPAM_POST_STATUS, $muut_post_status_spam_args );
+		}
+
+		/**
+		 * Add new Muut Thread.
+		 *
+		 * @param array $args The post args.
+		 *                    This array should follow the following structure:
+		 *                    'title' => "The Thread Title"
+		 *                    'path' => The new thread path.
+		 *                    'user' => The *Muut* username.
+		 *                    'body' => The thread content.
+		 * @return int The CPT post id.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function addMuutThreadData( $args = array() ) {
+			if ( empty( $args['title'] ) || empty( $args['path'] ) || empty( $args['user'] ) || !isset( $args['body'] ) ) {
+				return false;
+			}
+
+			// If everything is there, lets add the thread.
+			extract( $args );
+
+			$post_args = array(
+				'post_content' => $body,
+				'post_name' => $path,
+				'post_type' => self::MUUT_THREAD_CPT_NAME,
+				'post_status' => self::MUUT_PUBLIC_POST_STATUS,
+			);
+
+			// Add the thread to the Posts table.
+			$inserted_post = wp_insert_post( $post_args, false );
+
+			if ( $inserted_post == 0 ) {
+				return false;
+			}
+
+			// Add the muut user as post meta.
+			update_post_meta( $inserted_post, 'muut_user', $user );
+
+			// Return the WP post id.
+			return $inserted_post;
+		}
+
 	}
 }
