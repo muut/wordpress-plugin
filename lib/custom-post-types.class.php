@@ -63,7 +63,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		 * @since  3.0
 		 */
 		protected function addActions() {
-
+			add_action( 'init', array( $this, 'registerCustomPostTypes' ) );
 		}
 
 		/**
@@ -77,5 +77,41 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 
 		}
 
+		/**
+		 * Register the custom post types.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function registerCustomPostTypes() {
+			// Only worrying about a couple of these, since the post type is TOTALLY not public at all.
+			$muutPostLabels = array(
+				'name' => __( 'Muut Threads', 'muut' ),
+				'singular_name' => __( 'Muut Thread', 'muut' ),
+			);
+
+			$muutPostArgs = apply_filters( 'muut_thread_cpt_args', array(
+				'label' => __( 'Muut Threads', 'muut' ),
+				'labels' => $muutPostLabels,
+				'description' => __( 'This post type is not for public use, but is mainly for storing Muut thread data passed to it via webhooks.', 'muut' ),
+				'public' => false,
+			) );
+
+			$muutReplyLabels = array(
+				'name' => __( 'Muut Replies', 'muut' ),
+				'singular_name' => __( 'Muut Reply', 'muut' ),
+			);
+
+			$muutReplyArgs = apply_filters( 'muut_reply_cpt_args', array(
+				'label' => __( 'Muut Replies', 'muut' ),
+				'labels' => $muutReplyLabels,
+				'description' => __( 'This post type is not for public use, but is mainly for storing Muut reply data passed to it via webhooks.', 'muut' ),
+				'public' => false,
+			) );
+
+			register_post_type( 'muut_post', $muutPostArgs );
+			register_post_type( 'muut_reply', $muutReplyArgs );
+		}
 	}
 }
