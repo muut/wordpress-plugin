@@ -128,6 +128,8 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 				//error_log( $this->getRequestBody( true ) );
 				// Display the X-Muut-Signature header value.
 				//error_log( $_SERVER['HTTP_X_MUUT_SIGNATURE'] );
+
+				$body = $this->getRequestBody();
 			}
 		}
 
@@ -144,12 +146,37 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			$request = false;
 			if ( !empty( $body ) ) {
 				if ( !$raw ) {
-					$request = json_decode( $body );
+					$request = $this->parseRequestStructure( $body );
 				} else {
 					$request = $this->raw_request = $body;
 				}
 			}
 			return $request;
+		}
+
+		/**
+		 * Parses the request body into the proper PHP array/object based on the Webhooks Events Structure
+		 * (that can be found int $this->getWebhookEventsStructure()
+		 *
+		 * @param string $body The body content of the request.
+		 * @return array The parsed array/object.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function parseRequestStructure( $body ) {
+			$request = json_decode( $body );
+
+			if ( $request == null ) return false;
+
+			$structures = $this->getWebhookEventsStructure();
+
+			$event = $request[0];
+			$parsed = array();
+			for ( $i = 0; $i < count( $request ); $i++ ) {
+				$parsed[$structures[$event][$i]] = $request[$i];
+			}
+
+			//error_log( print_r( $parsed, true ) );
 		}
 
 		/**
