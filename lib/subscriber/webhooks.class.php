@@ -345,8 +345,22 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * Webhooks Processing Methods
 		 **********/
 
+		/**
+		 * Process the 'post' Muut event.
+		 * @param $request
+		 * @param $event
+		 */
 		public function processPost( $request, $event ) {
+			$new_thread_args = array(
+				'title' => $request['thread']->title,
+				'path' => $request['location']->path,
+				'user' => $request['thread']->user->path,
+				'body' => '',
+			);
 
+			$custom_posts_object = Muut_Custom_Post_Types::instance();
+
+			$custom_posts_object->addMuutThreadData( $new_thread_args );
 		}
 
 	}
