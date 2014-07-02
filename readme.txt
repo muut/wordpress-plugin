@@ -1,4 +1,4 @@
-=== Muut - Commenting and Forums Re-Imagined ===
+=== Muut – Commenting and Forums Re-Imagined ===
 Contributors: PaulHughes01, tipiirai, jannelehtinen
 Tags: forum, commenting, realtime, discussion
 Requires at least: 3.7
