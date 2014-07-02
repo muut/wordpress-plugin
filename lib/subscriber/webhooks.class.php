@@ -82,6 +82,9 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			add_action( 'admin_init', array( $this, 'addWebhooksEndpoint' ) );
 
 			add_action( 'template_redirect', array( $this, 'receiveRequest' ) );
+
+			// Webhook actions.
+			add_action( 'muut_webhook_request_post', array( $this, 'processPost' ) );
 		}
 
 		/**
@@ -130,6 +133,9 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 				//error_log( $_SERVER['HTTP_X_MUUT_SIGNATURE'] );
 
 				$body = $this->getRequestBody();
+
+				do_action( 'muut_webhook_request_' . $body['event'], $body, $body['event'] );
+				do_action( 'muut_webhook_request', $body, $body['event'] );
 			}
 		}
 
@@ -332,6 +338,15 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 					'thread',
 				),
 			) );
+		}
+
+
+		/**********
+		 * Webhooks Processing Methods
+		 **********/
+
+		public function processPost( $request, $event ) {
+
 		}
 
 	}
