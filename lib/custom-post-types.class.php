@@ -185,12 +185,57 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 			// Add the muut user as post meta.
 			update_post_meta( $inserted_post, 'muut_user', $user );
 
-			// Add the Muut post path as meta (even though it is also stored in post_name on the posts table.
+			// Add the Muut post path as meta (even though it is also stored in post_name on the posts table).
 			update_post_meta( $inserted_post, 'muut_path', $path );
 
 			// Return the WP post id.
 			return $inserted_post;
 		}
 
+		/**
+		 * Add new Muut Reply.
+		 *
+		 * @param array $args The post args.
+		 *                    This array should follow the following structure:
+		 *                    'title' => The Muut thread key
+		 *                    'path' => The main thread path.
+		 *                    'user' => The *Muut* username.
+		 *                    'body' => The reply content.
+		 * @return int The CPT post id.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function addMuutReplyData( $args = array() ) {
+			if ( empty( $args['title'] ) || empty( $args['path'] ) || empty( $args['user'] ) || !isset( $args['body'] ) ) {
+				return false;
+			}
+
+			// If everything is there, lets add the thread.
+			extract( $args );
+
+			$post_args = array(
+				'post_title' => $title,
+				'post_content' => $body,
+				'post_name' => urlencode( $path . '-' . $title ),
+				'post_type' => self::MUUT_REPLY_CPT_NAME,
+				'post_status' => self::MUUT_PUBLIC_POST_STATUS,
+			);
+
+			// Add the thread to the Posts table.
+			$inserted_reply = wp_insert_post( $post_args, false );
+
+			if ( $inserted_reply == 0 ) {
+				return false;
+			}
+
+			// Add the muut user as post meta.
+			update_post_meta( $inserted_reply, 'muut_user', $user );
+
+			// Add the Muut post path as meta for the parent thread.
+			update_post_meta( $inserted_reply, 'muut_path', $path );
+
+			// Return the WP post id.
+			return $inserted_reply;
+		}
 	}
 }

@@ -84,7 +84,9 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			add_action( 'template_redirect', array( $this, 'receiveRequest' ) );
 
 			// Webhook actions.
-			add_action( 'muut_webhook_request_post', array( $this, 'processPost' ) );
+			add_action( 'muut_webhook_request_post', array( $this, 'processPost' ), 10, 2 );
+			add_action( 'muut_webhook_request_reply', array( $this, 'processReply' ), 10, 2 );
+
 		}
 
 		/**
@@ -357,7 +359,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 */
 		public function processPost( $request, $event ) {
 			$new_thread_args = array(
-				'title' => $request['thread']->title,
+				'title' => $request['path'],
 				'path' => $request['location']->path,
 				'user' => $request['thread']->user->path,
 				'body' => '',
@@ -368,5 +370,26 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			$custom_posts_object->addMuutThreadData( $new_thread_args );
 		}
 
+		/**
+		 * Process the 'post' Muut event.
+		 *
+		 * @param $request
+		 * @param $event
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function processReply( $request, $event ) {
+			$new_reply_args = array(
+				'title' => $request['post']->key,
+				'path' => $request['path'],
+				'user' => $request['thread']->user->path,
+				'body' => $request['post']->body,
+			);
+
+			$custom_posts_object = Muut_Custom_Post_Types::instance();
+
+			$custom_posts_object->addMuutReplyData( $new_reply_args );
+		}
 	}
 }
