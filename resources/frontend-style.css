@@ -21,7 +21,8 @@
     -moz-box-shadow: 0 0 .2m #1fadc5;
 }
 
-#muut-widget-online-users-wrapper .m-users {
+#muut-widget-channel-embed-wrapper .m-menu {
+    display: none;
 }
 
 #muut-widget-online-users-wrapper .m-logged-users a.m-facelink,

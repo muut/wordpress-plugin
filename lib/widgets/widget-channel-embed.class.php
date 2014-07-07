@@ -64,6 +64,8 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 				$embed_args['allow-uploads'] = !$instance['disable_uploads'] ? 'true' : 'false';
 			}
 
+			$embed_args['share'] = 'false';
+
 			$embed_args['title'] = isset( $instance['title'] ) ? $instance['title'] : '';
 			$embed_args['channel'] = $instance['title'] ? $instance['title'] : '';
 			$path = $instance['muut_path'];

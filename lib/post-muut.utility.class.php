@@ -199,15 +199,14 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 			$post = get_post( $post_id );
 			$comment_count = get_comments( array( 'post_id' => $post_id, 'count' => true ) );
 			$latest_update_array = muut_get_option('update_timestamps', array() );
-			$latest_update_timestamp = array_pop( $latest_update_array );
-			$latest_update_timestamp = $latest_update_timestamp ? $latest_update_timestamp : '0';
+			$activation_timestamp = muut()->getOption( 'activation_timestamp' );
 			if ( muut()->getOption( 'replace_comments' )
 				&& ( get_post_meta( $post_id, 'muut_last_active_tab', true ) == 'commenting-tab'
 					|| ( !get_post_meta( $post_id, 'muut_last_active_tab', true )
 						&& ( ( ( $comment_count == 0
 							&& $post->post_status == 'auto-draft' ) )
 							|| muut()->getOption( 'override_all_comments' )
-						|| ( get_post_modified_time( 'U', false, $post_id ) < $latest_update_timestamp
+						|| ( get_post_modified_time( 'U', false, $post_id ) < $activation_timestamp
 							&& !has_shortcode( $post->post_content, 'muut' ) && !has_shortcode( $post->post_content, 'moot' )
 							&& $comment_count == 0 ) ) )
 				&& get_post( $post_id )->comment_status == 'open' )
@@ -217,7 +216,7 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 			} else {
 				// For old posts, ones that existed before upgrade, lets set the comment status to closed
 				// if they have an old shortcode, so that WP comments don't show up either.
-				if ( get_post_modified_time( 'U', false, $post_id ) < $latest_update_timestamp
+				if ( get_post_modified_time( 'U', false, $post_id ) < $activation_timestamp
 					&& $post->comment_status == 'open'
 					&& ( has_shortcode( $post->post_content, 'muut' )
 					|| has_shortcode( $post->post_content, 'moot' ) ) ) {

@@ -79,7 +79,7 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 */
 		public function addActions() {
 			add_action( 'wp_print_scripts', array( $this, 'printSsoJs' ) );
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueDeveloperScripts' ) );
+			add_action( 'muut_before_scripts_enqueued', array( $this, 'enqueueDeveloperScripts' ) );
 		}
 
 		/**
