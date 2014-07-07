@@ -348,8 +348,12 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 
 		/**
 		 * Process the 'post' Muut event.
+		 *
 		 * @param $request
 		 * @param $event
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
 		 */
 		public function processPost( $request, $event ) {
 			$new_thread_args = array(
