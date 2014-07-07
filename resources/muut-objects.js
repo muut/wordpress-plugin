@@ -132,7 +132,11 @@ var get_user_avatar_html = function(user) {
   }
 
   var username_for_class = username.replace(' ', '_');
+  var online_user_href_markup = '';
+  if ( typeof muut_forum_page_permalink == 'string' ) {
+    online_user_href_markup = 'href="' + muut_forum_page_permalink + '#!/' + user.path + '"';
+  }
   // Return the HTML for the face.
-  var html = '<a class="m-facelink ' + is_admin_class + 'm-online m-user-online_' + username_for_class +'" title="' + user.displayname + '" href="#!/' + user.path + '" data-href="#!/' + user.path + '"><img class="m-face" src="' + user.img + '"></a>';
+  var html = '<a class="m-facelink ' + is_admin_class + 'm-online m-user-online_' + username_for_class +'" title="' + user.displayname + '" ' + online_user_href_markup + ' data-href="#!/' + user.path + '"><img class="m-face" src="' + user.img + '"></a>';
   return html;
 };
