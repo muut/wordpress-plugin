@@ -185,6 +185,9 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 			// Add the muut user as post meta.
 			update_post_meta( $inserted_post, 'muut_user', $user );
 
+			// Add the Muut post path as meta (even though it is also stored in post_name on the posts table.
+			update_post_meta( $inserted_post, 'muut_path', $path );
+
 			// Return the WP post id.
 			return $inserted_post;
 		}
