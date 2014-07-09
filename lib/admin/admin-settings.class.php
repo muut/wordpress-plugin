@@ -166,7 +166,6 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				'allow_uploads_default',
 				'subscription_use_sso',
 				'enable_proxy_rewrites',
-				'use_custom_s3_bucket',
 			) );
 
 			foreach ( $boolean_settings as $boolean_setting ) {
@@ -175,9 +174,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 
 			if ( ( isset( $settings['forum_name'] ) && $settings['forum_name'] != muut()->getForumName() )
 				|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != muut()->getOption( 'enable_proxy_rewrites' ) )
-				|| ( isset( $settings['use_custom_s3_bucket'] ) && (
-						$settings['use_custom_s3_bucket'] != muut()->getOption( 'use_custom_s3_bucket' )
-						|| $settings['custom_s3_bucket_name'] != muut()->getOption( 'custom_s3_bucket_name' ) ) ) ) {
+			) {
 				flush_rewrite_rules( true );
 			}
 
