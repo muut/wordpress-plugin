@@ -900,6 +900,33 @@ if ( !class_exists( 'Muut' ) ) {
 		}
 
 		/**
+		 * Deletes a given Muut option or an array of options.
+		 *
+		 * @param string|array $option        The option name OR an array of option names.
+		 * @return bool True on success, false on failure.
+		 * @author Paul Hughes
+		 * @since  NEXT_RELEASE
+		 */
+		public function deleteOption( $option ) {
+			if ( is_string( $option ) )
+				$option = array( $option );
+
+			if ( !is_array( $option ) )
+				return false;
+
+			$current_options = $this->getOptions();
+
+			// Delete each of the options, if set.
+			foreach ( $option as $current_option ) {
+				if ( isset( $current_options[$current_option] ) ) {
+					unset( $current_options[$current_option] );
+				}
+			}
+
+			return $this->setOptions( $current_options );
+		}
+
+		/**
 		 * Creates the Muut admin menu section and menu items.
 		 *
 		 * @return void
