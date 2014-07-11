@@ -73,6 +73,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 */
 		public function addActions() {
 			add_action( 'load-toplevel_page_' . Muut::SLUG, array( $this, 'saveSettings' ) );
+			add_action( 'load-toplevel_page_' . Muut::SLUG, array( $this, 'maybeShowS3RemoveNotice' ), 9 );
 			add_action( 'admin_notices', array( $this, 'prepareAdminNotices' ), 9 );
 			add_action( 'admin_print_scripts', array( $this, 'printJsFieldNames') );
 		}
@@ -165,8 +166,6 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				'allow_uploads_default',
 				'subscription_use_sso',
 				'enable_proxy_rewrites',
-				'use_custom_s3_bucket',
-				'use_webhooks',
 			) );
 
 			foreach ( $boolean_settings as $boolean_setting ) {
@@ -175,9 +174,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 
 			if ( ( isset( $settings['forum_name'] ) && $settings['forum_name'] != muut()->getForumName() )
 				|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != muut()->getOption( 'enable_proxy_rewrites' ) )
-				|| ( isset( $settings['use_custom_s3_bucket'] ) && (
-						$settings['use_custom_s3_bucket'] != muut()->getOption( 'use_custom_s3_bucket' )
-						|| $settings['custom_s3_bucket_name'] != muut()->getOption( 'custom_s3_bucket_name' ) ) ) ) {
+			) {
 				flush_rewrite_rules( true );
 			}
 
@@ -301,6 +298,20 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				echo '<script type="text/javascript">';
 				echo 'var muut_error_fields = [' . $error_field_list . '];';
 				echo '</script>';
+			}
+		}
+
+		/**
+		 * Displays the S3-bucket setting removal notice on first load of admin settings page after removal.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function maybeShowS3RemoveNotice() {
+			if ( muut()->getOption( 'removed_s3_support' ) ) {
+				muut()->queueAdminNotice( 'updated', __("S3 bucket preferences have beem removed in this version in the interests of simpler and better SEO; don't worry, it's a good thing!", 'muut' ) );
+				muut()->deleteOption( 'removed_s3_support' );
 			}
 		}
 
