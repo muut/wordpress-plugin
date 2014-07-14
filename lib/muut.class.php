@@ -406,11 +406,14 @@ if ( !class_exists( 'Muut' ) ) {
 			if ( apply_filters( 'use_https_for_proxy', false ) ) {
 				$proxy_server = 'https://';
 			}
-			$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
+			/** REMOVED S3 Bucket proxying support starting in version NEXT_RELEASE. Is not useful and can hinder SEO. */
+			/*$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
 				? $this->getOption( 'custom_s3_bucket_name' )
 				: self::MUUTSERVERS . '/i';
+			*/
+			$proxy_server .= self::MUUTSERVERS . '/i';
 
-			return $proxy_server;
+			return apply_filters( 'muut_proxy_server', $proxy_server );
 		}
 
 
@@ -612,6 +615,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'show-online' => 'data-show_online',
 				'allow-uploads' => 'data-upload',
 				'title' => 'title',
+				'share' => 'data-share',
 				'channel' => 'data-channel',
 			);
 
@@ -896,6 +900,33 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			return $this->setOptions( wp_parse_args( $option, $current_options ) );
+		}
+
+		/**
+		 * Deletes a given Muut option or an array of options.
+		 *
+		 * @param string|array $option        The option name OR an array of option names.
+		 * @return bool True on success, false on failure.
+		 * @author Paul Hughes
+		 * @since  NEXT_RELEASE
+		 */
+		public function deleteOption( $option ) {
+			if ( is_string( $option ) )
+				$option = array( $option );
+
+			if ( !is_array( $option ) )
+				return false;
+
+			$current_options = $this->getOptions();
+
+			// Delete each of the options, if set.
+			foreach ( $option as $current_option ) {
+				if ( isset( $current_options[$current_option] ) ) {
+					unset( $current_options[$current_option] );
+				}
+			}
+
+			return $this->setOptions( $current_options );
 		}
 
 		/**
