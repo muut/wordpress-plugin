@@ -69,6 +69,7 @@ if ( !class_exists( 'Muut_Widget_My_Feed' ) ) {
 			$path = 'feed';
 			echo '<div id="muut-widget-my-feed-wrapper" class="muut_widget_wrapper muut_widget_my_feed_wrapper">';
 			Muut_Channel_Utility::getChannelEmbedMarkup( $path, $embed_args, true );
+			echo '<div id="muut-widget-my-feed-login"><a href="#" class="muut_login">' . __('Login', 'muut' ) . '</a></div>';
 			echo '</div>';
 			echo $args['after_widget'];
 		}

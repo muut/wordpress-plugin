@@ -77,8 +77,20 @@
 
 #muut-widget-channel-embed-wrapper .m-spammed,
 #muut-widget-channel-embed-wrapper .m-unspam,
-#muut-widget-channel-embed-wrapper .m-no-logged .m-me {
+#muut-widget-channel-embed-wrapper .m-no-logged .m-me,
+#muut-widget-my-feed-wrapper .m-no-logged {
     display: none;
+}
+
+#muut-widget-my-feed-login .muut_login {
+    width: 100%;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+}
+
+#muut-widget-my-feed-wrapper .m-logged {
+    display: block;
 }
 
 #muut-widget-channel-embed-wrapper .m-sso-link {
