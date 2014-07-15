@@ -720,7 +720,7 @@ if ( !class_exists( 'Muut' ) ) {
 					}
 					echo '</script>';
 				}
-				if( is_active_widget( false, false, 'muut_online_users_widget' ) ) {
+				if( is_active_widget( false, false, 'muut_online_users_widget' ) && Muut_Post_Utility::getForumPageId() != $page_id ) {
 					echo '<script type="text/javascript">';
 						echo 'var muut_widget_conf = { url: "' . $this->getForumIndexUri() . '", path: "/' . $this->getOption( 'comments_base_domain') . ':hidden-base-forum-thread" };';
 						echo 'var muut_force_load = true;';
