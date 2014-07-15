@@ -84,7 +84,7 @@ jQuery(document).ready(function($) {
       if ( show_num_logged_in ) {
         num_logged_in_span.text(muut().online.length);
       }
-      widget_online_users_wrapper.find('.m-logged-users').append(load_online_users_initial_html);
+      widget_online_users_wrapper.find('.m-logged-users').html(load_online_users_initial_html);
       $.each(widget_online_users_wrapper.find('.m-facelink'), function() {
         $(this).usertooltip();
       });
