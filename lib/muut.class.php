@@ -158,6 +158,8 @@ if ( !class_exists( 'Muut' ) ) {
 		protected function addActions() {
 			add_action( 'admin_init', array( $this, 'maybeAddRewriteRules' ) );
 			add_action( 'admin_menu', array( $this, 'createAdminMenuItems' ) );
+			add_action( 'admin_init', array( $this, 'runActivationFunctions' ) );
+
 			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ) );
 			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
 
@@ -167,6 +169,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ), 11 );
 
 			add_action( 'wp_print_scripts', array( $this, 'printCurrentPageJs' ) );
+			add_action( 'wp_footer', array( $this, 'printHiddenMuutDiv' ) );
 		}
 
 		/**
@@ -403,11 +406,14 @@ if ( !class_exists( 'Muut' ) ) {
 			if ( apply_filters( 'use_https_for_proxy', false ) ) {
 				$proxy_server = 'https://';
 			}
-			$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
+			/** REMOVED S3 Bucket proxying support starting in version NEXT_RELEASE. Is not useful and can hinder SEO. */
+			/*$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
 				? $this->getOption( 'custom_s3_bucket_name' )
 				: self::MUUTSERVERS . '/i';
+			*/
+			$proxy_server .= self::MUUTSERVERS . '/i';
 
-			return $proxy_server;
+			return apply_filters( 'muut_proxy_server', $proxy_server );
 		}
 
 
@@ -501,6 +507,7 @@ if ( !class_exists( 'Muut' ) ) {
 
 			wp_register_script( 'muut-frontend-functions', $this->pluginUrl . 'resources/frontend-functions.js', array( 'jquery' ), '1.0', true );
 			wp_register_script( 'muut-sso', $this->pluginUrl . 'resources/muut-sso.js', array( 'jquery', 'muut' ), '1.0', true );
+			wp_register_script( 'muut-objects', $this->pluginUrl . 'resources/muut-objects.js', array( 'jquery', 'muut-frontend-functions' ), '1.0', true );
 
 			wp_register_style( 'muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
 			wp_register_style( 'muut-frontend-style', $this->pluginUrl . 'resources/frontend-style.css' );
@@ -520,6 +527,10 @@ if ( !class_exists( 'Muut' ) ) {
 				),
 				'muut-frontend-functions' => array(
 					'comments' => __( 'Comments', 'muut' ),
+				),
+				'muut-objects' => array(
+					'admin' => __( 'Admin', 'muut' ),
+					'anonymous_users' => _x( 'anonymous', 'anonymous users', 'muut' ),
 				),
 			);
 			foreach ( $localizations as $key => $array ) {
@@ -585,6 +596,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'use_custom_s3_bucket' => '0',
 				'custom_s3_bucket_name' => '',
 				'comments_base_domain' => $_SERVER['SERVER_NAME'],
+				'activation_timestamp' => '0',
 			) );
 
 			return $defaults;
@@ -603,6 +615,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'show-online' => 'data-show_online',
 				'allow-uploads' => 'data-upload',
 				'title' => 'title',
+				'share' => 'data-share',
 				'channel' => 'data-channel',
 			);
 
@@ -672,10 +685,12 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function enqueueFrontendScripts() {
 			if ( $this->needsMuutResources() ) {
+				do_action( 'muut_before_scripts_enqueued' );
 				wp_enqueue_script( 'muut' );
 				wp_enqueue_style( 'muut-forum-css' );
 				wp_enqueue_style( 'muut-frontend-style' );
 				wp_enqueue_script( 'muut-frontend-functions' );
+				wp_enqueue_script( 'muut-objects' );
 			}
 
 
@@ -691,6 +706,7 @@ if ( !class_exists( 'Muut' ) ) {
 		public function printCurrentPageJs() {
 			if ( !is_admin() && get_post() ) {
 				$page_id = get_the_ID();
+				$forum_page_id = Muut_Post_Utility::getForumPageId();
 				if ( Muut_Post_Utility::isMuutPost( $page_id ) ) {
 					echo '<script type="text/javascript">';
 					if ( Muut_Post_Utility::getForumPageId() == $page_id ) {
@@ -704,7 +720,27 @@ if ( !class_exists( 'Muut' ) ) {
 					}
 					echo '</script>';
 				}
+				if( is_active_widget( false, false, 'muut_online_users_widget' ) && Muut_Post_Utility::getForumPageId() != $page_id ) {
+					echo '<script type="text/javascript">';
+						echo 'var muut_widget_conf = { url: "' . $this->getForumIndexUri() . '", path: "/' . $this->getOption( 'comments_base_domain') . ':hidden-base-forum-thread" };';
+						echo 'var muut_force_load = true;';
+						if ( $forum_page_id ) {
+							echo 'var muut_forum_page_permalink = "' . get_permalink( $forum_page_id ) . '";';
+						}
+					echo '</script>';
+				}
 			}
+		}
+
+		/**
+		 * Prints a hidden div that will allow us to "embed" Muut on pages where we don't need to actually see any of it.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function printHiddenMuutDiv() {
+			echo '<div id="muut_hidden_embed_div" style="display: none;"></div>';
 		}
 
 		/**
@@ -868,6 +904,33 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 
 			return $this->setOptions( wp_parse_args( $option, $current_options ) );
+		}
+
+		/**
+		 * Deletes a given Muut option or an array of options.
+		 *
+		 * @param string|array $option        The option name OR an array of option names.
+		 * @return bool True on success, false on failure.
+		 * @author Paul Hughes
+		 * @since  NEXT_RELEASE
+		 */
+		public function deleteOption( $option ) {
+			if ( is_string( $option ) )
+				$option = array( $option );
+
+			if ( !is_array( $option ) )
+				return false;
+
+			$current_options = $this->getOptions();
+
+			// Delete each of the options, if set.
+			foreach ( $option as $current_option ) {
+				if ( isset( $current_options[$current_option] ) ) {
+					unset( $current_options[$current_option] );
+				}
+			}
+
+			return $this->setOptions( $current_options );
 		}
 
 		/**
@@ -1067,6 +1130,20 @@ if ( !class_exists( 'Muut' ) ) {
 		}
 
 
+		/**
+		 * Check if the plugin was just activated, in which case update/store the activation timestamp.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function runActivationFunctions() {
+			$just_activated = get_option( 'muut_plugin_just_activated', '' );
+			if ( is_numeric( $just_activated ) ) {
+				muut()->setOption( 'activation_timestamp', $just_activated );
+				delete_option( 'muut_plugin_just_activated' );
+			}
+		}
 	}
 	/**
 	 * END MAIN CLASS

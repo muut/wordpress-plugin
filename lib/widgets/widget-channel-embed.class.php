@@ -52,6 +52,11 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 				return;
 			}
 
+			// Make sure the Muut resources get loaded (only stuff in the footer will work, as this happens
+			// partway through page load.
+			add_filter( 'muut_requires_muut_resources', '__return_true' );
+			muut()->enqueueFrontendScripts();
+
 			// Default to always NOT showing online users. Can be modified with filter.
 			$embed_args['show-online'] = apply_filters( 'muut_channel_embed_widget_show_online', false, $args, $instance );
 
@@ -59,10 +64,13 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 				$embed_args['allow-uploads'] = !$instance['disable_uploads'] ? 'true' : 'false';
 			}
 
+			$embed_args['share'] = 'false';
+
 			$embed_args['title'] = isset( $instance['title'] ) ? $instance['title'] : '';
 			$embed_args['channel'] = $instance['title'] ? $instance['title'] : '';
 			$path = $instance['muut_path'];
 
+			// Render widget.
 			echo $args['before_widget'];
 			echo $args['before_title'] . $embed_args['title'] . $args['after_title'];
 			echo '<div id="muut-widget-channel-embed-wrapper" class="muut_widget_wrapper muut_widget_channel_embed_wrapper">';

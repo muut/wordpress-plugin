@@ -2,7 +2,7 @@
 /*
 Plugin Name: Muut
 Plugin URI: http://wordpress.org/plugins/muut/
-Description: A complete re-imagining of what online discussions should be. Realtime forums and commenting for WordPress.
+Description: A complete re-imagining of what online discussions should be. Real&#8209;time forums and commenting for WordPress.
 Version: 3.0.1
 Author: Muut, Inc.
 Author URI: http://muut.com
@@ -44,5 +44,11 @@ function muut_show_plugin_load_fail_message() {
 	}
 }
 
+function muut_run_activation_functions() {
+	add_option( 'muut_plugin_just_activated', time() );
+}
+
 // Initialize the plugin.
 add_action( 'plugins_loaded', 'muut_initialize_plugin' );
+
+register_activation_hook( __FILE__, 'muut_run_activation_functions' );
