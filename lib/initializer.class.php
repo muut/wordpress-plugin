@@ -87,6 +87,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			// Initialize the widgets.
 			add_action( 'widgets_init', array( $this, 'initWidgetChannelEmbed' ) );
 			add_action( 'widgets_init', array( $this, 'initWidgetOnlineUsers' ) );
+			add_action( 'widgets_init', array( $this, 'initWidgetMyFeed' ) );
 		}
 
 		/**
@@ -309,6 +310,22 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 				require_once( muut()->getPluginPath() . 'lib/widgets/widget-online-users.class.php' );
 				$this->alreadyInit[] = $class;
 				register_widget( 'Muut_Widget_Online_Users' );
+			}
+		}
+
+		/**
+		 * Initialize the My Feed widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function initWidgetMyFeed() {
+			$class = 'Muut_Widget_My_Feed';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/widgets/widget-my-feed.class.php' );
+				$this->alreadyInit[] = $class;
+				register_widget( 'Muut_Widget_My_Feed' );
 			}
 		}
 

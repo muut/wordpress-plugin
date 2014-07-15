@@ -24,7 +24,29 @@ jQuery(document).ready(function($) {
     $('#muut_hidden_embed_div').muut(muut_conf);
   }
 
-  // Once Muut is loaded...
+  /************
+   * MY FEED WIDGET FUNCTIONALITY
+   ************/
+  muut().on('load', function() {
+    var widget_my_feed_wrapper = $('#muut-widget-my-feed-wrapper');
+    widget_my_feed_wrapper.find('.muut_login').on('click', function(e) {
+      e.preventDefault();
+      $('.m-login').click();
+    });
+    muut().user.on('login', function() {
+      muut().load('feed');
+    });
+    muut().user.on('logout', function() {
+      widget_my_feed_wrapper.find('.muut_login').show();
+    });
+    if (widget_my_feed_wrapper.find('.m-logged').length > 0 ) {
+      widget_my_feed_wrapper.find('.muut_login').hide();
+    }
+  });
+
+  /************
+   * ONLINE USERS WIDGET FUNCTIONALITY
+   ************/  // Once Muut is loaded...
   muut().on('load', function() {
     // Functionality for the online users widget.
     var widget_online_users_wrapper = $('#muut-widget-online-users-wrapper');
@@ -94,6 +116,13 @@ jQuery(document).ready(function($) {
         });
       });
     }
+
+    muut().user.on('logout', function(event) {
+      $('.muut').muut();
+    });
+    muut().channel.on('login', function(event) {
+      $('.muut').muut('feed');
+    });
 
     var update_anon_count = function() {
       if ( show_anon_count ) {
