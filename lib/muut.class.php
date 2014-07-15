@@ -706,6 +706,7 @@ if ( !class_exists( 'Muut' ) ) {
 		public function printCurrentPageJs() {
 			if ( !is_admin() && get_post() ) {
 				$page_id = get_the_ID();
+				$forum_page_id = Muut_Post_Utility::getForumPageId();
 				if ( Muut_Post_Utility::isMuutPost( $page_id ) ) {
 					echo '<script type="text/javascript">';
 					if ( Muut_Post_Utility::getForumPageId() == $page_id ) {
@@ -723,6 +724,9 @@ if ( !class_exists( 'Muut' ) ) {
 					echo '<script type="text/javascript">';
 						echo 'var muut_widget_conf = { url: "' . $this->getForumIndexUri() . '", path: "/' . $this->getOption( 'comments_base_domain') . ':hidden-base-forum-thread" };';
 						echo 'var muut_force_load = true;';
+						if ( $forum_page_id ) {
+							echo 'var muut_forum_page_permalink = "' . get_permalink( $forum_page_id ) . '";';
+						}
 					echo '</script>';
 				}
 			}
