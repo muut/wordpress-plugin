@@ -88,6 +88,8 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			add_action( 'widgets_init', array( $this, 'initWidgetChannelEmbed' ) );
 			add_action( 'widgets_init', array( $this, 'initWidgetOnlineUsers' ) );
 			add_action( 'widgets_init', array( $this, 'initWidgetMyFeed' ) );
+			add_action( 'widgets_init', array( $this, 'initWidgetLatestComments' ) );
+
 		}
 
 		/**
@@ -326,6 +328,22 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 				require_once( muut()->getPluginPath() . 'lib/widgets/widget-my-feed.class.php' );
 				$this->alreadyInit[] = $class;
 				register_widget( 'Muut_Widget_My_Feed' );
+			}
+		}
+
+		/**
+		 * Initialize the Latest Comments widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function initWidgetLatestComments() {
+			$class = 'Muut_Widget_Latest_Comments';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/widgets/widget-latest-comments.class.php' );
+				$this->alreadyInit[] = $class;
+				register_widget( 'Muut_Widget_Latest_Comments' );
 			}
 		}
 
