@@ -21,5 +21,5 @@ $number_of_comments = isset( $instance['number_of_comments'] ) ? $instance['numb
 </p>
 <p>
 	<label for="<?php echo $this->get_field_id( 'muut_path' ); ?>"><?php _e( 'Number of comments to show:', 'muut' ); ?></label>
-	<input id="<?php echo $this->get_field_id( 'muut_path' ); ?>" name="<?php echo $this->get_field_name( 'muut_path' ); ?>" size="3" type="text" value="<?php echo $number_of_comments; ?>" />
+	<input id="<?php echo $this->get_field_id( 'number_of_comments' ); ?>" name="<?php echo $this->get_field_name( 'number_of_comments' ); ?>" size="3" type="text" value="<?php echo $number_of_comments; ?>" />
 </p>
