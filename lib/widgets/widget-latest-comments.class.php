@@ -21,6 +21,10 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 	 */
 	class Muut_Widget_Latest_Comments extends WP_Widget {
 
+		const LATEST_COMMENTS_TRANSIENT_NAME = 'muut_latest_comments';
+
+		const REPLY_UPDATE_TIME_NAME = 'muut_last_reply_time';
+
 		/**
 		 * The class constructor.
 		 *
@@ -49,7 +53,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function addActions() {
-
+			add_action( 'muut_webhook_request_reply', array( $this, 'updateWidgetData' ), 100, 2 );
 		}
 
 		/**
@@ -115,6 +119,60 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			$instance['number_of_comments'] = !empty( $new_instance['number_of_comments'] ) ? $new_instance['number_of_comments'] : '5';
 
 			return $instance;
+		}
+
+
+		/********
+		 * CUSTOM WIDGET METHODS
+		 ********/
+
+		/**
+		 * Updates the widget data sources for displaying the widget content on the frontend.
+		 *
+		 * @param array $request The parsed webhook HTTP request data.
+		 * @param string $event The event that was received via the webhook (in this case, should always be 'reply').
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function updateWidgetData( $request, $event ) {
+			// Check if a WP post exists in the database that would match the path of the reply request.
+
+			// If so, make sure it is a post with commenting enabled.
+
+			// Add/update a meta for the post with the time of the last comment.
+
+			// Update the transient with array of the posts and their data for the "latest comments."
+
+		}
+
+		/**
+		 * Refreshes the Latest Posts array transient.
+		 *
+		 * @param int $number_of_posts The number of posts to set in the transient.
+		 * @return array The new transient array/value.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function refreshLatestPostsTransient( $number_of_posts = 5 ) {
+			$number_of_posts = is_numeric( $number_of_posts ) ? $number_of_posts : 5;
+
+			$query_args = apply_filters( 'muut_latest_posts_transient_args', array(
+				'orderby' => 'meta_value_num',
+				'order' => 'DESC',
+				'meta_key' => self::REPLY_UPDATE_TIME_NAME,
+				'meta_query' => array(
+					array(
+						'key' => 'muut_use_muut_commenting',
+						'value' => '1',
+						'compare' => '=',
+						'type' => 'NUMERIC',
+					),
+				),
+				'posts_per_page' => $number_of_posts,
+			) );
+
+			// Use the returned posts to generate the new transient data.
 		}
 	}
 }
