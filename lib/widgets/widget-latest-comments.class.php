@@ -36,7 +36,31 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 					'description' => __( 'Use this to show the latest posts with Muut comments.', 'muut' ),
 				)
 			);
-			error_log( 'Widget loaded' );
+
+			$this->addActions();
+			$this->addFilters();
+		}
+
+		/**
+		 * Adds the actions pertaining to the widget's functionality.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function addActions() {
+
+		}
+
+		/**
+		 * Adds the filters pertaining to the widget's functionality.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function addFilters() {
+
 		}
 
 		/**
