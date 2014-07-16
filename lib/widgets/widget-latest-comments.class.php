@@ -82,7 +82,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 
 			// Render widget.
 			echo $args['before_widget'];
-			echo $args['before_title'] . $title . $num_online_html . $args['after_title'];
+			echo $args['before_title'] . $title . $args['after_title'];
 			include( muut()->getPluginPath() . 'views/widgets/widget-latest-comments.php' );
 			echo $args['after_widget'];
 		}
