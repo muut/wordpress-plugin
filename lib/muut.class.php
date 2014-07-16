@@ -183,6 +183,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_filter( 'body_class', array( $this, 'addBodyClasses' ) );
 			add_filter( 'admin_body_class', array( $this, 'addAdminBodyClasses' ) );
 			add_filter( 'the_content', array( $this, 'filterForumPageContent' ), 10 );
+			add_filter( 'query_vars', array( $this, 'addQueryVars' ) );
 		}
 
 		/**
@@ -293,6 +294,20 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function getWrapperCssId() {
 			return apply_filters( 'muut_wrapper_css_id', $this->wrapperId );
+		}
+
+		/**
+		 * Adds the muut_action query var for checking if it is a webhooks request.
+		 *
+		 * @param array $vars The current registered query vars.
+		 * @return array The filtered registered query vars.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function addQueryVars( $vars ) {
+			$vars[] = 'muut_action';
+
+			return $vars;
 		}
 
 		/**
@@ -597,6 +612,8 @@ if ( !class_exists( 'Muut' ) ) {
 				'custom_s3_bucket_name' => '',
 				'comments_base_domain' => $_SERVER['SERVER_NAME'],
 				'activation_timestamp' => '0',
+				'use_webhooks' => '0',
+				'webhooks_secret' => '',
 			) );
 
 			return $defaults;
@@ -790,10 +807,10 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function queueAdminNotice( $type, $content ) {
-			$this->adminNotices[] = array(
+			array_unshift( $this->adminNotices, array(
 				'type' => $type,
 				'content' => $content,
-			);
+			) );
 		}
 
 		/**
