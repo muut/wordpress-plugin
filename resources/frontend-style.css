@@ -1,0 +1,103 @@
+/**
+ * ==========================
+ * Muut Frontend CSS
+ * ==========================
+ */
+
+/* Channel Embed Widget */
+.widget_muut_channel_embed_widget .m-page {
+    font-size: 14px;
+    line-height: 14px;
+    margin-bottom: -90px;
+}
+
+#muut-widget-channel-embed-wrapper a.m-facelink,
+#muut-widget-channel-embed-wrapper a.m-online {
+    margin-right: .2em;
+}
+
+#muut-widget-online-users-wrapper a.m-facelink.m-hovered img.m-face {
+    box-shadow: 0 0 .2em #1fadc5;
+    -moz-box-shadow: 0 0 .2m #1fadc5;
+}
+
+.muut_widget_wrapper .m-menu,
+#muut-widget-my-feed-wrapper .m-menu,
+#muut-widget-channel-embed-wrapper .m-no-logged .m-me,
+#muut-widget-my-feed-wrapper .m-no-logged .m-me {
+    display: none;
+}
+
+#muut-widget-my-feed-wrapper .m-no-logged .m-form {
+    display: none;
+}
+
+#muut-widget-online-users-wrapper .m-logged-users a.m-facelink,
+#muut-widget-online-users-wrapper .m-logged-users a.m-online {
+    position: relative;
+    float: none;
+    margin: 0 .2em .5em;
+}
+
+#muut-widget-online-users-wrapper .m-logged-users a.m-facelink {
+    height: 2.3em;
+    width: 2.3em;
+}
+
+.widget_muut_online_users_widget .num-logged-in {
+    background-color: #4cbe00;
+    color: #FFF;
+    display: inline-block;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    font-size: .8em;
+    text-align: center;
+    height: 1.6em;
+    vertical-align: middle;
+    padding: 0 .6em;
+    margin: .5em;
+    line-height: 1.7em;
+    font-weight: normal;
+}
+
+#muut-widget-online-users-wrapper .m-logged-users img.m-face {
+    vertical-align: baseline;
+    box-sizing: border-box;
+}
+
+#muut-widget-channel-embed-wrapper .m-logged .m-login,
+#muut-widget-my-feed-wrapper .m-logged .m-login
+{
+    display: none;
+}
+
+#muut-widget-channel-embed-wrapper .m-show-help {
+    padding: .3em;
+}
+
+#muut-widget-channel-embed-wrapper .m-spammed,
+#muut-widget-channel-embed-wrapper .m-unspam,
+#muut-widget-channel-embed-wrapper .m-no-logged .m-me,
+#muut-widget-my-feed-wrapper .m-no-logged {
+    display: none;
+}
+
+#muut-widget-my-feed-login .muut_login {
+    width: 100%;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+}
+
+#muut-widget-my-feed-wrapper .m-logged {
+    display: block;
+}
+
+#muut-widget-channel-embed-wrapper .m-sso-link {
+    display: block;
+    padding: .8em 1em;
+}
+
+.hidden {
+    display: none;
+}

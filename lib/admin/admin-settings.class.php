@@ -18,7 +18,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
-	 * @since   NEXT_RELEASE
+	 * @since   3.0.1
 	 */
 	class Muut_Admin_Settings
 	{
@@ -43,7 +43,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return Muut_Admin_Settings The instance.
 		 * @author Paul Hughes
-		 * @since  NEXT_RELEASE
+		 * @since  3.0.1
 		 */
 		public static function instance() {
 			if ( !is_a( self::$instance, __CLASS__ ) ) {
@@ -57,7 +57,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return Muut_Admin_Settings
 		 * @author Paul Hughes
-		 * @since  NEXT_RELEASE
+		 * @since  3.0.1
 		 */
 		protected function __construct() {
 			$this->addActions();
@@ -69,10 +69,11 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function addActions() {
 			add_action( 'load-toplevel_page_' . Muut::SLUG, array( $this, 'saveSettings' ) );
+			add_action( 'load-toplevel_page_' . Muut::SLUG, array( $this, 'maybeShowS3RemoveNotice' ), 9 );
 			add_action( 'admin_notices', array( $this, 'prepareAdminNotices' ), 9 );
 			add_action( 'admin_print_scripts', array( $this, 'printJsFieldNames') );
 		}
@@ -82,7 +83,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function addFilters() {
 			add_filter( 'muut_validate_setting', array( $this, 'validateSettings' ), 10, 2 );
@@ -125,7 +126,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return array The submitted settings.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function getSubmittedSettings() {
 			return $this->submittedSettings;
@@ -136,7 +137,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return array The error queue
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function getErrorQueue() {
 			return apply_filters( 'muut_get_error_queue', $this->errorQueue );
@@ -165,7 +166,6 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				'allow_uploads_default',
 				'subscription_use_sso',
 				'enable_proxy_rewrites',
-				'use_custom_s3_bucket',
 			) );
 
 			foreach ( $boolean_settings as $boolean_setting ) {
@@ -174,9 +174,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 
 			if ( ( isset( $settings['forum_name'] ) && $settings['forum_name'] != muut()->getForumName() )
 				|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != muut()->getOption( 'enable_proxy_rewrites' ) )
-				|| ( isset( $settings['use_custom_s3_bucket'] ) && (
-						$settings['use_custom_s3_bucket'] != muut()->getOption( 'use_custom_s3_bucket' )
-						|| $settings['custom_s3_bucket_name'] != muut()->getOption( 'custom_s3_bucket_name' ) ) ) ) {
+			) {
 				flush_rewrite_rules( true );
 			}
 
@@ -206,7 +204,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *                            message field (to generate a simple error string).
 		 * @return bool Whether the queuing was successful.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function addErrorToQueue( $error ) {
 			if ( !is_array( $error) && !is_string( $error ) ) {
@@ -246,7 +244,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 * @param string $name The name (and key) of the submitted setting.
 		 * @return mixed The filtered value.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function validateSettings( $value, $name ) {
 			switch( $name ) {
@@ -287,7 +285,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function printJsFieldNames() {
 			if ( count( $this->errorQueue ) > 0 ) {
@@ -304,11 +302,25 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		}
 
 		/**
-		 * Queues the admin notices generated here to the main Muut admin notices renderer.
+		 * Displays the S3-bucket setting removal notice on first load of admin settings page after removal.
 		 *
 		 * @return void
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
+		 */
+		public function maybeShowS3RemoveNotice() {
+			if ( muut()->getOption( 'removed_s3_support' ) ) {
+				muut()->queueAdminNotice( 'updated', __("S3 bucket preferences have beem removed in this version in the interests of simpler and better SEO; don't worry, it's a good thing!", 'muut' ) );
+				muut()->deleteOption( 'removed_s3_support' );
+			}
+		}
+
+		/**
+		 * Queues the admin notices generated here to the main Muut admin notices renderer.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.1
 		 */
 		public function prepareAdminNotices() {
 			foreach( $this->errorQueue as $name => $error ) {

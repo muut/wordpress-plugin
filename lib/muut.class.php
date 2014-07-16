@@ -158,6 +158,8 @@ if ( !class_exists( 'Muut' ) ) {
 		protected function addActions() {
 			add_action( 'admin_init', array( $this, 'maybeAddRewriteRules' ) );
 			add_action( 'admin_menu', array( $this, 'createAdminMenuItems' ) );
+			add_action( 'admin_init', array( $this, 'runActivationFunctions' ) );
+
 			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ) );
 			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
 
@@ -167,6 +169,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ), 11 );
 
 			add_action( 'wp_print_scripts', array( $this, 'printCurrentPageJs' ) );
+			add_action( 'wp_footer', array( $this, 'printHiddenMuutDiv' ) );
 		}
 
 		/**
@@ -396,18 +399,21 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @param bool $force_muut_server Will force going to Muut server if set to true (rather than any s3 bucket or whatnot).
 		 * @return string The proxy content server.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function getProxyContentServer( $force_muut_server = false ) {
 			$proxy_server = 'http://';
 			if ( apply_filters( 'use_https_for_proxy', false ) ) {
 				$proxy_server = 'https://';
 			}
-			$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
+			/** REMOVED S3 Bucket proxying support starting in version NEXT_RELEASE. Is not useful and can hinder SEO. */
+			/*$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
 				? $this->getOption( 'custom_s3_bucket_name' )
 				: self::MUUTSERVERS . '/i';
+			*/
+			$proxy_server .= self::MUUTSERVERS . '/i';
 
-			return $proxy_server;
+			return apply_filters( 'muut_proxy_server', $proxy_server );
 		}
 
 
@@ -417,7 +423,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @param bool $force_muut_server Will force going to Muut server if set to true (rather than any s3 bucket or whatnot).
 		 * @return string The full forum index URI.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function getForumIndexUri( $force_muut_server = false ) {
 			$uri = $this->getProxyContentServer( $force_muut_server ) . '/' . $this->getForumName() . '/';
@@ -501,8 +507,10 @@ if ( !class_exists( 'Muut' ) ) {
 
 			wp_register_script( 'muut-frontend-functions', $this->pluginUrl . 'resources/frontend-functions.js', array( 'jquery' ), '1.0', true );
 			wp_register_script( 'muut-sso', $this->pluginUrl . 'resources/muut-sso.js', array( 'jquery', 'muut' ), '1.0', true );
+			wp_register_script( 'muut-objects', $this->pluginUrl . 'resources/muut-objects.js', array( 'jquery', 'muut-frontend-functions' ), '1.0', true );
 
 			wp_register_style( 'muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
+			wp_register_style( 'muut-frontend-style', $this->pluginUrl . 'resources/frontend-style.css' );
 			wp_register_style( 'x-editable-style', $this->pluginUrl . 'vendor/jqueryui-editable/css/jqueryui-editable.css' );
 			wp_register_style( 'muut-forum-css', '//cdn.' . self::MUUTSERVERS . '/' . $muut_version . '/moot.css', array(), $muut_version );
 			wp_register_style( 'jquery-ui-dialog-css', site_url('wp-includes/css/jquery-ui-dialog.css') );
@@ -519,6 +527,10 @@ if ( !class_exists( 'Muut' ) ) {
 				),
 				'muut-frontend-functions' => array(
 					'comments' => __( 'Comments', 'muut' ),
+				),
+				'muut-objects' => array(
+					'admin' => __( 'Admin', 'muut' ),
+					'anonymous_users' => _x( 'anonymous', 'anonymous users', 'muut' ),
 				),
 			);
 			foreach ( $localizations as $key => $array ) {
@@ -584,9 +596,54 @@ if ( !class_exists( 'Muut' ) ) {
 				'use_custom_s3_bucket' => '0',
 				'custom_s3_bucket_name' => '',
 				'comments_base_domain' => $_SERVER['SERVER_NAME'],
+				'activation_timestamp' => '0',
 			) );
 
 			return $defaults;
+		}
+
+		/**
+		 * Gets the proper embed attribute name from a given embed argument name.
+		 *
+		 * @param string $argument The argument we are getting the proper embed attribute.
+		 * @return string The proper embed attribute.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getMuutEmbedAttribute( $argument ) {
+			$embed_parameters = array(
+				'show-online' => 'data-show_online',
+				'allow-uploads' => 'data-upload',
+				'title' => 'title',
+				'share' => 'data-share',
+				'channel' => 'data-channel',
+			);
+
+			$parameter_name = $argument;
+
+			if ( in_array( $argument, array_keys( $embed_parameters ) ) ) {
+				$parameter_name = $embed_parameters[$argument];
+			}
+
+			return $parameter_name;
+		}
+
+		/**
+		 * Gets a string of embed settings from args (the attributes for the embed markup).
+		 *
+		 * @param array $args The arguments we are translating to a setting string.
+		 * @return string The settings string of attributes to place in embed tag.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getEmbedAttributesString( $args = array() ) {
+			$settings = '';
+			foreach ( $args as $attribute => $value ) {
+				$attribute = muut()->getMuutEmbedAttribute( $attribute );
+				$settings .= ' ' . $attribute . '="' . $value .'"';
+			}
+
+			return $settings;
 		}
 
 		/**
@@ -599,6 +656,7 @@ if ( !class_exists( 'Muut' ) ) {
 		public function enqueueAdminScripts() {
 			$screen = get_current_screen();
 			if ( $screen->id == 'page'
+				|| $screen->id == 'widgets'
 				|| $screen->id == self::SLUG . '_page_muut_settings'
 				|| $screen->id == 'toplevel_page_muut' ) {
 				wp_enqueue_script( 'muut-admin-functions' );
@@ -627,9 +685,12 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function enqueueFrontendScripts() {
 			if ( $this->needsMuutResources() ) {
+				do_action( 'muut_before_scripts_enqueued' );
 				wp_enqueue_script( 'muut' );
 				wp_enqueue_style( 'muut-forum-css' );
+				wp_enqueue_style( 'muut-frontend-style' );
 				wp_enqueue_script( 'muut-frontend-functions' );
+				wp_enqueue_script( 'muut-objects' );
 			}
 
 
@@ -645,6 +706,7 @@ if ( !class_exists( 'Muut' ) ) {
 		public function printCurrentPageJs() {
 			if ( !is_admin() && get_post() ) {
 				$page_id = get_the_ID();
+				$forum_page_id = Muut_Post_Utility::getForumPageId();
 				if ( Muut_Post_Utility::isMuutPost( $page_id ) ) {
 					echo '<script type="text/javascript">';
 					if ( Muut_Post_Utility::getForumPageId() == $page_id ) {
@@ -658,7 +720,27 @@ if ( !class_exists( 'Muut' ) ) {
 					}
 					echo '</script>';
 				}
+				if( Muut_Post_Utility::getForumPageId() != $page_id && ( is_active_widget( false, false, 'muut_online_users_widget' ) || is_active_widget( false, false, 'muut_my_feed_widget' ) ) ) {
+					echo '<script type="text/javascript">';
+						echo 'var muut_widget_conf = { url: "' . $this->getForumIndexUri() . '", path: "/' . $this->getOption( 'comments_base_domain') . ':hidden-base-forum-thread" };';
+						echo 'var muut_force_load = true;';
+						if ( $forum_page_id ) {
+							echo 'var muut_forum_page_permalink = "' . get_permalink( $forum_page_id ) . '";';
+						}
+					echo '</script>';
+				}
 			}
+		}
+
+		/**
+		 * Prints a hidden div that will allow us to "embed" Muut on pages where we don't need to actually see any of it.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function printHiddenMuutDiv() {
+			echo '<div id="muut_hidden_embed_div" style="display: none;"></div>';
 		}
 
 		/**
@@ -825,6 +907,33 @@ if ( !class_exists( 'Muut' ) ) {
 		}
 
 		/**
+		 * Deletes a given Muut option or an array of options.
+		 *
+		 * @param string|array $option        The option name OR an array of option names.
+		 * @return bool True on success, false on failure.
+		 * @author Paul Hughes
+		 * @since  NEXT_RELEASE
+		 */
+		public function deleteOption( $option ) {
+			if ( is_string( $option ) )
+				$option = array( $option );
+
+			if ( !is_array( $option ) )
+				return false;
+
+			$current_options = $this->getOptions();
+
+			// Delete each of the options, if set.
+			foreach ( $option as $current_option ) {
+				if ( isset( $current_options[$current_option] ) ) {
+					unset( $current_options[$current_option] );
+				}
+			}
+
+			return $this->setOptions( $current_options );
+		}
+
+		/**
 		 * Creates the Muut admin menu section and menu items.
 		 *
 		 * @return void
@@ -909,13 +1018,9 @@ if ( !class_exists( 'Muut' ) ) {
 				$page_id = get_the_ID();
 			}
 
-			if ( !is_numeric( $page_id ) ) {
-				return false;
-			}
-
 			$return = false;
-			if ( Muut_Post_Utility::isMuutPost( get_the_ID() )
-				|| ( $this->getOption( 'replace_comments' ) && is_singular() && comments_open() ) ) {
+			if ( is_numeric( $page_id ) && ( Muut_Post_Utility::isMuutPost( $page_id )
+				|| Muut_Post_Utility::isMuutCommentingPost( $page_id ) ) ) {
 				$return = true;
 			}
 
@@ -1025,6 +1130,20 @@ if ( !class_exists( 'Muut' ) ) {
 		}
 
 
+		/**
+		 * Check if the plugin was just activated, in which case update/store the activation timestamp.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function runActivationFunctions() {
+			$just_activated = get_option( 'muut_plugin_just_activated', '' );
+			if ( is_numeric( $just_activated ) ) {
+				muut()->setOption( 'activation_timestamp', $just_activated );
+				delete_option( 'muut_plugin_just_activated' );
+			}
+		}
 	}
 	/**
 	 * END MAIN CLASS

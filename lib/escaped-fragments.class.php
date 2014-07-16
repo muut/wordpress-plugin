@@ -18,7 +18,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
-	 * @since   NEXT_RELEASE
+	 * @since   3.0.1
 	 */
 	class Muut_Escaped_Fragments
 	{
@@ -44,7 +44,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 *
 		 * @return Muut_Escaped_Fragments The instance.
 		 * @author Paul Hughes
-		 * @since  NEXT_RELEASE
+		 * @since  3.0.1
 		 */
 		public static function instance() {
 			if ( !is_a( self::$instance, __CLASS__ ) ) {
@@ -58,7 +58,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 *
 		 * @return Muut_Escaped_Fragments
 		 * @author Paul Hughes
-		 * @since  NEXT_RELEASE
+		 * @since  3.0.1
 		 */
 		protected function __construct() {
 			$this->addActions();
@@ -70,7 +70,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since  NEXT_RELEASE
+		 * @since  3.0.1
 		 */
 		protected function addActions() {
 			add_action( 'wp_head', array( $this, 'printEscapedFragmentMetaRequire' ) );
@@ -81,7 +81,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since  NEXT_RELEASE
+		 * @since  3.0.1
 		 */
 		protected function addFilters() {
 			add_filter( 'muut_channel_embed_content', array( $this, 'filterChannelIndexContent' ), 10, 2 );
@@ -94,7 +94,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function printEscapedFragmentMetaRequire() {
 			global $post;
@@ -108,7 +108,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 *
 		 * @return bool Whether we are using escaped fragments support on this page load.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function isUsingEscapedFragments() {
 			if ( !isset( $this->maybeDoEscapedFragments ) ) {
@@ -130,7 +130,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @param int $page_id The page for which we are filtering the embed.
 		 * @return string The filtered content.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function filterChannelIndexContent( $content, $page_id ) {
 			if ( $this->isUsingEscapedFragments() && apply_filters( 'muut_index_channels_on_channel_pages', true ) )  {
@@ -139,7 +139,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 				if ( $_GET['_escaped_fragment_'] ) {
 					$remote_path = $_GET['_escaped_fragment_'][0] == '/' ? substr( $_GET['_escaped_fragment_'], 1 ) : $_GET['_escaped_fragment_'];
 				} else {
-					$remote_path = Muut_Post_Utility::getChannelRemotePath( $page_id );
+					$remote_path = Muut_Post_Utility::getChannelRemotePathForPage( $page_id );
 				}
 
 				$content = $this->getIndexContentForPath( $remote_path );
@@ -154,7 +154,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @param int $page_id The page for which we are filtering the embed.
 		 * @return string The filtered content.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function filterForumIndexContent( $content, $page_id ) {
 			if ( $this->isUsingEscapedFragments() ) {
@@ -178,7 +178,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @param int $post_id The post for which we are filtering the embed.
 		 * @return string The filtered content.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function filterCommentsOverrideIndexContent( $content, $post_id, $type ) {
 			if ( $this->isUsingEscapedFragments() )  {
@@ -207,7 +207,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @param bool $force_muut_server Will bypass any S3 bucket or other setup and go directly to the muut.com index.
 		 * @return string The content.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		public function getIndexContentForPath( $path, $force_muut_server = false ) {
 			global $wp_version;
@@ -251,7 +251,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @param string $content The markup we will be filtering.
 		 * @return string The content we actually want to display.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		protected function getForumIndexContent( $content ) {
 			// Make sure to only get the content we want.
@@ -274,7 +274,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @param string $content The markup we will be filtering.
 		 * @return string The content we actually want to display.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		protected function getFlatIndexContent( $content ) {
 			// Make sure to only get the content we want.
@@ -298,7 +298,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 * @param string $content The markup we will be filtering.
 		 * @return string The content we actually want to display.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.1
 		 */
 		protected function getThreadedIndexContent( $content, $remote_path = '' ) {
 			// Make sure to only get the content we want.

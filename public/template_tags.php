@@ -102,7 +102,7 @@ function muut_get_channel_remote_path( $page_id = null ) {
 		$page_id = get_the_ID();
 	}
 
-	return Muut_Post_Utility::getChannelRemotePath( $page_id );
+	return Muut_Post_Utility::getChannelRemotePathForPage( $page_id );
 }
 
 /**
