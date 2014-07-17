@@ -25,6 +25,8 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 
 		const REPLY_UPDATE_TIME_NAME = 'muut_last_reply_time';
 
+		const REPLY_LAST_USER_DATA_NAME = 'muut_last_reply_user';
+
 		/**
 		 * The class constructor.
 		 *
@@ -137,25 +139,38 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 */
 		public function updateWidgetData( $request, $event ) {
 			// Check if a WP post exists in the database that would match the path of the reply request.
+			preg_match_all( '/^\/' . addslashes( muut()->getForumName() ) . '\/' . addslashes( muut()->getOption( 'comments_base_domain' ) ) . '\/([0-9]+)\/?.*$/', $request['path'], $matches );
 
-			// If so, make sure it is a post with commenting enabled.
+			if ( empty( $matches ) || !isset( $matches[1][0] ) || !is_numeric( $matches[1][0] ) ) {
+				return;
+			}
+			$post_id = $matches[1][0];
 
-			// Add/update a meta for the post with the time of the last comment.
+			// Make sure the post is a post with Muut commenting enabled.
+			if ( !Muut_Post_Utility::isMuutCommentingPost( $post_id ) ) {
+				return;
+			}
+
+			// Add/update a meta for the post with the time of the last comment and the user data responsible.
+			update_post_meta( $post_id, self::REPLY_UPDATE_TIME_NAME, time() );
+			update_post_meta( $post_id, self::REPLY_LAST_USER_DATA_NAME, $request['post']->user );
 
 			// Update the transient with array of the posts and their data for the "latest comments."
-
+			$this->refreshLatestCommentsTransient();
 		}
 
 		/**
-		 * Refreshes the Latest Posts array transient.
+		 * Refreshes the Latest Comments array transient.
 		 *
 		 * @param int $number_of_posts The number of posts to set in the transient.
 		 * @return array The new transient array/value.
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
-		public function refreshLatestPostsTransient( $number_of_posts = 5 ) {
+		public function refreshLatestCommentsTransient( $number_of_posts = 5 ) {
 			$number_of_posts = is_numeric( $number_of_posts ) ? $number_of_posts : 5;
+
+			$number_of_posts = apply_filters( 'muut_latest_comments_number_of_posts', $number_of_posts );
 
 			$query_args = apply_filters( 'muut_latest_posts_transient_args', array(
 				'orderby' => 'meta_value_num',
@@ -172,7 +187,36 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 				'posts_per_page' => $number_of_posts,
 			) );
 
+			$query = new WP_Query( $query_args );
+			$posts = $query->get_posts();
+
 			// Use the returned posts to generate the new transient data.
+			$transient_data = array();
+			foreach ( $posts as $comments_post ) {
+				$user = get_post_meta( $comments_post->ID, self::REPLY_LAST_USER_DATA_NAME, true );
+				$transient_data[] = array(
+					'post_id' => $comments_post->ID,
+					'user' => $user,
+					'timestamp' => get_post_meta( $comments_post->ID, self::REPLY_UPDATE_TIME_NAME, true ),
+				);
+			}
+			// Set the transient, with expiration 12 hours from now.
+			set_transient( self::LATEST_COMMENTS_TRANSIENT_NAME, $transient_data, 60 * 60 * 12 );
+		}
+
+		/**
+		 * Get the latest comments data array from the transient.
+		 *
+		 * @return array The transient array with the latest comments data.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getLatestCommentsData() {
+			if ( false === ( $latest_comments_data = get_transient( self::LATEST_COMMENTS_TRANSIENT_NAME ) ) ) {
+				$this->refreshLatestCommentsTransient();
+			}
+
+			return get_transient( self::LATEST_COMMENTS_TRANSIENT_NAME );
 		}
 	}
 }
