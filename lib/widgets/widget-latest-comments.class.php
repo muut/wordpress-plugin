@@ -85,6 +85,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			muut()->enqueueFrontendScripts();
 
 			$title = isset( $instance['title'] ) ? $instance['title'] : '';
+			$latest_comments_data = $this->getLatestCommentsData();
 
 			// Render widget.
 			echo $args['before_widget'];

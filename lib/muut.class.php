@@ -746,6 +746,8 @@ if ( !class_exists( 'Muut' ) ) {
 						}
 					echo '</script>';
 				}
+
+				// Print the various and proper JS templates for items like Muut user avatars.
 			}
 		}
 
@@ -1160,6 +1162,40 @@ if ( !class_exists( 'Muut' ) ) {
 				muut()->setOption( 'activation_timestamp', $just_activated );
 				delete_option( 'muut_plugin_just_activated' );
 			}
+		}
+
+		/**
+		 * Return the face-link/avatar anchor for a given muut user--all data must be provided.
+		 *
+		 * @param string $username The Muut username (sans opening '@' symbol).
+		 * @param string $display_name The display name for the user.
+		 * @param bool $is_admin Is the user an administrator?
+		 * @param string $user_url The URL that the image should link to.
+		 * @param string $avatar_url The URL of the user's avatar.
+		 * @param bool $echo Whether to echo the result or not.
+		 * @return void|string The anchor tag, or void if $echo is set to true.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getUserFacelinkAvatar( $username, $display_name, $is_admin = false, $user_url = null, $avatar_url = null, $echo = false ) {
+			$href_statement = '';
+			$admin_class = '';
+			if ( $user_url ) {
+				$href_statement = 'href="' . $user_url . '"';
+			}
+			if ( $is_admin ) {
+				$admin_class = 'm-is-admin';
+			}
+			$html = '<a class="m-facelink ' . $admin_class . ' m-online m-user-online_' . $username .'" title="' . $display_name . '" ' . $href_statement . ' data-href="#!/@' . $username . '"><img class="m-face" src="' . $avatar_url . '"></a>';
+
+			$html = apply_filters( 'muut_facelink_avatar_markup', $html, $username, $display_name, $is_admin, $user_url, $avatar_url, $echo );
+
+			if ( $echo ) {
+				echo $html;
+				return;
+			}
+
+			return $html;
 		}
 	}
 	/**
