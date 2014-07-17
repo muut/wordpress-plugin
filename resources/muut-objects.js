@@ -107,14 +107,6 @@ jQuery(document).ready(function($) {
         num_logged_in_span.text(muut().online.length);
       }
       widget_online_users_wrapper.find('.m-logged-users').html(load_online_users_initial_html);
-      $.each(widget_online_users_wrapper.find('.m-facelink'), function() {
-        $(this).usertooltip();
-        $(this).on('click', function(e) {
-          var el = $(this);
-          var page = el.data('href').substr(2);
-          muut().load(page);
-        });
-      });
     }
 
     muut().user.on('logout', function(event) {
@@ -141,14 +133,21 @@ jQuery(document).ready(function($) {
         num_logged_in_span.text(muut().online.length);
       }
     };
+    $('.m-facelink').on('click', function(e) {
+        var el = $(this);
+        var page = el.data('href').substr(2);
+        muut().load(page);
+    }).usertooltip();
   });
 
   $.fn.extend({
     usertooltip: function() {
-      $(this).tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0});
-      if($(this).hasClass('m-is-admin')) {
-        $(this).find(".m-tooltip").append("<em> (" + muut_objects_strings.admin + ")</em>");
-      }
+      this.tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0});
+      this.each(function() {
+        if($(this).hasClass('m-is-admin')) {
+          $(this).find(".m-tooltip").append("<em> (" + muut_objects_strings.admin + ")</em>");
+        }
+      });
     }
   });
 });
@@ -156,6 +155,7 @@ jQuery(document).ready(function($) {
 // Function that contains the template for avatars.
 var get_user_avatar_html = function(user) {
   var is_admin_class = '';
+
   if(user.is_admin) {
     is_admin_class = 'm-is-admin ';
   }
