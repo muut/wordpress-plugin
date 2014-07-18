@@ -20,13 +20,13 @@
 			if ( $time_since < 60 ) {
 				$list_time = 'just now';
 			} elseif ( $time_since < ( 60 * 60 ) ) {
-				$list_time = ceil( $time_since / 60 ) . 'm';
+				$list_time = floor( $time_since / 60 ) . 'm';
 			} elseif ( $time_since < ( 60 * 60 * 24 ) ) {
-				$list_time = ceil( $time_since / ( 60 * 60 ) ) . 'h';
+				$list_time = floor( $time_since / ( 60 * 60 ) ) . 'h';
 			} elseif ( $time_since < ( 60 * 60 * 24 * 7 ) ) {
-				$list_time = ceil( $time_since / ( 60 * 60 * 24 ) ) . 'd';
+				$list_time = floor( $time_since / ( 60 * 60 * 24 ) ) . 'd';
 			} else {
-				$list_time = ceil( $time_since / ( 60 * 60 * 24 * 7 ) ) . 'w';
+				$list_time = floor( $time_since / ( 60 * 60 * 24 * 7 ) ) . 'w';
 			}
 			$user = $comment['user'];
 			$user_link_path = Muut_Post_Utility::getForumPageId() ? get_permalink( Muut_Post_Utility::getForumPageId() ) . '#!/' . $user->path . '"' : false;

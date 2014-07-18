@@ -55,7 +55,10 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function addActions() {
+			// Update the transient data when a reply is made.
 			add_action( 'muut_webhook_request_reply', array( $this, 'updateWidgetData' ), 100, 2 );
+			// The reason we have to worry about this below (post event) is in case it is on threaded commenting.
+			add_action( 'muut_webhook_request_post', array( $this, 'updateWidgetData' ), 100, 2 );
 		}
 
 		/**
@@ -144,8 +147,20 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function updateWidgetData( $request, $event ) {
-			// Check if a WP post exists in the database that would match the path of the reply request.
-			preg_match_all( '/^\/' . addslashes( muut()->getForumName() ) . '\/' . addslashes( muut()->getOption( 'comments_base_domain' ) ) . '\/([0-9]+)\/?.*$/', $request['path'], $matches );
+
+			if ( $event == 'reply' ) {
+				$path = $request['path'];
+				$user = $request['post']->user;
+			} elseif ( $event == 'post' ) {
+				$path = $request['location']->path;
+				$user = $request['thread']->user;
+			}
+			if ( !isset( $path ) ) {
+				return;
+			}
+
+			// Check if a WP post exists in the database that would match the path of the "post" request (for threaded commenting).
+			preg_match_all( '/^\/' . addslashes( muut()->getForumName() ) . '\/' . addslashes( muut()->getOption( 'comments_base_domain' ) ) . '\/([0-9]+)(?:\/|\#)?.*$/', $path, $matches );
 
 			if ( empty( $matches ) || !isset( $matches[1][0] ) || !is_numeric( $matches[1][0] ) ) {
 				return;
@@ -159,7 +174,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 
 			// Add/update a meta for the post with the time of the last comment and the user data responsible.
 			update_post_meta( $post_id, self::REPLY_UPDATE_TIME_NAME, time() );
-			update_post_meta( $post_id, self::REPLY_LAST_USER_DATA_NAME, $request['post']->user );
+			update_post_meta( $post_id, self::REPLY_LAST_USER_DATA_NAME, $user );
 
 			// Update the transient with array of the posts and their data for the "latest comments."
 			$this->refreshLatestCommentsTransient();
