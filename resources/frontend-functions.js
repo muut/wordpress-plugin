@@ -30,15 +30,19 @@ jQuery(document).ready( function($) {
     facelinkinit: function() {
       var facelinks = $(this).find('.m-facelink');
       $.each(facelinks, function() {
-        $(this).tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0});
-        if($(this).hasClass('m-is-admin')) {
-          $(this).find(".m-tooltip").append("<em> (" + __muut_frontend_strings.admin + ")</em>");
+        if ( !$(this).hasClass('m-facelink-inited') ) {
+          $(this).tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0});
+          if($(this).hasClass('m-is-admin')) {
+            $(this).find(".m-tooltip").append("<em> (" + __muut_frontend_strings.admin + ")</em>");
+          }
+          $(this).on('click', function(e) {
+            e.preventDefault();
+            var el = $(this);
+            var page = el.data('href').substr(2);
+            muutObj().load(page);
+          });
+          $(this).addClass('m-facelink-inited');
         }
-        $(this).on('click', function(e) {
-          var el = $(this);
-          var page = el.data('href').substr(2);
-          muutObj().load(page);
-        });
       });
     }
   });
