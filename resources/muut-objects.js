@@ -24,6 +24,8 @@ jQuery(document).ready(function($) {
     $('#muut_hidden_embed_div').muut(muut_conf);
   }
 
+
+
   /************
    * MY FEED WIDGET FUNCTIONALITY
    ************/
@@ -42,106 +44,17 @@ jQuery(document).ready(function($) {
     if (widget_my_feed_wrapper.find('.m-logged').length > 0 ) {
       widget_my_feed_wrapper.find('.muut_login').hide();
     }
-  });
 
-  /************
-   * ONLINE USERS WIDGET FUNCTIONALITY
-   ************/  // Once Muut is loaded...
-  muut().on('load', function() {
-    // Functionality for the online users widget.
-    var widget_online_users_wrapper = $('#muut-widget-online-users-wrapper');
-    var anon_count_wrapper = widget_online_users_wrapper.find('.m-anon-count');
-    var num_logged_in_span = $('.widget_muut_online_users_widget').find('.num-logged-in');
-    var show_anon_count = false;
-    var show_num_logged_in = false;
-    if ( anon_count_wrapper.length > 0 ) {
-      show_anon_count = true;
-    }
-    if ( num_logged_in_span.length > 0 ) {
-      show_num_logged_in = true;
-    }
-    if (widget_online_users_wrapper.length > 0) {
-      // The custom trigger listeners.
-      $(muut_object).on('add_online_user', function(e, user) {
-
-        online_user_html = get_user_avatar_html(user);
-        var user_faces = widget_online_users_wrapper.find('.m-logged-users').append(online_user_html).find('.m-facelink');
-        var new_user_face = user_faces[user_faces.length - 1];
-        $(new_user_face).mootboost(500);
-        $(new_user_face).usertooltip();
-        update_anon_count();
-        update_num_logged_in();
-      });
-      $(muut_object).on('remove_online_user', function(e, user) {
-        if(user.path.substr(0,1) == '@') {
-          var username = user.path.substr(1);
-        }
-        var username_for_selector = (username.replace(':', '\\:')).replace(' ', '_');
-        widget_online_users_wrapper.find('.m-user-online_' + username_for_selector).fadeOut(500, function() { $(this).remove() });
-        update_anon_count();
-        update_num_logged_in();
-      });
-      // For the websockets that Muut is using.
-      muut().channel.on('enter', function(user) {
-        $(muut_object).trigger('add_online_user', [user]);
-      });
-      muut().channel.on('leave', function(user) {
-        $(muut_object).trigger('remove_online_user', [user]);
-      });
-      // Do Initial rendering of online users.
-      muut_object.online_users = muut().online;
-      muut_object.anon_count = muut().anon_count;
-      var load_online_users_initial_html = '';
-      $.each(muut().online, function(index, user) {
-        load_online_users_initial_html += get_user_avatar_html(user);
-      });
-      if ( show_anon_count ) {
-        var anon_count_class = '';
-        if ( !muut_object.anon_count ) {
-          anon_count_wrapper.addClass('hidden');
-        }
-        var anon_users_html = '+<em>' + muut_object.anon_count + '</em> ' + muut_objects_strings.anonymous_users;
-        anon_count_wrapper.append(anon_users_html);
-      }
-      if ( show_num_logged_in ) {
-        num_logged_in_span.text(muut().online.length);
-      }
-      widget_online_users_wrapper.find('.m-logged-users').html(load_online_users_initial_html);
-      $.each(widget_online_users_wrapper.find('.m-facelink'), function() {
-        $(this).usertooltip();
-        $(this).on('click', function(e) {
-          var el = $(this);
-          var page = el.data('href').substr(2);
-          muut().load(page);
-        });
-      });
-    }
-
+    // When a user
     muut().user.on('logout', function(event) {
       $('.muut').muut();
     });
     muut().channel.on('login', function(event) {
       $('.muut').muut('feed');
     });
-
-    var update_anon_count = function() {
-      if ( show_anon_count ) {
-        if (muut().anon_count == 0 && !anon_count_wrapper.hasClass('hidden')) {
-          anon_count_wrapper.addClass('hidden');
-        } else if (muut().anon_count > 0 && anon_count_wrapper.hasClass('hidden')) {
-          anon_count_wrapper.removeClass('hidden');
-        }
-
-        anon_count_wrapper.find('em').text(muut().anon_count);
-      }
-    };
-
-    var update_num_logged_in = function() {
-      if ( show_num_logged_in ) {
-        num_logged_in_span.text(muut().online.length);
-      }
-    };
   });
+
+
 
   $.fn.extend({
     usertooltip: function() {

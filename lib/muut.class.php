@@ -530,6 +530,8 @@ if ( !class_exists( 'Muut' ) ) {
 				),
 				'muut-objects' => array(
 					'admin' => __( 'Admin', 'muut' ),
+				),
+				'muut-widget-online-users' => array(
 					'anonymous_users' => _x( 'anonymous', 'anonymous users', 'muut' ),
 				),
 			);
