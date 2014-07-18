@@ -85,7 +85,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			muut()->enqueueFrontendScripts();
 
 			$title = isset( $instance['title'] ) ? $instance['title'] : '';
-			$latest_comments_data = $this->getLatestCommentsData();
+			$latest_comments_data = array_slice( $this->getLatestCommentsData(), 0, $instance['number_of_comments'] );
 
 			// Render widget.
 			echo $args['before_widget'];
@@ -173,10 +173,10 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
-		public function refreshLatestCommentsTransient( $number_of_posts = 5 ) {
-			$number_of_posts = is_numeric( $number_of_posts ) ? $number_of_posts : 5;
+		public function refreshLatestCommentsTransient( $number_of_posts = 10 ) {
+			$number_of_posts = is_numeric( $number_of_posts ) ? $number_of_posts : 10;
 
-			$number_of_posts = apply_filters( 'muut_latest_comments_number_of_posts', $number_of_posts );
+			$number_of_posts = apply_filters( 'muut_latest_comments_number_of_posts_to_store', $number_of_posts );
 
 			$query_args = apply_filters( 'muut_latest_posts_transient_args', array(
 				'orderby' => 'meta_value_num',
