@@ -36,6 +36,32 @@ if ( !class_exists( 'Muut_Widget_My_Feed' ) ) {
 					'description' => __( 'Use this to show a logged in user\'s personal Muut feed.', 'muut' ),
 				)
 			);
+
+			$this->addActions();
+			$this->addFilters();
+		}
+
+		/**
+		 * Adds actions related to this widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function addActions() {
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueWidgetScripts' ), 12 );
+			add_action( 'init', array( $this, 'maybeRequireMuutResources') );
+		}
+
+		/**
+		 * Adds filters related to this widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function addFilters() {
+
 		}
 
 		/**
@@ -101,6 +127,32 @@ if ( !class_exists( 'Muut_Widget_My_Feed' ) ) {
 			$instance['disable_uploads'] = !empty( $new_instance['disable_uploads'] ) ? $new_instance['disable_uploads'] : '0';
 
 			return $instance;
+		}
+
+		/**
+		 * Enqueues the JS required for this widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function enqueueWidgetScripts() {
+			if ( is_active_widget( false, false, $this->id_base, true ) ) {
+				wp_enqueue_script( 'muut-widget-my-feed', muut()->getPluginUrl() . 'resources/muut-widget-my-feed.js', array( 'jquery', 'muut-widgets-initialize' ), Muut::VERSION, true );
+			}
+		}
+
+		/**
+		 * Check if the widget is active, in which case make sure to include the Muut resources.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function maybeRequireMuutResources() {
+			if ( is_active_widget( false, false, $this->id_base, true ) ) {
+				add_filter( 'muut_requires_muut_resources', '__return_true' );
+			}
 		}
 	}
 }

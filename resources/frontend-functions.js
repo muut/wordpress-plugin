@@ -8,7 +8,7 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 jQuery(document).ready( function($) {
-  var muut_frontend_strings = muut_frontend_functions_localized;
+  var __muut_frontend_strings = muut_frontend_functions_localized;
 
   // Adds the comments navigation link to the forum navigation.
   var body = $('body');
@@ -21,8 +21,39 @@ jQuery(document).ready( function($) {
         var comments_link_class = "m-selected";
       }
       if ($('#muut_site_comments_nav').length == 0) {
-        $(".m-forums").append('<p><a id="muut_site_comments_nav" href="#!/' + muut_comments_base_domain + '" title="' + muut_frontend_strings.comments + '" data-channel="' + muut_frontend_strings.comments + '"  class="' + comments_link_class + '">' + muut_frontend_strings.comments + '</a></p>');
+        $(".m-forums").append('<p><a id="muut_site_comments_nav" href="#!/' + muut_comments_base_domain + '" title="' + __muut_frontend_strings.comments + '" data-channel="' + __muut_frontend_strings.comments + '"  class="' + comments_link_class + '">' + __muut_frontend_strings.comments + '</a></p>');
       }
     });
   }
+
+  $.fn.extend({
+    usertooltip: function() {
+      $(this).tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0});
+      if($(this).hasClass('m-is-admin')) {
+        $(this).find(".m-tooltip").append("<em> (" + __muut_frontend_strings.admin + ")</em>");
+      }
+    }
+  });
 });
+
+// Function that contains the template for avatars.
+var get_user_avatar_html = function(user) {
+  var is_admin_class = '';
+  if(user.is_admin) {
+    is_admin_class = 'm-is-admin ';
+  }
+
+  // Construct the actual username without the '@'.
+  if(user.path.substr(0,1) == '@') {
+    var username = user.path.substr(1);
+  }
+
+  var username_for_class = username.replace(' ', '_');
+  var online_user_href_markup = '';
+  if ( typeof muut_forum_page_permalink == 'string' ) {
+    online_user_href_markup = 'href="' + muut_forum_page_permalink + '#!/' + user.path + '"';
+  }
+  // Return the HTML for the face.
+  var html = '<a class="m-facelink ' + is_admin_class + 'm-online m-user-online_' + username_for_class +'" title="' + user.displayname + '" ' + online_user_href_markup + ' data-href="#!/' + user.path + '"><img class="m-face" src="' + user.img + '"></a>';
+  return html;
+};

@@ -36,6 +36,32 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 					'description' => __( 'Use this to show the online users in a widget.', 'muut' ),
 				)
 			);
+
+			$this->addActions();
+			$this->addFilters();
+		}
+
+		/**
+		 * Adds actions related to this widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function addActions() {
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueWidgetScripts' ), 12 );
+			add_action( 'init', array( $this, 'maybeRequireMuutResources') );
+		}
+
+		/**
+		 * Adds filters related to this widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function addFilters() {
+
 		}
 
 		/**
@@ -96,6 +122,38 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 			$instance['show_anonymous'] = !empty( $new_instance['show_anonymous'] ) ? $new_instance['show_anonymous'] : '0';
 
 			return $instance;
+		}
+
+		/**
+		 * Enqueues the JS required for this widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function enqueueWidgetScripts() {
+			if ( is_active_widget( false, false, $this->id_base, true ) ) {
+				wp_enqueue_script( 'muut-widget-online-users', muut()->getPluginUrl() . 'resources/muut-widget-online-users.js', array( 'jquery', 'muut-widgets-initialize' ), Muut::VERSION, true );
+
+				// Localization translation strings.
+				$localizations = array(
+					'anonymous_users' => _x( 'anonymous', 'anonymous users', 'muut' ),
+				);
+				wp_localize_script( 'muut-widget-online-users', 'muut_widget_online_users_localized', $localizations );
+			}
+		}
+
+		/**
+		 * Check if the widget is active, in which case make sure to include the Muut resources.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function maybeRequireMuutResources() {
+			if ( is_active_widget( false, false, $this->id_base, true ) ) {
+				add_filter( 'muut_requires_muut_resources', '__return_true' );
+			}
 		}
 	}
 }

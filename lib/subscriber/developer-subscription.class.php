@@ -79,7 +79,7 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 */
 		public function addActions() {
 			add_action( 'wp_print_scripts', array( $this, 'printSsoJs' ) );
-			add_action( 'muut_before_scripts_enqueued', array( $this, 'enqueueDeveloperScripts' ) );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueDeveloperScripts' ), 9 );
 		}
 
 		/**
@@ -101,11 +101,9 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 * @since 3.0
 		 */
 		public function enqueueDeveloperScripts() {
-			global $post;
-			if ( muut()->needsMuutResources() ) {
-				wp_enqueue_script( 'muut' );
-				wp_enqueue_script( 'muut-sso' );
-			}
+			//if ( muut()->needsMuutResources() ) {
+				wp_enqueue_script( 'muut-sso', muut()->getPluginUrl() . 'resources/muut-sso.js', array( 'jquery', 'muut' ), '1.0', true );
+			//}
 		}
 
 		/**
