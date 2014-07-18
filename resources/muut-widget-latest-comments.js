@@ -11,7 +11,7 @@
 jQuery(document).ready(function($) {
 
   // Once Muut is loaded...
-  muut().on('load', function() {
+  muutObj().on('load', function() {
     // Set the latest comments wrapper object.
     var widget_latest_comments_wrapper = $('#muut-widget-latest-comments-wrapper');
 

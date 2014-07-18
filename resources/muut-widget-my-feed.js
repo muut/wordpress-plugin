@@ -11,7 +11,7 @@
 jQuery(document).ready(function($) {
 
   // Once Muut is loaded...
-  muut().on('load', function() {
+  muutObj().on('load', function() {
     // Functionality for the My Feed widget.
     var widget_my_feed_wrapper = $('#muut-widget-my-feed-wrapper');
 
@@ -25,10 +25,10 @@ jQuery(document).ready(function($) {
       });
 
       // Listen for the websocket events for login and logout to reload/reset the widget on login and logout.
-      muut().user.on('login', function() {
-        muut().load('feed');
+      muutObj().user.on('login', function() {
+        muutObj().load('feed');
       });
-      muut().user.on('logout', function() {
+      muutObj().user.on('logout', function() {
         widget_my_feed_wrapper.find('.muut_login').show();
       });
 

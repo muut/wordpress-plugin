@@ -14,7 +14,7 @@ jQuery(document).ready( function($) {
   var body = $('body');
   if ( body.hasClass('muut-forum-home') && !body.hasClass('muut-custom-nav') && typeof muut_show_comments_in_nav != 'undefined' && muut_show_comments_in_nav ) {
     // Make sure the title of the comments page is "Comments".
-    muut().on( 'load', function(page) {
+    muutObj().on( 'load', function(page) {
       var comments_link_class = "unlisted ";
       if (typeof( muut_comments_base_domain ) == 'string' && page.relativePath == '/' + muut_comments_base_domain) {
         page.title = "Comments";
@@ -37,7 +37,7 @@ jQuery(document).ready( function($) {
         $(this).on('click', function(e) {
           var el = $(this);
           var page = el.data('href').substr(2);
-          muut().load(page);
+          muutObj().load(page);
         });
       });
     }

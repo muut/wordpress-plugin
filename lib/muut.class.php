@@ -721,6 +721,10 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function printCurrentPageJs() {
 			if ( !is_admin() && get_post() ) {
+				echo '<script type="text/javascript">';
+				echo 'var muut_object;';
+				echo 'function muutObj() { if( typeof muut_object == "undefined" && typeof muut() != "undefined" ) { muut_object = muut(); } return muut_object; }';
+				echo'</script>';
 				$page_id = get_the_ID();
 				$forum_page_id = Muut_Post_Utility::getForumPageId();
 				if ( Muut_Post_Utility::isMuutPost( $page_id ) ) {

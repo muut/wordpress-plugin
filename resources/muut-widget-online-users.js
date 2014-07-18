@@ -11,7 +11,7 @@
 jQuery(document).ready(function($) {
 
   // Once Muut is loaded...
-  muut().on('load', function() {
+  muutObj().on('load', function() {
     // Functionality for the online users widget.
     var widget_online_users_wrapper = $('#muut-widget-online-users-wrapper');
 
@@ -71,15 +71,15 @@ jQuery(document).ready(function($) {
       }
 
       // Execute the adding/removing based on Muut websocket events.
-      muut().channel.on('enter', function(user) {
+      muutObj().channel.on('enter', function(user) {
         muut_add_online_user(user);
       });
-      muut().channel.on('leave', function(user) {
+      muutObj().channel.on('leave', function(user) {
         muut_remove_online_user(user)
       });
 
       // For each online user, attach the proper markup to the initially loaded HTML block.
-      $.each(muut().online, function(index, user) {
+      $.each(muutObj().online, function(index, user) {
         load_online_users_initial_html += get_user_avatar_html(user);
       });
 
@@ -99,15 +99,15 @@ jQuery(document).ready(function($) {
         // Obviously, only do this if we are supposed to show the anonymous user count.
         if ( show_anon_count ) {
           // If there are no anonymous users, hide the block entirely.
-          if (muut().anon_count == 0 && !anon_count_wrapper.hasClass('hidden')) {
+          if (muutObj().anon_count == 0 && !anon_count_wrapper.hasClass('hidden')) {
             anon_count_wrapper.addClass('hidden');
           // If we have added an anonymous user, make sure to RE-display the block.
-          } else if (muut().anon_count > 0 && anon_count_wrapper.hasClass('hidden')) {
+          } else if (muutObj().anon_count > 0 && anon_count_wrapper.hasClass('hidden')) {
             anon_count_wrapper.removeClass('hidden');
           }
 
           // Replace the text (or rather, the count) to the updated number.
-          anon_count_wrapper.find('em').text(muut().anon_count);
+          anon_count_wrapper.find('em').text(muutObj().anon_count);
         }
       }
 
@@ -115,7 +115,7 @@ jQuery(document).ready(function($) {
       function update_num_logged_in() {
         // Obviously, only update if we are displaying the number to begin with.
         if ( show_num_logged_in ) {
-          num_logged_in_span.text(muut().online.length);
+          num_logged_in_span.text(muutObj().online.length);
         }
       }
     }
