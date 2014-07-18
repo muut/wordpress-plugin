@@ -11,30 +11,6 @@
  * Knowing that, `$this` represents that widget instance.
  */
 
-// For TESTING
-$user1 = new stdClass();
-$user1->path = '@paulhughes01';
-$user1->displayname = 'Paul Hughes';
-$user1->img = '//res.cloudinary.com/moot/image/upload/t_d2-avatar/v1398285864/paulhughes01.jpg';
-
-$user2 = new stdClass();
-$user2->path = '@paulhughes:Jerry Seinfeld';
-$user2->displayname = 'Jerry Seinfeld';
-$user2->img = '//gravatar.com/avatar/6d904762635e74a42cdc4b74b054396f';
-
-$latest_comments_data = array(
-	array(
-		'post_id' => 14,
-		'user' => $user1,
-		'timestamp' => time() - 400,
-	),
-	array(
-		'post_id' => 5,
-		'user' => $user2,
-		'timestamp' => time() - 600000,
-	),
-);
-
 ?>
 <div id="muut-widget-latest-comments-wrapper" class="muut_widget_wrapper muut_widget_latest_comments_wrapper">
 	<ul id="muut-recentcomments">
