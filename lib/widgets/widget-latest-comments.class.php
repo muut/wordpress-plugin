@@ -119,7 +119,12 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			$instance = array();
 			$instance['title'] = !empty( $new_instance['title'] ) ? strip_tags( $new_instance['title'] ) : '';
 
-			$instance['number_of_comments'] = !empty( $new_instance['number_of_comments'] ) ? $new_instance['number_of_comments'] : '5';
+			if ( empty( $new_instance['number_of_comments'] ) || !is_numeric( $new_instance['number_of_comments'] ) || $new_instance['number_of_comments'] < 1 ) {
+				$new_instance['number_of_comments'] = 5;
+			} elseif ( $new_instance['number_of_comments'] > 10 ) {
+				$new_instance['number_of_comments'] = 10;
+			}
+			$instance['number_of_comments'] = $new_instance['number_of_comments'];
 
 			return $instance;
 		}
