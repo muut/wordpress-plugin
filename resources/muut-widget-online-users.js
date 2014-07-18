@@ -98,15 +98,7 @@ jQuery(document).ready(function($) {
 
       // If we are supposed to display the anonymous user count, add that HTML to the widget.
       if ( show_anon_count ) {
-
-        // If there are no anonymous users currently, hide that anonymouse user count block.
-        if ( !muut().anon_count ) {
-          anon_count_wrapper.addClass('hidden');
-        }
-
-        // Added the anonymous count markup to the widget.
-        var anon_users_html = '+<em>' + muut().anon_count + '</em> ' + __muut_widget_online_users_strings.anonymous_users;
-        anon_count_wrapper.append(anon_users_html);
+        update_anon_count();
       }
 
       // Declare the function for updating the anonymous user count (called when users enter/leave.
