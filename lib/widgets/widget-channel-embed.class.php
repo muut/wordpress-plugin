@@ -36,6 +36,31 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 					'description' => __( 'Use this to embed a specific channel in a widget area.', 'muut' ),
 				)
 			);
+
+			$this->addActions();
+			$this->addFilters();
+		}
+
+		/**
+		 * Adds actions related to this widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function addActions() {
+			add_action( 'init', array( $this, 'maybeRequireMuutResources') );
+		}
+
+		/**
+		 * Adds filters related to this widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function addFilters() {
+
 		}
 
 		/**
@@ -51,11 +76,6 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 			if ( !is_home() && ( Muut_Post_Utility::isMuutPost( get_the_ID() ) || Muut_Post_Utility::isMuutCommentingPost( get_the_ID() ) ) ) {
 				return;
 			}
-
-			// Make sure the Muut resources get loaded (only stuff in the footer will work, as this happens
-			// partway through page load.
-			add_filter( 'muut_requires_muut_resources', '__return_true' );
-			muut()->enqueueFrontendScripts();
 
 			// Default to always NOT showing online users. Can be modified with filter.
 			$embed_args['show-online'] = apply_filters( 'muut_channel_embed_widget_show_online', false, $args, $instance );
@@ -113,6 +133,19 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 			$instance['muut_path'] = !empty( $new_instance['muut_path'] ) ? Muut_Post_Utility::sanitizeMuutPath( $new_instance['muut_path'] ) : $default_path;
 
 			return $instance;
+		}
+
+		/**
+		 * Check if the widget is active, in which case make sure to include the Muut resources.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function maybeRequireMuutResources() {
+			if ( is_active_widget( false, false, $this->id_base, true ) ) {
+				add_filter( 'muut_requires_muut_resources', '__return_true' );
+			}
 		}
 	}
 }

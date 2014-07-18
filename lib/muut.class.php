@@ -505,9 +505,8 @@ if ( !class_exists( 'Muut' ) ) {
 			wp_register_script( 'x-editable', $this->pluginUrl . 'vendor/jqueryui-editable/js/jqueryui-editable.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-tooltip', 'jquery-ui-button' ), '1.5.1', true);
 			wp_register_script( 'muut-admin-post-edit', $this->pluginUrl . 'resources/admin-post-edit.js', array( 'jquery', 'jquery-ui-dialog' ), '1.0', true );
 
-			wp_register_script( 'muut-frontend-functions', $this->pluginUrl . 'resources/frontend-functions.js', array( 'jquery' ), '1.0', true );
-			wp_register_script( 'muut-sso', $this->pluginUrl . 'resources/muut-sso.js', array( 'jquery', 'muut' ), '1.0', true );
-			wp_register_script( 'muut-objects', $this->pluginUrl . 'resources/muut-objects.js', array( 'jquery', 'muut-frontend-functions' ), '1.0', true );
+			wp_register_script( 'muut-frontend-functions', $this->pluginUrl . 'resources/frontend-functions.js', array( 'jquery', 'muut' ), '1.0', true );
+			wp_register_script( 'muut-widgets-initialize', $this->pluginUrl . 'resources/muut-widgets-initialize.js', array( 'jquery', 'muut-frontend-functions' ), '1.0', true );
 
 			wp_register_style( 'muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
 			wp_register_style( 'muut-frontend-style', $this->pluginUrl . 'resources/frontend-style.css' );
@@ -527,8 +526,6 @@ if ( !class_exists( 'Muut' ) ) {
 				),
 				'muut-frontend-functions' => array(
 					'comments' => __( 'Comments', 'muut' ),
-				),
-				'muut-objects' => array(
 					'admin' => __( 'Admin', 'muut' ),
 				),
 				'muut-widget-online-users' => array(
@@ -692,7 +689,7 @@ if ( !class_exists( 'Muut' ) ) {
 				wp_enqueue_style( 'muut-forum-css' );
 				wp_enqueue_style( 'muut-frontend-style' );
 				wp_enqueue_script( 'muut-frontend-functions' );
-				wp_enqueue_script( 'muut-objects' );
+				wp_enqueue_script( 'muut-widgets-initialize' );
 			}
 
 
