@@ -27,11 +27,19 @@ jQuery(document).ready( function($) {
   }
 
   $.fn.extend({
-    usertooltip: function() {
-      $(this).tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0});
-      if($(this).hasClass('m-is-admin')) {
-        $(this).find(".m-tooltip").append("<em> (" + __muut_frontend_strings.admin + ")</em>");
-      }
+    facelinkinit: function() {
+      var facelinks = $(this).find('.m-facelink');
+      $.each(facelinks, function() {
+        $(this).tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0});
+        if($(this).hasClass('m-is-admin')) {
+          $(this).find(".m-tooltip").append("<em> (" + __muut_frontend_strings.admin + ")</em>");
+        }
+        $(this).on('click', function(e) {
+          var el = $(this);
+          var page = el.data('href').substr(2);
+          muut().load(page);
+        });
+      });
     }
   });
 });

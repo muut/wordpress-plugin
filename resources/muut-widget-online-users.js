@@ -87,14 +87,7 @@ jQuery(document).ready(function($) {
       widget_online_users_wrapper.find('.m-logged-users').html(load_online_users_initial_html);
 
       // TODO: Replace this whole bit with a global check that accomplishes the facelink functionality assignment.
-      $.each(widget_online_users_wrapper.find('.m-facelink'), function() {
-        $(this).usertooltip();
-        $(this).on('click', function(e) {
-          var el = $(this);
-          var page = el.data('href').substr(2);
-          muut().load(page);
-        });
-      });
+      widget_online_users_wrapper.facelinkinit();
 
       // If we are supposed to display the anonymous user count, add that HTML to the widget.
       if ( show_anon_count ) {

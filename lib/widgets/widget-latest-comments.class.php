@@ -59,6 +59,9 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			add_action( 'muut_webhook_request_reply', array( $this, 'updateWidgetData' ), 100, 2 );
 			// The reason we have to worry about this below (post event) is in case it is on threaded commenting.
 			add_action( 'muut_webhook_request_post', array( $this, 'updateWidgetData' ), 100, 2 );
+
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueWidgetScripts' ), 12 );
+			add_action( 'init', array( $this, 'maybeRequireMuutResources') );
 		}
 
 		/**
@@ -238,6 +241,33 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			}
 
 			return get_transient( self::LATEST_COMMENTS_TRANSIENT_NAME );
+		}
+
+
+		/**
+		 * Enqueues the JS required for this widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function enqueueWidgetScripts() {
+			if ( is_active_widget( false, false, $this->id_base, true ) ) {
+				wp_enqueue_script( 'muut-widget-latest-comments', muut()->getPluginUrl() . 'resources/muut-widget-latest-comments.js', array( 'jquery', 'muut-widgets-initialize' ), Muut::VERSION, true );
+			}
+		}
+
+		/**
+		 * Check if the widget is active, in which case make sure to include the Muut resources.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function maybeRequireMuutResources() {
+			if ( is_active_widget( false, false, $this->id_base, true ) ) {
+				add_filter( 'muut_requires_muut_resources', '__return_true' );
+			}
 		}
 	}
 }
