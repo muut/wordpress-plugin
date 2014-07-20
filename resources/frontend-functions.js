@@ -35,7 +35,7 @@ jQuery(document).ready( function($) {
       var facelinks = $(this).find('.m-facelink');
       $.each(facelinks, function() {
         if ( !$(this).hasClass('m-facelink-inited') ) {
-          $(this).tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0});
+          $(this).tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0}).appendTo($(this));
           if($(this).hasClass('m-is-admin')) {
             $(this).find(".m-tooltip").append("<em> (" + __muut_frontend_strings.admin + ")</em>");
           }
@@ -44,12 +44,17 @@ jQuery(document).ready( function($) {
             var page = el.data('href').substr(2);
             muutObj().load(page);
           });
-          $(this).addClass('m-facelink-inited');
           var current_user_name = $(this).data('href').substr(4);
+          // This class is required for tooltips to work--something on the Muut end.
+          $(this).addClass('m-online')
           if($.inArray(current_user_name, online_usernames) >= 0) {
-            console.log(current_user_name);
-            $(this).addClass('m-online').addClass('m-user-online_' + current_user_name);
+            $(this).addClass('m-user-online_' + current_user_name);
+          } else {
+            // This hides the "online" circle, which has been added by the required m-online.
+            // Ugly, I know.
+            $(this).addClass('m-wp-hideafter');
           }
+          $(this).addClass('m-facelink-inited');
         }
       });
     }

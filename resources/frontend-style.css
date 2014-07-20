@@ -122,3 +122,6 @@
     float: right;
     color: #999;
 }
+.m-facelink.m-wp-hideafter:after {
+    content: '';
+}
