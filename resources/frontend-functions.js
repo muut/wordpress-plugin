@@ -28,6 +28,10 @@ jQuery(document).ready( function($) {
 
   $.fn.extend({
     facelinkinit: function() {
+      var online_usernames = Array();
+      muutObj().online.forEach(function(user) {
+        online_usernames.push(user.username);
+      });
       var facelinks = $(this).find('.m-facelink');
       $.each(facelinks, function() {
         if ( !$(this).hasClass('m-facelink-inited') ) {
@@ -41,6 +45,11 @@ jQuery(document).ready( function($) {
             muutObj().load(page);
           });
           $(this).addClass('m-facelink-inited');
+          var current_user_name = $(this).data('href').substr(4);
+          if($.inArray(current_user_name, online_usernames) >= 0) {
+            console.log(current_user_name);
+            $(this).addClass('m-online').addClass('m-user-online_' + current_user_name);
+          }
         }
       });
     }
