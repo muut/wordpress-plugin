@@ -27,6 +27,7 @@ jQuery(document).ready( function($) {
   }
 
   $.fn.extend({
+    // The function that is used to initialize all m-facelink anchors below the jQuery element collection calling the function.
     facelinkinit: function() {
       var online_usernames = Array();
       muutObj().online.forEach(function(user) {
@@ -34,11 +35,14 @@ jQuery(document).ready( function($) {
       });
       var facelinks = $(this).find('.m-facelink');
       $.each(facelinks, function() {
+        // If the facelinks are not marked as already having been initialized...
         if ( !$(this).hasClass('m-facelink-inited') ) {
+          // Add the username tooltip.
           $(this).tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0}).appendTo($(this));
           if($(this).hasClass('m-is-admin')) {
             $(this).find(".m-tooltip").append("<em> (" + __muut_frontend_strings.admin + ")</em>");
           }
+          // Load the user page if the portrait is clicked.
           $(this).on('click', function(e) {
             var el = $(this);
             var page = el.data('href').substr(2);
