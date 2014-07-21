@@ -160,7 +160,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'admin_menu', array( $this, 'createAdminMenuItems' ) );
 			add_action( 'admin_init', array( $this, 'runActivationFunctions' ) );
 
-			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ) );
+			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ), 50 );
 			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
 
 			add_action( 'init', array( $this, 'registerScriptsAndStyles' ) );
