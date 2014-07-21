@@ -33,7 +33,11 @@ jQuery(document).ready( function($) {
       muutObj().online.forEach(function(user) {
         online_usernames.push(user.username);
       });
-      var facelinks = $(this).find('.m-facelink');
+      if ($(this).hasClass('m-facelink')) {
+        var facelinks = $(this);
+      } else {
+        var facelinks = $(this).find('.m-facelink');
+      }
       $.each(facelinks, function() {
         // If the facelinks are not marked as already having been initialized...
         if ( !$(this).hasClass('m-facelink-inited') ) {

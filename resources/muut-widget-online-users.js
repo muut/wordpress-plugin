@@ -46,7 +46,7 @@ jQuery(document).ready(function($) {
         var user_faces = widget_online_users_wrapper.find('.m-logged-users').append(online_user_html).find('.m-facelink');
         var new_user_face = user_faces[user_faces.length - 1];
         $(new_user_face).mootboost(500);
-        $(new_user_face).usertooltip();
+        $(new_user_face).facelinkinit();
         muut_update_online_users_widget();
       }
 
