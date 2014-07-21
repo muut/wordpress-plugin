@@ -7,6 +7,7 @@
  * Licensed under MIT
  * http://www.opensource.org/licenses/mit-license.php
  */
+var NEPER = 2.718;
 jQuery(document).ready( function($) {
   var __muut_frontend_strings = muut_frontend_functions_localized;
 
@@ -14,7 +15,7 @@ jQuery(document).ready( function($) {
   var body = $('body');
   if ( body.hasClass('muut-forum-home') && !body.hasClass('muut-custom-nav') && typeof muut_show_comments_in_nav != 'undefined' && muut_show_comments_in_nav ) {
     // Make sure the title of the comments page is "Comments".
-    muut().on( 'load', function(page) {
+    muutObj().on( 'load', function(page) {
       var comments_link_class = "unlisted ";
       if (typeof( muut_comments_base_domain ) == 'string' && page.relativePath == '/' + muut_comments_base_domain) {
         page.title = "Comments";
@@ -27,11 +28,44 @@ jQuery(document).ready( function($) {
   }
 
   $.fn.extend({
-    usertooltip: function() {
-      $(this).tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0});
-      if($(this).hasClass('m-is-admin')) {
-        $(this).find(".m-tooltip").append("<em> (" + __muut_frontend_strings.admin + ")</em>");
+    // The function that is used to initialize all m-facelink anchors below the jQuery element collection calling the function.
+    facelinkinit: function() {
+      var online_usernames = Array();
+      muutObj().online.forEach(function(user) {
+        online_usernames.push(user.username);
+      });
+      if ($(this).hasClass('m-facelink')) {
+        var facelinks = $(this);
+      } else {
+        var facelinks = $(this).find('.m-facelink');
       }
+      $.each(facelinks, function() {
+        // If the facelinks are not marked as already having been initialized...
+        if ( !$(this).hasClass('m-facelink-inited') ) {
+          // Add the username tooltip.
+          $(this).tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0}).appendTo($(this));
+          if($(this).hasClass('m-is-admin')) {
+            $(this).find(".m-tooltip").append("<em> (" + __muut_frontend_strings.admin + ")</em>");
+          }
+          // Load the user page if the portrait is clicked.
+          $(this).on('click', function(e) {
+            var el = $(this);
+            var page = el.data('href').substr(2);
+            muutObj().load(page);
+          });
+          var current_user_name = $(this).data('href').substr(4);
+          // This class is required for tooltips to work--something on the Muut end.
+          $(this).addClass('m-online')
+          if($.inArray(current_user_name, online_usernames) >= 0) {
+            $(this).addClass('m-user-online_' + current_user_name);
+          } else {
+            // This hides the "online" circle, which has been added by the required m-online.
+            // Ugly, I know.
+            $(this).addClass('m-wp-hideafter');
+          }
+          $(this).addClass('m-facelink-inited');
+        }
+      });
     }
   });
 });
@@ -56,4 +90,12 @@ var get_user_avatar_html = function(user) {
   // Return the HTML for the face.
   var html = '<a class="m-facelink ' + is_admin_class + 'm-online m-user-online_' + username_for_class +'" title="' + user.displayname + '" ' + online_user_href_markup + ' data-href="#!/' + user.path + '"><img class="m-face" src="' + user.img + '"></a>';
   return html;
+};
+
+
+var tidy_muut_username = function(username) {
+  if (typeof(username) == 'string'){
+    username = (username.replace(':', '\\:')).replace(' ', '_');
+  }
+  return username;
 };

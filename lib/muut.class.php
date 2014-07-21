@@ -183,6 +183,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_filter( 'body_class', array( $this, 'addBodyClasses' ) );
 			add_filter( 'admin_body_class', array( $this, 'addAdminBodyClasses' ) );
 			add_filter( 'the_content', array( $this, 'filterForumPageContent' ), 10 );
+			add_filter( 'query_vars', array( $this, 'addQueryVars' ) );
 		}
 
 		/**
@@ -293,6 +294,20 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function getWrapperCssId() {
 			return apply_filters( 'muut_wrapper_css_id', $this->wrapperId );
+		}
+
+		/**
+		 * Adds the muut_action query var for checking if it is a webhooks request.
+		 *
+		 * @param array $vars The current registered query vars.
+		 * @return array The filtered registered query vars.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function addQueryVars( $vars ) {
+			$vars[] = 'muut_action';
+
+			return $vars;
 		}
 
 		/**
@@ -529,7 +544,7 @@ if ( !class_exists( 'Muut' ) ) {
 					'admin' => __( 'Admin', 'muut' ),
 				),
 				'muut-widget-online-users' => array(
-					'anonymous_users' => _x( 'anonymous', 'anonymous users', 'muut' ),
+					
 				),
 			);
 			foreach ( $localizations as $key => $array ) {
@@ -596,6 +611,8 @@ if ( !class_exists( 'Muut' ) ) {
 				'custom_s3_bucket_name' => '',
 				'comments_base_domain' => $_SERVER['SERVER_NAME'],
 				'activation_timestamp' => '0',
+				'use_webhooks' => '0',
+				'webhooks_secret' => '',
 			) );
 
 			return $defaults;
@@ -704,6 +721,10 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function printCurrentPageJs() {
 			if ( !is_admin() && get_post() ) {
+				echo '<script type="text/javascript">';
+				echo 'var muut_object;';
+				echo 'function muutObj() { if( typeof muut_object == "undefined" && typeof muut() != "undefined" ) { muut_object = muut(); } return muut_object; }';
+				echo'</script>';
 				$page_id = get_the_ID();
 				$forum_page_id = Muut_Post_Utility::getForumPageId();
 				if ( Muut_Post_Utility::isMuutPost( $page_id ) ) {
@@ -728,6 +749,8 @@ if ( !class_exists( 'Muut' ) ) {
 						}
 					echo '</script>';
 				}
+
+				// Print the various and proper JS templates for items like Muut user avatars.
 			}
 		}
 
@@ -789,10 +812,10 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function queueAdminNotice( $type, $content ) {
-			$this->adminNotices[] = array(
+			array_unshift( $this->adminNotices, array(
 				'type' => $type,
 				'content' => $content,
-			);
+			) );
 		}
 
 		/**
@@ -1142,6 +1165,40 @@ if ( !class_exists( 'Muut' ) ) {
 				muut()->setOption( 'activation_timestamp', $just_activated );
 				delete_option( 'muut_plugin_just_activated' );
 			}
+		}
+
+		/**
+		 * Return the face-link/avatar anchor for a given muut user--all data must be provided.
+		 *
+		 * @param string $username The Muut username (sans opening '@' symbol).
+		 * @param string $display_name The display name for the user.
+		 * @param bool $is_admin Is the user an administrator?
+		 * @param string $user_url The URL that the image should link to.
+		 * @param string $avatar_url The URL of the user's avatar.
+		 * @param bool $echo Whether to echo the result or not.
+		 * @return void|string The anchor tag, or void if $echo is set to true.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getUserFacelinkAvatar( $username, $display_name, $is_admin = false, $user_url = null, $avatar_url = null, $echo = false ) {
+			$href_statement = '';
+			$admin_class = '';
+			if ( $user_url ) {
+				$href_statement = 'href="' . $user_url . '"';
+			}
+			if ( $is_admin ) {
+				$admin_class = 'm-is-admin';
+			}
+			$html = '<a class="m-facelink ' . $admin_class . '" title="' . $display_name . '" ' . $href_statement . ' data-href="#!/@' . $username . '"><img class="m-face" src="' . $avatar_url . '"></a>';
+
+			$html = apply_filters( 'muut_facelink_avatar_markup', $html, $username, $display_name, $is_admin, $user_url, $avatar_url, $echo );
+
+			if ( $echo ) {
+				echo $html;
+				return;
+			}
+
+			return $html;
 		}
 	}
 	/**

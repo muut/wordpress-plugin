@@ -166,6 +166,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				'allow_uploads_default',
 				'subscription_use_sso',
 				'enable_proxy_rewrites',
+				'use_webhooks',
 			) );
 
 			foreach ( $boolean_settings as $boolean_setting ) {

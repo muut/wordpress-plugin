@@ -11,7 +11,7 @@
 jQuery(document).ready(function($) {
 
   // Once Muut is loaded...
-  muut().on('load', function() {
+  muutObj().on('load', function() {
     // Functionality for the online users widget.
     var widget_online_users_wrapper = $('#muut-widget-online-users-wrapper');
 
@@ -46,7 +46,7 @@ jQuery(document).ready(function($) {
         var user_faces = widget_online_users_wrapper.find('.m-logged-users').append(online_user_html).find('.m-facelink');
         var new_user_face = user_faces[user_faces.length - 1];
         $(new_user_face).mootboost(500);
-        $(new_user_face).usertooltip();
+        $(new_user_face).facelinkinit();
         muut_update_online_users_widget();
       }
 
@@ -55,7 +55,7 @@ jQuery(document).ready(function($) {
         if(user.path.substr(0,1) == '@') {
           var username = user.path.substr(1);
         }
-        var username_for_selector = (username.replace(':', '\\:')).replace(' ', '_');
+        var username_for_selector = tidy_muut_username(username);
         widget_online_users_wrapper.find('.m-user-online_' + username_for_selector).fadeOut(500, function() { $(this).remove() });
         muut_update_online_users_widget();
       }
@@ -71,15 +71,30 @@ jQuery(document).ready(function($) {
       }
 
       // Execute the adding/removing based on Muut websocket events.
-      muut().channel.on('enter', function(user) {
+      muutObj().channel.on('enter', function(user) {
         muut_add_online_user(user);
       });
-      muut().channel.on('leave', function(user) {
+      muutObj().channel.on('leave', function(user) {
         muut_remove_online_user(user)
+      });
+      muutObj().channel.on('type', function(user, path) {
+        // Show "typing" ring next to user icon on the Online Users widget.
+        var user_facelink = widget_online_users_wrapper.find('.m-facelink[data-href="#!/' + user.path + '"]');
+        var selected_element = false;
+        if ( user_facelink.length > 0 ) {
+          selected_element = user_facelink;
+        } else if ( show_anon_count ) {
+          selected_element = anon_count_wrapper;
+        }
+
+        if ( selected_element ) {
+          var icon = $("<em/>").ac("typing").appendTo(selected_element);
+          setTimeout(function() { icon.remove() }, NEPER * 1000);
+        }
       });
 
       // For each online user, attach the proper markup to the initially loaded HTML block.
-      $.each(muut().online, function(index, user) {
+      $.each(muutObj().online, function(index, user) {
         load_online_users_initial_html += get_user_avatar_html(user);
       });
 
@@ -87,26 +102,11 @@ jQuery(document).ready(function($) {
       widget_online_users_wrapper.find('.m-logged-users').html(load_online_users_initial_html);
 
       // TODO: Replace this whole bit with a global check that accomplishes the facelink functionality assignment.
-      $.each(widget_online_users_wrapper.find('.m-facelink'), function() {
-        $(this).usertooltip();
-        $(this).on('click', function(e) {
-          var el = $(this);
-          var page = el.data('href').substr(2);
-          muut().load(page);
-        });
-      });
+      widget_online_users_wrapper.facelinkinit();
 
       // If we are supposed to display the anonymous user count, add that HTML to the widget.
       if ( show_anon_count ) {
-
-        // If there are no anonymous users currently, hide that anonymouse user count block.
-        if ( !muut().anon_count ) {
-          anon_count_wrapper.addClass('hidden');
-        }
-
-        // Added the anonymous count markup to the widget.
-        var anon_users_html = '+<em>' + muut().anon_count + '</em> ' + __muut_widget_online_users_strings.anonymous_users;
-        anon_count_wrapper.append(anon_users_html);
+        update_anon_count();
       }
 
       // Declare the function for updating the anonymous user count (called when users enter/leave.
@@ -114,15 +114,15 @@ jQuery(document).ready(function($) {
         // Obviously, only do this if we are supposed to show the anonymous user count.
         if ( show_anon_count ) {
           // If there are no anonymous users, hide the block entirely.
-          if (muut().anon_count == 0 && !anon_count_wrapper.hasClass('hidden')) {
+          if (muutObj().anon_count == 0 && !anon_count_wrapper.hasClass('hidden')) {
             anon_count_wrapper.addClass('hidden');
           // If we have added an anonymous user, make sure to RE-display the block.
-          } else if (muut().anon_count > 0 && anon_count_wrapper.hasClass('hidden')) {
+          } else if (muutObj().anon_count > 0 && anon_count_wrapper.hasClass('hidden')) {
             anon_count_wrapper.removeClass('hidden');
           }
 
           // Replace the text (or rather, the count) to the updated number.
-          anon_count_wrapper.find('em').text(muut().anon_count);
+          anon_count_wrapper.find('em').text(muutObj().anon_count);
         }
       }
 
@@ -130,7 +130,7 @@ jQuery(document).ready(function($) {
       function update_num_logged_in() {
         // Obviously, only update if we are displaying the number to begin with.
         if ( show_num_logged_in ) {
-          num_logged_in_span.text(muut().online.length);
+          num_logged_in_span.text(muutObj().online.length);
         }
       }
     }

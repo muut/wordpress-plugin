@@ -101,3 +101,27 @@
 .hidden {
     display: none;
 }
+
+.widget #muut-recentcomments li.muut_recentcomments {
+    height: auto;
+    padding-bottom: 10px;
+    clear: left;
+}
+
+.widget #muut-recentcomments li.muut_recentcomments span.recent-comments-post-title {
+    margin-bottom: -8px;
+}
+
+.muut_recentcomments a.m-facelink {
+    float: left;
+    display: block;
+    margin: 0px 15px 5px 0;
+}
+
+.muut-post-time-since {
+    float: right;
+    color: #999;
+}
+.m-facelink.m-wp-hideafter:after {
+    content: '';
+}

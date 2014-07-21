@@ -9,7 +9,7 @@
  */
 jQuery(document).ready( function($) {
   // Embed the hidden Muut for widgets and pages where we need to load it in the background.
-  if (typeof muut() == 'undefined' && typeof muut_force_load != 'undefined' && muut_force_load ) {
+  if (typeof muutObj() == 'undefined' && typeof muut_force_load != 'undefined' && muut_force_load ) {
     if( typeof muut_conf == 'object') {
       $.extend(muut_conf, muut_widget_conf);
     } else {
