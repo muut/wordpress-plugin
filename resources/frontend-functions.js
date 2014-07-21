@@ -7,6 +7,7 @@
  * Licensed under MIT
  * http://www.opensource.org/licenses/mit-license.php
  */
+var NEPER = 2.718;
 jQuery(document).ready( function($) {
   var __muut_frontend_strings = muut_frontend_functions_localized;
 
@@ -89,4 +90,12 @@ var get_user_avatar_html = function(user) {
   // Return the HTML for the face.
   var html = '<a class="m-facelink ' + is_admin_class + 'm-online m-user-online_' + username_for_class +'" title="' + user.displayname + '" ' + online_user_href_markup + ' data-href="#!/' + user.path + '"><img class="m-face" src="' + user.img + '"></a>';
   return html;
+};
+
+
+var tidy_muut_username = function(username) {
+  if (typeof(username) == 'string'){
+    username = (username.replace(':', '\\:')).replace(' ', '_');
+  }
+  return username;
 };

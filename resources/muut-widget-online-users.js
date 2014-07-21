@@ -55,7 +55,7 @@ jQuery(document).ready(function($) {
         if(user.path.substr(0,1) == '@') {
           var username = user.path.substr(1);
         }
-        var username_for_selector = (username.replace(':', '\\:')).replace(' ', '_');
+        var username_for_selector = tidy_muut_username(username);
         widget_online_users_wrapper.find('.m-user-online_' + username_for_selector).fadeOut(500, function() { $(this).remove() });
         muut_update_online_users_widget();
       }
@@ -76,6 +76,21 @@ jQuery(document).ready(function($) {
       });
       muutObj().channel.on('leave', function(user) {
         muut_remove_online_user(user)
+      });
+      muutObj().channel.on('type', function(user, path) {
+        // Show "typing" ring next to user icon on the Online Users widget.
+        var user_facelink = widget_online_users_wrapper.find('.m-facelink[data-href="#!/' + user.path + '"]');
+        var selected_element = false;
+        if ( user_facelink.length > 0 ) {
+          selected_element = user_facelink;
+        } else if ( show_anon_count ) {
+          selected_element = anon_count_wrapper;
+        }
+
+        if ( selected_element ) {
+          var icon = $("<em/>").ac("typing").appendTo(selected_element);
+          setTimeout(function() { icon.remove() }, NEPER * 1000);
+        }
       });
 
       // For each online user, attach the proper markup to the initially loaded HTML block.
