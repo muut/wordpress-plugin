@@ -73,7 +73,6 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			add_action( 'init', array( $this, 'initCommentOverrides' ) );
 			add_action( 'init', array( $this, 'initDeveloperSubscription' ) );
 			add_action( 'init', array( $this, 'initWebhooks' ), 5 );
-			add_filter( 'comments_template', array( $this, 'initTemplateLoader' ) );
 
 			// Deprecating these, scheduled for full removal.
 			add_action( 'init', array( $this, 'initMuutShortcodes' ) );
