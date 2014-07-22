@@ -27,6 +27,10 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 
 		const MUUT_REPLY_CPT_NAME = 'muut_reply';
 
+		const MUUT_REPLY_POST_COMMENTING_TYPE_NAME = 'muut_commenting_reply';
+
+		const MUUT_REPLY_FORUM_TYPE_NAME = 'muut_forum_reply';
+
 		const MUUT_PUBLIC_POST_STATUS = 'muut_public';
 
 		const MUUT_SPAM_POST_STATUS = 'muut_spam';
@@ -205,7 +209,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
-		public function addMuutReplyData( $args = array() ) {
+		public function addMuutReplyDataOLD( $args = array() ) {
 			if ( empty( $args['title'] ) || empty( $args['path'] ) || empty( $args['user'] ) || !isset( $args['body'] ) ) {
 				return false;
 			}
@@ -236,6 +240,69 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 
 			// Return the WP post id.
 			return $inserted_reply;
+		}
+
+		/**
+		 * Add new Muut Reply.
+		 *
+		 * @param array $args The post args.
+		 *                    This array should follow the following structure:
+		 *                    'title' => The Muut thread key
+		 *                    'path' => The main thread path.
+		 *                    'user' => The *Muut* username.
+		 *                    'body' => The reply content.
+		 * @return int The CPT post id.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function addMuutReplyData( $args = array() ) {
+			if ( empty( $args['key'] ) || empty( $args['path'] ) || empty( $args['user'] ) || !isset( $args['body'] ) ) {
+				return false;
+			}
+
+			$comment_type = self::MUUT_REPLY_FORUM_TYPE_NAME;
+
+			// If everything is there, lets add the thread.
+			extract( $args );
+
+			// Check if a WP post exists in the database that would match the path of the "post" request (for threaded commenting).
+			preg_match_all( '/^\/' . addslashes( muut()->getForumName() ) . '\/' . addslashes( muut()->getOption( 'comments_base_domain' ) ) . '\/([0-9]+)(?:\/|\#)?.*$/', $path, $matches );
+
+			if ( !empty( $matches ) && isset( $matches[1][0] ) && is_numeric( $matches[1][0] ) && Muut_Post_Utility::isMuutCommentingPost( $matches[1][0] ) ) {
+				$post_id = $matches[1][0];
+				$comment_type = self::MUUT_REPLY_POST_COMMENTING_TYPE_NAME;
+			}
+
+			$post_id = isset( $post_id ) ? $post_id : 0;
+
+			$comment_args = array(
+				'comment_post_ID' => $post_id,
+				'comment_content' => $body,
+				'comment_type' => $comment_type,
+				'comment_agent' => 'Muut ' . muut()->getMuutVersion() . '; ' . muut()->getForumName(),
+			);
+
+			// Add the thread to the Posts table.
+			$inserted_reply = wp_insert_comment( $comment_args );
+
+			if ( $inserted_reply == 0 ) {
+				return false;
+			}
+
+			// Add the muut comment meta.
+			update_comment_meta( $inserted_reply, 'muut_user', $user );
+
+			update_comment_meta( $inserted_reply, 'muut_key', $key );
+
+			update_comment_meta( $inserted_reply, 'muut_path', $path );
+
+			// Return the comment id.
+			return $inserted_reply;
+
+
+			// Add/update a meta for the post with the time of the last comment and the user data responsible.
+			/*update_post_meta( $post_id, self::REPLY_UPDATE_TIME_NAME, time() );
+			update_post_meta( $post_id, self::REPLY_LAST_USER_DATA_NAME, $user );*/
 		}
 	}
 }
