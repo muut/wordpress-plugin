@@ -70,6 +70,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			add_action( 'template_redirect', array( $this, 'initTemplateLoader' ) );
 			add_action( 'init', array( $this, 'initMuutPostUtility' ) );
 			add_action( 'init', array( $this, 'initChannelUtility' ) );
+			add_action( 'init', array( $this, 'initFilesUtility' ) );
 			add_action( 'init', array( $this, 'initCommentOverrides' ) );
 			add_action( 'init', array( $this, 'initDeveloperSubscription' ) );
 			add_action( 'init', array( $this, 'initWebhooks' ), 5 );
@@ -300,6 +301,21 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			$class = 'Muut_Field_Validation';
 			if ( !in_array( $class, $this->alreadyInit ) ) {
 				require_once( muut()->getPluginPath() . 'lib/admin/admin-field-validation.utility.class.php' );
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the Files utility class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function initFilesUtility() {
+			$class = 'Muut_Files_Utility';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/files.utility.class.php' );
 				$this->alreadyInit[] = $class;
 			}
 		}
