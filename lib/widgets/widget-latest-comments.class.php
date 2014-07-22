@@ -63,6 +63,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			add_action( 'muut_webhook_request_post', array( $this, 'updateWidgetData' ), 100, 2 );
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueWidgetScripts' ), 12 );
+			add_action( 'wp_print_scripts', array( $this, 'printWidgetJs' ) );
 			add_action( 'init', array( $this, 'maybeRequireMuutResources') );
 		}
 
@@ -290,6 +291,23 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			return get_transient( self::LATEST_COMMENTS_TRANSIENT_NAME );
 		}
 
+		/**
+		 * Prints the widget JS stuff (mostly, the array of latest comments items).
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function printWidgetJs() {
+			$poll_time = apply_filters( 'muut_latest_comments_poll_updates', '' );
+			$json = $content = json_encode( array(
+				'latest_comments_posts' => $this->getLatestCommentsData(),
+			) );
+			echo '<script type="text/javascript">';
+			echo 'var muut_latest_comments_poll_time = "' . $poll_time . '";';
+			echo 'var muut_latest_comments_json = ' . $json . ';';
+			echo '</script>';
+		}
 
 		/**
 		 * Enqueues the JS required for this widget.
