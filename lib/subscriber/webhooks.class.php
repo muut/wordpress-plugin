@@ -359,7 +359,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 */
 		public function processPost( $request, $event ) {
 			$new_thread_args = array(
-				'title' => $request['path'],
+				'title' => $request['location']->path,
 				'path' => $request['location']->path,
 				'user' => $request['thread']->user->path,
 				'body' => '',
@@ -381,7 +381,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 */
 		public function processReply( $request, $event ) {
 			$new_reply_args = array(
-				'title' => $request['post']->key,
+				'key' => $request['post']->key,
 				'path' => $request['path'],
 				'user' => $request['post']->user->path,
 				'body' => join( '', $request['post']->body ),
