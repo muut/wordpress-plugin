@@ -27,6 +27,8 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 
 		const REPLY_LAST_USER_DATA_NAME = 'muut_last_reply_user';
 
+		const LATEST_COMMENTS_JSON_FILE_NAME = 'latest_comments.json';
+
 		/**
 		 * The class constructor.
 		 *
@@ -180,22 +182,23 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			update_post_meta( $post_id, self::REPLY_LAST_USER_DATA_NAME, $user );
 
 			// Update the transient with array of the posts and their data for the "latest comments."
-			$this->refreshLatestCommentsTransient();
+			$this->refreshCache();
 		}
 
 		/**
-		 * Refreshes the Latest Comments array transient.
+		 * Refreshes the Latest Comments caching items (transient and JSON file).
 		 *
-		 * @param int $number_of_posts The number of posts to set in the transient.
-		 * @return array The new transient array/value.
+		 * @param int $number_of_posts The number of posts to set in the transient and JSON file.
+		 * @return array The new data array.
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
-		public function refreshLatestCommentsTransient( $number_of_posts = 10 ) {
+		public function refreshCache( $number_of_posts = 10 ) {
 			$number_of_posts = is_numeric( $number_of_posts ) ? $number_of_posts : 10;
 
 			$number_of_posts = apply_filters( 'muut_latest_comments_number_of_posts_to_store', $number_of_posts );
 
+			// Get the posts with the most recent Muut Reply Update Times.
 			$query_args = apply_filters( 'muut_latest_posts_transient_args', array(
 				'orderby' => 'meta_value_num',
 				'order' => 'DESC',
@@ -215,17 +218,60 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			$posts = $query->get_posts();
 
 			// Use the returned posts to generate the new transient data.
-			$transient_data = array();
+			$data_array = array();
 			foreach ( $posts as $comments_post ) {
 				$user = get_post_meta( $comments_post->ID, self::REPLY_LAST_USER_DATA_NAME, true );
-				$transient_data[] = array(
+				$data_array[] = array(
 					'post_id' => $comments_post->ID,
+					'post_title' => $comments_post->post_title,
 					'user' => $user,
 					'timestamp' => get_post_meta( $comments_post->ID, self::REPLY_UPDATE_TIME_NAME, true ),
 				);
 			}
+
+			// Update the transient with the data as well as the JSON file.
+			$this->updateTransient( $data_array );
+			$this->updateJsonFile( $data_array );
+
+			return $data_array;
+		}
+
+		/**
+		 * Sets/updates the latest comments transient value.
+		 *
+		 * @param array $data_array The data array to store in the transient.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function updateTransient( $data_array ) {
+			if ( !is_array( $data_array ) ) {
+				return;
+			}
+
 			// Set the transient, with expiration 12 hours from now.
-			set_transient( self::LATEST_COMMENTS_TRANSIENT_NAME, $transient_data, 60 * 60 * 12 );
+			set_transient( self::LATEST_COMMENTS_TRANSIENT_NAME, $data_array, 60 * 60 * 12 );
+		}
+
+		/**
+		 * Sets/updates the latest comments JSON cache file.
+		 *
+		 * @param array $data_array The data array to store in the file.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function updateJsonFile( $data_array ) {
+			if ( !is_array( $data_array ) ) {
+				return;
+			}
+
+			$content = json_encode( array(
+				'latest_comments_posts' => $data_array,
+			) );
+
+			// Write the file.
+			Muut_Files_Utility::writeFile( 'cache/' . self::LATEST_COMMENTS_JSON_FILE_NAME, $content );
 		}
 
 		/**
@@ -237,7 +283,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 */
 		public function getLatestCommentsData() {
 			if ( false === ( $latest_comments_data = get_transient( self::LATEST_COMMENTS_TRANSIENT_NAME ) ) ) {
-				$this->refreshLatestCommentsTransient();
+				$this->refreshCache();
 			}
 
 			return get_transient( self::LATEST_COMMENTS_TRANSIENT_NAME );
