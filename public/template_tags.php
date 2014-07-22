@@ -179,3 +179,22 @@ function muut_comments_override_anchor( $post_id = null, $echo = true ) {
 		return false;
 	}
 }
+
+/**
+ * Gets the user facelink avatar. This function is pluggable.
+ *
+ * @param string $username The Muut username (sans opening '@' symbol).
+ * @param string $display_name The display name for the user.
+ * @param bool $is_admin Is the user an administrator?
+ * @param string $user_url The URL that the image should link to.
+ * @param string $avatar_url The URL of the user's avatar.
+ * @param bool $echo Whether to echo the result or not.
+ * @return void|string The anchor tag, or void if $echo is set to true.
+ * @author Paul Hughes
+ * @since NEXT_RELEASE
+ */
+if ( !function_exists( 'muut_get_user_facelink_avatar' ) ) {
+	function muut_get_user_facelink_avatar( $username, $display_name, $is_admin = false, $user_url = null, $avatar_url = null, $echo = false ) {
+		muut()->getUserFacelinkAvatar( $username, $display_name, $is_admin, $user_url, $avatar_url, $echo );
+	}
+}

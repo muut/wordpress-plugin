@@ -18,7 +18,7 @@
 	<div class="m-users">
 		<div class="m-logged-users"></div>
 		<?php if ( isset( $instance['show_anonymous'] ) && $instance['show_anonymous'] ) { ?>
-		<div class="m-anon-count"></div>
+		<div class="m-anon-count">+<em></em> <?php _e( 'anonymous users', 'muut' ); ?></div>
 		<?php } ?>
 	</div>
 </div>

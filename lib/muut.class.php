@@ -160,7 +160,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'admin_menu', array( $this, 'createAdminMenuItems' ) );
 			add_action( 'admin_init', array( $this, 'runActivationFunctions' ) );
 
-			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ) );
+			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ), 50 );
 			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
 
 			add_action( 'init', array( $this, 'registerScriptsAndStyles' ) );
@@ -520,9 +520,8 @@ if ( !class_exists( 'Muut' ) ) {
 			wp_register_script( 'x-editable', $this->pluginUrl . 'vendor/jqueryui-editable/js/jqueryui-editable.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-tooltip', 'jquery-ui-button' ), '1.5.1', true);
 			wp_register_script( 'muut-admin-post-edit', $this->pluginUrl . 'resources/admin-post-edit.js', array( 'jquery', 'jquery-ui-dialog' ), '1.0', true );
 
-			wp_register_script( 'muut-frontend-functions', $this->pluginUrl . 'resources/frontend-functions.js', array( 'jquery' ), '1.0', true );
-			wp_register_script( 'muut-sso', $this->pluginUrl . 'resources/muut-sso.js', array( 'jquery', 'muut' ), '1.0', true );
-			wp_register_script( 'muut-objects', $this->pluginUrl . 'resources/muut-objects.js', array( 'jquery', 'muut-frontend-functions' ), '1.0', true );
+			wp_register_script( 'muut-frontend-functions', $this->pluginUrl . 'resources/frontend-functions.js', array( 'jquery', 'muut' ), '1.0', true );
+			wp_register_script( 'muut-widgets-initialize', $this->pluginUrl . 'resources/muut-widgets-initialize.js', array( 'jquery', 'muut-frontend-functions' ), '1.0', true );
 
 			wp_register_style( 'muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
 			wp_register_style( 'muut-frontend-style', $this->pluginUrl . 'resources/frontend-style.css' );
@@ -542,10 +541,10 @@ if ( !class_exists( 'Muut' ) ) {
 				),
 				'muut-frontend-functions' => array(
 					'comments' => __( 'Comments', 'muut' ),
-				),
-				'muut-objects' => array(
 					'admin' => __( 'Admin', 'muut' ),
-					'anonymous_users' => _x( 'anonymous', 'anonymous users', 'muut' ),
+				),
+				'muut-widget-online-users' => array(
+					
 				),
 			);
 			foreach ( $localizations as $key => $array ) {
@@ -707,7 +706,7 @@ if ( !class_exists( 'Muut' ) ) {
 				wp_enqueue_style( 'muut-forum-css' );
 				wp_enqueue_style( 'muut-frontend-style' );
 				wp_enqueue_script( 'muut-frontend-functions' );
-				wp_enqueue_script( 'muut-objects' );
+				wp_enqueue_script( 'muut-widgets-initialize' );
 			}
 
 
@@ -722,7 +721,12 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function printCurrentPageJs() {
 			if ( !is_admin() && get_post() ) {
+				echo '<script type="text/javascript">';
+				echo 'var muut_object;';
+				echo 'function muutObj() { if( typeof muut_object == "undefined" && typeof muut() != "undefined" ) { muut_object = muut(); } return muut_object; }';
+				echo'</script>';
 				$page_id = get_the_ID();
+				$forum_page_id = Muut_Post_Utility::getForumPageId();
 				if ( Muut_Post_Utility::isMuutPost( $page_id ) ) {
 					echo '<script type="text/javascript">';
 					if ( Muut_Post_Utility::getForumPageId() == $page_id ) {
@@ -736,12 +740,17 @@ if ( !class_exists( 'Muut' ) ) {
 					}
 					echo '</script>';
 				}
-				if( is_active_widget( false, false, 'muut_online_users_widget' ) ) {
+				if( Muut_Post_Utility::getForumPageId() != $page_id && ( is_active_widget( false, false, 'muut_online_users_widget' ) || is_active_widget( false, false, 'muut_my_feed_widget' ) ) ) {
 					echo '<script type="text/javascript">';
 						echo 'var muut_widget_conf = { url: "' . $this->getForumIndexUri() . '", path: "/' . $this->getOption( 'comments_base_domain') . ':hidden-base-forum-thread" };';
 						echo 'var muut_force_load = true;';
+						if ( $forum_page_id ) {
+							echo 'var muut_forum_page_permalink = "' . get_permalink( $forum_page_id ) . '";';
+						}
 					echo '</script>';
 				}
+
+				// Print the various and proper JS templates for items like Muut user avatars.
 			}
 		}
 
@@ -1156,6 +1165,40 @@ if ( !class_exists( 'Muut' ) ) {
 				muut()->setOption( 'activation_timestamp', $just_activated );
 				delete_option( 'muut_plugin_just_activated' );
 			}
+		}
+
+		/**
+		 * Return the face-link/avatar anchor for a given muut user--all data must be provided.
+		 *
+		 * @param string $username The Muut username (sans opening '@' symbol).
+		 * @param string $display_name The display name for the user.
+		 * @param bool $is_admin Is the user an administrator?
+		 * @param string $user_url The URL that the image should link to.
+		 * @param string $avatar_url The URL of the user's avatar.
+		 * @param bool $echo Whether to echo the result or not.
+		 * @return void|string The anchor tag, or void if $echo is set to true.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getUserFacelinkAvatar( $username, $display_name, $is_admin = false, $user_url = null, $avatar_url = null, $echo = false ) {
+			$href_statement = '';
+			$admin_class = '';
+			if ( $user_url ) {
+				$href_statement = 'href="' . $user_url . '"';
+			}
+			if ( $is_admin ) {
+				$admin_class = 'm-is-admin';
+			}
+			$html = '<a class="m-facelink ' . $admin_class . '" title="' . $display_name . '" ' . $href_statement . ' data-href="#!/@' . $username . '"><img class="m-face" src="' . $avatar_url . '"></a>';
+
+			$html = apply_filters( 'muut_facelink_avatar_markup', $html, $username, $display_name, $is_admin, $user_url, $avatar_url, $echo );
+
+			if ( $echo ) {
+				echo $html;
+				return;
+			}
+
+			return $html;
 		}
 	}
 	/**

@@ -166,6 +166,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				'allow_uploads_default',
 				'subscription_use_sso',
 				'enable_proxy_rewrites',
+				'use_webhooks',
 			) );
 
 			foreach ( $boolean_settings as $boolean_setting ) {
@@ -248,6 +249,8 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 */
 		public function validateSettings( $value, $name ) {
 			switch( $name ) {
+				//This first case is deprecated and should no longer be used. Delete after next release.
+				//TODO: Delete after next release.
 				case 'custom_s3_bucket_name':
 					$submitted_settings = $this->getSubmittedSettings();
 					if ( isset( $submitted_settings['use_custom_s3_bucket'] ) && isset( $submitted_settings['enable_proxy_rewrites'] ) && $submitted_settings['use_custom_s3_bucket'] && $submitted_settings['enable_proxy_rewrites'] ) {
@@ -273,6 +276,24 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 							// Unset the value, so nothing *breaks* (defaults to Muut.com indexing).
 							$value = '';
 						}
+					}
+					break;
+
+				case 'forum_name':
+					// Make sure the forum name has no whitespace.
+					$valid = Muut_Field_Validation::validateHasNoWhitespace( $value );
+
+					if ( !$valid ) {
+						$error_args = array(
+							'name' => $name,
+							'message' => __( 'Forum name must contain no spaces of any kind. Make sure the forum name is the name you registered with Muut when you set up the forum.', 'muut' ),
+							'field' => 'muut_forum_name',
+							'new_value' => $value,
+							'old_value' => muut()->getForumName(),
+						);
+						$this->addErrorToQueue( $error_args );
+
+						$value = muut()->getForumName();
 					}
 					break;
 			}
