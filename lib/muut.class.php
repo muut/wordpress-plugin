@@ -1200,6 +1200,21 @@ if ( !class_exists( 'Muut' ) ) {
 
 			return $html;
 		}
+
+		/**
+		 * Return the Muut uploads directory URL.
+		 *
+		 * @return string the Uploads directory URL.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getUploadsUrl() {
+			if ( class_exists( 'Muut_Files_Utility' ) ) {
+				return Muut_Files_Utility::getUploadsUrl();
+			} else {
+				return false;
+			}
+		}
 	}
 	/**
 	 * END MAIN CLASS
