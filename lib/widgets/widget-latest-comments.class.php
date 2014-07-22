@@ -224,6 +224,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 				$data_array[] = array(
 					'post_id' => $comments_post->ID,
 					'post_title' => $comments_post->post_title,
+					'post_permalink' => get_permalink( $comments_post ),
 					'user' => $user,
 					'timestamp' => get_post_meta( $comments_post->ID, self::REPLY_UPDATE_TIME_NAME, true ),
 				);
