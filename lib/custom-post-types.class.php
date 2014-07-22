@@ -25,11 +25,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 	{
 		const MUUT_THREAD_CPT_NAME = 'muut_thread';
 
-		const MUUT_REPLY_CPT_NAME = 'muut_reply';
-
-		const MUUT_REPLY_POST_COMMENTING_TYPE_NAME = 'muut_commenting_reply';
-
-		const MUUT_REPLY_FORUM_TYPE_NAME = 'muut_forum_reply';
+		const MUUT_REPLY_TYPE_NAME = 'muut_post_reply';
 
 		const MUUT_PUBLIC_POST_STATUS = 'muut_public';
 
@@ -112,20 +108,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 				'public' => false,
 			) );
 
-			$muut_reply_labels = array(
-				'name' => __( 'Muut Replies', 'muut' ),
-				'singular_name' => __( 'Muut Reply', 'muut' ),
-			);
-
-			$muut_reply_args = apply_filters( 'muut_reply_cpt_args', array(
-				'label' => __( 'Muut Replies', 'muut' ),
-				'labels' => $muut_reply_labels,
-				'description' => __( 'This post type is not for public use, but is mainly for storing Muut reply data passed to it via webhooks.', 'muut' ),
-				'public' => false,
-			) );
-
 			register_post_type( self::MUUT_THREAD_CPT_NAME, $muut_post_args );
-			register_post_type( self::MUUT_REPLY_CPT_NAME, $muut_reply_args );
 		}
 
 		/**
@@ -199,59 +182,13 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		/**
 		 * Add new Muut Reply.
 		 *
-		 * @param array $args The post args.
+		 * @param array $args The comment args.
 		 *                    This array should follow the following structure:
-		 *                    'title' => The Muut thread key
+		 *                    'key' => The Muut thread key
 		 *                    'path' => The main thread path.
 		 *                    'user' => The *Muut* username.
 		 *                    'body' => The reply content.
-		 * @return int The CPT post id.
-		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
-		 */
-		public function addMuutReplyDataOLD( $args = array() ) {
-			if ( empty( $args['title'] ) || empty( $args['path'] ) || empty( $args['user'] ) || !isset( $args['body'] ) ) {
-				return false;
-			}
-
-			// If everything is there, lets add the thread.
-			extract( $args );
-
-			$post_args = array(
-				'post_title' => $title,
-				'post_content' => $body,
-				'post_name' => urlencode( $path . '#' . $title ),
-				'post_type' => self::MUUT_REPLY_CPT_NAME,
-				'post_status' => self::MUUT_PUBLIC_POST_STATUS,
-			);
-
-			// Add the thread to the Posts table.
-			$inserted_reply = wp_insert_post( $post_args, false );
-
-			if ( $inserted_reply == 0 ) {
-				return false;
-			}
-
-			// Add the muut user as post meta.
-			update_post_meta( $inserted_reply, 'muut_user', $user );
-
-			// Add the Muut post path as meta for the parent thread.
-			update_post_meta( $inserted_reply, 'muut_path', $path );
-
-			// Return the WP post id.
-			return $inserted_reply;
-		}
-
-		/**
-		 * Add new Muut Reply.
-		 *
-		 * @param array $args The post args.
-		 *                    This array should follow the following structure:
-		 *                    'title' => The Muut thread key
-		 *                    'path' => The main thread path.
-		 *                    'user' => The *Muut* username.
-		 *                    'body' => The reply content.
-		 * @return int The CPT post id.
+		 * @return int The comment id.
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
@@ -260,7 +197,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 				return false;
 			}
 
-			$comment_type = self::MUUT_REPLY_FORUM_TYPE_NAME;
+			$comment_type = self::MUUT_REPLY_TYPE_NAME;
 
 			// If everything is there, lets add the thread.
 			extract( $args );
@@ -270,7 +207,6 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 
 			if ( !empty( $matches ) && isset( $matches[1][0] ) && is_numeric( $matches[1][0] ) && Muut_Post_Utility::isMuutCommentingPost( $matches[1][0] ) ) {
 				$post_id = $matches[1][0];
-				$comment_type = self::MUUT_REPLY_POST_COMMENTING_TYPE_NAME;
 			}
 
 			$post_id = isset( $post_id ) ? $post_id : 0;
@@ -298,11 +234,6 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 
 			// Return the comment id.
 			return $inserted_reply;
-
-
-			// Add/update a meta for the post with the time of the last comment and the user data responsible.
-			/*update_post_meta( $post_id, self::REPLY_UPDATE_TIME_NAME, time() );
-			update_post_meta( $post_id, self::REPLY_LAST_USER_DATA_NAME, $user );*/
 		}
 	}
 }
