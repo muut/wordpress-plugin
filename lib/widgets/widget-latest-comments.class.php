@@ -30,6 +30,11 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		const LATEST_COMMENTS_JSON_FILE_NAME = 'latest_comments.json';
 
 		/**
+		 * @property array The instance array of settings.
+		 */
+		protected $widget_instance;
+
+		/**
 		 * The class constructor.
 		 *
 		 * @return Muut_Widget_Online_Users
@@ -98,6 +103,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 
 			// Render widget.
 			echo $args['before_widget'];
+			echo '<script type="text/javascript">var muut_latest_comments_num_posts = "' . $instance['number_of_comments'] . '";</script>';
 			echo $args['before_title'] . $title . $args['after_title'];
 			include( muut()->getPluginPath() . 'views/widgets/widget-latest-comments.php' );
 			echo $args['after_widget'];
@@ -299,14 +305,23 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function printWidgetJs() {
-			$poll_time = apply_filters( 'muut_latest_comments_poll_updates', '' );
-			$json = $content = json_encode( array(
-				'latest_comments_posts' => $this->getLatestCommentsData(),
-			) );
-			echo '<script type="text/javascript">';
-			echo 'var muut_latest_comments_poll_time = "' . $poll_time . '";';
-			echo 'var muut_latest_comments_json = ' . $json . ';';
-			echo '</script>';
+			global $post;
+			if ( is_active_widget( false, false, $this->id_base, true ) && !is_admin() && isset( $post ) ) {
+				$poll_time = apply_filters( 'muut_latest_comments_poll_updates', '' );
+				$json = $content = json_encode( array(
+					'latest_comments_posts' => $this->getLatestCommentsData(),
+				) );
+				echo '<script type="text/javascript">';
+				echo 'var muut_latest_comments_poll_time = "' . $poll_time . '";';
+				echo 'var muut_latest_comments_json = ' . $json . ';';
+				echo 'var muut_latest_comments_request_endpoint = "' . trailingslashit( Muut_Files_Utility::getUploadsUrl() ) . 'cache/' . self::LATEST_COMMENTS_JSON_FILE_NAME . '";';
+				$user_obj = new stdClass();
+				$user_obj->path = '%USER_PATH%';
+				$user_obj->displayname = '%USER_DISPLAYNAME%';
+				$user_obj->img = '%USER_IMAGEURL%';
+				echo 'var muut_latest_comments_row_template = \'' . $this->getRowMarkup( '%POSTID%', '%TIMESTAMP%', $user_obj ) . '\';';
+				echo '</script>';
+			}
 		}
 
 		/**
@@ -333,6 +348,45 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			if ( is_active_widget( false, false, $this->id_base, true ) ) {
 				add_filter( 'muut_requires_muut_resources', '__return_true' );
 			}
+		}
+
+		/**
+		 * Get a row markup for given row data.
+		 *
+		 *
+		 */
+		public function getRowMarkup( $post_id, $timestamp, $user_obj ) {
+			if ( is_numeric( $timestamp ) ) {
+				$time_since = time() - $timestamp;
+				if ( $time_since < 60 ) {
+					$list_time = 'just now';
+				} elseif ( $time_since < ( 60 * 60 ) ) {
+					$list_time = floor( $time_since / 60 ) . 'm';
+				} elseif ( $time_since < ( 60 * 60 * 24 ) ) {
+					$list_time = floor( $time_since / ( 60 * 60 ) ) . 'h';
+				} elseif ( $time_since < ( 60 * 60 * 24 * 7 ) ) {
+					$list_time = floor( $time_since / ( 60 * 60 * 24 ) ) . 'd';
+				} else {
+					$list_time = floor( $time_since / ( 60 * 60 * 24 * 7 ) ) . 'w';
+				}
+			} else {
+				$list_time = '%LISTTIME%';
+			}
+			if ( is_numeric( $post_id ) ) {
+				$permalink = get_permalink( $post_id );
+				$title = get_the_title( $post_id );
+			} else {
+				$permalink = '%POST_PERMALINK%';
+				$title = '%POST_TITLE%';
+			}
+			$user_link_path = Muut_Post_Utility::getForumPageId() && Muut_Post_Utility::getForumPageId() != get_the_ID() ? get_permalink( Muut_Post_Utility::getForumPageId() ) . '#!/' . $user_obj->path . '"' : false;
+			$html = '<li class="muut_recentcomments" data-post-id="' . $post_id . '" data-timestamp="' . $timestamp. '" data-username="' . $user_obj->path . '">';
+			$html .= muut_get_user_facelink_avatar( $user_obj->path, $user_obj->displayname, false, $user_link_path, $user_obj->img, false );
+			$html .= '<span class="recent-comments-post-title"><a href="' . $permalink . '">' . $title . '</a></span>';
+			$html .= '<div class="muut-post-time-since">' . $list_time . '</div>';
+			$html .= '</li>';
+
+			return $html;
 		}
 	}
 }

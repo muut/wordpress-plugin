@@ -92,10 +92,51 @@ var get_user_avatar_html = function(user) {
   return html;
 };
 
-
+// Function that tidies the usernames of specific bad (but important) characters.
 var tidy_muut_username = function(username) {
   if (typeof(username) == 'string'){
     username = (username.replace(':', '\\:')).replace(' ', '_');
   }
   return username;
+};
+
+// Sets up a polling request to the WordPress server.
+// Should only be used if webhooks are not being used to initiate a request.
+var muut_poll_wordpress_cache = function(obj, endpoint_uri, timeout, event_obj) {
+  setTimeout( function() {
+    muut_request_json(obj, endpoint_uri, event_obj);
+    muut_poll_wordpress_cache(obj, endpoint_uri, timeout, event_obj);
+  }, timeout);
+};
+
+// Sends request to server to a specific JSON endpoint.
+var muut_request_json = function(obj, endpoint_uri, event_obj) {
+  jQuery.ajax({
+    url: endpoint_uri,
+    async: false,
+    dataType: 'json',
+    success: function(data) {
+      var old_data = obj;
+      obj = data;
+      event_obj.trigger('json_update', [ obj, old_data ] );
+    }
+  });
+};
+
+// Generate Muut-style shorthand string for timestamp (1s, 4d, etc.)
+var muut_time_format = function(timestamp) {
+  var time_since = Math.round(timestamp / 1000);
+  var list_time = '';
+  if ( time_since < 60 ) {
+    list_time = 'just now';
+  } else if ( time_since < ( 60 * 60 ) ) {
+    list_time = String(Math.floor( time_since / 60 )) + 'm';
+  } else if ( time_since < ( 60 * 60 * 24 ) ) {
+    list_time = String(Math.floor( time_since / ( 60 * 60 ) )) + 'h';
+  } else if ( time_since < ( 60 * 60 * 24 * 7 ) ) {
+    list_time = String(Math.floor( time_since / ( 60 * 60 * 24 ) )) + 'd';
+  } else {
+    list_time = String(Math.floor( time_since / ( 60 * 60 * 24 * 7 ) )) + 'w';
+  }
+  return list_time;
 };

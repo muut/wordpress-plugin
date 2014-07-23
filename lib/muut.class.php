@@ -1189,7 +1189,7 @@ if ( !class_exists( 'Muut' ) ) {
 			if ( $is_admin ) {
 				$admin_class = 'm-is-admin';
 			}
-			$html = '<a class="m-facelink ' . $admin_class . '" title="' . $display_name . '" ' . $href_statement . ' data-href="#!/@' . $username . '"><img class="m-face" src="' . $avatar_url . '"></a>';
+			$html = '<a class="m-facelink ' . $admin_class . '" title="' . $display_name . '" ' . $href_statement . ' data-href="#!/' . $username . '"><img class="m-face" src="' . $avatar_url . '"></a>';
 
 			$html = apply_filters( 'muut_facelink_avatar_markup', $html, $username, $display_name, $is_admin, $user_url, $avatar_url, $echo );
 

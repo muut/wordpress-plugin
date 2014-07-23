@@ -195,6 +195,10 @@ function muut_comments_override_anchor( $post_id = null, $echo = true ) {
  */
 if ( !function_exists( 'muut_get_user_facelink_avatar' ) ) {
 	function muut_get_user_facelink_avatar( $username, $display_name, $is_admin = false, $user_url = null, $avatar_url = null, $echo = false ) {
-		muut()->getUserFacelinkAvatar( $username, $display_name, $is_admin, $user_url, $avatar_url, $echo );
+		if ( $echo ) {
+			muut()->getUserFacelinkAvatar( $username, $display_name, $is_admin, $user_url, $avatar_url, true );
+		} else {
+			return muut()->getUserFacelinkAvatar( $username, $display_name, $is_admin, $user_url, $avatar_url, false );
+		}
 	}
 }
