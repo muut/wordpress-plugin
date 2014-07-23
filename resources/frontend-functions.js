@@ -100,29 +100,6 @@ var tidy_muut_username = function(username) {
   return username;
 };
 
-// Sets up a polling request to the WordPress server.
-// Should only be used if webhooks are not being used to initiate a request.
-var muut_poll_wordpress_cache = function(obj, endpoint_uri, timeout, event_obj) {
-  setTimeout( function() {
-    muut_request_json(obj, endpoint_uri, event_obj);
-    muut_poll_wordpress_cache(obj, endpoint_uri, timeout, event_obj);
-  }, timeout);
-};
-
-// Sends request to server to a specific JSON endpoint.
-var muut_request_json = function(obj, endpoint_uri, event_obj) {
-  jQuery.ajax({
-    url: endpoint_uri,
-    async: false,
-    dataType: 'json',
-    success: function(data) {
-      var old_data = obj;
-      obj = data;
-      event_obj.trigger('json_update', [ obj, old_data ] );
-    }
-  });
-};
-
 // Generate Muut-style shorthand string for timestamp (1s, 4d, etc.)
 var muut_time_format = function(timestamp) {
   var time_since = Math.round(timestamp / 1000);
