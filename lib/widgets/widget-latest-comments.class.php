@@ -307,7 +307,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		public function printWidgetJs() {
 			global $post;
 			if ( is_active_widget( false, false, $this->id_base, true ) && !is_admin() && isset( $post ) ) {
-				$poll_time = apply_filters( 'muut_latest_comments_poll_updates', '' );
+				$poll_time = apply_filters( 'muut_latest_comments_poll_updates', '0' );
 				$json = $content = json_encode( array(
 					'latest_comments_posts' => $this->getLatestCommentsData(),
 				) );

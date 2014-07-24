@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
     // Init all of the facelink functionality (tooltips and such).
     widget_latest_comments_wrapper.facelinkinit();
 
-    var muut_poll_wordpress_cache = function() {
+    var muut_poll_wordpress_cache = function( timeout ) {
       setTimeout( function() {
         jQuery.ajax({
           url: muut_latest_comments_request_endpoint,
@@ -34,14 +34,19 @@ jQuery(document).ready(function($) {
             var old_data = muut_latest_comments_json;
             muut_latest_comments_json = data;
             widget_latest_comments_wrapper.trigger('json_update', [ muut_latest_comments_json, old_data ] );
-            muut_poll_wordpress_cache();
+            if ( timeout >= 1000 ) {
+              muut_poll_wordpress_cache( timeout );
+            }
           }
         });
-      }, 30000);
+      }, timeout);
     };
 
-    // Poll the WP server to get the new JSON for the widget every 30 seconds.
-    muut_poll_wordpress_cache();
+    // The poll time must be greater than 1 second (1000 milliseconds).
+    if ( muut_latest_comments_poll_time >= 1000 ) {
+      // Poll the WP server to get the new JSON for the widget every <timeout> seconds.
+      muut_poll_wordpress_cache( muut_latest_comments_poll_time );
+    }
 
     // Listen for the json_update event so that we can compare data and act accordingly.
     widget_latest_comments_wrapper.on('json_update', function( event, new_obj, old_obj ) {
