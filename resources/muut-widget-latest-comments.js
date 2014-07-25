@@ -41,7 +41,7 @@ jQuery(document).ready(function($) {
         });
       }, timeout);
     };
-
+muut_latest_comments_poll_time = 5000;
     // The poll time must be greater than 1 second (1000 milliseconds).
     if ( muut_latest_comments_poll_time >= 1000 ) {
       // Poll the WP server to get the new JSON for the widget every <timeout> seconds.
@@ -50,6 +50,7 @@ jQuery(document).ready(function($) {
 
     // Listen for the json_update event so that we can compare data and act accordingly.
     widget_latest_comments_wrapper.on('json_update', function( event, new_obj, old_obj ) {
+widget_latest_comments_num_showing = widget_latest_comments_current_list_elements.length;
       muut_latest_comments_json = new_obj;
       new_obj = new_obj.latest_comments_posts;
       old_obj = old_obj.latest_comments_posts;
@@ -79,13 +80,14 @@ jQuery(document).ready(function($) {
           break;
         }
       }
-      // Delete the posts that are being replaced by updates to them (i.e. being moved to the top).
+      
+// Delete the posts that are being replaced by updates to them (i.e. being moved to the top).
       for(i = 0; i < post_ids_to_delete.length; i++) {
         widget_latest_comments_wrapper.find('.muut_recentcomments[data-post-id="' + post_ids_to_delete[i] + '"]').hide(400, function(){ $(this).remove(); });
       }
       // Refresh the current list of items and get figure out how many to remove from the bottom.
       widget_latest_comments_num_showing = widget_latest_comments_num_showing - post_ids_to_delete.length;
-      var difference_count_from_new_items = widget_latest_comments_num_showing - num_new_items;
+      var difference_count_from_new_items = muut_latest_comments_num_posts - num_new_items;
       for(i = 0; i < widget_latest_comments_num_showing - difference_count_from_new_items; i++) {
         $(widget_latest_comments_current_list_elements.get(-1)).hide(400, function() { $(this).remove(); });
       }
