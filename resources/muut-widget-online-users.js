@@ -71,14 +71,13 @@ jQuery(document).ready(function($) {
       }
 
       // Execute the adding/removing based on Muut websocket events.
-      muutObj().channel.on('enter', function(user) {
+      muutRpc.event('enter', function(user) {
         muut_add_online_user(user);
       });
-      muutObj().channel.on('leave', function(user) {
+      muutRpc.event('leave', function(user) {
         muut_remove_online_user(user)
       });
-      muutObj().channel.on('type', function(user, path) {
-        // Show "typing" ring next to user icon on the Online Users widget.
+      muutRpc.event('type', function(path, user) {
         var user_facelink = widget_online_users_wrapper.find('.m-facelink[data-href="#!/' + user.path + '"]');
         var selected_element = false;
         if ( user_facelink.length > 0 ) {
