@@ -41,7 +41,7 @@ jQuery(document).ready(function($) {
         });
       }, timeout);
     };
-muut_latest_comments_poll_time = 5000;
+
     // The poll time must be greater than 1 second (1000 milliseconds).
     if ( muut_latest_comments_poll_time >= 1000 ) {
       // Poll the WP server to get the new JSON for the widget every <timeout> seconds.
@@ -50,7 +50,7 @@ muut_latest_comments_poll_time = 5000;
 
     // Listen for the json_update event so that we can compare data and act accordingly.
     widget_latest_comments_wrapper.on('json_update', function( event, new_obj, old_obj ) {
-widget_latest_comments_num_showing = widget_latest_comments_current_list_elements.length;
+    widget_latest_comments_num_showing = widget_latest_comments_current_list_elements.length;
       muut_latest_comments_json = new_obj;
       new_obj = new_obj.latest_comments_posts;
       old_obj = old_obj.latest_comments_posts;
@@ -81,7 +81,7 @@ widget_latest_comments_num_showing = widget_latest_comments_current_list_element
         }
       }
       
-// Delete the posts that are being replaced by updates to them (i.e. being moved to the top).
+      // Delete the posts that are being replaced by updates to them (i.e. being moved to the top).
       for(i = 0; i < post_ids_to_delete.length; i++) {
         widget_latest_comments_wrapper.find('.muut_recentcomments[data-post-id="' + post_ids_to_delete[i] + '"]').hide(400, function(){ $(this).remove(); });
       }
@@ -109,7 +109,7 @@ widget_latest_comments_num_showing = widget_latest_comments_current_list_element
           .replace(/%POST_TITLE%/g, new_obj[i].post_title);
       }
       // Append the HTML.
-      $('#muut-recentcomments').prepend(new_item_html);
+      $('#muut-recentcomments').prepend(new_item_html).facelinkinit();
     });
   });
 });
