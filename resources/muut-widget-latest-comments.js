@@ -42,6 +42,14 @@ jQuery(document).ready(function($) {
       }, timeout);
     };
 
+    // When a reply event comes through the websocket.
+    muutRpc.on('reply', function( path, user ) {
+      // If the path shows that it is a comment on a post...
+      if(path.search(muutObj().path + '/' + muut_latest_comments_path) != -1) {
+        muut_poll_wordpress_cache(0);
+      }
+    });
+
     // The poll time must be greater than 1 second (1000 milliseconds).
     if ( muut_latest_comments_poll_time >= 1000 ) {
       // Poll the WP server to get the new JSON for the widget every <timeout> seconds.
