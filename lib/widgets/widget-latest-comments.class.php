@@ -103,7 +103,10 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 
 			// Render widget.
 			echo $args['before_widget'];
-			echo '<script type="text/javascript">var muut_latest_comments_num_posts = "' . $instance['number_of_comments'] . '";</script>';
+			echo '<script type="text/javascript">';
+			echo 'var muut_latest_comments_num_posts = "' . $instance['number_of_comments'] . '";';
+			echo 'var muut_latest_comments_path = "' . muut()->getOption( 'comments_base_domain') . '";';
+			echo '</script>';
 			echo $args['before_title'] . $title . $args['after_title'];
 			include( muut()->getPluginPath() . 'views/widgets/widget-latest-comments.php' );
 			echo $args['after_widget'];

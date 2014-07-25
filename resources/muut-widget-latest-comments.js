@@ -85,7 +85,7 @@ jQuery(document).ready(function($) {
       }
       // Refresh the current list of items and get figure out how many to remove from the bottom.
       widget_latest_comments_num_showing = widget_latest_comments_num_showing - post_ids_to_delete.length;
-      var difference_count_from_new_items = widget_latest_comments_num_showing - num_new_items;
+      var difference_count_from_new_items = muut_latest_comments_num_posts - num_new_items;
       for(i = 0; i < widget_latest_comments_num_showing - difference_count_from_new_items; i++) {
         $(widget_latest_comments_current_list_elements.get(-1)).hide(400, function() { $(this).remove(); });
       }
