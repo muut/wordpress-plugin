@@ -85,6 +85,36 @@ jQuery(document).ready(function($) {
           );
         }
       });
+
+      muutRpc.on('send', function(event, object) {
+        if ( event == 'reply' && typeof object[0] != 'undefined' && typeof muut_wp_post_id != 'undefined' ) {
+          var current_post_ids = [];
+          for (i = 0; i < muut_latest_comments_json.latest_comments_posts.length; i++) {
+            current_post_ids.push(muut_latest_comments_json.latest_comments_posts[i].post_id);
+          }
+          var old_data = muut_latest_comments_json;
+          var index_match = $.inArray(muut_wp_post_id, current_post_ids);
+          if ( index_match >= 0 ) {
+            muut_latest_comments_json.latest_comments_posts.splice( index_match, 1 );
+          } else if (muut_latest_comments_json.latest_comments_posts.length == 10 )  {
+            muut_latest_comments_json.latest_comments_posts.splice( 9, 1 );
+          }
+          new_object = {
+            post_id: muut_wp_post_id,
+            post_permalink: muut_wp_post_permalink,
+            post_title: muut_wp_post_title,
+            timestamp: Math.floor(Date.now() / 1000).toString(),
+            user: {
+              displayname: muutObj().user.displayname,
+              img: muutObj().user.img,
+              path: muutObj().user.path
+            }
+          };
+          muut_latest_comments_json.latest_comments_posts.unshift(new_object);
+          widget_latest_comments_wrapper.trigger('json_update', [ muut_latest_comments_json, old_data ] );
+          console.log('done');
+        }
+      });
     }
 
     // Listen for the json_update event so that we can compare data and act accordingly.

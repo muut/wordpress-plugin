@@ -106,6 +106,11 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			echo '<script type="text/javascript">';
 			echo 'var muut_latest_comments_num_posts = "' . $instance['number_of_comments'] . '";';
 			echo 'var muut_latest_comments_path = "' . muut()->getOption( 'comments_base_domain') . '";';
+			if ( get_the_ID() && Muut_Post_Utility::isMuutCommentingPost( get_the_ID() ) ) {
+				echo 'var muut_wp_post_id = ' . get_the_ID() . ';';
+				echo 'var muut_wp_post_permalink = "' . get_permalink() . '";';
+				echo 'var muut_wp_post_title = "' . get_the_title() . '";';
+			}
 			echo '</script>';
 			echo $args['before_title'] . $title . $args['after_title'];
 			include( muut()->getPluginPath() . 'views/widgets/widget-latest-comments.php' );
