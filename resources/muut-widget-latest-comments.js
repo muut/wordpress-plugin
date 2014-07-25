@@ -73,7 +73,7 @@ jQuery(document).ready(function($) {
         // If the path shows that it is a comment on a post...
         if(path.search(root_path) != -1) {
           matches = path_post_id_re.exec(path);
-          if ( typeof matches[1] != 'undefined' ) {
+          if ( matches && typeof matches[1] != 'undefined' ) {
             var post_id = parseInt(matches[1]);
             var current_post_ids = [];
             for (i = 0; i < muut_latest_comments_json.latest_comments_posts.length; i++) {
@@ -112,7 +112,7 @@ jQuery(document).ready(function($) {
         // If the path shows that it is a comment on a post...
         if(location.path.search(root_path) != -1) {
           matches = path_post_id_re.exec(location.path);
-          if ( typeof matches[1] != 'undefined' ) {
+          if ( matches && typeof matches[1] != 'undefined' ) {
             var post_id = parseInt(matches[1]);
             var current_post_ids = [];
             for (i = 0; i < muut_latest_comments_json.latest_comments_posts.length; i++) {
