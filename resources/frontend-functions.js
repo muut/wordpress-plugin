@@ -17,6 +17,8 @@ muut(function(app, rpc) {
   muutRpc.on('receive', function(object) {
     if ( typeof object.params != 'undefined' && object.params[0] == 'reply' ) {
       muutRpc.emit('reply', object.params[1], object.params[2]);
+    } else if ( typeof object.params != 'undefined' && ( object.params[0] == 'post' || object.params[0] == 'moot' ) ) {
+      muutRpc.emit('post', object.params[1], object.params[2]);
     }
   });
 });

@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
     // Init all of the facelink functionality (tooltips and such).
     widget_latest_comments_wrapper.facelinkinit();
 
-
+    // Get new results from the server.
     var muut_poll_wordpress_cache = function( timeout ) {
       setTimeout( function() {
         jQuery.ajax({
@@ -60,6 +60,7 @@ jQuery(document).ready(function($) {
     var last_update = Date.now();
     update_time_displays();
 
+    // If we are going to poll the server for new posts...
     // The poll time must be greater than 1 second (1000 milliseconds).
     if ( muut_latest_comments_poll_time >= 1000 ) {
       // Poll the WP server to get the new JSON for the widget every <timeout> seconds.
@@ -69,6 +70,15 @@ jQuery(document).ready(function($) {
       muutRpc.on('reply', function( path, user ) {
         // If the path shows that it is a comment on a post...
         if(path.search(muutObj().path + '/' + muut_latest_comments_path) != -1) {
+          setTimeout( function() {
+              muut_poll_wordpress_cache(0);
+            }, 4000
+          );
+        }
+      });
+      muutRpc.on('post', function( location, post ) {
+        // If the path shows that it is a comment on a post...
+        if(location.path.search(muutObj().path + '/' + muut_latest_comments_path) != -1) {
           setTimeout( function() {
               muut_poll_wordpress_cache(0);
             }, 4000
