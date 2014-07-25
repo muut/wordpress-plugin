@@ -23,6 +23,7 @@ jQuery(document).ready(function($) {
     // Init all of the facelink functionality (tooltips and such).
     widget_latest_comments_wrapper.facelinkinit();
 
+
     var muut_poll_wordpress_cache = function( timeout ) {
       setTimeout( function() {
         jQuery.ajax({
@@ -41,6 +42,23 @@ jQuery(document).ready(function($) {
         });
       }, timeout);
     };
+
+    // Check to update the timestamps every minute.
+    var update_time_displays = function() {
+      setTimeout( function() {
+        if ( Date.now() - last_update < 60000 ) {
+          widget_latest_comments_current_list_elements = $(widget_latest_comments_current_list_elements.selector);
+        }
+        widget_latest_comments_current_list_elements.each(function(index, element) {
+          var difference_timestamp = Date.now() - ( muut_latest_comments_json.latest_comments_posts[index].timestamp * 1000 );
+          var new_display_time = muut_time_format( difference_timestamp );
+          $(this).find('.muut-post-time-since').text(new_display_time);
+        });
+        update_time_displays();
+      }, 60000);
+    };
+    var last_update = Date.now();
+    update_time_displays();
 
     // The poll time must be greater than 1 second (1000 milliseconds).
     if ( muut_latest_comments_poll_time >= 1000 ) {
@@ -61,7 +79,8 @@ jQuery(document).ready(function($) {
 
     // Listen for the json_update event so that we can compare data and act accordingly.
     widget_latest_comments_wrapper.on('json_update', function( event, new_obj, old_obj ) {
-    widget_latest_comments_num_showing = widget_latest_comments_current_list_elements.length;
+      last_update = Date.now();
+      widget_latest_comments_num_showing = widget_latest_comments_current_list_elements.length;
       muut_latest_comments_json = new_obj;
       new_obj = new_obj.latest_comments_posts;
       old_obj = old_obj.latest_comments_posts;
