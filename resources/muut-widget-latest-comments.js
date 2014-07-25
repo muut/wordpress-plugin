@@ -42,18 +42,21 @@ jQuery(document).ready(function($) {
       }, timeout);
     };
 
-    // When a reply event comes through the websocket.
-    muutRpc.on('reply', function( path, user ) {
-      // If the path shows that it is a comment on a post...
-      if(path.search(muutObj().path + '/' + muut_latest_comments_path) != -1) {
-        muut_poll_wordpress_cache(0);
-      }
-    });
-
     // The poll time must be greater than 1 second (1000 milliseconds).
     if ( muut_latest_comments_poll_time >= 1000 ) {
       // Poll the WP server to get the new JSON for the widget every <timeout> seconds.
       muut_poll_wordpress_cache( muut_latest_comments_poll_time );
+    } else {
+      // When a reply event comes through the websocket.
+      muutRpc.on('reply', function( path, user ) {
+        // If the path shows that it is a comment on a post...
+        if(path.search(muutObj().path + '/' + muut_latest_comments_path) != -1) {
+          setTimeout( function() {
+              muut_poll_wordpress_cache(0);
+            }, 4000
+          );
+        }
+      });
     }
 
     // Listen for the json_update event so that we can compare data and act accordingly.
@@ -91,13 +94,13 @@ jQuery(document).ready(function($) {
       
       // Delete the posts that are being replaced by updates to them (i.e. being moved to the top).
       for(i = 0; i < post_ids_to_delete.length; i++) {
-        widget_latest_comments_wrapper.find('.muut_recentcomments[data-post-id="' + post_ids_to_delete[i] + '"]').hide(400, function(){ $(this).remove(); });
+        widget_latest_comments_wrapper.find('.muut_recentcomments[data-post-id="' + post_ids_to_delete[i] + '"]').remove();
       }
       // Refresh the current list of items and get figure out how many to remove from the bottom.
       widget_latest_comments_num_showing = widget_latest_comments_num_showing - post_ids_to_delete.length;
       var difference_count_from_new_items = muut_latest_comments_num_posts - num_new_items;
       for(i = 0; i < widget_latest_comments_num_showing - difference_count_from_new_items; i++) {
-        $(widget_latest_comments_current_list_elements.get(-1)).hide(400, function() { $(this).remove(); });
+        $(widget_latest_comments_current_list_elements.get(-1)).remove();
       }
 
       // Generate the HTML for the new elements and prepend it to the list.
