@@ -8,6 +8,13 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 var NEPER = 2.718;
+
+var muutRpc = {};
+
+muut(function(app, rpc) {
+  muutRpc = rpc;
+});
+
 jQuery(document).ready( function($) {
   var __muut_frontend_strings = muut_frontend_functions_localized;
 
