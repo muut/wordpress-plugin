@@ -20,6 +20,8 @@ jQuery(document).ready(function($) {
 
     var widget_latest_comments_num_showing = widget_latest_comments_current_list_elements.length;
 
+    var muut_comments_root_path = muutObj().path + '/' + muut_latest_comments_path;
+
     // Init all of the facelink functionality (tooltips and such).
     widget_latest_comments_wrapper.facelinkinit();
 
@@ -60,6 +62,38 @@ jQuery(document).ready(function($) {
     var last_update = Date.now();
     update_time_displays();
 
+    // Find out if a thread path is a WP Post commenting path.
+    // Return the WP post id on success, or false on failure.
+    var muut_is_wp_commenting_thread = function(path) {
+      // The commenting base path.
+      var path_post_id_re = new RegExp( muut_comments_root_path + '/([0-9]+)');
+      // If the string lines up with the commenting base path.
+      if(path.search(muut_comments_root_path) != -1) {
+        // Do the regular expression comparison to get the WP Post id the path references.
+        matches = path_post_id_re.exec(path);
+        if ( matches && typeof matches[1] != 'undefined' ) {
+          return parseInt(matches[1]);;
+        }
+      }
+      return false;
+    };
+
+    // Get the array of currently locally cached WP *post ids* (in same order as they are stored).
+    var muut_get_cached_post_ids = function() {
+      var current_post_ids = [];
+      for (i = 0; i < muut_latest_comments_json.latest_comments_posts.length; i++) {
+        current_post_ids.push(muut_latest_comments_json.latest_comments_posts[i].post_id);
+      }
+      return current_post_ids;
+    };
+
+    // Check if a given post id is already stored locally, and if so what the index is in the locally cached array.
+    // Return the index OR -1 if there is no match.
+    var muut_post_id_is_cached_locally = function(post_id){
+      var current_post_ids = muut_get_cached_post_ids();
+      return $.inArray(post_id, current_post_ids);;
+    };
+
     // If we are going to poll the server for new posts...
     // The poll time must be greater than 1 second (1000 milliseconds).
     if ( muut_latest_comments_poll_time >= 1000 ) {
@@ -68,93 +102,75 @@ jQuery(document).ready(function($) {
     } else {
       // When a reply event comes through the websocket.
       muutRpc.on('reply', function( path, reply_object ) {
-        var root_path = muutObj().path + '/' + muut_latest_comments_path;
-        var path_post_id_re = new RegExp( root_path + '/([0-9]+)');
-        // If the path shows that it is a comment on a post...
-        if(path.search(root_path) != -1) {
-          matches = path_post_id_re.exec(path);
-          if ( matches && typeof matches[1] != 'undefined' ) {
-            var post_id = parseInt(matches[1]);
-            var current_post_ids = [];
-            for (i = 0; i < muut_latest_comments_json.latest_comments_posts.length; i++) {
-              current_post_ids.push(muut_latest_comments_json.latest_comments_posts[i].post_id);
-            }
-            var new_data = $.extend(true,{},muut_latest_comments_json);
-            var index_match = $.inArray(post_id, current_post_ids);
-            if ( index_match >= 0 ) {
-              var post_data = new_data.latest_comments_posts[index_match];
-              new_object = {
-                post_id: post_id,
-                post_permalink: post_data.post_permalink,
-                post_title: post_data.post_title,
-                timestamp: Math.floor(Date.now() / 1000).toString(),
-                user: {
-                  displayname: reply_object.user.displayname,
-                  img: reply_object.user.img,
-                  path: reply_object.user.path
-                }
-              };
-              new_data.latest_comments_posts.splice( index_match, 1 );
-              new_data.latest_comments_posts.unshift(new_object);
-              widget_latest_comments_wrapper.trigger('json_update', [ new_data, muut_latest_comments_json ] );
-            } else {
-              setTimeout( function() {
-                  muut_poll_wordpress_cache(0);
-                }, 4000
-              );
-            }
+        var post_id = muut_is_wp_commenting_thread(path);
+        if (post_id != 'false') {
+          var new_data = $.extend(true,{},muut_latest_comments_json);
+          var index_match = muut_post_id_is_cached_locally(post_id);
+          if ( index_match >= 0 ) {
+            var post_data = new_data.latest_comments_posts[index_match];
+            new_object = {
+              post_id: post_id,
+              post_permalink: post_data.post_permalink,
+              post_title: post_data.post_title,
+              timestamp: Math.floor(Date.now() / 1000).toString(),
+              user: {
+                displayname: reply_object.user.displayname,
+                img: reply_object.user.img,
+                path: reply_object.user.path
+              }
+            };
+            new_data.latest_comments_posts.splice( index_match, 1 );
+            new_data.latest_comments_posts.unshift(new_object);
+            widget_latest_comments_wrapper.trigger('json_update', [ new_data, muut_latest_comments_json ] );
+          } else {
+            setTimeout( function() {
+                muut_poll_wordpress_cache(0);
+              }, 4000
+            );
           }
         }
       });
+      
       muutRpc.on('post', function( location, post_object ) {
-        var root_path = muutObj().path + '/' + muut_latest_comments_path;
-        var path_post_id_re = new RegExp( root_path + '/([0-9]+)');
         // If the path shows that it is a comment on a post...
-        if(location.path.search(root_path) != -1) {
-          matches = path_post_id_re.exec(location.path);
-          if ( matches && typeof matches[1] != 'undefined' ) {
-            var post_id = parseInt(matches[1]);
-            var current_post_ids = [];
-            for (i = 0; i < muut_latest_comments_json.latest_comments_posts.length; i++) {
-              current_post_ids.push(muut_latest_comments_json.latest_comments_posts[i].post_id);
-            }
-            var new_data = $.extend(true,{},muut_latest_comments_json);
-            var index_match = $.inArray(post_id, current_post_ids);
-            if ( index_match >= 0 ) {
-              var post_data = new_data.latest_comments_posts[index_match];
-              new_object = {
-                post_id: post_id,
-                post_permalink: post_data.post_permalink,
-                post_title: post_data.post_title,
-                timestamp: Math.floor(Date.now() / 1000).toString(),
-                user: {
-                  displayname: post_object.user.displayname,
-                  img: post_object.user.img,
-                  path: post_object.user.path
-                }
-              };
-              new_data.latest_comments_posts.splice( index_match, 1 );
-              new_data.latest_comments_posts.unshift(new_object);
-              widget_latest_comments_wrapper.trigger('json_update', [ new_data, muut_latest_comments_json ] );
-            } else {
-              setTimeout( function() {
-                  muut_poll_wordpress_cache(0);
-                }, 4000
-              );
-            }
+        var post_id = muut_is_wp_commenting_thread(location.path);
+        if (post_id != 'false') {
+          var new_data = $.extend(true,{},muut_latest_comments_json);
+          var index_match = muut_post_id_is_cached_locally(post_id);
+          if ( index_match >= 0 ) {
+            var post_data = new_data.latest_comments_posts[index_match];
+            new_object = {
+              post_id: post_id,
+              post_permalink: post_data.post_permalink,
+              post_title: post_data.post_title,
+              timestamp: Math.floor(Date.now() / 1000).toString(),
+              user: {
+                displayname: post_object.user.displayname,
+                img: post_object.user.img,
+                path: post_object.user.path
+              }
+            };
+            new_data.latest_comments_posts.splice( index_match, 1 );
+            new_data.latest_comments_posts.unshift(new_object);
+            widget_latest_comments_wrapper.trigger('json_update', [ new_data, muut_latest_comments_json ] );
+          } else {
+            setTimeout( function() {
+                muut_poll_wordpress_cache(0);
+              }, 4000
+            );
           }
         }
       });
 
       muutRpc.on('send', function(event, object) {
         if ( ( event == 'reply' || event == 'createMoot' ) && typeof object[0] != 'undefined' && typeof muut_wp_post_id != 'undefined' ) {
-          if(object[0].path.search(muutObj().path + '/' + muut_latest_comments_path) != -1) {
+          if(muut_is_wp_commenting_thread(object[0].path)) {
+            var new_data = $.extend(true,{},muut_latest_comments_json);
             var current_post_ids = [];
             for (i = 0; i < muut_latest_comments_json.latest_comments_posts.length; i++) {
               current_post_ids.push(muut_latest_comments_json.latest_comments_posts[i].post_id);
             }
-            var new_data = $.extend(true,{},muut_latest_comments_json);
-            var index_match = $.inArray(muut_wp_post_id, current_post_ids);
+            var index_match = muut_post_id_is_cached_locally(muut_wp_post_id);
             if ( index_match >= 0 ) {
               new_data.latest_comments_posts.splice( index_match, 1 );
             } else if (new_data.latest_comments_posts.length == 10 )  {
