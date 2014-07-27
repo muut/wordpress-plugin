@@ -86,7 +86,8 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			// Webhook actions.
 			add_action( 'muut_webhook_request_post', array( $this, 'processPost' ), 10, 2 );
 			add_action( 'muut_webhook_request_reply', array( $this, 'processReply' ), 10, 2 );
-
+			add_action( 'muut_webhook_request_like', array( $this, 'processLikeUnlike' ), 10, 2 );
+			add_action( 'muut_webhook_request_unlike', array( $this, 'processLikeUnlike' ), 10, 2 );
 		}
 
 		/**
@@ -390,6 +391,72 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			$custom_posts_object = Muut_Custom_Post_Types::instance();
 
 			$custom_posts_object->addMuutReplyData( $new_reply_args );
+		}
+
+		/**
+		 * Process the 'post' Muut event.
+		 *
+		 * @param $request
+		 * @param $event
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function processLikeUnlike( $request, $event ) {
+			$path = $request['path'];
+
+			$split_path = explode( '#', $path );
+			$split_final = explode( '/', $split_path );
+
+			if ( count( $split_final ) > 1 ) {
+				// The path leads to an individual reply.
+				$query_args = array(
+					'meta_query' => array(
+						array(
+							'key' => 'muut_path',
+							'value' => $path,
+						),
+					),
+					'number' => 1,
+				);
+				// Get the comment data.
+				$comment_query = new WP_Comment_Query;
+				$comment = $comment_query->query( $query_args );
+
+				// Update the number of likes and store it.
+				$likes = get_comment_meta( $comment->ID, 'muut_likes', true );
+				if ( $event == 'like' ) {
+					$likes++;
+				} elseif ( $event == 'unlike' ) {
+					if ( $likes > 0 ) {
+						$likes--;
+					}
+				}
+				update_comment_meta( $comment->ID, 'muut_likes', $likes );
+			} else {
+				// The path leads to a top-level thread.
+				$query_args = array(
+					'meta_query' => array(
+						array(
+							'key' => 'muut_path',
+							'value' => $path,
+						),
+					),
+					'posts_per_page' => 1,
+				);
+				// Get the post data.
+				$posts_query = new WP_Query;
+				$post = $posts_query->query( $query_args );
+
+				// Update the number of likes and store it.
+				$likes = get_comment_meta( $post->ID, 'muut_likes', true );
+				if ( $event == 'like' ) {
+					$likes++;
+				} elseif ( $event == 'unlike' ) {
+					$likes--;
+				}
+				update_post_meta( $post->ID, 'muut_likes', $likes );
+			}
 		}
 	}
 }
