@@ -158,10 +158,13 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function printWidgetJs() {
-			if ( muut_is_webhooks_active() && !is_admin() && get_post() && muut_get_forum_page_id() == get_the_ID() ) {
+			if ( muut_is_webhooks_active() && !is_admin() && get_post() && muut_get_forum_page_id() == get_the_ID() && current_user_can( 'edit_theme_options' ) ) {
 				$json = json_encode( $this->getCurrentChannelsOption() );
 
-				echo '<script type="text/javascript">var muut_stored_channel_list = ' . $json . ';</script>';
+				echo '<script type="text/javascript">';
+				echo 'var muut_stored_channel_list = ' . $json . ';';
+				echo 'var muut_stored_channels_nonce = "' . wp_create_nonce( 'muut_stored_channels_request' ) . '";';
+				echo '</script>';
 			}
 		}
 
@@ -173,7 +176,7 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function ajaxStoreChannelList() {
-			if ( isset( $_POST['channel_list'] ) ) {
+			if ( check_ajax_referer( 'muut_stored_channels_request', 'security' ) && isset( $_POST['channel_list'] ) ) {
 				if ( $this->storeChannelList( $_POST['channel_list'] ) ) {
 					echo 'Stored successfully.';
 				}

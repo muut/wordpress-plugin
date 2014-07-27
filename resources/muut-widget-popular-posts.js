@@ -14,7 +14,7 @@ jQuery(document).ready(function($) {
   muutObj().on('load', function() {
     var body = $('body');
 
-    if(body.hasClass('muut-forum-home') && typeof muut_stored_channel_list != 'undefined') {
+    if(body.hasClass('muut-forum-home') && typeof muut_stored_channel_list != 'undefined' && typeof muut_stored_channels_nonce == 'string' ) {
       var category_object = {};
       // Assign the actual displayed categories to an object to match the one currently stored.
       var live_channels = muutObj().categories;
@@ -25,9 +25,10 @@ jQuery(document).ready(function($) {
       // If the current categories and the ones in storage do NOT match, then send the current ones to be stored.
       if (JSON.stringify(category_object) != JSON.stringify(muut_stored_channel_list)) {
         $.post(ajaxurl, {
-          action: 'muut_store_current_channels',
-          channel_list: category_object
-        }
+            action: 'muut_store_current_channels',
+            channel_list: category_object,
+            security: muut_stored_channels_nonce
+          }
         );
       }
     }
