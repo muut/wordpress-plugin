@@ -8,7 +8,23 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 var NEPER = 2.718;
+
+var muutRpc = {};
+
+muut(function(app, rpc) {
+  muutRpc = rpc;
+
+  muutRpc.on('receive', function(object) {
+    if ( typeof object.params != 'undefined' && object.params[0] == 'reply' ) {
+      muutRpc.emit('reply', object.params[1], object.params[2]);
+    } else if ( typeof object.params != 'undefined' && ( object.params[0] == 'post' || object.params[0] == 'moot' ) ) {
+      muutRpc.emit('post', object.params[1], object.params[2]);
+    }
+  });
+});
+
 jQuery(document).ready( function($) {
+
   var __muut_frontend_strings = muut_frontend_functions_localized;
 
   // Adds the comments navigation link to the forum navigation.
