@@ -406,25 +406,31 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			$path = $request['path'];
 
 			$split_path = explode( '#', $path );
-			$split_final = explode( '/', $split_path );
-
+			$split_final = explode( '/', $split_path[1] );
 			if ( count( $split_final ) > 1 ) {
 				// The path leads to an individual reply.
+				$comment_base = $split_path[0] . '#' . $split_final[0];
 				$query_args = array(
 					'meta_query' => array(
+						'relation' => 'AND',
 						array(
 							'key' => 'muut_path',
-							'value' => $path,
+							'value' => $comment_base,
+						),
+						array(
+							'key' => 'muut_key',
+							'value' => $split_final[1],
 						),
 					),
 					'number' => 1,
 				);
+
 				// Get the comment data.
 				$comment_query = new WP_Comment_Query;
-				$comment = $comment_query->query( $query_args );
+				$comments = $comment_query->query( $query_args );
 
 				// Update the number of likes and store it.
-				$likes = get_comment_meta( $comment->ID, 'muut_likes', true );
+				$likes = (int) get_comment_meta( $comments[0]->comment_ID, 'muut_likes', true );
 				if ( $event == 'like' ) {
 					$likes++;
 				} elseif ( $event == 'unlike' ) {
@@ -432,10 +438,12 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 						$likes--;
 					}
 				}
-				update_comment_meta( $comment->ID, 'muut_likes', $likes );
+				update_comment_meta( $comments[0]->comment_ID, 'muut_likes', $likes );
 			} else {
 				// The path leads to a top-level thread.
 				$query_args = array(
+					'post_type' => Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME,
+					'post_status' => Muut_Custom_Post_Types::MUUT_PUBLIC_POST_STATUS,
 					'meta_query' => array(
 						array(
 							'key' => 'muut_path',
@@ -444,18 +452,21 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 					),
 					'posts_per_page' => 1,
 				);
+
 				// Get the post data.
 				$posts_query = new WP_Query;
-				$post = $posts_query->query( $query_args );
+				$posts = $posts_query->query( $query_args );
 
 				// Update the number of likes and store it.
-				$likes = get_comment_meta( $post->ID, 'muut_likes', true );
+				$likes = get_post_meta( $posts[0]->ID, 'muut_likes', true );
 				if ( $event == 'like' ) {
 					$likes++;
 				} elseif ( $event == 'unlike' ) {
-					$likes--;
+					if ( $likes > 0 ) {
+						$likes--;
+					}
 				}
-				update_post_meta( $post->ID, 'muut_likes', $likes );
+				update_post_meta( $posts[0]->ID, 'muut_likes', $likes );
 			}
 		}
 	}
