@@ -134,6 +134,14 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 			}
 			$instance['number_of_posts'] = $new_instance['number_of_posts'];
 
+			$forum_channels_list = $this->getCurrentChannelsOption();
+			foreach( $new_instance['channels'] as $channel_value ) {
+				if ( in_array( $channel_value, array_keys( $forum_channels_list ) ) ) {
+					$instance['channels'][$channel_value] = $forum_channels_list[$channel_value];
+				} else {
+					$instance['channels'][$channel_value] = $channel_value;
+				}
+			}
 			return $instance;
 		}
 
