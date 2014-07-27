@@ -181,6 +181,17 @@ function muut_comments_override_anchor( $post_id = null, $echo = true ) {
 }
 
 /**
+ * Check if webhooks are currently activated.
+ *
+ * @return bool Whether webhooks are active or not.
+ * @author Paul Hughes
+ * @since NEXT_RELEASE
+ */
+function muut_is_webhooks_active() {
+	return Muut_Webhooks::instance()->isWebhooksActivated();
+}
+
+/**
  * Gets the user facelink avatar. This function is pluggable.
  *
  * @param string $username The Muut username (sans opening '@' symbol).
