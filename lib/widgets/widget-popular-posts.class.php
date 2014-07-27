@@ -23,6 +23,8 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 
 		const POPULAR_POSTS_TRANSIENT_NAME = 'muut_popular_posts';
 
+		const CURRENT_CHANNELS_OPTION_NAME = 'muut_forum_channels';
+
 		/**
 		 * @property array The instance array of settings.
 		 */
@@ -60,6 +62,12 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 			add_action( 'muut_webhook_request_reply', array( $this, 'updateWidgetData' ), 100, 2 );
 			// The reason we have to worry about this below (post event) is in case it is on threaded commenting.
 			add_action( 'muut_webhook_request_post', array( $this, 'updateWidgetData' ), 100, 2 );
+
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueWidgetScripts' ), 12 );
+			add_action( 'wp_print_scripts', array( $this, 'printWidgetJs' ) );
+
+			// Receive the AJAX action for storing the current channels
+			add_action( 'wp_ajax_muut_store_current_channels', array( $this, 'ajaxStoreChannelList') );
 
 		}
 
@@ -135,6 +143,52 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		 ********/
 
 		/**
+		 * If on the main forum page, print/pass the currently stored "channel list" as a JS variable for comparison.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function printWidgetJs() {
+			if ( muut_is_webhooks_active() && !is_admin() && get_post() && muut_get_forum_page_id() == get_the_ID() ) {
+				$json = json_encode( $this->getCurrentChannelsOption() );
+
+				echo '<script type="text/javascript">var muut_stored_channel_list = ' . $json . ';</script>';
+			}
+		}
+
+		/**
+		 * Receive the AJAX action to store the current channel list.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function ajaxStoreChannelList() {
+			if ( isset( $_POST['channel_list'] ) ) {
+				if ( $this->storeChannelList( $_POST['channel_list'] ) ) {
+					echo 'Stored successfully.';
+				}
+			}
+			die(0);
+		}
+
+		/**
+		 * Store a channel list.
+		 *
+		 * @param array $channel_list An array of channels of the form ['path'] => 'Channel Name'.
+		 * @return bool Whether it was stored successfully or not.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		protected function storeChannelList( $channel_list ) {
+			if ( is_array( $channel_list ) ) {
+				return update_option( self::CURRENT_CHANNELS_OPTION_NAME, $channel_list );
+			}
+			return false;
+		}
+
+		/**
 		 * Updates the widget data sources for displaying the widget content on the frontend.
 		 *
 		 * @param array $request The parsed webhook HTTP request data.
@@ -178,6 +232,19 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		}
 
 		/**
+		 * Enqueues the JS required for this widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function enqueueWidgetScripts() {
+			if ( muut_is_webhooks_active() ) {
+				wp_enqueue_script( 'muut-widget-popular-posts', muut()->getPluginUrl() . 'resources/muut-widget-popular-posts.js', array( 'jquery', 'muut-widgets-initialize' ), Muut::VERSION, true );
+			}
+		}
+
+		/**
 		 * Refreshes the Popular Posts caching items (transient and JSON file).
 		 *
 		 * @param int $number_of_posts The number of posts to set in the transient.
@@ -199,6 +266,17 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		 */
 		protected function updateTransient( $data_array ) {
 
+		}
+
+		/**
+		 * Get the currently stored channel list.
+		 *
+		 * @return array The array of currently stored "Channels".
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getCurrentChannelsOption() {
+			return get_option( self::CURRENT_CHANNELS_OPTION_NAME, array() );
 		}
 
 		/**
