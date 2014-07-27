@@ -431,14 +431,20 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 
 				// Update the number of likes and store it.
 				$likes = (int) get_comment_meta( $comments[0]->comment_ID, 'muut_likes', true );
+				$post_likes = (int) get_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', true );
 				if ( $event == 'like' ) {
 					$likes++;
+					$post_likes++;
 				} elseif ( $event == 'unlike' ) {
 					if ( $likes > 0 ) {
 						$likes--;
 					}
+					if ( $post_likes > 0 ) {
+						$post_likes--;
+					}
 				}
 				update_comment_meta( $comments[0]->comment_ID, 'muut_likes', $likes );
+				update_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', $post_likes );
 			} else {
 				// The path leads to a top-level thread.
 				$query_args = array(
@@ -459,14 +465,20 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 
 				// Update the number of likes and store it.
 				$likes = get_post_meta( $posts[0]->ID, 'muut_likes', true );
+				$total_likes = (int) get_post_meta( $posts[0]->ID, 'muut_thread_likes', true );
 				if ( $event == 'like' ) {
 					$likes++;
+					$total_likes++;
 				} elseif ( $event == 'unlike' ) {
 					if ( $likes > 0 ) {
 						$likes--;
 					}
+					if ( $total_likes > 0 ) {
+						$total_likes--;
+					}
 				}
 				update_post_meta( $posts[0]->ID, 'muut_likes', $likes );
+				update_post_meta( $posts[0]->ID, 'muut_thread_likes', $total_likes );
 			}
 		}
 	}
