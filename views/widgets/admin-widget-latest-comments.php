@@ -20,6 +20,6 @@ $number_of_comments = isset( $instance['number_of_comments'] ) ? $instance['numb
 	<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
 </p>
 <p>
-	<label for="<?php echo $this->get_field_id( 'muut_path' ); ?>"><?php _e( 'Number of comments to show:', 'muut' ); ?></label>
+	<label for="<?php echo $this->get_field_id( 'number_of_comments' ); ?>"><?php _e( 'Number of comments to show:', 'muut' ); ?></label>
 	<input id="<?php echo $this->get_field_id( 'number_of_comments' ); ?>" name="<?php echo $this->get_field_name( 'number_of_comments' ); ?>" size="3" type="text" value="<?php echo $number_of_comments; ?>" />
 </p>
