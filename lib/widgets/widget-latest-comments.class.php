@@ -35,6 +35,12 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		protected $widget_instance;
 
 		/**
+		 * @static
+		 * @property bool Whether the widget has been loaded.
+		 */
+		protected static $has_loaded = false;
+
+		/**
 		 * The class constructor.
 		 *
 		 * @return Muut_Widget_Online_Users
@@ -94,7 +100,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 */
 		public function widget( $args, $instance ) {
 			// Make sure webhooks are active, or don't bother.
-			if ( !muut_is_webhooks_active() ) {
+			if ( !muut_is_webhooks_active() || self::$has_loaded ) {
 				return;
 			}
 			// Make sure the Muut resources get loaded (only stuff in the footer will work, as this happens
@@ -119,6 +125,8 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			echo $args['before_title'] . $title . $args['after_title'];
 			include( muut()->getPluginPath() . 'views/widgets/widget-latest-comments.php' );
 			echo $args['after_widget'];
+
+			self::$has_loaded = true;
 		}
 
 		/**
