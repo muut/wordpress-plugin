@@ -19,10 +19,10 @@
 		<?php
 		foreach( $popular_posts as $popular_post ) {
 			$meta_comments_text = sprintf( __( '%d comments', 'muut' ), $popular_post->comment_count );
-			$meta_likes_text = sprintf( __( '%d likes', 'muut' ), get_post_meta( $popular_post->ID, 'muut_thread_likes' ) );
+			$meta_likes_text = sprintf( __( '%d likes', 'muut' ), get_post_meta( $popular_post->ID, 'muut_thread_likes', true ) );
 		?>
 		<li class="muut_popular_post_item" data-wp-post-id="<?php echo $popular_post->ID; ?>">
-			<span class="popular-posts-post-title"><?php echo $popular_post->post_title; ?></span>
+			<span class="popular-posts-post-title"><a href="<?php echo get_permalink( $popular_post ); ?>"><?php echo $popular_post->post_title; ?></a></span>
 			<span class="popular-posts-post-meta">
 				<span class="muut_post_comment_count"><?php echo $meta_comments_text; ?></span> | <span class="muut_post_like_count"><?php echo $meta_likes_text; ?></span>
 			</span>

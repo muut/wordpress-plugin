@@ -359,8 +359,9 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function processPost( $request, $event ) {
+
 			$new_thread_args = array(
-				'title' => $request['location']->path,
+				'title' => $request['thread']->title,
 				'path' => $request['location']->path,
 				'user' => $request['thread']->user->path,
 				'body' => '',
