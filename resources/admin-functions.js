@@ -116,4 +116,9 @@ jQuery(document).ready( function($) {
     window.open(muut_upgrade_url,"","width=1000,height=750,status=0,scrollbars=0,menubar=0");
     e.preventDefault();
   });
+
+  $('input.muut_webhooks_secret').on('focus', function(e) {
+    $(this).blur();
+    $(this).select();
+  })
 });

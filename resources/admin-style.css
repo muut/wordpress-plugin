@@ -45,6 +45,16 @@ span.admin-subheader-to-right {
     max-width: 650px;
 }
 
+input.muut_webhooks_secret {
+    border: none;
+    background: transparent;
+    font-weight: bold;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: none;
+    padding: 0;
+}
+
 span.right-justify-float {
     float:right;
     font-weight: normal;

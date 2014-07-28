@@ -140,7 +140,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 				<input name="setting[use_webhooks]" type="checkbox" id="muut_use_webhooks" value="1" <?php checked( '1', $display_values['use_webhooks'] ); ?> />
 				<label for="muut_use_webhooks"><?php _e( 'Enable', 'muut' ); ?></label>
 				<p class="muut_requires_input_block" data-muut_requires="muut_use_webhooks" data-muut_require_func="is(':checked')"><?php printf( __( 'Enter the url %s/muut-webhooks/%s in your Muut forum webhooks settings, with all events selected.', 'muut' ), '<b>' . site_url(), '</b>' ); ?></p>
-				<?php if ( $current_values['webhooks_secret'] && $current_values['use_webhooks'] ) { ?><p class="muut_requires_input_block" data-muut_requires="muut_use_webhooks" data-muut_require_func="is(':checked')"><?php printf( __( 'Enter the the following secret as the webhooks secret in the Muut settings: %s', 'muut' ), '<b>' . $current_values['webhooks_secret'] . '</b>' ); ?></p><?php } ?>
+				<?php if ( $current_values['webhooks_secret'] && $current_values['use_webhooks'] ) { ?><p class="muut_requires_input_block" data-muut_requires="muut_use_webhooks" data-muut_require_func="is(':checked')"><?php printf( __( 'Enter the the following secret as the webhooks secret in the Muut settings: %s', 'muut' ), '<input type="text" class="muut_webhooks_secret" value="' . $current_values['webhooks_secret'] . '" readonly />' ); ?></p><?php } ?>
 			</th>
 		</tr>
 		</tbody>

@@ -224,9 +224,11 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 */
 		public function executeSettingSave( $value ) {
 			if ( $value == 1 && !muut()->getOption( 'use_webhooks' ) ) {
-				$this->secret = $this->generateSecret();
+				if ( empty( $this->secret ) ) {
+					$this->secret = $this->generateSecret();
+				}
 				add_filter( 'muut_settings_validated', array( $this, 'saveSecret' ) );
-				$notice_message = sprintf( __( 'You can now use the following secret in your Muut webhook settings: %s', 'muut' ), '<b>' . $this->secret . '</b><br />' );
+				$notice_message = sprintf( __( 'You can now use the following secret in your Muut webhook settings: %s', 'muut' ), '<input type="text" class="muut_webhooks_secret" value="' . $this->secret . '" readonly /><br />' );
 				$notice_message .= sprintf( __( 'Note that webhooks (and the features that use them) will only affect %sfuture%s posts; content created prior to activation will not utilize this functionality.', 'muut' ), '<b>', '</b>' );
 				muut()->queueAdminNotice( 'updated', $notice_message );
 			}
@@ -256,11 +258,11 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		protected function generateSecret() {
-			$validCharacters = "abcdefghijklmnopqrstuxyvwzABCDEFGHIJKLMNOPQRSTUXYVWZ+-*#&@!?";
+			$validCharacters = "abcdefghijklmnopqrstuxyvwzABCDEFGHIJKLMNOPQRSTUXYVWZ0123456789";
 			$validCharNumber = strlen($validCharacters);
 
 			$result = "";
-			for ( $i = 0; $i < 20; $i++ ) {
+			for ( $i = 0; $i < 10; $i++ ) {
 				$index = mt_rand( 0, $validCharNumber - 1 );
 				$result .= $validCharacters[$index];
 			}
