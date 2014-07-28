@@ -31,6 +31,32 @@ jQuery(document).ready(function($) {
       // Boolean settings variables.
       var show_anon_count = false;
       var show_num_logged_in = false;
+
+      // Declare the function for updating the anonymous user count (called when users enter/leave.
+      function update_anon_count() {
+        // Obviously, only do this if we are supposed to show the anonymous user count.
+        if ( show_anon_count ) {
+          // If there are no anonymous users, hide the block entirely.
+          if (muutObj().anon_count == 0 && !anon_count_wrapper.hasClass('hidden')) {
+            anon_count_wrapper.addClass('hidden');
+            // If we have added an anonymous user, make sure to RE-display the block.
+          } else if (muutObj().anon_count > 0 && anon_count_wrapper.hasClass('hidden')) {
+            anon_count_wrapper.removeClass('hidden');
+          }
+
+          // Replace the text (or rather, the count) to the updated number.
+          anon_count_wrapper.find('em').text(muutObj().anon_count);
+        }
+      }
+
+      // Declare the function for updating the logged-in user count.
+      function update_num_logged_in() {
+        // Obviously, only update if we are displaying the number to begin with.
+        if ( show_num_logged_in ) {
+          num_logged_in_span.text(muutObj().online.length);
+        }
+      }
+
       if ( anon_count_wrapper.length > 0 ) {
         show_anon_count = true;
         update_anon_count();
@@ -106,31 +132,6 @@ jQuery(document).ready(function($) {
       // If we are supposed to display the anonymous user count, add that HTML to the widget.
       if ( show_anon_count ) {
         update_anon_count();
-      }
-
-      // Declare the function for updating the anonymous user count (called when users enter/leave.
-      function update_anon_count() {
-        // Obviously, only do this if we are supposed to show the anonymous user count.
-        if ( show_anon_count ) {
-          // If there are no anonymous users, hide the block entirely.
-          if (muutObj().anon_count == 0 && !anon_count_wrapper.hasClass('hidden')) {
-            anon_count_wrapper.addClass('hidden');
-          // If we have added an anonymous user, make sure to RE-display the block.
-          } else if (muutObj().anon_count > 0 && anon_count_wrapper.hasClass('hidden')) {
-            anon_count_wrapper.removeClass('hidden');
-          }
-
-          // Replace the text (or rather, the count) to the updated number.
-          anon_count_wrapper.find('em').text(muutObj().anon_count);
-        }
-      }
-
-      // Declare the function for updating the logged-in user count.
-      function update_num_logged_in() {
-        // Obviously, only update if we are displaying the number to begin with.
-        if ( show_num_logged_in ) {
-          num_logged_in_span.text(muutObj().online.length);
-        }
       }
     }
   });
