@@ -33,7 +33,7 @@ jQuery(document).ready(function($) {
       });
 
       // If the user is logged in, hide the login link.
-      if (widget_my_feed_wrapper.find('.m-logged').length > 0 ) {
+      if ($(widget_my_feed_wrapper).find('.m-logged').length > 0 ) {
         widget_my_feed_wrapper.find('.muut_login').hide();
       }
     }
