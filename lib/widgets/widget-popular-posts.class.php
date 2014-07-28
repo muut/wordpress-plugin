@@ -92,6 +92,25 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		public function widget( $args, $instance ) {
 			$title = isset( $instance['title'] ) ? $instance['title'] : '';
 
+			$query_args = array(
+				'post_type' => Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME,
+				'post_status' => Muut_Custom_Post_Types::MUUT_PUBLIC_POST_STATUS,
+				'meta_query' => array(
+					array(
+						'key' => 'muut_channel_path',
+						'value' => array_keys( $instance['channels'] ),
+						'compare' => 'IN',
+					),
+				),
+				'orderby' => 'comment_count',
+				'order' => 'DESC',
+				'posts_per_page' => $instance['number_of_posts'],
+			);
+
+			$posts_query = new WP_Query( $query_args );
+
+			$popular_posts = $posts_query->get_posts();
+
 			// Render widget.
 			echo $args['before_widget'];
 			echo $args['before_title'] . $title . $args['after_title'];
