@@ -41,5 +41,5 @@ foreach( $current_channels as $channel_path => $channel_name ) {
 		<input type="checkbox" id="<?php echo $this->get_field_id( 'channels' ) . '_' . $i; ?>" name="<?php echo $this->get_field_name( 'channels' ); ?>[]" value="<?php echo $channel_path; ?>" <?php checked( in_array( $channel_path, array_keys( $current_channels ) ) ); ?> />
 		<label for="<?php echo $this->get_field_id( 'channels' ) . '_' . $i; ?>"><?php echo $channel_name; ?></label>
 	</span>
-	<?php } ?>
+	<?php $i++; } ?>
 </p>
