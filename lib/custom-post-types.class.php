@@ -175,6 +175,10 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 			// Add the Muut post path as meta (even though it is also stored in post_name on the posts table).
 			update_post_meta( $inserted_post, 'muut_path', $path );
 
+			// Add the Muut channel path.
+			$path_split = explode( '#', $path );
+			update_post_meta( $inserted_post, 'muut_channel_path', $path_split[0] );
+
 			// Return the WP post id.
 			return $inserted_post;
 		}
