@@ -58,10 +58,8 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function addActions() {
-			// Update the transient data when a reply is made.
-			add_action( 'muut_webhook_request_reply', array( $this, 'updateWidgetData' ), 100, 2 );
-			// The reason we have to worry about this below (post event) is in case it is on threaded commenting.
-			add_action( 'muut_webhook_request_post', array( $this, 'updateWidgetData' ), 100, 2 );
+			// Update the transient data when a post is liked, unliked, or replied to.
+			//add_action( 'muut_webhook_request', array( $this, 'updateWidgetData' ), 100, 2 );
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueWidgetScripts' ), 12 );
 			add_action( 'wp_print_scripts', array( $this, 'printWidgetJs' ) );
@@ -166,6 +164,8 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 				echo 'var muut_stored_channels_nonce = "' . wp_create_nonce( 'muut_stored_channels_request' ) . '";';
 				echo '</script>';
 			}
+			// Only print the stuff once.
+			remove_action( 'wp_print_scripts', array( $this, 'printWidgetJs' ) );
 		}
 
 		/**
@@ -179,6 +179,7 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 			if ( check_ajax_referer( 'muut_stored_channels_request', 'security' ) && isset( $_POST['channel_list'] ) ) {
 				if ( $this->storeChannelList( $_POST['channel_list'] ) ) {
 					echo 'Stored successfully.';
+					remove_action( 'wp_ajax_muut_store_current_channels', array( $this, 'ajaxStoreChannelList') );
 				}
 			}
 			die(0);
@@ -210,10 +211,17 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		 */
 		public function updateWidgetData( $request, $event ) {
 
+			// Only execute actions on specific events.
 			if ( $event == 'reply' ) {
 				$path = $request['path'];
 				$user = $request['post']->user;
-			} elseif ( $event == 'post' ) {
+			} elseif ( $event == 'like' ) {
+				$path = $request['location']->path;
+				$user = $request['thread']->user;
+			} elseif ( $event == 'unlike' ) {
+				$path = $request['location']->path;
+				$user = $request['thread']->user;
+			} elseif ( $event == 'remove' ) {
 				$path = $request['location']->path;
 				$user = $request['thread']->user;
 			}
@@ -253,30 +261,6 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 			if ( muut_is_webhooks_active() ) {
 				wp_enqueue_script( 'muut-widget-popular-posts', muut()->getPluginUrl() . 'resources/muut-widget-popular-posts.js', array( 'jquery', 'muut-widgets-initialize' ), Muut::VERSION, true );
 			}
-		}
-
-		/**
-		 * Refreshes the Popular Posts caching items (transient and JSON file).
-		 *
-		 * @param int $number_of_posts The number of posts to set in the transient.
-		 * @return array The new data array.
-		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
-		 */
-		public function refreshCache() {
-
-		}
-
-		/**
-		 * Sets/updates the popular posts transient value.
-		 *
-		 * @param array $data_array The data array to store in the transient.
-		 * @return void
-		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
-		 */
-		protected function updateTransient( $data_array ) {
-
 		}
 
 		/**
