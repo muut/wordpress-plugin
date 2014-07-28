@@ -121,6 +121,12 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 				'callback' => array( $this, 'renderSettingsHelpSsoTabContent' ),
 			);
 
+			$help_webhooks_tab_args = array(
+				'id' => 'muut_settings_help_webhooks_tab',
+				'title' => __( 'Webhooks', 'muut' ),
+				'callback' => array( $this, 'renderSettingsHelpWebhooksTabContent' ),
+			);
+
 			// Add the help tabs for the Muut Settings page.
 			$screen->add_help_tab( $help_overview_tab_args );
 
@@ -131,6 +137,8 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 			$screen->add_help_tab( $help_seo_tab_args );
 
 			$screen->add_help_tab( $help_sso_tab_args );
+
+			$screen->add_help_tab( $help_webhooks_tab_args );
 
 			// Set the "For More Information" sidebar up as well.
 			ob_start();
@@ -203,6 +211,19 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 		 */
 		public function renderSettingsHelpSsoTabContent( $screen, $tab ) {
 			include( muut()->getPluginPath() . 'views/blocks/help-tab-settings-sso.php' );
+		}
+
+		/**
+		 * Renders the content for the Webhooks help tab on the main Muut settings page.
+		 *
+		 * @param WP_Screen $screen The current screen.
+		 * @param array $tab The current tab array.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function renderSettingsHelpWebhooksTabContent( $screen, $tab ) {
+			include( muut()->getPluginPath() . 'views/blocks/help-tab-settings-webhooks.php' );
 		}
 
 		/**
