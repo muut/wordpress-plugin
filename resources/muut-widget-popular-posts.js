@@ -32,5 +32,18 @@ jQuery(document).ready(function($) {
         );
       }
     }
+
+    var popular_posts_widgets = $('div.muut_widget_popular_posts_wrapper');
+    if ( popular_posts_widgets.length > 0 ) {
+
+      // Show the typing circle next to a thread if it is being typed in.
+      muutRpc.event('type', function(path, user) {
+        var selected_elements = popular_posts_widgets.find('.muut_popular_post_item[data-muut-post-path="' + path + '"]');
+        selected_elements.each( function() {
+          var icon = $("<em/>").ac("typing").appendTo($(this).find('.popular-posts-post-meta'));
+          setTimeout(function() { icon.remove() }, NEPER * 1000);
+        });
+      });
+    }
   });
 });
