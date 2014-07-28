@@ -112,6 +112,20 @@
     margin-bottom: -8px;
 }
 
+.muut_popular_posts li span.popular-posts-post-title {
+    display: block;
+    margin-bottom: -5px;
+}
+
+.muut_popular_posts li .popular-posts-post-meta {
+    font-size: .8em;
+}
+
+.muut_popular_posts li .m-typing {
+    height: .5em;
+    width: .5em;
+}
+
 .muut_recentcomments a.m-facelink {
     float: left;
     display: block;

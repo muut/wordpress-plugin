@@ -41,6 +41,15 @@ jQuery(document).ready( function($) {
         $(".m-forums").append('<p><a id="muut_site_comments_nav" href="#!/' + muut_comments_base_domain + '" title="' + __muut_frontend_strings.comments + '" data-channel="' + __muut_frontend_strings.comments + '"  class="' + comments_link_class + '">' + __muut_frontend_strings.comments + '</a></p>');
       }
     });
+
+    // Make sure links to popular posts work even from the forum page.
+    if ( typeof muut_current_page_permalink == 'string' ) {
+      $('a[href^="' + muut_current_page_permalink + '#!"]').one('click', function(e) {
+       var el = $(this);
+        var page = el.attr('href').slice(muut_current_page_permalink.length + 2);
+        muutObj().load(page);
+      });
+    }
   }
 
   $.fn.extend({
@@ -80,6 +89,23 @@ jQuery(document).ready( function($) {
             $(this).addClass('m-wp-hideafter');
           }
           $(this).addClass('m-facelink-inited');
+        }
+      });
+    },
+
+    // Increase the count of a given element.
+    increasecount: function(selector) {
+      $(this).each( function() {
+        var count_element = $(this).find(selector);
+        count_element.text(parseInt(count_element.text()) + 1);
+      });
+    },
+
+    decreasecount: function(selector) {
+      $(this).each( function() {
+        var count_element = $(this).find(selector);
+        if (parseInt(count_element.text()) > 0 ) {
+          count_element.text(parseInt(count_element.text()) - 1);
         }
       });
     }

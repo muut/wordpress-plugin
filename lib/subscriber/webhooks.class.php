@@ -86,7 +86,8 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			// Webhook actions.
 			add_action( 'muut_webhook_request_post', array( $this, 'processPost' ), 10, 2 );
 			add_action( 'muut_webhook_request_reply', array( $this, 'processReply' ), 10, 2 );
-
+			add_action( 'muut_webhook_request_like', array( $this, 'processLikeUnlike' ), 10, 2 );
+			add_action( 'muut_webhook_request_unlike', array( $this, 'processLikeUnlike' ), 10, 2 );
 		}
 
 		/**
@@ -98,6 +99,8 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 */
 		public function addFilters() {
 			add_filter( 'muut_validate_setting_use_webhooks', array( $this, 'executeSettingSave' ) );
+
+			add_filter( 'post_type_link', array( $this, 'permalinkToForum' ), 10, 2 );
 		}
 
 		/**
@@ -358,8 +361,9 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function processPost( $request, $event ) {
+
 			$new_thread_args = array(
-				'title' => $request['location']->path,
+				'title' => $request['thread']->title,
 				'path' => $request['location']->path,
 				'user' => $request['thread']->user->path,
 				'body' => '',
@@ -390,6 +394,118 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			$custom_posts_object = Muut_Custom_Post_Types::instance();
 
 			$custom_posts_object->addMuutReplyData( $new_reply_args );
+		}
+
+		/**
+		 * Process the 'post' Muut event.
+		 *
+		 * @param $request
+		 * @param $event
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function processLikeUnlike( $request, $event ) {
+			$path = $request['path'];
+
+			$split_path = explode( '#', $path );
+			$split_final = explode( '/', $split_path[1] );
+			if ( count( $split_final ) > 1 ) {
+				// The path leads to an individual reply.
+				$comment_base = $split_path[0] . '#' . $split_final[0];
+				$query_args = array(
+					'meta_query' => array(
+						'relation' => 'AND',
+						array(
+							'key' => 'muut_path',
+							'value' => $comment_base,
+						),
+						array(
+							'key' => 'muut_key',
+							'value' => $split_final[1],
+						),
+					),
+					'number' => 1,
+				);
+
+				// Get the comment data.
+				$comment_query = new WP_Comment_Query;
+				$comments = $comment_query->query( $query_args );
+
+				// Update the number of likes and store it.
+				$likes = (int) get_comment_meta( $comments[0]->comment_ID, 'muut_likes', true );
+				$post_likes = (int) get_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', true );
+				if ( $event == 'like' ) {
+					$likes++;
+					$post_likes++;
+				} elseif ( $event == 'unlike' ) {
+					if ( $likes > 0 ) {
+						$likes--;
+					}
+					if ( $post_likes > 0 ) {
+						$post_likes--;
+					}
+				}
+				update_comment_meta( $comments[0]->comment_ID, 'muut_likes', $likes );
+				update_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', $post_likes );
+			} else {
+				// The path leads to a top-level thread.
+				$query_args = array(
+					'post_type' => Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME,
+					'post_status' => Muut_Custom_Post_Types::MUUT_PUBLIC_POST_STATUS,
+					'meta_query' => array(
+						array(
+							'key' => 'muut_path',
+							'value' => $path,
+						),
+					),
+					'posts_per_page' => 1,
+				);
+
+				// Get the post data.
+				$posts_query = new WP_Query;
+				$posts = $posts_query->query( $query_args );
+
+				// Update the number of likes and store it.
+				$likes = get_post_meta( $posts[0]->ID, 'muut_likes', true );
+				$total_likes = (int) get_post_meta( $posts[0]->ID, 'muut_thread_likes', true );
+				if ( $event == 'like' ) {
+					$likes++;
+					$total_likes++;
+				} elseif ( $event == 'unlike' ) {
+					if ( $likes > 0 ) {
+						$likes--;
+					}
+					if ( $total_likes > 0 ) {
+						$total_likes--;
+					}
+				}
+				update_post_meta( $posts[0]->ID, 'muut_likes', $likes );
+				update_post_meta( $posts[0]->ID, 'muut_thread_likes', $total_likes );
+			}
+		}
+
+		/**
+		 * Redirect to the forum page for Muut threads.
+		 *
+		 * @param string $permalink The current permalink.
+		 * @param WP_Post $post The post.
+		 * @return string The filtered permalink.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function permalinkToForum( $permalink, $post ) {
+			if ( $post->post_type == Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME ) {
+				$forum_page_id = Muut_Post_Utility::getForumPageId();
+				$path = get_post_meta( $post->ID, 'muut_path', true );
+				$path = str_replace( array( '/' . muut()->getForumName(), '#' ) , array( '', ':'), $path );
+				if ( !empty( $forum_page_id ) ) {
+					$permalink = get_permalink( $forum_page_id ) . '#!' . $path;
+				} else {
+					$permalink = 'http://' . Muut::MUUTSERVERS . '/' . muut()->getForumName() . '/#!' . $path;
+				}
+			}
+			return $permalink;
 		}
 	}
 }

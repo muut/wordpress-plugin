@@ -740,7 +740,12 @@ if ( !class_exists( 'Muut' ) ) {
 					}
 					echo '</script>';
 				}
-				if( Muut_Post_Utility::getForumPageId() != $page_id && ( is_active_widget( false, false, 'muut_online_users_widget' ) || is_active_widget( false, false, 'muut_my_feed_widget' ) ) ) {
+				if( Muut_Post_Utility::getForumPageId() != $page_id
+					&& ( is_active_widget( false, false, 'muut_online_users_widget' )
+						|| is_active_widget( false, false, 'muut_my_feed_widget' )
+						|| is_active_widget( false, false, 'muut_channel_embed_widget')
+						|| is_active_widget( false, false, 'muut_latest_comments_widget')
+						|| is_active_widget( false, false, 'muut_online_users_widget' ) ) ) {
 					echo '<script type="text/javascript">';
 						echo 'var muut_widget_conf = { url: "' . $this->getForumIndexUri() . '", path: "/' . $this->getForumName() . '" };';
 						echo 'var muut_force_load = true;';

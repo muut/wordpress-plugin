@@ -175,6 +175,10 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 			// Add the Muut post path as meta (even though it is also stored in post_name on the posts table).
 			update_post_meta( $inserted_post, 'muut_path', $path );
 
+			// Add the Muut channel path.
+			$path_split = explode( '#', $path );
+			update_post_meta( $inserted_post, 'muut_channel_path', $path_split[0] );
+
 			// Return the WP post id.
 			return $inserted_post;
 		}
@@ -203,13 +207,23 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 			extract( $args );
 
 			// Check if a WP post exists in the database that would match the path of the "post" request (for threaded commenting).
-			preg_match_all( '/^\/' . addslashes( muut()->getForumName() ) . '\/' . addslashes( muut()->getOption( 'comments_base_domain' ) ) . '\/([0-9]+)(?:\/|\#)?.*$/', $path, $matches );
+			$query_args = array(
+				'post_type' => Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME,
+				'post_status' => Muut_Custom_Post_Types::MUUT_PUBLIC_POST_STATUS,
+				'meta_query' => array(
+					array(
+						'key' => 'muut_path',
+						'value' => $path,
+					),
+				),
+				'posts_per_page' => 1,
+			);
 
-			if ( !empty( $matches ) && isset( $matches[1][0] ) && is_numeric( $matches[1][0] ) && Muut_Post_Utility::isMuutCommentingPost( $matches[1][0] ) ) {
-				$post_id = $matches[1][0];
-			}
+			// Get the post data.
+			$posts_query = new WP_Query;
+			$posts = $posts_query->query( $query_args );
 
-			$post_id = isset( $post_id ) ? $post_id : 0;
+			$post_id = isset( $posts[0]->ID ) ? $posts[0]->ID : 0;
 
 			$comment_args = array(
 				'comment_post_ID' => $post_id,
