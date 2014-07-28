@@ -150,3 +150,7 @@ span.description {
     visibility: hidden;
     position: absolute;
 }
+
+.widget .muut_widget_error {
+    line-height: 1.7em;
+}

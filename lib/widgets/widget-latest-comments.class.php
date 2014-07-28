@@ -93,6 +93,10 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function widget( $args, $instance ) {
+			// Make sure webhooks are active, or don't bother.
+			if ( !muut_is_webhooks_active() ) {
+				return;
+			}
 			// Make sure the Muut resources get loaded (only stuff in the footer will work, as this happens
 			// partway through page load).
 			add_filter( 'muut_requires_muut_resources', '__return_true' );
@@ -126,7 +130,11 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function form( $instance ) {
-			include( muut()->getPluginPath() . 'views/widgets/admin-widget-latest-comments.php' );
+			if ( muut_is_webhooks_active() ) {
+				include( muut()->getPluginPath() . 'views/widgets/admin-widget-latest-comments.php' );
+			} else {
+				include( muut()->getPluginPath() . 'views/widgets/admin-error-widget-requires-webhooks.php' );
+			}
 		}
 
 		/**

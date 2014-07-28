@@ -90,6 +90,10 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function widget( $args, $instance ) {
+			// Make sure webhooks are active, or don't bother.
+			if ( !muut_is_webhooks_active() ) {
+				return;
+			}
 			$title = isset( $instance['title'] ) ? $instance['title'] : '';
 
 			$query_args = array(
@@ -130,7 +134,11 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function form( $instance ) {
-			include( muut()->getPluginPath() . 'views/widgets/admin-widget-popular-posts.php' );
+			if ( muut_is_webhooks_active() ) {
+				include( muut()->getPluginPath() . 'views/widgets/admin-widget-popular-posts.php' );
+			} else {
+				include( muut()->getPluginPath() . 'views/widgets/admin-error-widget-requires-webhooks.php' );
+			}
 		}
 
 		/**

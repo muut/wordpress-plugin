@@ -132,7 +132,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 		</table>
 	<h3 class="title"><?php _e( 'Webhooks', 'muut' ); ?></h3>
 	<?php $sso_field_class = $display_values['subscription_use_sso'] ? '' : 'hidden'; ?>
-	<p class="muut_requires_input_block" data-muut_requires="muut_use_webhooks" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Muut Developer%s to use webhooks to listen for events on your forum.', 'muut' ), '<a class="muut_upgrade_to_developer_link" href="#">', '</a>'); ?></p>
+	<p class="muut_requires_input_block" data-muut_requires="muut_use_webhooks" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Muut Developer%s to use webhooks.%s This will add support for advanced features, such as widgets like %sLatest Comments%s and %sPopular Posts%s.', 'muut' ), '<a class="muut_upgrade_to_developer_link" href="#">', '</a>', '<br />', '<b>', '</b>', '<b>', '</b>'); ?></p>
 	<table class="form-table">
 		<tbody>
 		<tr>
