@@ -10,6 +10,8 @@
 
 jQuery(document).ready(function($) {
 
+  var popular_posts_executed = 0;
+
   // Once Muut is loaded...
   muutObj().on('load', function() {
     var body = $('body');
@@ -43,7 +45,7 @@ jQuery(document).ready(function($) {
     };
 
     var popular_posts_widgets = $('div.muut_widget_popular_posts_wrapper');
-    if ( popular_posts_widgets.length > 0 ) {
+    if ( popular_posts_widgets.length > 0 && popular_posts_executed == 0 ) {
 
       // Show the typing circle next to a thread if it is being typed in.
       muutRpc.event('type', function(path, user) {
@@ -98,5 +100,8 @@ jQuery(document).ready(function($) {
         }
       });
     }
+
+    // Make sure that some of the functions know not to be executed again.
+    popular_posts_executed = 1;
   });
 });
