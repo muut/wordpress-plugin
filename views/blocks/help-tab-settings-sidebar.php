@@ -1,6 +1,6 @@
 <?php
 /**
- * The content for the Muut settings contextual Overview help tab.
+ * The content for the Muut settings contextual help Sidebar.
  *
  * @package   Muut
  * @copyright 2014 Muut Inc
@@ -14,4 +14,7 @@
 </p>
 <p>
 	<a href="https://muut.com/setup/" target="_blank"><?php _e( 'Setup New Forum', 'muut' ); ?></a>
+</p>
+<p>
+	<a href="https://muut.com/pricing/" target="_blank"><?php _e( 'Upgrade Pricing', 'muut' ); ?></a>
 </p>
