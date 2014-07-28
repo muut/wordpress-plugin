@@ -110,6 +110,8 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 
 			$posts_query = new WP_Query( $query_args );
 
+			add_filter( 'posts_orderby', array( $this, 'popularPostsOrderby' ) );
+
 			$popular_posts = $posts_query->get_posts();
 
 			// Render widget.
@@ -307,6 +309,23 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 			}
 
 			return get_transient( self::POPULAR_POSTS_TRANSIENT_NAME );
+		}
+
+		/**
+		 * Filter the orderby statement to order by comment count first and THEN number of likes as backup (for same comment count).
+		 *
+		 * @param string $orderby The current orderby statement.
+		 * @return string The filtered orderby statement.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function popularPostsOrderby( $orderby ) {
+			global $wpdb;
+			$orderby = "{$wpdb->posts}.comment_count DESC, {$wpdb->postmeta}.meta_value+0 DESC";
+
+			remove_filter( 'posts_orderby', array( $this, 'popularPostsOrderby' ) );
+
+			return $orderby;
 		}
 	}
 }
