@@ -33,6 +33,15 @@ jQuery(document).ready(function($) {
       }
     }
 
+    var muut_reduce_thread_path = function(path) {
+      var path_regexp = new RegExp( '^(.*#[^/]+)' );
+      matches = path_regexp.exec(path);
+      if ( matches && typeof matches[1] != 'undefined' ) {
+        path = matches[1];
+      }
+      return path;
+    };
+
     var popular_posts_widgets = $('div.muut_widget_popular_posts_wrapper');
     if ( popular_posts_widgets.length > 0 ) {
 
@@ -49,10 +58,7 @@ jQuery(document).ready(function($) {
       muutRpc.on('reply', function( path, reply_object ) {
         var selected_elements = popular_posts_widgets.find('.muut_popular_post_item[data-muut-post-path="' + path + '"]');
         if ( selected_elements.length > 0 ) {
-          selected_elements.each( function() {
-            var count_element = $(this).find('.muut_post_comment_count');
-            count_element.text(parseInt(count_element.text()) + 1);
-          });
+          selected_elements.increasecount('.muut_post_comment_count');
         }
       });
       muutRpc.on('send', function(event, object) {
@@ -60,10 +66,26 @@ jQuery(document).ready(function($) {
           var path = object[0].path;
           var selected_elements = popular_posts_widgets.find('.muut_popular_post_item[data-muut-post-path="' + path + '"]');
           if ( selected_elements.length > 0 ) {
-            selected_elements.each( function() {
-              var count_element = $(this).find('.muut_post_comment_count');
-              count_element.text(parseInt(count_element.text()) + 1);
-            });
+            selected_elements.increasecount('.muut_post_comment_count');
+          }
+        }
+      });
+
+      // Increase the like count when a new like is executed
+      muutRpc.event('like', function( path, like_object ) {
+        path = muut_reduce_thread_path(path);
+        var selected_elements = popular_posts_widgets.find('.muut_popular_post_item[data-muut-post-path="' + path + '"]');
+        if ( selected_elements.length > 0 ) {
+          selected_elements.increasecount('.muut_post_like_count');
+        }
+      });
+
+      muutRpc.on('send', function(event, object) {
+        if ( event == 'like' ) {
+          path = muut_reduce_thread_path(object[0]);
+          selected_elements = popular_posts_widgets.find('.muut_popular_post_item[data-muut-post-path="' + path + '"]');
+          if ( selected_elements.length > 0 ) {
+            selected_elements.increasecount('.muut_post_like_count');
           }
         }
       });

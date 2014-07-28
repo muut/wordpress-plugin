@@ -91,6 +91,23 @@ jQuery(document).ready( function($) {
           $(this).addClass('m-facelink-inited');
         }
       });
+    },
+
+    // Increase the count of a given element.
+    increasecount: function(selector) {
+      $(this).each( function() {
+        var count_element = $(this).find(selector);
+        count_element.text(parseInt(count_element.text()) + 1);
+      });
+    },
+
+    decreasecount: function(selector) {
+      $(this).each( function() {
+        var count_element = $(this).find(selector);
+        if (parseInt(count_element.text()) > 0 ) {
+          count_element.text(parseInt(count_element.text()) - 1);
+        }
+      });
     }
   });
 });
