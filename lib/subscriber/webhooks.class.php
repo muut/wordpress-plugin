@@ -99,6 +99,8 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 */
 		public function addFilters() {
 			add_filter( 'muut_validate_setting_use_webhooks', array( $this, 'executeSettingSave' ) );
+
+			add_filter( 'post_type_link', array( $this, 'permalinkToForum' ), 10, 2 );
 		}
 
 		/**
@@ -481,6 +483,30 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 				update_post_meta( $posts[0]->ID, 'muut_likes', $likes );
 				update_post_meta( $posts[0]->ID, 'muut_thread_likes', $total_likes );
 			}
+		}
+
+		/**
+		 * Redirect to the forum page for Muut threads.
+		 *
+		 * @param string $permalink The current permalink.
+		 * @param WP_Post $post The post.
+		 * @return string The filtered permalink.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function permalinkToForum( $permalink, $post ) {
+			error_log('here');
+			if ( $post->post_type == Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME ) {
+				$forum_page_id = Muut_Post_Utility::getForumPageId();
+				if ( $forum_page_id ) {
+					$path = get_post_meta( $post->ID, 'muut_path', true );
+
+					$path = str_replace( array( '/' . muut()->getForumName(), '#' ) , array( '', ':'), $path );
+
+					$permalink = get_permalink( $forum_page_id ) . '#!' . $path;
+				}
+			}
+			return $permalink;
 		}
 	}
 }
