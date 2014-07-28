@@ -41,6 +41,15 @@ jQuery(document).ready( function($) {
         $(".m-forums").append('<p><a id="muut_site_comments_nav" href="#!/' + muut_comments_base_domain + '" title="' + __muut_frontend_strings.comments + '" data-channel="' + __muut_frontend_strings.comments + '"  class="' + comments_link_class + '">' + __muut_frontend_strings.comments + '</a></p>');
       }
     });
+
+    // Make sure links to popular posts work even from the forum page.
+    if ( typeof muut_current_page_permalink == 'string' ) {
+      $('a[href^="' + muut_current_page_permalink + '#!"]').one('click', function(e) {
+       var el = $(this);
+        var page = el.attr('href').slice(muut_current_page_permalink.length + 2);
+        muutObj().load(page);
+      });
+    }
   }
 
   $.fn.extend({
