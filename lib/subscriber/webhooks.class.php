@@ -495,15 +495,14 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function permalinkToForum( $permalink, $post ) {
-			error_log('here');
 			if ( $post->post_type == Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME ) {
 				$forum_page_id = Muut_Post_Utility::getForumPageId();
-				if ( $forum_page_id ) {
-					$path = get_post_meta( $post->ID, 'muut_path', true );
-
-					$path = str_replace( array( '/' . muut()->getForumName(), '#' ) , array( '', ':'), $path );
-
+				$path = get_post_meta( $post->ID, 'muut_path', true );
+				$path = str_replace( array( '/' . muut()->getForumName(), '#' ) , array( '', ':'), $path );
+				if ( !empty( $forum_page_id ) ) {
 					$permalink = get_permalink( $forum_page_id ) . '#!' . $path;
+				} else {
+					$permalink = 'http://' . Muut::MUUTSERVERS . '/' . muut()->getForumName() . '/#!' . $path;
 				}
 			}
 			return $permalink;
