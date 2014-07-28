@@ -102,7 +102,8 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 						'compare' => 'IN',
 					),
 				),
-				'orderby' => 'comment_count',
+				'orderby' => 'comment_count meta_value_num',
+				'meta_key' => 'muut_thread_likes',
 				'order' => 'DESC',
 				'posts_per_page' => $instance['number_of_posts'],
 			);
