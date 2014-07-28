@@ -44,6 +44,29 @@ jQuery(document).ready(function($) {
           setTimeout(function() { icon.remove() }, NEPER * 1000);
         });
       });
+
+      // Increase the comment count when a new comment is posted.
+      muutRpc.on('reply', function( path, reply_object ) {
+        var selected_elements = popular_posts_widgets.find('.muut_popular_post_item[data-muut-post-path="' + path + '"]');
+        if ( selected_elements.length > 0 ) {
+          selected_elements.each( function() {
+            var count_element = $(this).find('.muut_post_comment_count');
+            count_element.text(parseInt(count_element.text()) + 1);
+          });
+        }
+      });
+      muutRpc.on('send', function(event, object) {
+        if ( event == 'reply' ) {
+          var path = object[0].path;
+          var selected_elements = popular_posts_widgets.find('.muut_popular_post_item[data-muut-post-path="' + path + '"]');
+          if ( selected_elements.length > 0 ) {
+            selected_elements.each( function() {
+              var count_element = $(this).find('.muut_post_comment_count');
+              count_element.text(parseInt(count_element.text()) + 1);
+            });
+          }
+        }
+      });
     }
   });
 });
