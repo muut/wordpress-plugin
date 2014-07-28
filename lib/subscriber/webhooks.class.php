@@ -81,7 +81,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		public function addActions() {
 			add_action( 'admin_init', array( $this, 'addWebhooksEndpoint' ) );
 
-			add_action( 'template_redirect', array( $this, 'receiveRequest' ), 5 );
+			add_action( 'wp', array( $this, 'receiveRequest' ), 20 );
 
 			// Webhook actions.
 			add_action( 'muut_webhook_request_post', array( $this, 'processPost' ), 10, 2 );
@@ -141,6 +141,8 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 
 				do_action( 'muut_webhook_request_' . $body['event'], $body, $body['event'] );
 				do_action( 'muut_webhook_request', $body, $body['event'] );
+
+				exit;
 			}
 		}
 
