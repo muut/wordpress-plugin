@@ -226,7 +226,8 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			if ( $value == 1 && !muut()->getOption( 'use_webhooks' ) ) {
 				$this->secret = $this->generateSecret();
 				add_filter( 'muut_settings_validated', array( $this, 'saveSecret' ) );
-				$notice_message = sprintf( __( 'You can now use the following secret in your Muut webhook settings: %s', 'muut' ), '<b>' . $this->secret . '</b>' );
+				$notice_message = sprintf( __( 'You can now use the following secret in your Muut webhook settings: %s', 'muut' ), '<b>' . $this->secret . '</b><br />' );
+				$notice_message .= sprintf( __( 'Note that webhooks (and the features that use them) will only affect %sfuture%s posts; content created prior to activation will not utilize this functionality.', 'muut' ), '<b>', '</b>' );
 				muut()->queueAdminNotice( 'updated', $notice_message );
 			}
 
