@@ -31,6 +31,24 @@ function muut_get_forum_name() {
 }
 
 /**
+ * Gets a general set of option/setting for a given Muut page.
+ *
+ * @param int $post_id The page ID.
+ * @param string $option_name The option name.
+ * @param mixed $default The default if not found.
+ * @return mixed The option
+ * @author Paul Hughes
+ * @since NEXT_RELEASE
+ */
+function muut_get_page_general_option( $post_id, $option_name, $default = '' ) {
+	$return = $default;
+	if ( class_exists( 'Muut_Post_Utility' ) ) {
+		$return = Muut_Post_Utility::getPostOption( $post_id, $option_name, $default );
+	}
+	return $return;
+}
+
+/**
  * Checks if a post uses Muut in some way (is a channel embed, uses commenting, etc.
  *
  * @param int $post_id The ID of the post we are checking (defaults to current post).
