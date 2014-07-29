@@ -90,7 +90,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			add_action( 'widgets_init', array( $this, 'initWidgetOnlineUsers' ) );
 			add_action( 'widgets_init', array( $this, 'initWidgetMyFeed' ) );
 			add_action( 'widgets_init', array( $this, 'initWidgetLatestComments' ) );
-			add_action( 'widgets_init', array( $this, 'initWidgetPopularPosts' ) );
+			add_action( 'widgets_init', array( $this, 'initWidgetTrendingPosts' ) );
 		}
 
 		/**
@@ -400,18 +400,18 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		}
 
 		/**
-		 * Initialize the Popular Posts widget.
+		 * Initialize the Trending Posts widget.
 		 *
 		 * @return void
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
-		public function initWidgetPopularPosts() {
-			$class = 'Muut_Widget_Popular_Posts';
+		public function initWidgetTrendingPosts() {
+			$class = 'Muut_Widget_Trending_Posts';
 			if ( !in_array( $class, $this->alreadyInit ) ) {
-				require_once( muut()->getPluginPath() . 'lib/widgets/widget-popular-posts.class.php' );
+				require_once( muut()->getPluginPath() . 'lib/widgets/widget-trending-posts.class.php' );
 				$this->alreadyInit[] = $class;
-				register_widget( 'Muut_Widget_Popular_Posts' );
+				register_widget( 'Muut_Widget_Trending_Posts' );
 			}
 		}
 

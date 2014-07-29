@@ -42,7 +42,7 @@ jQuery(document).ready( function($) {
       }
     });
 
-    // Make sure links to popular posts work even from the forum page.
+    // Make sure links to trending posts work even from the forum page.
     if ( typeof muut_current_page_permalink == 'string' ) {
       $('a[href^="' + muut_current_page_permalink + '#!"]').one('click', function(e) {
        var el = $(this);

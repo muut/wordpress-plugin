@@ -1,6 +1,6 @@
 <?php
 /**
- * The Muut Popular Posts widget.
+ * The Muut Trending Posts widget.
  *
  * @package   Muut
  * @copyright 2014 Muut Inc
@@ -11,17 +11,17 @@ if ( !defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
-if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
+if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 	/**
-	 * Muut Popular Posts widget class.
+	 * Muut Trending Posts widget class.
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
 	 * @since   NEXT_RELEASE
 	 */
-	class Muut_Widget_Popular_Posts extends WP_Widget {
+	class Muut_Widget_Trending_Posts extends WP_Widget {
 
-		const POPULAR_POSTS_TRANSIENT_NAME = 'muut_popular_posts';
+		const TRENDING_POSTS_TRANSIENT_NAME = 'muut_trending_posts';
 
 		const CURRENT_CHANNELS_OPTION_NAME = 'muut_forum_channels';
 
@@ -33,14 +33,14 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		/**
 		 * The class constructor.
 		 *
-		 * @return Muut_Widget_Popular_Posts
+		 * @return Muut_Widget_Trending_Posts
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
 		function __construct() {
 			parent::__construct(
-				'muut_popular_posts_widget',
-				__( 'Muut Popular Posts', 'muut' ),
+				'muut_trending_posts_widget',
+				__( 'Muut Trending Posts', 'muut' ),
 				array(
 					'description' => __( 'Use this to show the Muut posts with the most activity.', 'muut' ),
 				)
@@ -114,14 +114,14 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 
 			$posts_query = new WP_Query( $query_args );
 
-			add_filter( 'posts_orderby', array( $this, 'popularPostsOrderby' ) );
+			add_filter( 'posts_orderby', array( $this, 'trendingPostsOrderby' ) );
 
-			$popular_posts = $posts_query->get_posts();
+			$trending_posts = $posts_query->get_posts();
 
 			// Render widget.
 			echo $args['before_widget'];
 			echo $args['before_title'] . $title . $args['after_title'];
-			include( muut()->getPluginPath() . 'views/widgets/widget-popular-posts.php' );
+			include( muut()->getPluginPath() . 'views/widgets/widget-trending-posts.php' );
 			echo $args['after_widget'];
 		}
 
@@ -135,7 +135,7 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		 */
 		public function form( $instance ) {
 			if ( muut_is_webhooks_active() ) {
-				include( muut()->getPluginPath() . 'views/widgets/admin-widget-popular-posts.php' );
+				include( muut()->getPluginPath() . 'views/widgets/admin-widget-trending-posts.php' );
 			} else {
 				include( muut()->getPluginPath() . 'views/widgets/admin-error-widget-requires-webhooks.php' );
 			}
@@ -289,7 +289,7 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		 */
 		public function enqueueWidgetScripts() {
 			if ( muut_is_webhooks_active() ) {
-				wp_enqueue_script( 'muut-widget-popular-posts', muut()->getPluginUrl() . 'resources/muut-widget-popular-posts.js', array( 'jquery', 'muut-widgets-initialize' ), Muut::VERSION, true );
+				wp_enqueue_script( 'muut-widget-trending-posts', muut()->getPluginUrl() . 'resources/muut-widget-trending-posts.js', array( 'jquery', 'muut-widgets-initialize' ), Muut::VERSION, true );
 			}
 		}
 
@@ -305,18 +305,18 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		}
 
 		/**
-		 * Get the popular posts array from the transient.
+		 * Get the trending posts array from the transient.
 		 *
-		 * @return array The transient array with the popular posts data.
+		 * @return array The transient array with the trending posts data.
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
-		public function getPopularPostsData() {
-			if ( false === ( $popular_posts_data = get_transient( self::POPULAR_POSTS_TRANSIENT_NAME ) ) ) {
+		public function getTrendingPostsData() {
+			if ( false === ( $trending_posts_data = get_transient( self::TRENDING_POSTS_TRANSIENT_NAME ) ) ) {
 				$this->refreshCache();
 			}
 
-			return get_transient( self::POPULAR_POSTS_TRANSIENT_NAME );
+			return get_transient( self::TRENDING_POSTS_TRANSIENT_NAME );
 		}
 
 		/**
@@ -327,11 +327,11 @@ if ( !class_exists( 'Muut_Widget_Popular_Posts' ) ) {
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
-		public function popularPostsOrderby( $orderby ) {
+		public function trendingPostsOrderby( $orderby ) {
 			global $wpdb;
 			$orderby = "{$wpdb->posts}.comment_count DESC, {$wpdb->postmeta}.meta_value+0 DESC";
 
-			remove_filter( 'posts_orderby', array( $this, 'popularPostsOrderby' ) );
+			remove_filter( 'posts_orderby', array( $this, 'trendingPostsOrderby' ) );
 
 			return $orderby;
 		}

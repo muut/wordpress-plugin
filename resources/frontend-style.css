@@ -112,16 +112,16 @@
     margin-bottom: -8px;
 }
 
-.muut_popular_posts li span.popular-posts-post-title {
+.muut_trending_posts li span.trending-posts-post-title {
     display: block;
     margin-bottom: -5px;
 }
 
-.muut_popular_posts li .popular-posts-post-meta {
+.muut_trending_posts li .trending-posts-post-meta {
     font-size: .8em;
 }
 
-.muut_popular_posts li .m-typing {
+.muut_trending_posts li .m-typing {
     height: .5em;
     width: .5em;
 }

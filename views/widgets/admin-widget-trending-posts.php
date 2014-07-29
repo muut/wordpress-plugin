@@ -1,13 +1,13 @@
 <?php
 /**
- * The markup for the admin form of the Popular Posts widget.
+ * The markup for the admin form of the Trending Posts widget.
  *
  * @package   Muut
  * @copyright 2014 Muut Inc
  */
 
 /**
- * This file assumes that we are within an instance of the Muut_Widget_Popular_Posts class (which extends WP_Widget).
+ * This file assumes that we are within an instance of the Muut_Widget_Trending_Posts class (which extends WP_Widget).
  * Knowing that, `$this` represents that widget instance.
  */
 

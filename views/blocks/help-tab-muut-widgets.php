@@ -23,6 +23,6 @@
 		<a href="https://muut.com/docs/wordpress.html" target="_blank"><?php _e( 'Online Users', 'muut' ); ?></a>
 	</li>
 	<li>
-		<a href="https://muut.com/docs/wordpress.html" target="_blank"><?php _e( 'Popular Posts', 'muut' ); ?></a>
+		<a href="https://muut.com/docs/wordpress.html" target="_blank"><?php _e( 'Trending Posts', 'muut' ); ?></a>
 	</li>
 </ul>

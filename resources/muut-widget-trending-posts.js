@@ -1,5 +1,5 @@
 /**
- * Contains the objects that are used for Muut Popular Posts widget.
+ * Contains the objects that are used for Muut Trending Posts widget.
  * Version 1.0
  * Requires jQuery
  *
@@ -10,7 +10,7 @@
 
 jQuery(document).ready(function($) {
 
-  var popular_posts_executed = 0;
+  var trending_posts_executed = 0;
 
   // Once Muut is loaded...
   muutObj().on('load', function() {
@@ -44,21 +44,21 @@ jQuery(document).ready(function($) {
       return path;
     };
 
-    var popular_posts_widgets = $('div.muut_widget_popular_posts_wrapper');
-    if ( popular_posts_widgets.length > 0 && popular_posts_executed == 0 ) {
+    var trending_posts_widgets = $('div.muut_widget_trending_posts_wrapper');
+    if ( trending_posts_widgets.length > 0 && trending_posts_executed == 0 ) {
 
       // Show the typing circle next to a thread if it is being typed in.
       muutRpc.event('type', function(path, user) {
-        var selected_elements = popular_posts_widgets.find('.muut_popular_post_item[data-muut-post-path="' + path + '"]');
+        var selected_elements = trending_posts_widgets.find('.muut_trending_post_item[data-muut-post-path="' + path + '"]');
         selected_elements.each( function() {
-          var icon = $("<em/>").ac("typing").appendTo($(this).find('.popular-posts-post-meta'));
+          var icon = $("<em/>").ac("typing").appendTo($(this).find('.trending-posts-post-meta'));
           setTimeout(function() { icon.remove() }, NEPER * 1000);
         });
       });
 
       // Increase the comment count when a new comment is posted.
       muutRpc.on('reply', function( path, reply_object ) {
-        var selected_elements = popular_posts_widgets.find('.muut_popular_post_item[data-muut-post-path="' + path + '"]');
+        var selected_elements = trending_posts_widgets.find('.muut_trending_post_item[data-muut-post-path="' + path + '"]');
         if ( selected_elements.length > 0 ) {
           selected_elements.increasecount('.muut_post_comment_count');
         }
@@ -66,7 +66,7 @@ jQuery(document).ready(function($) {
       muutRpc.on('send', function(event, object) {
         if ( event == 'reply' ) {
           var path = object[0].path;
-          var selected_elements = popular_posts_widgets.find('.muut_popular_post_item[data-muut-post-path="' + path + '"]');
+          var selected_elements = trending_posts_widgets.find('.muut_trending_post_item[data-muut-post-path="' + path + '"]');
           if ( selected_elements.length > 0 ) {
             selected_elements.increasecount('.muut_post_comment_count');
           }
@@ -76,7 +76,7 @@ jQuery(document).ready(function($) {
       // Increase the like count when a new like is executed
       muutRpc.event('like unlike', function( event, path, like_object ) {
         path = muut_reduce_thread_path(path);
-        var selected_elements = popular_posts_widgets.find('.muut_popular_post_item[data-muut-post-path="' + path + '"]');
+        var selected_elements = trending_posts_widgets.find('.muut_trending_post_item[data-muut-post-path="' + path + '"]');
         if ( selected_elements.length > 0 ) {
           if (event == 'like') {
             selected_elements.increasecount('.muut_post_like_count');
@@ -89,7 +89,7 @@ jQuery(document).ready(function($) {
       muutRpc.on('send', function(event, object) {
         if ( event == 'like' || event == 'unlike' ) {
           path = muut_reduce_thread_path(object[0]);
-          selected_elements = popular_posts_widgets.find('.muut_popular_post_item[data-muut-post-path="' + path + '"]');
+          selected_elements = trending_posts_widgets.find('.muut_trending_post_item[data-muut-post-path="' + path + '"]');
           if ( selected_elements.length > 0 ) {
             if ( event == 'like' ) {
               selected_elements.increasecount('.muut_post_like_count');
@@ -102,6 +102,6 @@ jQuery(document).ready(function($) {
     }
 
     // Make sure that some of the functions know not to be executed again.
-    popular_posts_executed = 1;
+    trending_posts_executed = 1;
   });
 });
