@@ -74,6 +74,11 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function widget( $args, $instance ) {
+			// Do not show widget on the main forum page.
+			if ( Muut_Post_Utility::getForumPageId() == get_the_ID() && !apply_filters( 'muut_force_online_widget_display', false ) ) {
+				return;
+			}
+
 			// Make sure the Muut resources get loaded (only stuff in the footer will work, as this happens
 			// partway through page load.
 			add_filter( 'muut_requires_muut_resources', '__return_true' );
