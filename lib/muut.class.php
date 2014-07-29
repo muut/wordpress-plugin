@@ -24,9 +24,9 @@ if ( !class_exists( 'Muut' ) ) {
 	{
 
 		/**
-		 * The current version of urGuru
+		 * The current version of Muut
 		 */
-		const VERSION = '3.0.1';
+		const VERSION = '3.0.2';
 
 		/**
 		 * The version of Muut this was released with.
