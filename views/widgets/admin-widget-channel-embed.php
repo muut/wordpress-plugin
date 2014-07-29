@@ -1,6 +1,6 @@
 <?php
 /**
- * The markup for the admin form of the Channel Embed widget.
+ * The markup for the admin form of the Discussion Channel Embed widget.
  *
  * @package   Muut
  * @copyright 2014 Muut Inc

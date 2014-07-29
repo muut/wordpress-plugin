@@ -13,7 +13,7 @@ if ( !defined( 'ABSPATH' ) ) {
 
 if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 	/**
-	 * Muut Channel Embed widget class.
+	 * Muut Discussion Channel Embed widget class.
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
@@ -31,7 +31,7 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		function __construct() {
 			parent::__construct(
 				'muut_channel_embed_widget',
-				__( 'Muut Channel', 'muut' ),
+				__( 'Muut Discussion Channel', 'muut' ),
 				array(
 					'description' => __( 'Use this to embed a specific channel in a widget area.', 'muut' ),
 				)
