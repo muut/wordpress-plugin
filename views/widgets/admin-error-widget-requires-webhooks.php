@@ -12,6 +12,12 @@
  */
 
 ?>
+<script type="text/javascript">
+	jQuery(function($) {
+		var id_base = "<?php echo $this->id_base; ?>";
+		$('#widgets-right').find('input.id_base[value="' + id_base + '"]').closest('.widget-inside').find('input.widget-control-save').hide();
+	});
+</script>
 <p class="muut_widget_error">
-<?php printf( __( 'The %s requires that webhooks be enabled. Webhooks can be enabled at the %splugin settings%s page and set up in the Muut settings for your forum. Note that webhooks only can be set up on forums with a developer subscription.', 'muut' ), $this->name, '<a href="' . admin_url( 'admin.php?page=muut' ) . '">', '</a>' ); ?>
+<?php printf( __( 'This widget uses webhooks and requires a Muut Developer subscription. %sEnable webhooks%s', 'muut' ), '<br /><a href="' . admin_url( 'admin.php?page=muut' ) . '">', '</a>' ); ?>
 </p>
