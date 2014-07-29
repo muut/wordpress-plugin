@@ -13,9 +13,16 @@
 
 $title = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
 
-$number_of_posts = isset( $instance['number_of_posts'] ) ? $instance['number_of_posts'] : '5';
-$current_channels = isset( $instance['channels'] ) ? $instance['channels'] : array();
+// If widget has just been created, select all the channels in advance.
 $potential_channels = $this->getCurrentChannelsOption();
+if ( !isset( $instance['number_of_posts'] ) ) {
+	$current_channels = $potential_channels;
+} else {
+	$current_channels = isset( $instance['channels'] ) ? $instance['channels'] : array();
+}
+
+// Add default values for number of posts.
+$number_of_posts = isset( $instance['number_of_posts'] ) ? $instance['number_of_posts'] : '5';
 
 // Check if there are "current channels" not in the potential channels array, in which case add them to it (for display).
 foreach( $current_channels as $channel_path => $channel_name ) {
