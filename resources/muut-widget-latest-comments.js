@@ -196,6 +196,12 @@ jQuery(document).ready(function($) {
           }
         });
       }
+      muutRpc.event('enter', function(user) {
+        widget_latest_comments_wrapper.facelinkinit( true );
+      });
+      muutRpc.event('leave', function(user) {
+        widget_latest_comments_wrapper.facelinkinit( true );
+      });
 
       // Listen for the json_update event so that we can compare data and act accordingly.
       widget_latest_comments_wrapper.on('json_update', function( event, new_obj, old_obj ) {

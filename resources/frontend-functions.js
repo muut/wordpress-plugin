@@ -54,7 +54,7 @@ jQuery(document).ready( function($) {
 
   $.fn.extend({
     // The function that is used to initialize all m-facelink anchors below the jQuery element collection calling the function.
-    facelinkinit: function() {
+    facelinkinit: function( force_refresh ) {
       var online_usernames = Array();
       muutObj().online.forEach(function(user) {
         online_usernames.push(user.username);
@@ -65,22 +65,25 @@ jQuery(document).ready( function($) {
         var facelinks = $(this).find('.m-facelink');
       }
       $.each(facelinks, function() {
-        // If the facelinks are not marked as already having been initialized...
-        if ( !$(this).hasClass('m-facelink-inited') ) {
-          // Add the username tooltip.
+        var current_user_name = $(this).data('href').substr(4);
+
+        if (force_refresh || !$(this).hasClass('m-facelink-inited') ) {
+          // Add the username tooltip. This needs to be done on every call as it can disappear otherwise based on other Muut client behavior.
           $(this).tooltip2({prefix: 'm-', delayIn: 0, delayOut: 0}).appendTo($(this));
           if($(this).hasClass('m-is-admin')) {
             $(this).find(".m-tooltip").append("<em> (" + __muut_frontend_strings.admin + ")</em>");
           }
+        }
+        // If the facelinks are not marked as already having been initialized...
+        if (!$(this).hasClass('m-facelink-inited') ) {
           // Load the user page if the portrait is clicked.
           $(this).on('click', function(e) {
             var el = $(this);
             var page = el.data('href').substr(2);
             muutObj().load(page);
           });
-          var current_user_name = $(this).data('href').substr(4);
           // This class is required for tooltips to work--something on the Muut end.
-          $(this).addClass('m-online')
+          $(this).addClass('m-online');
           if($.inArray(current_user_name, online_usernames) >= 0) {
             $(this).addClass('m-user-online_' + current_user_name);
           } else {
@@ -89,6 +92,18 @@ jQuery(document).ready( function($) {
             $(this).addClass('m-wp-hideafter');
           }
           $(this).addClass('m-facelink-inited');
+        } else {
+          if ( !$(this).hasClass('m-online') ) {
+            $(this).addClass('m-online');
+          }
+          if($.inArray(current_user_name, online_usernames) == -1) {
+            // This hides the "online" circle, which has been added by the required m-online.
+            // Ugly, I know.
+            $(this).addClass('m-wp-hideafter');
+          } else {
+            // Show it again on log-in.
+            $(this).removeClass('m-wp-hideafter');
+          }
         }
       });
     },
