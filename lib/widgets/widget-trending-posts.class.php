@@ -96,6 +96,8 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 			}
 			$title = isset( $instance['title'] ) ? $instance['title'] : '';
 
+			$date_since_string = apply_filters( 'muut_widget_trending_posts_since', "-1 week", $this->id );
+
 			$query_args = array(
 				'post_type' => Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME,
 				'post_status' => Muut_Custom_Post_Types::MUUT_PUBLIC_POST_STATUS,
@@ -104,6 +106,12 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 						'key' => 'muut_channel_path',
 						'value' => array_keys( $instance['channels'] ),
 						'compare' => 'IN',
+					),
+				),
+				'date_query' => array(
+					array(
+						'column' => 'post_modified_gmt',
+						'after' => $date_since_string,
 					),
 				),
 				'orderby' => 'comment_count meta_value_num',
