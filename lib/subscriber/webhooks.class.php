@@ -88,6 +88,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			add_action( 'muut_webhook_request_reply', array( $this, 'processReply' ), 10, 2 );
 			add_action( 'muut_webhook_request_like', array( $this, 'processLikeUnlike' ), 10, 2 );
 			add_action( 'muut_webhook_request_unlike', array( $this, 'processLikeUnlike' ), 10, 2 );
+			add_action( 'muut_webhook_request_remove', array( $this, 'processRemove' ), 10, 2 );
 		}
 
 		/**
@@ -496,6 +497,83 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 				}
 				update_post_meta( $posts[0]->ID, 'muut_likes', $likes );
 				update_post_meta( $posts[0]->ID, 'muut_thread_likes', $total_likes );
+			}
+		}
+
+		/**
+		 * Process the 'remove' Muut event.
+		 *
+		 * @param $request
+		 * @param $event
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function processRemove( $request, $event ) {
+			$path = $request['path'];
+
+			$split_path = explode( '#', $path );
+			$split_final = explode( '/', $split_path[1] );
+			if ( count( $split_final ) > 1 ) {
+				// The path leads to an individual reply.
+				$comment_base = $split_path[0] . '#' . $split_final[0];
+				$query_args = array(
+					'meta_query' => array(
+						'relation' => 'AND',
+						array(
+							'key' => 'muut_path',
+							'value' => $path,
+						),
+						array(
+							'key' => 'muut_key',
+							'value' => $split_final[1],
+						),
+					),
+					'number' => 1,
+				);
+
+				// Get the comment data.
+				$comment_query = new WP_Comment_Query;
+				$comments = $comment_query->query( $query_args );
+
+				if ( is_a( $comments[0], 'WP_Comment' ) ) {
+					$likes = (int) get_comment_meta( $comments[0]->comment_ID, 'muut_likes', true );
+					$post_likes = (int) get_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', true );
+
+					// Remove the number of likes from the thread count of likes.
+					$post_likes = $post_likes - $likes;
+					update_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', $post_likes );
+					wp_delete_comment( $comments[0]->comment_ID, true );
+				}
+			} else {
+				// The path leads to a top-level thread.
+				$query_args = array(
+					'post_type' => Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME,
+					'post_status' => 'any',
+					'meta_query' => array(
+						array(
+							'key' => 'muut_path',
+							'value' => $path,
+						),
+					),
+					'posts_per_page' => 1,
+				);
+
+				// Get the post data.
+				$posts_query = new WP_Query;
+				$posts = $posts_query->query( $query_args );
+
+				if ( is_a( $posts[0], 'WP_Post' ) ) {
+					$comment_query_args = array(
+						'post_ID' => $posts[0]->ID,
+					);
+					$comments = get_comments( $comment_query_args );
+					foreach( $comments as $comment ) {
+						wp_delete_comment( $comment->comment_ID, true );
+					}
+
+					wp_delete_post( $posts[0]->ID, true );
+				}
 			}
 		}
 
