@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Muut\n"
-"POT-Creation-Date: 2014-07-28 17:49-0500\n"
-"PO-Revision-Date: 2014-07-28 17:50-0500\n"
+"POT-Creation-Date: 2014-07-30 12:54-0500\n"
+"PO-Revision-Date: 2014-07-30 12:54-0500\n"
 "Last-Translator: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language-Team: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language: en_US\n"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: lib/admin/admin-contextual-help.class.php:110
 #: lib/admin/admin-post-editor.class.php:122
-#: lib/admin/admin-post-editor.class.php:123 views/admin-settings.php:75
+#: lib/admin/admin-post-editor.class.php:123 views/admin-settings.php:76
 msgid "Commenting"
 msgstr ""
 
@@ -40,7 +40,7 @@ msgstr ""
 msgid "Single Sign-On"
 msgstr ""
 
-#: lib/admin/admin-contextual-help.class.php:128 views/admin-settings.php:133
+#: lib/admin/admin-contextual-help.class.php:128
 msgid "Webhooks"
 msgstr ""
 
@@ -49,7 +49,6 @@ msgid "Muut Commenting"
 msgstr ""
 
 #: lib/admin/admin-contextual-help.class.php:251
-#: lib/widgets/widget-channel-embed.class.php:34
 msgid "Muut Channel"
 msgstr ""
 
@@ -91,8 +90,8 @@ msgstr ""
 msgid "Enable forum"
 msgstr ""
 
-#: lib/admin/admin-post-editor.class.php:172 lib/muut.class.php:972
-#: lib/muut.class.php:973 views/admin-settings.php:33
+#: lib/admin/admin-post-editor.class.php:172 lib/muut.class.php:975
+#: lib/muut.class.php:976 views/admin-settings.php:34
 msgid "Muut"
 msgstr ""
 
@@ -127,7 +126,7 @@ msgid ""
 msgstr ""
 
 #: lib/channel.utility.class.php:67 lib/comment-overrides.class.php:197
-#: lib/comment-overrides.class.php:211 lib/muut.class.php:543
+#: lib/comment-overrides.class.php:211 lib/muut.class.php:544
 msgid "Comments"
 msgstr ""
 
@@ -153,99 +152,99 @@ msgstr ""
 msgid "Spammed Muut Post"
 msgstr ""
 
-#: lib/muut.class.php:539
+#: lib/muut.class.php:540
 msgid "Go ahead!"
 msgstr ""
 
-#: lib/muut.class.php:540
+#: lib/muut.class.php:541
 msgid "Don't do that!"
 msgstr ""
 
-#: lib/muut.class.php:544
+#: lib/muut.class.php:545
 msgid "Admin"
 msgstr ""
 
-#: lib/muut.class.php:783
+#: lib/muut.class.php:786
 msgid "Arabic"
 msgstr ""
 
-#: lib/muut.class.php:784
+#: lib/muut.class.php:787
 msgid "Brazil Portuguese"
 msgstr ""
 
-#: lib/muut.class.php:785
+#: lib/muut.class.php:788
 msgid "Bulgarian"
 msgstr ""
 
-#: lib/muut.class.php:786
+#: lib/muut.class.php:789
 msgid "Chinese"
 msgstr ""
 
-#: lib/muut.class.php:787
+#: lib/muut.class.php:790
 msgid "Chinese / Taiwan"
 msgstr ""
 
-#: lib/muut.class.php:788
+#: lib/muut.class.php:791
 msgid "Dutch"
 msgstr ""
 
-#: lib/muut.class.php:789
+#: lib/muut.class.php:792
 msgid "English"
 msgstr ""
 
-#: lib/muut.class.php:790
+#: lib/muut.class.php:793
 msgid "Finnish"
 msgstr ""
 
-#: lib/muut.class.php:791
+#: lib/muut.class.php:794
 msgid "French"
 msgstr ""
 
-#: lib/muut.class.php:792
+#: lib/muut.class.php:795
 msgid "German"
 msgstr ""
 
-#: lib/muut.class.php:793
+#: lib/muut.class.php:796
 msgid "Hungarian"
 msgstr ""
 
-#: lib/muut.class.php:794
+#: lib/muut.class.php:797
 msgid "Hebrew"
 msgstr ""
 
-#: lib/muut.class.php:795
+#: lib/muut.class.php:798
 msgid "Indonesian"
 msgstr ""
 
-#: lib/muut.class.php:796
+#: lib/muut.class.php:799
 msgid "Japanese"
 msgstr ""
 
-#: lib/muut.class.php:797
+#: lib/muut.class.php:800
 msgid "Korean"
 msgstr ""
 
-#: lib/muut.class.php:798
+#: lib/muut.class.php:801
 msgid "Polish"
 msgstr ""
 
-#: lib/muut.class.php:799
+#: lib/muut.class.php:802
 msgid "Russian"
 msgstr ""
 
-#: lib/muut.class.php:800
+#: lib/muut.class.php:803
 msgid "Spanish"
 msgstr ""
 
-#: lib/muut.class.php:801
+#: lib/muut.class.php:804
 msgid "Swedish"
 msgstr ""
 
-#: lib/muut.class.php:802
+#: lib/muut.class.php:805
 msgid "Tamil"
 msgstr ""
 
-#: lib/muut.class.php:803
+#: lib/muut.class.php:806
 msgid "Turkish"
 msgstr ""
 
@@ -266,28 +265,32 @@ msgid ""
 "content."
 msgstr ""
 
-#: lib/subscriber/webhooks.class.php:231
-#, php-format
-msgid "You can now use the following secret in your Muut webhook settings: %s"
-msgstr ""
-
-#: lib/subscriber/webhooks.class.php:232
+#: lib/subscriber/webhooks.class.php:234
 #, php-format
 msgid ""
-"Note that webhooks (and the features that use them) will only affect %sfuture"
-"%s posts; content created prior to activation will not utilize this "
-"functionality."
+"Webhooks have been activated. %sClick here%s to view the instructions for "
+"completing your setup."
+msgstr ""
+
+#: lib/subscriber/webhooks.class.php:235
+msgid ""
+"Note that webhooks functionality will only work for posts made after "
+"activation."
+msgstr ""
+
+#: lib/widgets/widget-channel-embed.class.php:34
+msgid "Muut Discussion Channel"
 msgstr ""
 
 #: lib/widgets/widget-channel-embed.class.php:36
 msgid "Use this to embed a specific channel in a widget area."
 msgstr ""
 
-#: lib/widgets/widget-latest-comments.class.php:47
+#: lib/widgets/widget-latest-comments.class.php:53
 msgid "Muut Latest Comments"
 msgstr ""
 
-#: lib/widgets/widget-latest-comments.class.php:49
+#: lib/widgets/widget-latest-comments.class.php:55
 msgid "Use this to show the latest posts with Muut comments."
 msgstr ""
 
@@ -311,16 +314,16 @@ msgstr ""
 msgid "Use this to show the online users in a widget."
 msgstr ""
 
-#: lib/widgets/widget-online-users.class.php:140
+#: lib/widgets/widget-online-users.class.php:145
 msgctxt "anonymous users"
 msgid "anonymous"
 msgstr ""
 
-#: lib/widgets/widget-popular-posts.class.php:43
-msgid "Muut Popular Posts"
+#: lib/widgets/widget-trending-posts.class.php:43
+msgid "Muut Trending Posts"
 msgstr ""
 
-#: lib/widgets/widget-popular-posts.class.php:45
+#: lib/widgets/widget-trending-posts.class.php:45
 msgid "Use this to show the Muut posts with the most activity."
 msgstr ""
 
@@ -334,58 +337,58 @@ msgstr ""
 msgid "Enabling this will disable other types of Muut embeds on this %s."
 msgstr ""
 
-#: views/admin-settings.php:33
+#: views/admin-settings.php:34
 msgid "Forums and commenting re-imagined."
 msgstr ""
 
-#: views/admin-settings.php:38
+#: views/admin-settings.php:39
 #, php-format
 msgid ""
 "Please enter the name of your Muut forum. If you don't have one, please "
 "%ssetup now%s!"
 msgstr ""
 
-#: views/admin-settings.php:39
+#: views/admin-settings.php:40
 msgid ""
 "You can have any number of forums, users, or commenting pages. No traffic "
 "limits: 10, 1,000, or 100,000,000 loads a day, for free."
 msgstr ""
 
-#: views/admin-settings.php:45 views/blocks/help-tab-settings-general.php:11
+#: views/admin-settings.php:46 views/blocks/help-tab-settings-general.php:11
 msgid "Forum Name"
 msgstr ""
 
-#: views/admin-settings.php:56
+#: views/admin-settings.php:57
 msgid "Continue"
 msgstr ""
 
-#: views/admin-settings.php:61 views/blocks/help-tab-settings-general.php:15
+#: views/admin-settings.php:62 views/blocks/help-tab-settings-general.php:15
 msgid "Language"
 msgstr ""
 
-#: views/admin-settings.php:81
+#: views/admin-settings.php:82
 #: views/blocks/help-tab-settings-commenting.php:11
 msgid "Use Muut for post commenting"
 msgstr ""
 
-#: views/admin-settings.php:87
+#: views/admin-settings.php:88
 msgid "Use Muut commenting on posts with existing comments (data not deleted)"
 msgstr ""
 
-#: views/admin-settings.php:92
+#: views/admin-settings.php:93
 msgid "Search Engine Optimization (SEO)"
 msgstr ""
 
-#: views/admin-settings.php:99
+#: views/admin-settings.php:100
 #, php-format
 msgid "Allow search engines to crawl discussions at %s"
 msgstr ""
 
-#: views/admin-settings.php:104
+#: views/admin-settings.php:105
 msgid "Single Sign-on"
 msgstr ""
 
-#: views/admin-settings.php:106
+#: views/admin-settings.php:107
 #, php-format
 msgid ""
 "%sUpgrade to Muut Developer%s to use the WordPress authentication system for "
@@ -393,38 +396,79 @@ msgid ""
 "users."
 msgstr ""
 
-#: views/admin-settings.php:112 views/admin-settings.php:141
+#: views/admin-settings.php:113
 msgid "Enable"
 msgstr ""
 
-#: views/admin-settings.php:117
+#: views/admin-settings.php:118
 msgid "API Key"
 msgstr ""
 
-#: views/admin-settings.php:125
+#: views/admin-settings.php:126
 msgid "Secret Key"
 msgstr ""
 
-#: views/admin-settings.php:135
+#: views/admin-settings.php:134
+msgid "Widgets"
+msgstr ""
+
+#: views/admin-settings.php:136
+msgid ""
+"The plugin comes packed with the following real-time widgets that you can "
+"place on any page."
+msgstr ""
+
+#: views/admin-settings.php:138
+#, php-format
+msgid "%sMy Feed%s - List of the current user's most recent posts."
+msgstr ""
+
+#: views/admin-settings.php:139
+#, php-format
+msgid "%sWho's Online%s - A real-time list of currently logged-in users."
+msgstr ""
+
+#: views/admin-settings.php:140
 #, php-format
 msgid ""
-"%sUpgrade to Muut Developer%s to use webhooks.%s This will add support for "
-"advanced features, such as widgets like %sLatest Comments%s and %sPopular "
-"Posts%s."
+"%sDiscussion Channel%s - Embed a single discussion channel in to your "
+"website's sidebar."
+msgstr ""
+
+#: views/admin-settings.php:141
+#, php-format
+msgid ""
+"%sLatest Comments%s - The most recent comments on your site, updating in "
+"real-time."
+msgstr ""
+
+#: views/admin-settings.php:141 views/admin-settings.php:142
+msgid "Uses webhooks"
 msgstr ""
 
 #: views/admin-settings.php:142
 #, php-format
 msgid ""
-"Enter the url %s/muut-webhooks/%s in your Muut forum webhooks settings, with "
-"all events selected."
+"%sTrending Topics%s - The most popular discussion, updating in real-time."
 msgstr ""
 
-#: views/admin-settings.php:143
-#, php-format
+#: views/admin-settings.php:149
+msgid "Enable Webhooks"
+msgstr ""
+
+#: views/admin-settings.php:152
+msgid "Finish Setup"
+msgstr ""
+
+#: views/admin-settings.php:166
+msgid "To complete your webhooks setup..."
+msgstr ""
+
+#: views/admin-settings.php:167
 msgid ""
-"Enter the the following secret as the webhooks secret in the Muut settings: "
-"%s"
+"From your main forum page, open the Muut settings, select the integrations "
+"tab, and create a new integration as below using the following URL and "
+"secret:"
 msgstr ""
 
 #: views/blocks/help-tab-muut-widgets.php:10
@@ -446,7 +490,7 @@ msgid "Online Users"
 msgstr ""
 
 #: views/blocks/help-tab-muut-widgets.php:26
-msgid "Popular Posts"
+msgid "Trending Posts"
 msgstr ""
 
 #: views/blocks/help-tab-post-editor-channel.php:10
@@ -719,20 +763,18 @@ msgstr ""
 msgid "Access comments from navigation"
 msgstr ""
 
-#: views/widgets/admin-error-widget-requires-webhooks.php:16
+#: views/widgets/admin-error-widget-requires-webhooks.php:22
 #, php-format
 msgid ""
-"The %s requires that webhooks be enabled. Webhooks can be enabled at the "
-"%splugin settings%s page and set up in the Muut settings for your forum. "
-"Note that webhooks only can be set up on forums with a developer "
-"subscription."
+"This widget uses webhooks and requires a Muut Developer subscription. "
+"%sEnable webhooks%s"
 msgstr ""
 
 #: views/widgets/admin-widget-channel-embed.php:22
 #: views/widgets/admin-widget-latest-comments.php:19
 #: views/widgets/admin-widget-my-feed.php:20
 #: views/widgets/admin-widget-online-users.php:20
-#: views/widgets/admin-widget-popular-posts.php:28
+#: views/widgets/admin-widget-trending-posts.php:35
 msgid "Display Title:"
 msgstr ""
 
@@ -752,11 +794,11 @@ msgstr ""
 msgid "Show anonymous user count"
 msgstr ""
 
-#: views/widgets/admin-widget-popular-posts.php:32
+#: views/widgets/admin-widget-trending-posts.php:39
 msgid "Number of posts to show:"
 msgstr ""
 
-#: views/widgets/admin-widget-popular-posts.php:36
+#: views/widgets/admin-widget-trending-posts.php:43
 msgid "Channels:"
 msgstr ""
 
@@ -764,10 +806,10 @@ msgstr ""
 msgid "anonymous users"
 msgstr ""
 
-#: views/widgets/widget-popular-posts.php:29
+#: views/widgets/widget-trending-posts.php:29
 msgid "comments"
 msgstr ""
 
-#: views/widgets/widget-popular-posts.php:29
+#: views/widgets/widget-trending-posts.php:29
 msgid "likes"
 msgstr ""
