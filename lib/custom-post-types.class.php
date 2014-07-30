@@ -226,7 +226,9 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 			$post_id = isset( $posts[0]->ID ) ? $posts[0]->ID : 0;
 
 			// Update the post modified date for the parent thread WP post.
-			wp_update_post( array( 'ID' => $post_id ) );
+			if ( $post_id > 0 ) {
+				wp_update_post( array( 'ID' => $post_id ) );
+			}
 
 			$comment_args = array(
 				'comment_post_ID' => $post_id,
