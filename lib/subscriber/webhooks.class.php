@@ -375,7 +375,12 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 
 			$custom_posts_object = Muut_Custom_Post_Types::instance();
 
-			$custom_posts_object->addMuutThreadData( $new_thread_args );
+			$inserted_post = $custom_posts_object->addMuutThreadData( $new_thread_args );
+
+			if ( $inserted_post ) {
+				update_post_meta( $inserted_post, 'muut_likes', '0' );
+				update_post_meta( $inserted_post, 'muut_thread_likes', '0' );
+			}
 		}
 
 		/**
@@ -397,7 +402,12 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 
 			$custom_posts_object = Muut_Custom_Post_Types::instance();
 
-			$custom_posts_object->addMuutReplyData( $new_reply_args );
+			$inserted_comment = $custom_posts_object->addMuutReplyData( $new_reply_args );
+
+			if ( $inserted_comment ) {
+				update_comment_meta( $inserted_comment, 'muut_likes', '0' );
+			}
+
 		}
 
 		/**
