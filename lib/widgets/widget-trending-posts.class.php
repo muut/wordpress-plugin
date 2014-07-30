@@ -178,6 +178,10 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 					$instance['channels'][$channel_value] = $channel_value;
 				}
 			}
+
+			if ( empty( $instance['channels'] ) ) {
+				$instance['channels'] = $forum_channels_list;
+			}
 			return $instance;
 		}
 
