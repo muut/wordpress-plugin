@@ -524,7 +524,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 						'relation' => 'AND',
 						array(
 							'key' => 'muut_path',
-							'value' => $path,
+							'value' => $comment_base,
 						),
 						array(
 							'key' => 'muut_key',
