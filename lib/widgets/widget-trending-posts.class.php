@@ -91,7 +91,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 */
 		public function widget( $args, $instance ) {
 			// Make sure webhooks are active, or don't bother.
-			if ( !muut_is_webhooks_active() ) {
+			if ( !muut_is_webhooks_active() || apply_filters( 'muut_hide_trending_posts_widget_display', 'false' ) ) {
 				return;
 			}
 			$title = isset( $instance['title'] ) ? $instance['title'] : '';

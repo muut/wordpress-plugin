@@ -73,10 +73,10 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function widget( $args, $instance ) {
-			if ( !is_home() && ( Muut_Post_Utility::isMuutPost( get_the_ID() ) || Muut_Post_Utility::isMuutCommentingPost( get_the_ID() ) ) ) {
+			// Make sure webhooks are active, or don't bother.
+			if ( apply_filters( 'muut_hide_channel_embed_display', 'false' ) ) {
 				return;
 			}
-
 			// Default to always NOT showing online users. Can be modified with filter.
 			$embed_args['show-online'] = apply_filters( 'muut_channel_embed_widget_show_online', false, $args, $instance );
 
