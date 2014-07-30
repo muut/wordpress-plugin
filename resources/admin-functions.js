@@ -121,4 +121,37 @@ jQuery(document).ready( function($) {
     $(this).blur();
     $(this).select();
   })
+
+  // Resize thickbox for the settings webhooks integration box.
+  $('#muut_settings_finish_webhook_setup').on('click', function() {
+    setTimeout(function() {
+      $('#TB_window').css('width', '750px').css('margin-left', '-375px').css('height', 'auto');
+      $('#TB_ajaxContent').css('width', 'auto');
+    }, 1);
+  });
+
+  // Borrowed and modified from realmacsoftware author Ben. http://realmacsoftware.com/blog/author:ben
+  // For retina image support, just add the class "retinaise" to the img tag.
+  function retinaise() {
+    // Check if it's a retina device or not
+    var retina = (window.devicePixelRatio > 1) ? true : false;
+
+    // Loop through all the images you want to update
+    $("img.retinaise").each(function(i,image) {
+      var source = image.getAttribute('src');
+
+      // Append "@2x" to the image src if it's a retina device
+      // else remove the appended "@2x" if it's a non-retina device
+      if (retina == true) {
+        source = source.replace(/\.\w+$/, function(match) { return "@2x" + match; });
+      } else {
+        source = source.replace(/(@2x)/, '');
+      }
+
+      // Set the image src
+      image.setAttribute('src', source);
+    });
+
+  }
+  retinaise();
 });
