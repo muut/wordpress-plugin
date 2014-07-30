@@ -92,7 +92,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function registerCustomPostTypes() {
 			// Only worrying about a couple of these, since the post type is TOTALLY not public at all.
@@ -116,7 +116,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function registerCustomPostStatuses() {
 			$muut_post_status_public_args = apply_filters( 'muut_public_post_status_args', array(
@@ -144,7 +144,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		 *                    'body' => The thread content.
 		 * @return int The CPT post id.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function addMuutThreadData( $args = array() ) {
 			if ( empty( $args['title'] ) || empty( $args['path'] ) || empty( $args['user'] ) || !isset( $args['body'] ) ) {
@@ -194,7 +194,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		 *                    'body' => The reply content.
 		 * @return int The comment id.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function addMuutReplyData( $args = array() ) {
 			if ( empty( $args['key'] ) || empty( $args['path'] ) || empty( $args['user'] ) || !isset( $args['body'] ) ) {

@@ -19,7 +19,7 @@ if ( !class_exists( 'Muut_Files_Utility' ) ) {
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
-	 * @since   NEXT_RELEASE
+	 * @since   3.0.2
 	 */
 	class Muut_Files_Utility {
 
@@ -36,7 +36,7 @@ if ( !class_exists( 'Muut_Files_Utility' ) ) {
 		 *
 		 * @return Muut_Files_Utility (Except it can never be called).
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		private function __construct() {}
 
@@ -46,7 +46,7 @@ if ( !class_exists( 'Muut_Files_Utility' ) ) {
 		 * @param string $sub_dir A subdirectory or path to check beneath the main Muut uploads directory.
 		 * @return bool Whether the directory exists or not (or was created if it previously didn't).
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public static function checkMuutUploadsDirectory( $sub_dir = '' ) {
 			$wp_upload_dir = wp_upload_dir();
@@ -79,7 +79,7 @@ if ( !class_exists( 'Muut_Files_Utility' ) ) {
 		 * @param string $sub_dir A subdirectory or path to check beneath the main Muut uploads directory.
 		 * @return false|string The Muut uploads full path (and a sub-path if specified).
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public static function getUploadsPath( $sub_dir = '' ) {
 			if ( !self::$uploads_path && !self::checkMuutUploadsDirectory( $sub_dir ) ) {
@@ -94,7 +94,7 @@ if ( !class_exists( 'Muut_Files_Utility' ) ) {
 		 *
 		 * @return false|string The Muut uploads directory URL or false if it doesn't exist/isn't verified.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public static function getUploadsUrl() {
 			if ( !self::$uploads_path && !self::checkMuutUploadsDirectory() ) {
@@ -115,7 +115,7 @@ if ( !class_exists( 'Muut_Files_Utility' ) ) {
 		 * @param string $content The content of the file that we are writing.
 		 * @return false|string The created file path or false if failed.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public static function writeFile( $file, $content ) {
 			$file_dir = ( dirname( $file ) != '/' && dirname( $file ) != '.' ) ? trailingslashit( dirname( $file ) ) : '';

@@ -38,7 +38,7 @@ function muut_get_forum_name() {
  * @param mixed $default The default if not found.
  * @return mixed The option
  * @author Paul Hughes
- * @since NEXT_RELEASE
+ * @since 3.0.2
  */
 function muut_get_page_general_option( $post_id, $option_name, $default = '' ) {
 	$return = $default;
@@ -203,7 +203,7 @@ function muut_comments_override_anchor( $post_id = null, $echo = true ) {
  *
  * @return bool Whether webhooks are active or not.
  * @author Paul Hughes
- * @since NEXT_RELEASE
+ * @since 3.0.2
  */
 function muut_is_webhooks_active() {
 	return Muut_Webhooks::instance()->isWebhooksActivated();
@@ -220,7 +220,7 @@ function muut_is_webhooks_active() {
  * @param bool $echo Whether to echo the result or not.
  * @return void|string The anchor tag, or void if $echo is set to true.
  * @author Paul Hughes
- * @since NEXT_RELEASE
+ * @since 3.0.2
  */
 if ( !function_exists( 'muut_get_user_facelink_avatar' ) ) {
 	function muut_get_user_facelink_avatar( $username, $display_name, $is_admin = false, $user_url = null, $avatar_url = null, $echo = false ) {

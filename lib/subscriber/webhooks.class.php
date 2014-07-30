@@ -18,7 +18,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
-	 * @since   NEXT_RELEASE
+	 * @since   3.0.2
 	 */
 	class Muut_Webhooks
 	{
@@ -46,7 +46,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 *
 		 * @return Muut_Webhooks The instance.
 		 * @author Paul Hughes
-		 * @since  NEXT_RELEASE
+		 * @since  3.0.2
 		 */
 		public static function instance() {
 			if ( !is_a( self::$instance, __CLASS__ ) ) {
@@ -60,7 +60,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 *
 		 * @return Muut_Webhooks
 		 * @author Paul Hughes
-		 * @since  NEXT_RELEASE
+		 * @since  3.0.2
 		 */
 		protected function __construct() {
 			$this->secret = muut()->getOption( 'webhooks_secret' );
@@ -76,7 +76,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function addActions() {
 			add_action( 'admin_init', array( $this, 'addWebhooksEndpoint' ) );
@@ -96,7 +96,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function addFilters() {
 			add_filter( 'muut_validate_setting_use_webhooks', array( $this, 'executeSettingSave' ) );
@@ -109,7 +109,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function addWebhooksEndpoint() {
 			add_rewrite_rule( '^' . $this->getEndpointSlug() . '/?', 'index.php?muut_action=webhooks', 'top' );
@@ -120,7 +120,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function receiveRequest() {
 			if ( get_query_var( 'muut_action' ) == 'webhooks' && $this->isWebhooksActivated() ) {
@@ -152,7 +152,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 *
 		 * @return array The request body content.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		protected function getRequestBody( $raw = false ) {
 			$body = file_get_contents('php://input');
@@ -175,7 +175,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @param string $body The body content of the request.
 		 * @return array The parsed array/object.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function parseRequestStructure( $body ) {
 			$request = json_decode( $body );
@@ -199,7 +199,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 *
 		 * @return string The endpoint slug.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function getEndpointSlug() {
 			return apply_filters( 'muut_webhooks_endpoint_slug', self::DEFAULT_ENDPOINT_SLUG );
@@ -210,7 +210,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 *
 		 * @return bool Whether webhooks are activated or not.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function isWebhooksActivated() {
 			return muut()->getOption( 'use_webhooks' );
@@ -223,7 +223,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @param int $value Whether the use_webhooks setting is being saved as active or not.
 		 * @return int $value The same value—we aren't messing with it.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function executeSettingSave( $value ) {
 			if ( $value == 1 && !muut()->getOption( 'use_webhooks' ) ) {
@@ -244,7 +244,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function printSavedJs() {
 			echo '<script type="text/javascript">';
@@ -260,7 +260,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @param array $settings The current settings array.
 		 * @return array The filtered settings array.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function saveSecret( $settings ) {
 			$settings['webhooks_secret'] = $this->secret;
@@ -273,7 +273,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 *
 		 * @return string The secret.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		protected function generateSecret() {
 			$validCharacters = "abcdefghijklmnopqrstuxyvwzABCDEFGHIJKLMNOPQRSTUXYVWZ0123456789";
@@ -293,7 +293,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 *
 		 * @return int Whether the request is valid or not, the HTTP status code.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		protected function validateRequest() {
 			if ( !isset( $_SERVER['HTTP_X_MUUT_SIGNATURE'] ) ) {
@@ -315,7 +315,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 *
 		 * @return array An array of webhook events.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function getWebhookEventsStructure() {
 			return apply_filters( 'muut_webhook_events_structure', array(
@@ -379,7 +379,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @param $event
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function processPost( $request, $event ) {
 
@@ -407,7 +407,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @param $event
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function processReply( $request, $event ) {
 			$new_reply_args = array(
@@ -434,7 +434,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @param $event
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function processLikeUnlike( $request, $event ) {
 			$path = $request['path'];
@@ -523,7 +523,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @param $event
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function processRemove( $request, $event ) {
 			$path = $request['path'];
@@ -592,7 +592,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @param WP_Post $post The post.
 		 * @return string The filtered permalink.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function permalinkToForum( $permalink, $post ) {
 			if ( $post->post_type == Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME ) {

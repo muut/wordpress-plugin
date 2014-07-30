@@ -302,7 +302,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @param array $vars The current registered query vars.
 		 * @return array The filtered registered query vars.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function addQueryVars( $vars ) {
 			$vars[] = 'muut_action';
@@ -421,7 +421,7 @@ if ( !class_exists( 'Muut' ) ) {
 			if ( apply_filters( 'use_https_for_proxy', false ) ) {
 				$proxy_server = 'https://';
 			}
-			/** REMOVED S3 Bucket proxying support starting in version NEXT_RELEASE. Is not useful and can hinder SEO. */
+			/** REMOVED S3 Bucket proxying support starting in version 3.0.2. Is not useful and can hinder SEO. */
 			/*$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
 				? $this->getOption( 'custom_s3_bucket_name' )
 				: self::MUUTSERVERS . '/i';
@@ -625,7 +625,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @param string $argument The argument we are getting the proper embed attribute.
 		 * @return string The proper embed attribute.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function getMuutEmbedAttribute( $argument ) {
 			$embed_parameters = array(
@@ -651,7 +651,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @param array $args The arguments we are translating to a setting string.
 		 * @return string The settings string of attributes to place in embed tag.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function getEmbedAttributesString( $args = array() ) {
 			$settings = '';
@@ -767,7 +767,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function printHiddenMuutDiv() {
 			echo '<div id="muut_hidden_embed_div" style="display: none;"></div>';
@@ -942,7 +942,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @param string|array $option        The option name OR an array of option names.
 		 * @return bool True on success, false on failure.
 		 * @author Paul Hughes
-		 * @since  NEXT_RELEASE
+		 * @since  3.0.2
 		 */
 		public function deleteOption( $option ) {
 			if ( is_string( $option ) )
@@ -1165,7 +1165,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function runActivationFunctions() {
 			$just_activated = get_option( 'muut_plugin_just_activated', '' );
@@ -1186,7 +1186,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @param bool $echo Whether to echo the result or not.
 		 * @return void|string The anchor tag, or void if $echo is set to true.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function getUserFacelinkAvatar( $username, $display_name, $is_admin = false, $user_url = null, $avatar_url = null, $echo = false ) {
 			$href_statement = '';
@@ -1214,7 +1214,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 *
 		 * @return string the Uploads directory URL.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function getUploadsUrl() {
 			if ( class_exists( 'Muut_Files_Utility' ) ) {

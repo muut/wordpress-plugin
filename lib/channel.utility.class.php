@@ -19,7 +19,7 @@ if ( !class_exists( 'Muut_Channel_Utility' ) ) {
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
-	 * @since   NEXT_RELEASE
+	 * @since   3.0.2
 	 */
 	class Muut_Channel_Utility {
 
@@ -28,7 +28,7 @@ if ( !class_exists( 'Muut_Channel_Utility' ) ) {
 		 *
 		 * @return Muut_Channel_Utility (Except it can never be called).
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		private function __construct() {}
 
@@ -38,7 +38,7 @@ if ( !class_exists( 'Muut_Channel_Utility' ) ) {
 		 * @param string $path The channel path.
 		 * @return string The full index URI.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public static function getChannelIndexUri( $path ) {
 
@@ -57,7 +57,7 @@ if ( !class_exists( 'Muut_Channel_Utility' ) ) {
 		 * @param bool $echo Whether to echo or return the markup
 		 * @return string|void The embed code or void, if echoing.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public static function getChannelEmbedMarkup( $path, $args = array(), $echo = false ) {
 			$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';

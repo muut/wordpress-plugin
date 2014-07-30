@@ -356,7 +356,7 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		 * @param string $path The current channel path.
 		 * @return string The sanitized path.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public static function sanitizeMuutPath( $path ) {
 			if ( substr( $path, 0, 1 ) == '/' ) {

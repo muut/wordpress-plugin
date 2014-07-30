@@ -17,7 +17,7 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
-	 * @since   NEXT_RELEASE
+	 * @since   3.0.2
 	 */
 	class Muut_Widget_Channel_Embed extends WP_Widget {
 
@@ -26,7 +26,7 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		 *
 		 * @return Muut_Widget_Channel_Embed
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		function __construct() {
 			parent::__construct(
@@ -46,7 +46,7 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		protected function addActions() {
 			add_action( 'init', array( $this, 'maybeRequireMuutResources') );
@@ -57,7 +57,7 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		protected function addFilters() {
 
@@ -70,7 +70,7 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		 * @param array $instance The widget instance parameters.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function widget( $args, $instance ) {
 			// Make sure webhooks are active, or don't bother.
@@ -105,7 +105,7 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		 * @param array $instance The widget instance parameters.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function form( $instance ) {
 			include( muut()->getPluginPath() . 'views/widgets/admin-widget-channel-embed.php' );
@@ -118,7 +118,7 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		 * @param array $old_instance The previous/old arguments.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function update( $new_instance, $old_instance ) {
 			$instance = array();
@@ -140,7 +140,7 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function maybeRequireMuutResources() {
 			if ( is_active_widget( false, false, $this->id_base, true ) ) {

@@ -169,7 +169,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function initWebhooks() {
 			$class = 'Muut_Webhooks';
@@ -187,7 +187,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function initCustomPostTypes() {
 			$class= 'Muut_Custom_Post_Types';
@@ -310,7 +310,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function initFilesUtility() {
 			$class = 'Muut_Files_Utility';
@@ -325,7 +325,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function initChannelUtility() {
 			$class = 'Muut_Channel_Utility';
@@ -340,7 +340,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function initWidgetChannelEmbed() {
 			$class = 'Muut_Widget_Channel_Embed';
@@ -356,7 +356,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function initWidgetOnlineUsers() {
 			$class = 'Muut_Widget_Online_Users';
@@ -372,7 +372,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function initWidgetMyFeed() {
 			$class = 'Muut_Widget_My_Feed';
@@ -388,7 +388,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function initWidgetLatestComments() {
 			$class = 'Muut_Widget_Latest_Comments';
@@ -404,7 +404,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function initWidgetTrendingPosts() {
 			$class = 'Muut_Widget_Trending_Posts';

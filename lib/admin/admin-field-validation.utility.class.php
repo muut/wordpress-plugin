@@ -84,7 +84,7 @@ if ( !class_exists( 'Muut_Field_Validation' ) ) {
 		 * @param string $string $value The value that we are validating.
 		 * @return bool Whether the field is valid or not.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public static function validateHasNoWhitespace( $value ) {
 			if ( !is_string( $value ) ) {

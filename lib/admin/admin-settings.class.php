@@ -327,7 +327,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function maybeShowS3RemoveNotice() {
 			if ( muut()->getOption( 'removed_s3_support' ) ) {

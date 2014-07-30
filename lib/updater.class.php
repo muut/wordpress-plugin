@@ -183,7 +183,7 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 					delete_option( 'muut_comments_under_forums' );
 				break;
 
-				case 'NEXT_RELEASE':
+				case '3.0.2':
 					if ( !is_null( muut()->getOption( 'use_custom_s3_bucket' ) ) ) {
 						if ( muut()->getOption( 'use_custom_s3_bucket' ) ) {
 							muut()->setOption( 'removed_s3_support', '1' );

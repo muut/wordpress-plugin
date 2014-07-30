@@ -17,7 +17,7 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
-	 * @since   NEXT_RELEASE
+	 * @since   3.0.2
 	 */
 	class Muut_Widget_Online_Users extends WP_Widget {
 
@@ -26,7 +26,7 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 *
 		 * @return Muut_Widget_Online_Users
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		function __construct() {
 			parent::__construct(
@@ -46,7 +46,7 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		protected function addActions() {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueWidgetScripts' ), 12 );
@@ -58,7 +58,7 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		protected function addFilters() {
 
@@ -71,7 +71,7 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 * @param array $instance The widget instance parameters.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function widget( $args, $instance ) {
 			// Do not show widget on the main forum page.
@@ -104,7 +104,7 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 * @param array $instance The widget instance parameters.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function form( $instance ) {
 			include( muut()->getPluginPath() . 'views/widgets/admin-widget-online-users.php' );
@@ -117,7 +117,7 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 * @param array $old_instance The previous/old arguments.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function update( $new_instance, $old_instance ) {
 			$instance = array();
@@ -134,7 +134,7 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function enqueueWidgetScripts() {
 			if ( is_active_widget( false, false, $this->id_base, true ) ) {
@@ -153,7 +153,7 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function maybeRequireMuutResources() {
 			if ( is_active_widget( false, false, $this->id_base, true ) ) {

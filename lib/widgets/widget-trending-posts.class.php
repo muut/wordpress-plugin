@@ -17,7 +17,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
-	 * @since   NEXT_RELEASE
+	 * @since   3.0.2
 	 */
 	class Muut_Widget_Trending_Posts extends WP_Widget {
 
@@ -35,7 +35,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 *
 		 * @return Muut_Widget_Trending_Posts
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		function __construct() {
 			parent::__construct(
@@ -55,7 +55,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function addActions() {
 			// Update the transient data when a post is liked, unliked, or replied to.
@@ -74,7 +74,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function addFilters() {
 
@@ -87,7 +87,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 * @param array $instance The widget instance parameters.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function widget( $args, $instance ) {
 			// Make sure webhooks are active, or don't bother.
@@ -141,7 +141,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 * @param array $instance The widget instance parameters.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function form( $instance ) {
 			if ( muut_is_webhooks_active() ) {
@@ -158,7 +158,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 * @param array $old_instance The previous/old arguments.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function update( $new_instance, $old_instance ) {
 			$instance = array();
@@ -197,7 +197,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function printWidgetJs() {
 			if ( muut_is_webhooks_active() && !is_admin() && get_post() && muut_get_forum_page_id() == get_the_ID() && current_user_can( 'edit_theme_options' ) ) {
@@ -217,7 +217,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function ajaxStoreChannelList() {
 			if ( check_ajax_referer( 'muut_stored_channels_request', 'security' ) && isset( $_POST['channel_list'] ) ) {
@@ -235,7 +235,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 * @param array $channel_list An array of channels of the form ['path'] => 'Channel Name'.
 		 * @return bool Whether it was stored successfully or not.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		protected function storeChannelList( $channel_list ) {
 			if ( is_array( $channel_list ) ) {
@@ -251,7 +251,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 * @param string $event The event that was received via the webhook (in this case, should always be 'reply').
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function updateWidgetData( $request, $event ) {
 
@@ -299,7 +299,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function enqueueWidgetScripts() {
 			if ( muut_is_webhooks_active() ) {
@@ -312,7 +312,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 *
 		 * @return array The array of currently stored "Channels".
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function getCurrentChannelsOption() {
 			return get_option( self::CURRENT_CHANNELS_OPTION_NAME, array() );
@@ -323,7 +323,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 *
 		 * @return array The transient array with the trending posts data.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function getTrendingPostsData() {
 			if ( false === ( $trending_posts_data = get_transient( self::TRENDING_POSTS_TRANSIENT_NAME ) ) ) {
@@ -339,7 +339,7 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 * @param string $orderby The current orderby statement.
 		 * @return string The filtered orderby statement.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function trendingPostsOrderby( $orderby ) {
 			global $wpdb;

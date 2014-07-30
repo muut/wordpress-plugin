@@ -17,7 +17,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 	 *
 	 * @package Muut
 	 * @author  Paul Hughes
-	 * @since   NEXT_RELEASE
+	 * @since   3.0.2
 	 */
 	class Muut_Widget_Latest_Comments extends WP_Widget {
 
@@ -45,7 +45,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 *
 		 * @return Muut_Widget_Online_Users
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		function __construct() {
 			parent::__construct(
@@ -65,7 +65,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function addActions() {
 			// Update the transient data when a reply is made.
@@ -83,7 +83,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function addFilters() {
 
@@ -96,7 +96,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @param array $instance The widget instance parameters.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function widget( $args, $instance ) {
 			// Make sure webhooks are active, or don't bother.
@@ -135,7 +135,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @param array $instance The widget instance parameters.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function form( $instance ) {
 			if ( muut_is_webhooks_active() ) {
@@ -152,7 +152,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @param array $old_instance The previous/old arguments.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function update( $new_instance, $old_instance ) {
 			$instance = array();
@@ -180,7 +180,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @param string $event The event that was received via the webhook (in this case, should always be 'reply').
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function updateWidgetData( $request, $event ) {
 
@@ -222,7 +222,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @param int $number_of_posts The number of posts to set in the transient and JSON file.
 		 * @return array The new data array.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function refreshCache( $number_of_posts = 10 ) {
 			$number_of_posts = is_numeric( $number_of_posts ) ? $number_of_posts : 10;
@@ -275,7 +275,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @param array $data_array The data array to store in the transient.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		protected function updateTransient( $data_array ) {
 			if ( !is_array( $data_array ) ) {
@@ -292,7 +292,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @param array $data_array The data array to store in the file.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		protected function updateJsonFile( $data_array ) {
 			if ( !is_array( $data_array ) ) {
@@ -312,7 +312,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 *
 		 * @return array The transient array with the latest comments data.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function getLatestCommentsData() {
 			if ( false === ( $latest_comments_data = get_transient( self::LATEST_COMMENTS_TRANSIENT_NAME ) ) ) {
@@ -327,7 +327,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function printWidgetJs() {
 			global $post;
@@ -354,7 +354,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function enqueueWidgetScripts() {
 			if ( is_active_widget( false, false, $this->id_base, true ) ) {
@@ -367,7 +367,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2
 		 */
 		public function maybeRequireMuutResources() {
 			if ( is_active_widget( false, false, $this->id_base, true ) ) {
