@@ -536,7 +536,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 				$comment_query = new WP_Comment_Query;
 				$comments = $comment_query->query( $query_args );
 
-				if ( is_a( $comments[0], 'WP_Comment' ) ) {
+				if ( isset( $comments[0] ) ) {
 					$likes = (int) get_comment_meta( $comments[0]->comment_ID, 'muut_likes', true );
 					$post_likes = (int) get_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', true );
 
@@ -563,15 +563,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 				$posts_query = new WP_Query;
 				$posts = $posts_query->query( $query_args );
 
-				if ( is_a( $posts[0], 'WP_Post' ) ) {
-					$comment_query_args = array(
-						'post_ID' => $posts[0]->ID,
-					);
-					$comments = get_comments( $comment_query_args );
-					foreach( $comments as $comment ) {
-						wp_delete_comment( $comment->comment_ID, true );
-					}
-
+				if ( isset( $posts[0] ) ) {
 					wp_delete_post( $posts[0]->ID, true );
 				}
 			}
