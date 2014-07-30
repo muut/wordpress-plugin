@@ -102,7 +102,7 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 */
 		public function enqueueDeveloperScripts() {
 			if ( muut()->needsMuutResources() ) {
-				wp_enqueue_script( 'muut-sso', muut()->getPluginUrl() . 'resources/muut-sso.js', array( 'jquery', 'muut' ), '1.0', true );
+				wp_enqueue_script( 'muut-sso', muut()->getPluginUrl() . 'resources/muut-sso.js', array( 'jquery', 'muut' ), Muut::VERSION, true );
 			}
 		}
 

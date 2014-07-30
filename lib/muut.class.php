@@ -515,13 +515,14 @@ if ( !class_exists( 'Muut' ) ) {
 		 */
 		public function registerScriptsAndStyles() {
 			$muut_version = $this->getMuutVersion();
+			$plugin_version = self::VERSION;
 			wp_register_script( 'muut', '//cdn.' . self::MUUTSERVERS . '/' . $muut_version . '/moot.' . $this->getOption( 'language', 'en' ) . '.min.js', array( 'jquery' ), $muut_version, true );
-			wp_register_script( 'muut-admin-functions', $this->pluginUrl . 'resources/admin-functions.js', array( 'jquery' ), '1.0', true );
+			wp_register_script( 'muut-admin-functions', $this->pluginUrl . 'resources/admin-functions.js', array( 'jquery' ), $plugin_version, true );
 			wp_register_script( 'x-editable', $this->pluginUrl . 'vendor/jqueryui-editable/js/jqueryui-editable.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-tooltip', 'jquery-ui-button' ), '1.5.1', true);
-			wp_register_script( 'muut-admin-post-edit', $this->pluginUrl . 'resources/admin-post-edit.js', array( 'jquery', 'jquery-ui-dialog' ), '1.0', true );
+			wp_register_script( 'muut-admin-post-edit', $this->pluginUrl . 'resources/admin-post-edit.js', array( 'jquery', 'jquery-ui-dialog' ), $plugin_version, true );
 
-			wp_register_script( 'muut-frontend-functions', $this->pluginUrl . 'resources/frontend-functions.js', array( 'jquery', 'muut' ), '1.0', true );
-			wp_register_script( 'muut-widgets-initialize', $this->pluginUrl . 'resources/muut-widgets-initialize.js', array( 'jquery', 'muut-frontend-functions' ), '1.0', true );
+			wp_register_script( 'muut-frontend-functions', $this->pluginUrl . 'resources/frontend-functions.js', array( 'jquery', 'muut' ), $plugin_version, true );
+			wp_register_script( 'muut-widgets-initialize', $this->pluginUrl . 'resources/muut-widgets-initialize.js', array( 'jquery', 'muut-frontend-functions' ), $plugin_version, true );
 
 			wp_register_style( 'muut-admin-style', $this->pluginUrl . 'resources/admin-style.css' );
 			wp_register_style( 'muut-frontend-style', $this->pluginUrl . 'resources/frontend-style.css' );
