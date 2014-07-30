@@ -122,13 +122,22 @@ jQuery(document).ready( function($) {
     $(this).select();
   })
 
-  // Resize thickbox for the settings webhooks integration box.
-  $('.muut_settings_finish_webhook_setup').on('click', function() {
+  var muut_open_webhooks_setup_thickbox = function() {
     setTimeout(function() {
       $('#TB_window').css('width', '750px').css('margin-left', '-375px').css('height', 'auto');
       $('#TB_ajaxContent').css('width', 'auto');
     }, 1);
+  };
+
+  // Resize thickbox for the settings webhooks integration box.
+  $('.muut_settings_finish_webhook_setup').on('click', function() {
+    muut_open_webhooks_setup_thickbox();
   });
+
+  if ( typeof open_webhooks_setup_window != 'undefined' && open_webhooks_setup_window == true ) {
+    $('.muut_settings_finish_webhook_setup').click();
+    muut_open_webhooks_setup_thickbox();
+  }
 
   // Borrowed and modified from realmacsoftware author Ben. http://realmacsoftware.com/blog/author:ben
   // For retina image support, just add the class "retinaise" to the img tag.

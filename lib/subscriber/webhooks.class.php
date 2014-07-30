@@ -231,13 +231,28 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 					$this->secret = $this->generateSecret();
 				}
 				add_filter( 'muut_settings_validated', array( $this, 'saveSecret' ) );
-				$notice_message = sprintf( __( 'Webhooks have been activated. %sClick here%s to view the instructions for completing your setup.', 'muut' ), '<a class="thickbox muut_settings_finish_webhook_setup" href="#TB_inline?width=200&height=700&inlineId=muut_settings_webhooks_setup_instructions">', '</a>' );
-				$notice_message .= '<br />' . __( 'Note that webhooks functionality will only work for posts made after activation.', 'muut' );
+				$notice_message =  __( 'Note that webhooks functionality will only work for posts made after activation.', 'muut' );
 				muut()->queueAdminNotice( 'updated', $notice_message );
+				add_action( 'wp_print_scripts', array( $this, 'printSavedJs' ) );
 			}
 
 			return $value;
 		}
+
+		/**
+		 * Print the function to open the webhooks finish setup popup.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function printSavedJs() {
+			echo '<script type="text/javascript">';
+			echo 'var open_webhooks_setup_window = true;';
+			echo '</script>';
+		}
+
+
 
 		/**
 		 * Adds the current instance's shared secret to the settings being saved.

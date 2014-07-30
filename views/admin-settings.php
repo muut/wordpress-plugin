@@ -146,7 +146,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 		<tr>
 			<th class="th-full" colspan="2">
 				<input name="setting[use_webhooks]" type="checkbox" id="muut_use_webhooks" value="1" <?php checked( '1', $display_values['use_webhooks'] ); ?> />
-				<label for="muut_use_webhooks"><?php _e( 'Enable Webhooks', 'muut' ); ?></label>
+				<label for="muut_use_webhooks"><?php _e( 'Configure webhooks for latest comments or trending topics', 'muut' ); ?></label>
 				<?php if ( $current_values['webhooks_secret'] && $current_values['use_webhooks'] ) { ?>
 					<a class="thickbox muut_eol_link muut_settings_finish_webhook_setup" href="#TB_inline?width=200&height=700&inlineId=muut_settings_webhooks_setup_instructions">
 						<?php _e( 'Finish Setup', 'muut' ); ?>
