@@ -27,5 +27,7 @@ get_header();
 		</div><!-- #primary -->
 	</div><!-- #main-content -->
 <?php
-get_sidebar();
+if ( apply_filters( 'muut_forum_template_use_primary_theme_sidebar', true ) ) {
+	get_sidebar();
+}
 get_footer();
