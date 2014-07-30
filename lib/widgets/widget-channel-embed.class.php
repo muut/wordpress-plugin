@@ -74,7 +74,7 @@ if ( !class_exists( 'Muut_Widget_Channel_Embed' ) ) {
 		 */
 		public function widget( $args, $instance ) {
 			// Make sure webhooks are active, or don't bother.
-			if ( apply_filters( 'muut_hide_channel_embed_display', false ) ) {
+			if ( ( Muut_Post_Utility::getForumPageId() == get_the_ID() && !apply_filters( 'muut_force_online_widget_display', false ) ) || apply_filters( 'muut_hide_channel_embed_display', false ) ) {
 				return;
 			}
 			// Default to always NOT showing online users. Can be modified with filter.
