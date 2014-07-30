@@ -117,13 +117,13 @@ jQuery(document).ready( function($) {
     e.preventDefault();
   });
 
-  $('input.muut_webhooks_secret').on('focus', function(e) {
+  $('input.muut_autoselect').on('focus', function(e) {
     $(this).blur();
     $(this).select();
   })
 
   // Resize thickbox for the settings webhooks integration box.
-  $('#muut_settings_finish_webhook_setup').on('click', function() {
+  $('.muut_settings_finish_webhook_setup').on('click', function() {
     setTimeout(function() {
       $('#TB_window').css('width', '750px').css('margin-left', '-375px').css('height', 'auto');
       $('#TB_ajaxContent').css('width', 'auto');

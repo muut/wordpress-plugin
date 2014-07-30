@@ -45,13 +45,24 @@ span.admin-subheader-to-right {
     max-width: 650px;
 }
 
+.muut_eol_link {
+    margin-left: 20px;
+}
+
+div.center_screenshot {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .muut-unemphasized {
     color: #999;
     font-style: italic;
 }
 
-input.muut_webhooks_secret {
+input.muut_autoselect {
     border: none;
+    text-align: center;
     background: transparent;
     font-weight: bold;
     -webkit-box-shadow: none;

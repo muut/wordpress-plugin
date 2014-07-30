@@ -5,6 +5,8 @@
  * @package   Muut
  * @copyright 2014 Muut Inc
  */
+add_thickbox();
+
 $languages = muut()->getLanguages();
 $current_language = muut()->getOption( 'language', 'en' );
 $error_queue = Muut_Admin_Settings::instance()->getErrorQueue();
@@ -28,7 +30,6 @@ $current_values = array(
 
 $display_values = wp_parse_args( $error_values, $current_values );
 ?>
-
 <div class="wrap">
 	<h2><?php _e( 'Muut', 'muut' ); ?> <span class="admin-subheader-to-right"><?php _e( 'Forums and commenting re-imagined.', 'muut' ); ?></span></h2>
 	<form method="post" id="muut_settings_form">
@@ -130,24 +131,44 @@ $display_values = wp_parse_args( $error_values, $current_values );
 			</tr>
 			</tbody>
 		</table>
-	<h3 class="title"><?php _e( 'Webhooks', 'muut' ); ?></h3>
+	<h3 class="title"><?php _e( 'Widgets', 'muut' ); ?></h3>
 	<?php $sso_field_class = $display_values['subscription_use_sso'] ? '' : 'hidden'; ?>
-	<p class="muut_requires_input_block" data-muut_requires="muut_use_webhooks" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Muut Developer%s to use webhooks.%s This will add support for advanced features, such as widgets like %sLatest Comments%s and %sPopular Posts%s.', 'muut' ), '<a class="muut_upgrade_to_developer_link" href="#">', '</a>', '<br />', '<b>', '</b>', '<b>', '</b>'); ?></p>
+	<p><?php _e( 'The plugin comes packed with the following real-time widgets that you can place on any page.', 'muut' ); ?></p>
+	<ul>
+		<li><?php printf( __( '%sMy Feed%s - List of the current user\'s most recent posts.', 'muut' ), '<b>', '</b>' ); ?></li>
+		<li><?php printf( __( '%sWho\'s Online%s - A real-time list of currently logged-in users.', 'muut' ), '<b>', '</b>' ); ?></li>
+		<li><?php printf( __( '%sDiscussion Channel%s - Embed a single discussion channel in to your website\'s sidebar.', 'muut' ), '<b>', '</b>' ); ?></li>
+		<li><?php printf( __( '%sLatest Comments%s - The most recent comments on your site, updating in real-time.', 'muut' ), '<b>', '</b>' ); ?> <span class="muut-unemphasized"><?php _e( 'Uses webhooks', 'muut' ); ?></span></li>
+		<li><?php printf( __( '%sTrending Topics%s - The most popular discussion, updating in real-time.', 'muut' ), '<b>', '</b>' ); ?> <span class="muut-unemphasized"><?php _e( 'Uses webhooks', 'muut' ); ?></span></li>
+	</ul>
 	<table class="form-table">
 		<tbody>
 		<tr>
 			<th class="th-full" colspan="2">
 				<input name="setting[use_webhooks]" type="checkbox" id="muut_use_webhooks" value="1" <?php checked( '1', $display_values['use_webhooks'] ); ?> />
-				<label for="muut_use_webhooks"><?php _e( 'Enable', 'muut' ); ?></label>
-				<p class="muut_requires_input_block" data-muut_requires="muut_use_webhooks" data-muut_require_func="is(':checked')"><?php printf( __( 'Enter the url %s/muut-webhooks/%s in your Muut forum webhooks settings, with all events selected.', 'muut' ), '<b>' . site_url(), '</b>' ); ?></p>
-				<?php if ( $current_values['webhooks_secret'] && $current_values['use_webhooks'] ) { ?><p class="muut_requires_input_block" data-muut_requires="muut_use_webhooks" data-muut_require_func="is(':checked')"><?php printf( __( 'Enter the the following secret as the webhooks secret in the Muut settings: %s', 'muut' ), '<input type="text" class="muut_webhooks_secret" value="' . $current_values['webhooks_secret'] . '" readonly />' ); ?></p><?php } ?>
+				<label for="muut_use_webhooks"><?php _e( 'Enable Webhooks', 'muut' ); ?></label>
+				<?php if ( $current_values['webhooks_secret'] && $current_values['use_webhooks'] ) { ?>
+					<a class="thickbox muut_eol_link muut_settings_finish_webhook_setup" href="#TB_inline?width=200&height=700&inlineId=muut_settings_webhooks_setup_instructions">
+						<?php _e( 'Finish Setup', 'muut' ); ?>
+					</a>
+				<?php } ?>
 			</th>
 		</tr>
 		</tbody>
 	</table>
-		<p class="submit">
-			<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
-		</p>
-		<?php endif; ?>
+	<p class="submit">
+		<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
+	</p>
+<?php endif; ?>
 	</form>
+	<div id="muut_settings_webhooks_setup_instructions" style="display: none">
+		<div class="center_screenshot">
+			<h3><?php _e('To complete your webhooks setup...', 'muut' ); ?></h3>
+			<p><?php _e('From your main forum page, open the Muut settings, select the integrations tab, and create a new integration as below using the following URL and secret:', 'muut' ); ?></p>
+			<p><input type="text" class="muut_autoselect"  value="<?php echo site_url() . '/' . Muut_Webhooks::instance()->getEndpointSlug(); ?>" style="width: 500px;" readonly /><br />
+			<input type="text" class="muut_autoselect" value="<?php echo $current_values['webhooks_secret']; ?>" readonly />
+			</p>
+			<img class="retinaise" style="height: 480px" src="<?php echo muut()->getPluginUrl() . '/resources/images/webhooks-instructions.png'; ?>">
+		</div>
+	</div>
 </div>
