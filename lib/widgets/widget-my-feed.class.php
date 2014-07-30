@@ -74,7 +74,7 @@ if ( !class_exists( 'Muut_Widget_My_Feed' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function widget( $args, $instance ) {
-			if ( !is_home() && ( Muut_Post_Utility::isMuutPost( get_the_ID() ) || Muut_Post_Utility::isMuutCommentingPost( get_the_ID() ) ) ) {
+			if ( ( Muut_Post_Utility::getForumPageId() == get_the_ID() && !apply_filters( 'muut_force_my_feed_widget_display', false ) ) || apply_filters( 'muut_hide_my_feed_widget_display', false ) ) {
 				return;
 			}
 

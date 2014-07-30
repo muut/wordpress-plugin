@@ -75,7 +75,7 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 */
 		public function widget( $args, $instance ) {
 			// Do not show widget on the main forum page.
-			if ( Muut_Post_Utility::getForumPageId() == get_the_ID() && !apply_filters( 'muut_force_online_widget_display', false ) ) {
+			if ( ( Muut_Post_Utility::getForumPageId() == get_the_ID() && !apply_filters( 'muut_force_online_widget_display', false ) ) || apply_filters( 'muut_hide_online_widget_display', false ) ) {
 				return;
 			}
 

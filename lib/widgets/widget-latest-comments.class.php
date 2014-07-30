@@ -100,7 +100,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 */
 		public function widget( $args, $instance ) {
 			// Make sure webhooks are active, or don't bother.
-			if ( !muut_is_webhooks_active() || self::$has_loaded ) {
+			if ( !muut_is_webhooks_active() || self::$has_loaded || apply_filters( 'muut_hide_latest_comments_widget_display', false ) ) {
 				return;
 			}
 			// Make sure the Muut resources get loaded (only stuff in the footer will work, as this happens
