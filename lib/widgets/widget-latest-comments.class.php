@@ -231,6 +231,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 
 			// Get the posts with the most recent Muut Reply Update Times.
 			$query_args = apply_filters( 'muut_latest_posts_transient_args', array(
+				'post_type' => 'any',
 				'orderby' => 'meta_value_num',
 				'order' => 'DESC',
 				'meta_key' => self::REPLY_UPDATE_TIME_NAME,
