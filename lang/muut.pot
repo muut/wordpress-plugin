@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Muut\n"
-"POT-Creation-Date: 2014-07-30 12:54-0500\n"
-"PO-Revision-Date: 2014-07-30 12:54-0500\n"
+"POT-Creation-Date: 2014-07-30 17:38-0500\n"
+"PO-Revision-Date: 2014-07-30 17:39-0500\n"
 "Last-Translator: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language-Team: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language: en_US\n"
@@ -266,13 +266,6 @@ msgid ""
 msgstr ""
 
 #: lib/subscriber/webhooks.class.php:234
-#, php-format
-msgid ""
-"Webhooks have been activated. %sClick here%s to view the instructions for "
-"completing your setup."
-msgstr ""
-
-#: lib/subscriber/webhooks.class.php:235
 msgid ""
 "Note that webhooks functionality will only work for posts made after "
 "activation."
@@ -453,7 +446,7 @@ msgid ""
 msgstr ""
 
 #: views/admin-settings.php:149
-msgid "Enable Webhooks"
+msgid "Configure webhooks for latest comments or trending topics"
 msgstr ""
 
 #: views/admin-settings.php:152
