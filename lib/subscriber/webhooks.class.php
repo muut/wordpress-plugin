@@ -89,6 +89,8 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			add_action( 'muut_webhook_request_like', array( $this, 'processLikeUnlike' ), 10, 2 );
 			add_action( 'muut_webhook_request_unlike', array( $this, 'processLikeUnlike' ), 10, 2 );
 			add_action( 'muut_webhook_request_remove', array( $this, 'processRemove' ), 10, 2 );
+			add_action( 'muut_webhook_request_spam', array( $this, 'processSpamUnspam' ), 10, 2 );
+			add_action( 'muut_webhook_request_unspam', array( $this, 'processSpamUnspam' ), 10, 2 );
 		}
 
 		/**
@@ -565,6 +567,99 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 
 				if ( isset( $posts[0] ) ) {
 					wp_delete_post( $posts[0]->ID, true );
+				}
+			}
+		}
+
+		/**
+		 * Process the 'spam' Muut event.
+		 *
+		 * @param $request
+		 * @param $event
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function processSpamUnspam( $request, $event ) {
+			$path = $request['path'];
+
+			$split_path = explode( '#', $path );
+			$split_final = explode( '/', $split_path[1] );
+			if ( count( $split_final ) > 1 ) {
+				// The path leads to an individual reply.
+				$comment_base = $split_path[0] . '#' . $split_final[0];
+				$query_args = array(
+					'meta_query' => array(
+						'relation' => 'AND',
+						array(
+							'key' => 'muut_path',
+							'value' => $path,
+						),
+						array(
+							'key' => 'muut_key',
+							'value' => $split_final[1],
+						),
+					),
+					'number' => 1,
+				);
+
+				// Get the comment data.
+				$comment_query = new WP_Comment_Query;
+				$comments = $comment_query->query( $query_args );
+
+				if ( isset( $comments[0] ) ) {
+					if ( $event == 'spam' ) {
+						$comment_array = array(
+							'comment_ID' => $comments[0]->comment_ID,
+							'comment_approved' => Muut_Custom_Post_Types::MUUT_SPAM_POST_STATUS,
+						);
+						$likes = (int) get_comment_meta( $comments[0]->comment_ID, 'muut_likes', true );
+						$post_likes = (int) get_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', true );
+						$post_likes = $post_likes - $likes;
+						update_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', $post_likes );
+					} elseif ( $event == 'unspam' ) {
+						$comment_array = array(
+							'comment_ID' => $comments[0]->comment_ID,
+							'comment_approved' => 1,
+						);
+						$likes = (int) get_comment_meta( $comments[0]->comment_ID, 'muut_likes', true );
+						$post_likes = (int) get_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', true );
+						$post_likes = $post_likes + $likes;
+						update_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', $post_likes );
+					}
+				}
+			} else {
+				// The path leads to a top-level thread.
+				$query_args = array(
+					'post_type' => Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME,
+					'post_status' => 'any',
+					'meta_query' => array(
+						array(
+							'key' => 'muut_path',
+							'value' => $path,
+						),
+					),
+					'posts_per_page' => 1,
+				);
+
+				// Get the post data.
+				$posts_query = new WP_Query;
+				$posts = $posts_query->query( $query_args );
+
+				if ( isset( $posts[0] ) ) {
+					if ( $event == 'spam' ) {
+						$post_array = array(
+							'ID' => $posts[0]->ID,
+							'post_status' => Muut_Custom_Post_Types::MUUT_SPAM_POST_STATUS,
+						);
+						wp_update_post( $post_array );
+					} elseif ( $event == 'unspam' ) {
+						$post_array = array(
+							'ID' => $posts[0]->ID,
+							'post_status' => Muut_Custom_Post_Types::MUUT_PUBLIC_POST_STATUS,
+						);
+						wp_update_post( $post_array );
+					}
 				}
 			}
 		}
