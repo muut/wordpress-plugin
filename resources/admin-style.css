@@ -45,6 +45,32 @@ span.admin-subheader-to-right {
     max-width: 650px;
 }
 
+.muut_eol_link {
+    margin-left: 20px;
+}
+
+div.center_screenshot {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.muut-unemphasized {
+    color: #999;
+    font-style: italic;
+}
+
+input.muut_autoselect {
+    border: none;
+    text-align: center;
+    background: transparent;
+    font-weight: bold;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    outline: none;
+    padding: 0;
+}
+
 span.right-justify-float {
     float:right;
     font-weight: normal;
@@ -149,4 +175,8 @@ span.description {
 #muut_s3_requirement_paragraph {
     visibility: hidden;
     position: absolute;
+}
+
+.widget .muut_widget_error {
+    line-height: 1.7em;
 }

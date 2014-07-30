@@ -48,7 +48,7 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public static function setChannelPageRemotePath( $page_id, $path = '' ) {
+		public static function setChannelRemotePathForPage( $page_id, $path = '' ) {
 			if ( !is_numeric( $page_id ) || !is_string( $path ) ) {
 				return false;
 			}
@@ -155,7 +155,7 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public static function getChannelRemotePath( $page_id, $no_suffix = false ) {
+		public static function getChannelRemotePathForPage( $page_id, $no_suffix = false ) {
 			if( !is_numeric( $page_id ) ) {
 				return false;
 			}
@@ -175,16 +175,16 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0.1
 		 */
-		public static function getChannelIndexUri( $page_id ) {
+		public static function getChannelIndexUriForPage( $page_id ) {
 			if( !is_numeric( $page_id ) ) {
 				return false;
 			}
 
-			$base_uri = muut()->getForumIndexUri();
+			$path = self::getChannelRemotePathForPage( $page_id );
 
-			$uri = $base_uri . self::getChannelRemotePath( $page_id );
+			$uri = Muut_Channel_Utility::getChannelIndexUri( $path );
 
-			return apply_filters( 'muut_channel_index_uri', $uri, $page_id );
+			return apply_filters( 'muut_channel_page_index_uri', $uri, $page_id );
 		}
 
 		/**
@@ -199,15 +199,14 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 			$post = get_post( $post_id );
 			$comment_count = get_comments( array( 'post_id' => $post_id, 'count' => true ) );
 			$latest_update_array = muut_get_option('update_timestamps', array() );
-			$latest_update_timestamp = array_pop( $latest_update_array );
-			$latest_update_timestamp = $latest_update_timestamp ? $latest_update_timestamp : '0';
+			$activation_timestamp = muut()->getOption( 'activation_timestamp' );
 			if ( muut()->getOption( 'replace_comments' )
 				&& ( get_post_meta( $post_id, 'muut_last_active_tab', true ) == 'commenting-tab'
 					|| ( !get_post_meta( $post_id, 'muut_last_active_tab', true )
 						&& ( ( ( $comment_count == 0
 							&& $post->post_status == 'auto-draft' ) )
 							|| muut()->getOption( 'override_all_comments' )
-						|| ( get_post_modified_time( 'U', false, $post_id ) < $latest_update_timestamp
+						|| ( get_post_modified_time( 'U', false, $post_id ) < $activation_timestamp
 							&& !has_shortcode( $post->post_content, 'muut' ) && !has_shortcode( $post->post_content, 'moot' )
 							&& $comment_count == 0 ) ) )
 				&& get_post( $post_id )->comment_status == 'open' )
@@ -217,7 +216,7 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 			} else {
 				// For old posts, ones that existed before upgrade, lets set the comment status to closed
 				// if they have an old shortcode, so that WP comments don't show up either.
-				if ( get_post_modified_time( 'U', false, $post_id ) < $latest_update_timestamp
+				if ( get_post_modified_time( 'U', false, $post_id ) < $activation_timestamp
 					&& $post->comment_status == 'open'
 					&& ( has_shortcode( $post->post_content, 'muut' )
 					|| has_shortcode( $post->post_content, 'moot' ) ) ) {
@@ -302,25 +301,22 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 			} else {
 				return;
 			}
-			if ( isset( $post_options['hide_online'] ) && $post_options['hide_online'] == true ) {
-				$settings .= 'data-show_online="false" ';
-			} else {
-				$settings .= 'data-show_online="true" ';
+			if ( isset( $post_options['hide_online'] ) ) {
+				$args['show-online'] = !$post_options['hide_online'] ? 'true' : 'false';
 			}
-			if ( isset( $post_options['disable_uploads'] ) && $post_options['disable_uploads'] == true ) {
-				$settings .= 'data-upload="false" ';
-			} else {
-				$settings .= 'data-upload="true" ';
+			if ( isset( $post_options['disable_uploads'] ) ) {
+				$args['allow-uploads'] = !$post_options['disable_uploads'] ? 'true' : 'false';
 			}
 
-			$settings .= 'title="' . get_the_title( $page_id ) . '" ';
-			$settings .= 'data-channel="' . get_the_title( $page_id ) . '" ';
+			$args['title'] = get_the_title( $page_id );
+			$args['channel'] = get_the_title( $page_id );
+
+			$settings = muut()->getEmbedAttributesString( $args );
 
 			if ( $type_of_embed == 'channel' ) {
-				$path = self::getChannelRemotePath( $page_id );
-				$id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' : '';
-				$embed = '<a ' . $id_attr . ' class="' . muut()->getWrapperCssClass() . '" href="' . muut()->getContentPathPrefix() . 'i/' . muut()->getForumName() . '/' . $path . '" ' . $settings . '>' . __( 'Comments', 'muut' ) . '</a>';
-				$embed = apply_filters( 'muut_channel_embed_content', $embed, $page_id );
+				$path = self::getChannelRemotePathForPage( $page_id );
+
+				$embed = Muut_Channel_Utility::getChannelEmbedMarkup( $path, $args );
 			} elseif ( $type_of_embed == 'forum' ) {
 				ob_start();
 					include ( muut()->getPluginPath() . 'views/blocks/forum-page-embed.php' );
@@ -352,6 +348,25 @@ if ( !class_exists( 'Muut_Post_Utility' ) ) {
 			} else {
 				return $forum_page_id;
 			}
+		}
+
+		/**
+		 * Sanitizes a Muut remote path for storage.
+		 *
+		 * @param string $path The current channel path.
+		 * @return string The sanitized path.
+		 * @author Paul Hughes
+		 * @since 3.0.2
+		 */
+		public static function sanitizeMuutPath( $path ) {
+			if ( substr( $path, 0, 1 ) == '/' ) {
+				$path = substr( $path, 1 );
+			}
+			if ( substr( $path, -1 ) == '/' ) {
+				$path = substr( $path, 0, -1 );
+			}
+			$path =  str_replace( '%3A', ':', implode('/', array_map('rawurlencode', explode( '/', $path ) ) ) );
+			return $path;
 		}
 	}
 }

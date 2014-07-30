@@ -5,6 +5,8 @@
  * @package   Muut
  * @copyright 2014 Muut Inc
  */
+add_thickbox();
+
 $languages = muut()->getLanguages();
 $current_language = muut()->getOption( 'language', 'en' );
 $error_queue = Muut_Admin_Settings::instance()->getErrorQueue();
@@ -22,12 +24,12 @@ $current_values = array(
 	'subscription_use_sso' => muut()->getOption( 'subscription_use_sso', '0' ),
 	'subscription_api_key' => muut()->getOption( 'subscription_api_key', '' ),
 	'subscription_secret_key' => muut()->getOption( 'subscription_secret_key', '' ),
-
+	'use_webhooks' => muut()->getOption( 'use_webhooks', '' ),
+	'webhooks_secret' => muut()->getOption( 'webhooks_secret', '' ),
 );
 
 $display_values = wp_parse_args( $error_values, $current_values );
 ?>
-
 <div class="wrap">
 	<h2><?php _e( 'Muut', 'muut' ); ?> <span class="admin-subheader-to-right"><?php _e( 'Forums and commenting re-imagined.', 'muut' ); ?></span></h2>
 	<form method="post" id="muut_settings_form">
@@ -98,26 +100,6 @@ $display_values = wp_parse_args( $error_values, $current_values );
 				<label for="muut_enable_proxy_rewrites"><?php printf( __( 'Allow search engines to crawl discussions at %s', 'muut' ), '<strong>' . str_replace( array( 'http://', 'https://', ), '', get_site_url() ) . '</strong>.' ); ?></label>
 			</th>
 		</tr>
-		<tr class="<?php echo $custom_s3_field_class; ?> indented" data-muut_requires="muut_enable_proxy_rewrites" data-muut_require_func="is(':checked()')">
-			<th class="th-full" colspan="2">
-				<input name="setting[use_custom_s3_bucket]" type="checkbox" id="muut_use_custom_s3_bucket" value="1" <?php checked( '1', $display_values['use_custom_s3_bucket'] ); ?> />
-				<label for="muut_use_custom_s3_bucket"><?php printf( __( 'Serve from your own S3 Bucket (%sRequires Developer Subscription%s)', 'muut' ), '<a class="muut_upgrade_to_developer_link" href="#">', '</a>' ); ?></label>
-			</th>
-		</tr>
-		<tr class="<?php echo $custom_s3_field_class; ?> indented" data-muut_requires="muut_use_custom_s3_bucket" data-muut_require_func="is(':checked()')">
-			<th scope="row">
-				<label for="muut_custom_s3_bucket_name"><?php _e( 'S3 Bucket Name', 'muut' ); ?></label>
-			</th>
-			<td>
-				<input name="setting[custom_s3_bucket_name]" type="text" id="muut_custom_s3_bucket_name" placeholder="s3.bucket.name" value="<?php echo $display_values['custom_s3_bucket_name']; ?>" />
-			</td>
-		</tr>
-		<?php $show_s3_bucket_input = muut()->getOption( 'use_custom_s3_bucket' ) ? '' : 'hidden'; ?>
-		<tr class="<?php echo $show_s3_bucket_input; ?> indented show_slow" id="muut_s3_requirement_paragraph" data-muut_requires="muut_use_custom_s3_bucket" data-muut_require_func="is(':checked()')">
-			<td colspan="2">
-				<span class="description"><?php _e( 'The bucket name you enter must be the same S3 bucket registered for the forum in the Muut settings', 'muut' ); ?></span>
-			</td>
-		</tr>
 		</tbody>
 	</table>
 	<h3 class="title"><?php _e( 'Single Sign-on', 'muut' ); ?></h3>
@@ -149,9 +131,44 @@ $display_values = wp_parse_args( $error_values, $current_values );
 			</tr>
 			</tbody>
 		</table>
-		<p class="submit">
-			<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
-		</p>
-		<?php endif; ?>
+	<h3 class="title"><?php _e( 'Widgets', 'muut' ); ?></h3>
+	<?php $sso_field_class = $display_values['subscription_use_sso'] ? '' : 'hidden'; ?>
+	<p><?php _e( 'The plugin comes packed with the following real-time widgets that you can place on any page.', 'muut' ); ?></p>
+	<ul>
+		<li><?php printf( __( '%sMy Feed%s - List of the current user\'s most recent posts.', 'muut' ), '<b>', '</b>' ); ?></li>
+		<li><?php printf( __( '%sWho\'s Online%s - A real-time list of currently logged-in users.', 'muut' ), '<b>', '</b>' ); ?></li>
+		<li><?php printf( __( '%sDiscussion Channel%s - Embed a single discussion channel in to your website\'s sidebar.', 'muut' ), '<b>', '</b>' ); ?></li>
+		<li><?php printf( __( '%sLatest Comments%s - The most recent comments on your site, updating in real-time.', 'muut' ), '<b>', '</b>' ); ?> <span class="muut-unemphasized"><?php _e( 'Uses webhooks', 'muut' ); ?></span></li>
+		<li><?php printf( __( '%sTrending Topics%s - The most popular discussion, updating in real-time.', 'muut' ), '<b>', '</b>' ); ?> <span class="muut-unemphasized"><?php _e( 'Uses webhooks', 'muut' ); ?></span></li>
+	</ul>
+	<table class="form-table">
+		<tbody>
+		<tr>
+			<th class="th-full" colspan="2">
+				<input name="setting[use_webhooks]" type="checkbox" id="muut_use_webhooks" value="1" <?php checked( '1', $display_values['use_webhooks'] ); ?> />
+				<label for="muut_use_webhooks"><?php _e( 'Configure webhooks for latest comments or trending topics', 'muut' ); ?></label>
+				<?php if ( $current_values['webhooks_secret'] && $current_values['use_webhooks'] ) { ?>
+					<a class="thickbox muut_eol_link muut_settings_finish_webhook_setup" href="#TB_inline?width=200&height=700&inlineId=muut_settings_webhooks_setup_instructions">
+						<?php _e( 'Finish Setup', 'muut' ); ?>
+					</a>
+				<?php } ?>
+			</th>
+		</tr>
+		</tbody>
+	</table>
+	<p class="submit">
+		<input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes">
+	</p>
+<?php endif; ?>
 	</form>
+	<div id="muut_settings_webhooks_setup_instructions" style="display: none">
+		<div class="center_screenshot">
+			<h3><?php _e('To complete your webhooks setup...', 'muut' ); ?></h3>
+			<p><?php _e('From your main forum page, open the Muut settings, select the integrations tab, and create a new integration as below using the following URL and secret:', 'muut' ); ?></p>
+			<p><input type="text" class="muut_autoselect"  value="<?php echo site_url() . '/' . Muut_Webhooks::instance()->getEndpointSlug(); ?>" style="width: 500px;" readonly /><br />
+			<input type="text" class="muut_autoselect" value="<?php echo $current_values['webhooks_secret']; ?>" readonly />
+			</p>
+			<img class="retinaise" style="height: 480px" src="<?php echo muut()->getPluginUrl() . '/resources/images/webhooks-instructions.png'; ?>">
+		</div>
+	</div>
 </div>

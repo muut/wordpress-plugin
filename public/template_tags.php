@@ -31,6 +31,24 @@ function muut_get_forum_name() {
 }
 
 /**
+ * Gets a general set of option/setting for a given Muut page.
+ *
+ * @param int $post_id The page ID.
+ * @param string $option_name The option name.
+ * @param mixed $default The default if not found.
+ * @return mixed The option
+ * @author Paul Hughes
+ * @since 3.0.2
+ */
+function muut_get_page_general_option( $post_id, $option_name, $default = '' ) {
+	$return = $default;
+	if ( class_exists( 'Muut_Post_Utility' ) ) {
+		$return = Muut_Post_Utility::getPostOption( $post_id, $option_name, $default );
+	}
+	return $return;
+}
+
+/**
  * Checks if a post uses Muut in some way (is a channel embed, uses commenting, etc.
  *
  * @param int $post_id The ID of the post we are checking (defaults to current post).
@@ -102,7 +120,7 @@ function muut_get_channel_remote_path( $page_id = null ) {
 		$page_id = get_the_ID();
 	}
 
-	return Muut_Post_Utility::getChannelRemotePath( $page_id );
+	return Muut_Post_Utility::getChannelRemotePathForPage( $page_id );
 }
 
 /**
@@ -177,5 +195,39 @@ function muut_comments_override_anchor( $post_id = null, $echo = true ) {
 		return Muut_Comment_Overrides::instance()->commentsOverrideAnchor( $post_id, $echo );
 	} else {
 		return false;
+	}
+}
+
+/**
+ * Check if webhooks are currently activated.
+ *
+ * @return bool Whether webhooks are active or not.
+ * @author Paul Hughes
+ * @since 3.0.2
+ */
+function muut_is_webhooks_active() {
+	return Muut_Webhooks::instance()->isWebhooksActivated();
+}
+
+/**
+ * Gets the user facelink avatar. This function is pluggable.
+ *
+ * @param string $username The Muut username (sans opening '@' symbol).
+ * @param string $display_name The display name for the user.
+ * @param bool $is_admin Is the user an administrator?
+ * @param string $user_url The URL that the image should link to.
+ * @param string $avatar_url The URL of the user's avatar.
+ * @param bool $echo Whether to echo the result or not.
+ * @return void|string The anchor tag, or void if $echo is set to true.
+ * @author Paul Hughes
+ * @since 3.0.2
+ */
+if ( !function_exists( 'muut_get_user_facelink_avatar' ) ) {
+	function muut_get_user_facelink_avatar( $username, $display_name, $is_admin = false, $user_url = null, $avatar_url = null, $echo = false ) {
+		if ( $echo ) {
+			muut()->getUserFacelinkAvatar( $username, $display_name, $is_admin, $user_url, $avatar_url, true );
+		} else {
+			return muut()->getUserFacelinkAvatar( $username, $display_name, $is_admin, $user_url, $avatar_url, false );
+		}
 	}
 }

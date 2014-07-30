@@ -69,9 +69,11 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 		protected function addInitListeners() {
 			add_action( 'template_redirect', array( $this, 'initTemplateLoader' ) );
 			add_action( 'init', array( $this, 'initMuutPostUtility' ) );
+			add_action( 'init', array( $this, 'initChannelUtility' ) );
+			add_action( 'init', array( $this, 'initFilesUtility' ) );
 			add_action( 'init', array( $this, 'initCommentOverrides' ) );
 			add_action( 'init', array( $this, 'initDeveloperSubscription' ) );
-			add_filter( 'comments_template', array( $this, 'initTemplateLoader' ) );
+			add_action( 'init', array( $this, 'initWebhooks' ), 5 );
 
 			// Deprecating these, scheduled for full removal.
 			add_action( 'init', array( $this, 'initMuutShortcodes' ) );
@@ -82,6 +84,13 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 
 			// If the escaped fragment parameter has been passed in the URL (google bot).
 			add_action( 'init', array( $this, 'initEscapedFragments' ), 5 );
+
+			// Initialize the widgets.
+			add_action( 'widgets_init', array( $this, 'initWidgetChannelEmbed' ) );
+			add_action( 'widgets_init', array( $this, 'initWidgetOnlineUsers' ) );
+			add_action( 'widgets_init', array( $this, 'initWidgetMyFeed' ) );
+			add_action( 'widgets_init', array( $this, 'initWidgetLatestComments' ) );
+			add_action( 'widgets_init', array( $this, 'initWidgetTrendingPosts' ) );
 		}
 
 		/**
@@ -150,6 +159,42 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 				require_once( muut()->getPluginPath() . 'lib/subscriber/developer-subscription.class.php');
 				if ( class_exists( $class ) ) {
 					Muut_Developer_Subscription::instance();
+				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the Webhooks class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.2
+		 */
+		public function initWebhooks() {
+			$class = 'Muut_Webhooks';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/subscriber/webhooks.class.php');
+				if ( class_exists( $class ) ) {
+					Muut_Webhooks::instance();
+				}
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the Custom Post Types class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.2
+		 */
+		public function initCustomPostTypes() {
+			$class= 'Muut_Custom_Post_Types';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/custom-post-types.class.php');
+				if ( class_exists( $class ) ) {
+					Muut_Custom_Post_Types::instance();
 				}
 				$this->alreadyInit[] = $class;
 			}
@@ -257,6 +302,116 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			if ( !in_array( $class, $this->alreadyInit ) ) {
 				require_once( muut()->getPluginPath() . 'lib/admin/admin-field-validation.utility.class.php' );
 				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the Files utility class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.2
+		 */
+		public function initFilesUtility() {
+			$class = 'Muut_Files_Utility';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/files.utility.class.php' );
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initializes the Channel utility class.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.2
+		 */
+		public function initChannelUtility() {
+			$class = 'Muut_Channel_Utility';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/channel.utility.class.php' );
+				$this->alreadyInit[] = $class;
+			}
+		}
+
+		/**
+		 * Initialize the Channel Embed widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.2
+		 */
+		public function initWidgetChannelEmbed() {
+			$class = 'Muut_Widget_Channel_Embed';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/widgets/widget-channel-embed.class.php' );
+				$this->alreadyInit[] = $class;
+				register_widget( 'Muut_Widget_Channel_Embed' );
+			}
+		}
+
+		/**
+		 * Initialize the Online Users widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.2
+		 */
+		public function initWidgetOnlineUsers() {
+			$class = 'Muut_Widget_Online_Users';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/widgets/widget-online-users.class.php' );
+				$this->alreadyInit[] = $class;
+				register_widget( 'Muut_Widget_Online_Users' );
+			}
+		}
+
+		/**
+		 * Initialize the My Feed widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.2
+		 */
+		public function initWidgetMyFeed() {
+			$class = 'Muut_Widget_My_Feed';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/widgets/widget-my-feed.class.php' );
+				$this->alreadyInit[] = $class;
+				register_widget( 'Muut_Widget_My_Feed' );
+			}
+		}
+
+		/**
+		 * Initialize the Latest Comments widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.2
+		 */
+		public function initWidgetLatestComments() {
+			$class = 'Muut_Widget_Latest_Comments';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/widgets/widget-latest-comments.class.php' );
+				$this->alreadyInit[] = $class;
+				register_widget( 'Muut_Widget_Latest_Comments' );
+			}
+		}
+
+		/**
+		 * Initialize the Trending Posts widget.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.2
+		 */
+		public function initWidgetTrendingPosts() {
+			$class = 'Muut_Widget_Trending_Posts';
+			if ( !in_array( $class, $this->alreadyInit ) ) {
+				require_once( muut()->getPluginPath() . 'lib/widgets/widget-trending-posts.class.php' );
+				$this->alreadyInit[] = $class;
+				register_widget( 'Muut_Widget_Trending_Posts' );
 			}
 		}
 

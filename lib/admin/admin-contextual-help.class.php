@@ -68,6 +68,8 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 			// Add the contextual help tab items for the post editor (the Muut meta box).
 			add_action( 'load-post.php', array( $this, 'addMuutPostEditorHelp' ) );
 			add_action( 'load-post-new.php', array( $this, 'addMuutPostEditorHelp' ) );
+			add_action( 'load-widgets.php', array( $this, 'addMuutWidgetsHelpAction' ) );
+
 		}
 
 		/**
@@ -121,6 +123,12 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 				'callback' => array( $this, 'renderSettingsHelpSsoTabContent' ),
 			);
 
+			$help_webhooks_tab_args = array(
+				'id' => 'muut_settings_help_webhooks_tab',
+				'title' => __( 'Webhooks', 'muut' ),
+				'callback' => array( $this, 'renderSettingsHelpWebhooksTabContent' ),
+			);
+
 			// Add the help tabs for the Muut Settings page.
 			$screen->add_help_tab( $help_overview_tab_args );
 
@@ -131,6 +139,8 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 			$screen->add_help_tab( $help_seo_tab_args );
 
 			$screen->add_help_tab( $help_sso_tab_args );
+
+			$screen->add_help_tab( $help_webhooks_tab_args );
 
 			// Set the "For More Information" sidebar up as well.
 			ob_start();
@@ -206,6 +216,19 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 		}
 
 		/**
+		 * Renders the content for the Webhooks help tab on the main Muut settings page.
+		 *
+		 * @param WP_Screen $screen The current screen.
+		 * @param array $tab The current tab array.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function renderSettingsHelpWebhooksTabContent( $screen, $tab ) {
+			include( muut()->getPluginPath() . 'views/blocks/help-tab-settings-webhooks.php' );
+		}
+
+		/**
 		 * Adds the contextual help tab items to the post/page editing page.
 		 *
 		 * @return void
@@ -278,6 +301,50 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 		 */
 		public function renderPostEditorHelpForumTabContent( $screen, $tab ) {
 			include( muut()->getPluginPath() . 'views/blocks/help-tab-post-editor-forum.php' );
+		}
+
+		/**
+		 * We only want to add the widgets help on the admin widgets page, but it has to get added a bit later (after the default ones).
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function addMuutWidgetsHelpAction() {
+			add_action('admin_head', array( $this, 'addMuutWidgetsHelp' ) );
+		}
+
+		/**
+		 * Adds the contextual help tab items to the Widgets page.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function addMuutWidgetsHelp() {
+			$screen = get_current_screen();
+
+			$help_muut_widgets_tab_args = array(
+				'id' => 'muut_widgets_help_tab',
+				'title' => __( 'Muut Widgets', 'muut' ),
+				'callback' => array( $this, 'renderMuutWidgetsHelpTabContent' ),
+			);
+
+			// Add the help tabs for the Muut Settings page.
+			$screen->add_help_tab( $help_muut_widgets_tab_args );
+		}
+
+		/**
+		 * Renders the content for the Commenting-meta-box-tab help tab on the post editor.
+		 *
+		 * @param WP_Screen $screen The current screen.
+		 * @param array $tab The current tab array.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0
+		 */
+		public function renderMuutWidgetsHelpTabContent( $screen, $tab ) {
+			include( muut()->getPluginPath() . 'views/blocks/help-tab-muut-widgets.php' );
 		}
 	}
 }

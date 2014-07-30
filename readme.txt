@@ -1,9 +1,9 @@
 === Muut – Commenting and Forums Re-Imagined ===
 Contributors: PaulHughes01, tipiirai, jannelehtinen
-Tags: forum, commenting, realtime, discussion
+Tags: forum, commenting, comments, social, realtime, discussion, widgets
 Requires at least: 3.7
 Tested up to: 3.9.1
-Stable tag: 3.0.1
+Stable tag: 3.0.2
 License: MIT
 License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
 
@@ -15,14 +15,20 @@ It's a modern, fast, highly scalable discussion platform that you can embed onto
 
 Whether you’re setting up for the first time or have just updated to the new version of the plugin, you’re going to love what we’ve done to make implementing Muut in your WordPress website easy and flexible.
 
+= Why Muut? = 
+
 * Unified system for both forums and commenting. Same users and design
 * Full featured forums makes your WordPress site conversational
 * Flat or threaded commenting for small or big topics
-* Skinnable style the discussion directly from the WordPress CSS editor
-* Realtime. No page reloads – posts, replies, likes and users appear in realtime
-* Focus on content. Text focused, uncluttered and linear user interface
-* Single Sign-On. Use the WordPress login, users and avatars
+* Real-time. No page reloads – posts, replies, likes and users appear in real-time
 * Spam filtering, email notifications and 20+ different language versions
+
+= Built For WordPress =
+
+* Skinnable style the discussion directly from the WordPress CSS editor
+* Focus on content. Text focused, uncluttered and linear user interface
+* Comes with five widgets, all of which update in real-time 
+* Single Sign-On. Use the WordPress login, users and avatars
 
 = Optimized for SEO =
 
@@ -69,6 +75,9 @@ There are several great ways to learn more about and get help with the plugin. T
 
 == Upgrade Notice ==
 
+= 3.0.2 =
+The update to version 3.0.2 is mostly a feature update, focusing on the five added widgets.
+
 = 3.0.1 =
 The update to version 3.0.1 is a small update with a couple big fixes and better SEO and S3 bucket support.
 
@@ -76,6 +85,29 @@ The update to version 3.0.1 is a small update with a couple big fixes and better
 The update to version 3.0 is a major update that enhances the plugin experience in a large way. The update _does_ support all of the earlier plugin functionality (such as the shortcodes), but we recommend updating when you have a little bit of time to experiment and ensure that everything continues to work as expected. We hope you enjoy the new version!
 
 == Changelog ==
+
+= 3.0.2 =
+Features, UX, Improvements
+
+* Added "Who's Online" widget.
+* Added "Discussion Channel" widget.
+* Added "My Feed" widget.
+* Added "Latest Comments" widget.
+* Added "Trending Posts" widget.
+* Added Muut Webhooks support.
+* Clean framework to setup listeners for Muut websocket events (devs).
+* Easy to hook into Muut webhook events to extend functionality (devs).
+
+Notes
+
+* When webhooks are activated and functioning, more data is stored in the WordPress database regarding Muut content. Note that the *actual displayed content* is always pulled from the embed properly and NOT the WordPress database.
+
+Bug Fixes
+
+* Fixed problem for websites who use Muut for forums and another plugin for commenting.
+* Muut embedding using the template tags has better support for unique uses.
+* Removed the S3 bucket settings section in favor of having that entirely managed on Muut end. This, in turn, will improve SEO further.
+* Returns a proper error if the administrator tries to enter a forum name with spaces in it.
 
 = 3.0.1 =
 Features, UX, Improvements

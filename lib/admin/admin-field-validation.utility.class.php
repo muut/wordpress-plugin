@@ -77,5 +77,25 @@ if ( !class_exists( 'Muut_Field_Validation' ) ) {
 				return false;
 			}
 		}
+
+		/**
+		 * Function to validate that a string (like forum name) has no whitespace.
+		 *
+		 * @param string $string $value The value that we are validating.
+		 * @return bool Whether the field is valid or not.
+		 * @author Paul Hughes
+		 * @since 3.0.2
+		 */
+		public static function validateHasNoWhitespace( $value ) {
+			if ( !is_string( $value ) ) {
+				return false;
+			}
+
+			if ( preg_match( '/\s/', $value ) ) {
+				return false;
+			} else {
+				return true;
+			}
+		}
 	}
 }
