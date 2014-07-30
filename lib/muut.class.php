@@ -747,7 +747,8 @@ if ( !class_exists( 'Muut' ) ) {
 						|| is_active_widget( false, false, 'muut_my_feed_widget' )
 						|| is_active_widget( false, false, 'muut_channel_embed_widget')
 						|| is_active_widget( false, false, 'muut_latest_comments_widget')
-						|| is_active_widget( false, false, 'muut_online_users_widget' ) ) ) {
+						|| is_active_widget( false, false, 'muut_online_users_widget' )
+						|| is_active_widget( false, false, 'muut_trending_posts_widget' )) ) {
 					echo '<script type="text/javascript">';
 						echo 'var muut_widget_conf = { url: "' . $this->getForumIndexUri() . '", path: "/' . $this->getForumName() . '", widget: true };';
 						echo 'var muut_force_load = true;';
