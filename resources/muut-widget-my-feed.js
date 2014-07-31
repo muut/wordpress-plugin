@@ -33,9 +33,11 @@ jQuery(document).ready(function($) {
       });
 
       // If the user is logged in, hide the login link.
-      if ($(widget_my_feed_wrapper).find('.m-logged').length > 0 ) {
+      if ( muutObj().user.is_logged ) {
         widget_my_feed_wrapper.find('.muut_login').hide();
       }
+      widget_my_feed_wrapper.find('.m-input-wrap').hide();
+
     }
   });
 });

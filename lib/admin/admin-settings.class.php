@@ -175,6 +175,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 
 			if ( ( isset( $settings['forum_name'] ) && $settings['forum_name'] != muut()->getForumName() )
 				|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != muut()->getOption( 'enable_proxy_rewrites' ) )
+				|| ( isset( $settings['use_webhooks'] ) && $settings['use_webhooks'] != muut()->getOption( 'use_webhooks' ) )
 			) {
 				flush_rewrite_rules( true );
 			}
