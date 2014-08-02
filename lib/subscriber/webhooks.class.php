@@ -595,7 +595,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @since 3.0.2
 		 */
 		public function permalinkToForum( $permalink, $post ) {
-			if ( $post->post_type == Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME ) {
+			if ( class_exists( 'Muut_Custom_Post_Types' ) && $post->post_type == Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME ) {
 				$forum_page_id = Muut_Post_Utility::getForumPageId();
 				$path = get_post_meta( $post->ID, 'muut_path', true );
 				$path = str_replace( array( '/' . muut()->getForumName(), '#' ) , array( '', ':'), $path );
