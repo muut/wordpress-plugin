@@ -381,7 +381,12 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		/**
 		 * Get a row markup for given row data.
 		 *
-		 *
+		 * @param int $post_id The ID of the post we are fetching the row data for.
+		 * @param mixed $timestamp The timestamp we are saying was the time for the post, or the template placeholder.
+		 * @param mixed $user_obj The user object in the format from the webhook.
+		 * @return string The Markup.
+		 * @author Paul Hughes
+		 * @since 3.0.2
 		 */
 		public function getRowMarkup( $post_id, $timestamp, $user_obj ) {
 			if ( is_numeric( $timestamp ) ) {
