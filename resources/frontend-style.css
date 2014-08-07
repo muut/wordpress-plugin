@@ -139,3 +139,7 @@
 .m-facelink.m-wp-hideafter:after {
     content: '';
 }
+
+.muut_widget_wrapper p.m-message {
+    padding: 0;
+}
