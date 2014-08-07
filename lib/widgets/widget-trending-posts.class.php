@@ -21,8 +21,6 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 	 */
 	class Muut_Widget_Trending_Posts extends WP_Widget {
 
-		const TRENDING_POSTS_TRANSIENT_NAME = 'muut_trending_posts';
-
 		const CURRENT_CHANNELS_OPTION_NAME = 'muut_forum_channels';
 
 		/**
@@ -58,9 +56,6 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 * @since 3.0.2
 		 */
 		public function addActions() {
-			// Update the transient data when a post is liked, unliked, or replied to.
-			//add_action( 'muut_webhook_request', array( $this, 'updateWidgetData' ), 100, 2 );
-
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueWidgetScripts' ), 12 );
 			add_action( 'wp_print_scripts', array( $this, 'printWidgetJs' ) );
 
@@ -245,56 +240,6 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		}
 
 		/**
-		 * Updates the widget data sources for displaying the widget content on the frontend.
-		 *
-		 * @param array $request The parsed webhook HTTP request data.
-		 * @param string $event The event that was received via the webhook (in this case, should always be 'reply').
-		 * @return void
-		 * @author Paul Hughes
-		 * @since 3.0.2
-		 */
-		public function updateWidgetData( $request, $event ) {
-
-			// Only execute actions on specific events.
-			if ( $event == 'reply' ) {
-				$path = $request['path'];
-				$user = $request['post']->user;
-			} elseif ( $event == 'like' ) {
-				$path = $request['location']->path;
-				$user = $request['thread']->user;
-			} elseif ( $event == 'unlike' ) {
-				$path = $request['location']->path;
-				$user = $request['thread']->user;
-			} elseif ( $event == 'remove' ) {
-				$path = $request['location']->path;
-				$user = $request['thread']->user;
-			}
-			if ( !isset( $path ) ) {
-				return;
-			}
-
-			// Check if a WP post exists in the database that would match the path of the "post" request (for threaded commenting).
-			preg_match_all( '/^\/' . addslashes( muut()->getForumName() ) . '\/' . addslashes( muut()->getOption( 'comments_base_domain' ) ) . '\/([0-9]+)(?:\/|\#)?.*$/', $path, $matches );
-
-			if ( empty( $matches ) || !isset( $matches[1][0] ) || !is_numeric( $matches[1][0] ) ) {
-				return;
-			}
-			$post_id = $matches[1][0];
-
-			// Make sure the post is a post with Muut commenting enabled.
-			if ( !Muut_Post_Utility::isMuutCommentingPost( $post_id ) ) {
-				return;
-			}
-
-			// Add/update a meta for the post with the time of the last comment and the user data responsible.
-			update_post_meta( $post_id, self::REPLY_UPDATE_TIME_NAME, time() );
-			update_post_meta( $post_id, self::REPLY_LAST_USER_DATA_NAME, $user );
-
-			// Update the transient with array of the posts and their data.
-			$this->refreshCache();
-		}
-
-		/**
 		 * Enqueues the JS required for this widget.
 		 *
 		 * @return void
@@ -316,21 +261,6 @@ if ( !class_exists( 'Muut_Widget_Trending_Posts' ) ) {
 		 */
 		public function getCurrentChannelsOption() {
 			return get_option( self::CURRENT_CHANNELS_OPTION_NAME, array() );
-		}
-
-		/**
-		 * Get the trending posts array from the transient.
-		 *
-		 * @return array The transient array with the trending posts data.
-		 * @author Paul Hughes
-		 * @since 3.0.2
-		 */
-		public function getTrendingPostsData() {
-			if ( false === ( $trending_posts_data = get_transient( self::TRENDING_POSTS_TRANSIENT_NAME ) ) ) {
-				$this->refreshCache();
-			}
-
-			return get_transient( self::TRENDING_POSTS_TRANSIENT_NAME );
 		}
 
 		/**
