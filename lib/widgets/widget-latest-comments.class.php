@@ -213,7 +213,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			update_post_meta( $post_id, self::REPLY_LAST_USER_DATA_NAME, $user );
 
 			// Update the transient with array of the posts and their data for the "latest comments."
-			$this->refreshCache();
+			self::refreshCache();
 		}
 
 		/**
@@ -224,7 +224,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0.2
 		 */
-		public function refreshCache( $number_of_posts = 10 ) {
+		public static function refreshCache( $number_of_posts = 10 ) {
 			$number_of_posts = is_numeric( $number_of_posts ) ? $number_of_posts : 10;
 
 			$number_of_posts = apply_filters( 'muut_latest_comments_number_of_posts_to_store', $number_of_posts );
@@ -263,9 +263,8 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			}
 
 			// Update the transient with the data as well as the JSON file.
-			$this->updateTransient( $data_array );
-			$this->updateJsonFile( $data_array );
-
+			self::updateTransient( $data_array );
+			self::updateJsonFile( $data_array );
 			return $data_array;
 		}
 
@@ -277,7 +276,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0.2
 		 */
-		protected function updateTransient( $data_array ) {
+		protected static function updateTransient( $data_array ) {
 			if ( !is_array( $data_array ) ) {
 				return;
 			}
@@ -294,7 +293,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0.2
 		 */
-		protected function updateJsonFile( $data_array ) {
+		protected static function updateJsonFile( $data_array ) {
 			if ( !is_array( $data_array ) ) {
 				return;
 			}
