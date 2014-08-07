@@ -320,5 +320,21 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 
 			return $posts;
 		}
+
+		/**
+		 * Gets the type of commenting enabled on a given commenting post (threaded or flat).
+		 *
+		 * @param int $post_id The commenting post id.
+		 * @return null|string The commenting type that is enabled or null if failed.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getCommentingPostCommentType( $post_id ) {
+			$post_commenting_options = Muut_Post_Utility::getPostOption( $post_id, 'commenting_settings' );
+
+			if ( isset( $post_commenting_options['type'] ) ) {
+				return $post_commenting_options['type'];
+			}
+		}
 	}
 }
