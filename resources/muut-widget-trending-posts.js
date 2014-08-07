@@ -16,7 +16,7 @@ jQuery(document).ready(function($) {
   muutObj().on('load', function() {
     var body = $('body');
 
-    if(body.hasClass('muut-forum-home') && typeof muut_stored_channel_list != 'undefined' && typeof muut_stored_channels_nonce == 'string' ) {
+    if(body.hasClass('muut-forum-home') && typeof muut_stored_channel_list != 'undefined' && typeof muut_stored_channels_nonce == 'string' && muutObj().user.is_admin == true ) {
       var category_object = {};
       // Assign the actual displayed categories to an object to match the one currently stored.
       var live_channels = muutObj().categories;
