@@ -607,5 +607,25 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			}
 			return $permalink;
 		}
+
+		/**
+		 * Static function for checking if (and what is) the post ID that a given muut path is commenting on.
+		 *
+		 * @param string $path The path we are comparing/checking for.
+		 * @return int|false The post ID, if it is a comment on a given post or false, if not found.
+		 */
+		public static function getPostIdRepliedTo( $path ) {
+			// Check if the comment path is in the Muut post comment path formayt.
+			preg_match_all( '/^\/' . addslashes( muut()->getForumName() ) . '\/' . addslashes( muut()->getOption( 'comments_base_domain' ) ) . '\/([0-9]+)(?:\/|\#)?.*$/', $path, $matches );
+
+			// If it doesn't match or isn't a commenting post, return false.
+			if ( empty( $matches ) || !isset( $matches[1][0] ) || !is_numeric( $matches[1][0] ) || !Muut_Post_Utility::isMuutCommentingPost( $matches[1][0] ) ) {
+				return false;
+			}
+
+			// Otherwise, return the post id.
+			return $matches[1][0];
+
+		}
 	}
 }
