@@ -68,6 +68,9 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @since 3.0.2
 		 */
 		public function addActions() {
+			// Reset the widget cache when the admin Muut page is visted.
+			add_action( 'load-toplevel_page_' . Muut::SLUG, array( __CLASS__, 'refreshCache' ) );
+
 			// Update the transient data when a reply is made.
 			add_action( 'muut_webhook_request_reply', array( $this, 'updateWidgetData' ), 100, 2 );
 			// The reason we have to worry about this below (post event) is in case it is on threaded commenting.
@@ -265,6 +268,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			// Update the transient with the data as well as the JSON file.
 			self::updateTransient( $data_array );
 			self::updateJsonFile( $data_array );
+			error_log('cache done' );
 			return $data_array;
 		}
 
