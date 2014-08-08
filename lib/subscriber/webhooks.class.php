@@ -616,6 +616,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 							'value' => $split_final[1],
 						),
 					),
+					'status' => 'approve',
 					'number' => 1,
 				);
 
@@ -679,6 +680,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 							'value' => $split_final[1],
 						),
 					),
+					'status' => Muut_Custom_Post_Types::MUUT_SPAM_POST_STATUS,
 					'number' => 1,
 				);
 
