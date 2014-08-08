@@ -31,6 +31,8 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 
 		const MUUT_SPAM_POST_STATUS = 'muut_spam';
 
+		const MUUT_SPAM_INHERIT_STATUS = 'muut_spam_inherit';
+
 
 		/**
 		 * @static
@@ -268,6 +270,21 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 				return 0;
 			}
 
+			// Mark child comments as spam—inherited (so they are unmarked if this post is unmarked).
+			$comment_query_args = array(
+				'post_id' => $post_id,
+				'status' => 'approve',
+			);
+			$comment_query = new WP_Comment_Query;
+			$comments = $comment_query->query( $comment_query_args );
+			foreach( $comments as $comment ) {
+				$comment_args = array(
+					'comment_ID' => $comment->comment_ID,
+					'comment_approved' => self::MUUT_SPAM_INHERIT_STATUS,
+				);
+				wp_update_comment( $comment_args );
+			}
+
 			$post_args = array(
 				'ID' => $post_id,
 				'post_status' => self::MUUT_SPAM_POST_STATUS,
@@ -290,6 +307,21 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 				return 0;
 			}
 
+			// Mark child comments as spam—inherited (so they are unmarked if this post is unmarked).
+			$comment_query_args = array(
+				'post_id' => $post_id,
+				'status' => self::MUUT_SPAM_INHERIT_STATUS,
+			);
+			$comment_query = new WP_Comment_Query;
+			$comments = $comment_query->query( $comment_query_args );
+			foreach( $comments as $comment ) {
+				$comment_args = array(
+					'comment_ID' => $comment->comment_ID,
+					'comment_approved' => 1,
+				);
+				wp_update_comment( $comment_args );
+			}
+
 			$post_args = array(
 				'ID' => $post_id,
 				'post_status' => self::MUUT_PUBLIC_POST_STATUS,
@@ -308,7 +340,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		 * @since NEXT_RELEASE
 		 */
 		public function markCommentAsSpam( $comment_id ) {
-			if ( !is_numeric( $comment_id ) || get_post_type( $comment_id ) !== self::MUUT_THREAD_CPT_NAME ) {
+			if ( !is_numeric( $comment_id ) ) {
 				return 0;
 			}
 
