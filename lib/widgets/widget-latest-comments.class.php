@@ -426,7 +426,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @author Paul Hughes
 		 * @since NEXT_RELEASE
 		 */
-		public function updatePostRemoveTime( $request, $event ) {
+		public function updatePostLatestReplyTime( $request, $event ) {
 			// Only execute for the applicable events.
 			$events = array( 'remove', 'spam', 'unspam' );
 			if ( in_array( $event, $events ) ) {
