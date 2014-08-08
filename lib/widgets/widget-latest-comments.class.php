@@ -435,7 +435,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 				$split_path = explode( '#', $path );
 				$split_final = explode( '/', $split_path[1] );
 				$comment_base = $split_path[0] . '#' . $split_final[0];
-				
+
 				// See if the path is a reply to a given post.
 				$post_id = Muut_Webhooks::getPostIdRepliedTo( $path );
 
@@ -492,10 +492,10 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 				$comments = $comment_query->query( $comment_query_args );
 
 				if ( !empty( $comments ) && is_array( $comments ) ) {
-					$comment_update_time = strtotime( $comments[0]['comment_date_gmt'] );
+					$comment_update_time = strtotime( $comments[0]->comment_date_gmt );
 					if ( $comment_update_time > $latest_update_timestamp ) {
 						$latest_update_timestamp = $comment_update_time;
-						$muut_user = get_comment_meta( $comments[0]['comment_ID'], 'muut_user', true );
+						$muut_user = get_comment_meta( $comments[0]->comment_ID, 'muut_user', true );
 					}
 					$has_replies = true;
 				}
