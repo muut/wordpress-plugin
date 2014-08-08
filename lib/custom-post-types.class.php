@@ -254,5 +254,93 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 			// Return the comment id.
 			return $inserted_reply;
 		}
+
+		/**
+		 * Mark a post as spam.
+		 *
+		 * @param int $post_id The post ID we are marking as spam.
+		 * @return int The post ID or 0 if failed.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function markPostAsSpam( $post_id ) {
+			if ( !is_numeric( $post_id ) || get_post_type( $post_id ) !== self::MUUT_THREAD_CPT_NAME ) {
+				return 0;
+			}
+
+			$post_args = array(
+				'ID' => $post_id,
+				'post_status' => self::MUUT_SPAM_POST_STATUS,
+			);
+
+			// Return the comment id.
+			return wp_update_post( $post_args );
+		}
+
+		/**
+		 * Mark a post as NOT spam (unspam the post).
+		 *
+		 * @param int $post_id The post ID we are unspamming.
+		 * @return int The post ID or 0 if failed.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function markPostAsNotSpam( $post_id ) {
+			if ( !is_numeric( $post_id ) || get_post_type( $post_id ) !== self::MUUT_THREAD_CPT_NAME ) {
+				return 0;
+			}
+
+			$post_args = array(
+				'ID' => $post_id,
+				'post_status' => self::MUUT_PUBLIC_POST_STATUS,
+			);
+
+			// Return the comment id.
+			return wp_update_post( $post_args );
+		}
+
+		/**
+		 * Mark a post as spam.
+		 *
+		 * @param int $post_id The post ID we are marking as spam.
+		 * @return int The post ID or 0 if failed.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function markCommentAsSpam( $comment_id ) {
+			if ( !is_numeric( $comment_id ) || get_post_type( $comment_id ) !== self::MUUT_THREAD_CPT_NAME ) {
+				return 0;
+			}
+
+			$comment_args = array(
+				'comment_ID' => $comment_id,
+				'comment_approved' => self::MUUT_SPAM_POST_STATUS,
+			);
+
+			// Return the comment id.
+			return wp_update_comment( $comment_args );
+		}
+
+		/**
+		 * Mark a post as NOT spam (unspam the post).
+		 *
+		 * @param int $post_id The post ID we are unspamming.
+		 * @return int The post ID or 0 if failed.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function markCommentAsNotSpam( $comment_id ) {
+			if ( !is_numeric( $comment_id ) ) {
+				return 0;
+			}
+
+			$comment_args = array(
+				'comment_ID' => $comment_id,
+				'comment_approved' => 1,
+			);
+
+			// Return the comment id.
+			return wp_update_comment( $comment_args );
+		}
 	}
 }
