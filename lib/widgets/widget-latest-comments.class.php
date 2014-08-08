@@ -433,7 +433,9 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 				$path = $request['path'];
 
 				$split_path = explode( '#', $path );
-
+				$split_final = explode( '/', $split_path[1] );
+				$comment_base = $split_path[0] . '#' . $split_final[0];
+				
 				// See if the path is a reply to a given post.
 				$post_id = Muut_Webhooks::getPostIdRepliedTo( $path );
 
@@ -478,7 +480,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 					'meta_query' => array(
 						array(
 							'key' => 'muut_path',
-							'value' => $path,
+							'value' => $comment_base,
 						),
 					),
 					'orderby' => 'comment_date_gmt',
