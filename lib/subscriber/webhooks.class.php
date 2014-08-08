@@ -386,7 +386,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			$new_thread_args = array(
 				'title' => $request['thread']->title,
 				'path' => $request['location']->path,
-				'user' => $request['thread']->user->path,
+				'user' => $request['thread']->user,
 				'body' => '',
 			);
 
@@ -413,7 +413,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			$new_reply_args = array(
 				'key' => $request['post']->key,
 				'path' => $request['path'],
-				'user' => $request['post']->user->path,
+				'user' => $request['post']->user,
 				'body' => join( '', $request['post']->body ),
 			);
 
