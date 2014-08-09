@@ -441,80 +441,50 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		public function processLikeUnlike( $request, $event ) {
 			$path = $request['path'];
 
-			$split_path = explode( '#', $path );
-			$split_final = explode( '/', $split_path[1] );
-			if ( count( $split_final ) > 1 ) {
-				// The path leads to an individual reply.
-				$comment_base = $split_path[0] . '#' . $split_final[0];
-				$query_args = array(
-					'meta_query' => array(
-						'relation' => 'AND',
-						array(
-							'key' => 'muut_path',
-							'value' => $comment_base,
-						),
-						array(
-							'key' => 'muut_key',
-							'value' => $split_final[1],
-						),
-					),
-					'number' => 1,
-				);
+			// The path leads to an individual reply.
+			if ( self::webhookPathType( $path ) == 'reply' ) {
+				$comment = self::webhookGetCommentFromPath( $path, 'approve' );
 
-				// Get the comment data.
-				$comment_query = new WP_Comment_Query;
-				$comments = $comment_query->query( $query_args );
-
-				// Update the number of likes and store it.
-				$likes = (int) get_comment_meta( $comments[0]->comment_ID, 'muut_likes', true );
-				$post_likes = (int) get_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', true );
-				if ( $event == 'like' ) {
-					$likes++;
-					$post_likes++;
-				} elseif ( $event == 'unlike' ) {
-					if ( $likes > 0 ) {
-						$likes--;
+				if ( $comment ) {
+					// Update the number of likes and store it.
+					$likes = (int) get_comment_meta( $comment->comment_ID, 'muut_likes', true );
+					$post_likes = (int) get_post_meta( $comment->comment_post_ID, 'muut_thread_likes', true );
+					if ( $event == 'like' ) {
+						$likes++;
+						$post_likes++;
+					} elseif ( $event == 'unlike' ) {
+						if ( $likes > 0 ) {
+							$likes--;
+						}
+						if ( $post_likes > 0 ) {
+							$post_likes--;
+						}
 					}
-					if ( $post_likes > 0 ) {
-						$post_likes--;
-					}
+					update_comment_meta( $comment->comment_ID, 'muut_likes', $likes );
+					update_post_meta( $comment->comment_post_ID, 'muut_thread_likes', $post_likes );
 				}
-				update_comment_meta( $comments[0]->comment_ID, 'muut_likes', $likes );
-				update_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', $post_likes );
+			// The path leads the a top-level thread.
 			} else {
-				// The path leads to a top-level thread.
-				$query_args = array(
-					'post_type' => Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME,
-					'post_status' => Muut_Custom_Post_Types::MUUT_PUBLIC_POST_STATUS,
-					'meta_query' => array(
-						array(
-							'key' => 'muut_path',
-							'value' => $path,
-						),
-					),
-					'posts_per_page' => 1,
-				);
+				$thread_post = self::webhookGetPostFromPath( $path, 'any' );
 
-				// Get the post data.
-				$posts_query = new WP_Query;
-				$posts = $posts_query->query( $query_args );
-
-				// Update the number of likes and store it.
-				$likes = get_post_meta( $posts[0]->ID, 'muut_likes', true );
-				$total_likes = (int) get_post_meta( $posts[0]->ID, 'muut_thread_likes', true );
-				if ( $event == 'like' ) {
-					$likes++;
-					$total_likes++;
-				} elseif ( $event == 'unlike' ) {
-					if ( $likes > 0 ) {
-						$likes--;
+				if ( $thread_post ) {
+					// Update the number of likes and store it.
+					$likes = get_post_meta( $thread_post->ID, 'muut_likes', true );
+					$total_likes = (int) get_post_meta( $thread_post->ID, 'muut_thread_likes', true );
+					if ( $event == 'like' ) {
+						$likes++;
+						$total_likes++;
+					} elseif ( $event == 'unlike' ) {
+						if ( $likes > 0 ) {
+							$likes--;
+						}
+						if ( $total_likes > 0 ) {
+							$total_likes--;
+						}
 					}
-					if ( $total_likes > 0 ) {
-						$total_likes--;
-					}
+					update_post_meta( $thread_post->ID, 'muut_likes', $likes );
+					update_post_meta( $thread_post->ID, 'muut_thread_likes', $total_likes );
 				}
-				update_post_meta( $posts[0]->ID, 'muut_likes', $likes );
-				update_post_meta( $posts[0]->ID, 'muut_thread_likes', $total_likes );
 			}
 		}
 
@@ -530,59 +500,25 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		public function processRemove( $request, $event ) {
 			$path = $request['path'];
 
-			$split_path = explode( '#', $path );
-			$split_final = explode( '/', $split_path[1] );
-			if ( count( $split_final ) > 1 ) {
-				// The path leads to an individual reply.
-				$comment_base = $split_path[0] . '#' . $split_final[0];
-				$query_args = array(
-					'meta_query' => array(
-						'relation' => 'AND',
-						array(
-							'key' => 'muut_path',
-							'value' => $comment_base,
-						),
-						array(
-							'key' => 'muut_key',
-							'value' => $split_final[1],
-						),
-					),
-					'number' => 1,
-				);
+			// The path leads to an individual reply.
+			if ( self::webhookPathType( $path ) == 'reply' ) {
+				$comment = self::webhookGetCommentFromPath( $path, 'any' );
 
-				// Get the comment data.
-				$comment_query = new WP_Comment_Query;
-				$comments = $comment_query->query( $query_args );
-
-				if ( isset( $comments[0] ) ) {
-					$likes = (int) get_comment_meta( $comments[0]->comment_ID, 'muut_likes', true );
-					$post_likes = (int) get_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', true );
+				if ( $comment ) {
+					$likes = (int) get_comment_meta( $comment->comment_ID, 'muut_likes', true );
+					$post_likes = (int) get_post_meta( $comment->comment_post_ID, 'muut_thread_likes', true );
 
 					// Remove the number of likes from the thread count of likes.
 					$post_likes = $post_likes - $likes;
-					update_post_meta( $comments[0]->comment_post_ID, 'muut_thread_likes', $post_likes );
-					wp_delete_comment( $comments[0]->comment_ID, true );
+					update_post_meta( $comment->comment_post_ID, 'muut_thread_likes', $post_likes );
+					wp_delete_comment( $comment->comment_ID, true );
 				}
+			// The path leads the a top-level thread.
 			} else {
-				// The path leads to a top-level thread.
-				$query_args = array(
-					'post_type' => Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME,
-					'post_status' => 'any',
-					'meta_query' => array(
-						array(
-							'key' => 'muut_path',
-							'value' => $path,
-						),
-					),
-					'posts_per_page' => 1,
-				);
+				$thread_post = self::webhookGetPostFromPath( $path, 'any' );
 
-				// Get the post data.
-				$posts_query = new WP_Query;
-				$posts = $posts_query->query( $query_args );
-
-				if ( isset( $posts[0] ) ) {
-					wp_delete_post( $posts[0]->ID, true );
+				if ( $thread_post ) {
+					wp_delete_post( $thread_post->ID, true );
 				}
 			}
 		}
@@ -599,54 +535,19 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		public function processSpam( $request, $event ) {
 			$path = $request['path'];
 
-			$split_path = explode( '#', $path );
-			$split_final = explode( '/', $split_path[1] );
-			if ( count( $split_final ) > 1 ) {
-				// The path leads to an individual reply.
-				$comment_base = $split_path[0] . '#' . $split_final[0];
-				$query_args = array(
-					'meta_query' => array(
-						'relation' => 'AND',
-						array(
-							'key' => 'muut_path',
-							'value' => $comment_base,
-						),
-						array(
-							'key' => 'muut_key',
-							'value' => $split_final[1],
-						),
-					),
-					'status' => 'approve',
-					'number' => 1,
-				);
+			// The path leads to an individual reply.
+			if ( self::webhookPathType( $path ) == 'reply' ) {
+				$comment = self::webhookGetCommentFromPath( $path, 'approve' );
 
-				// Get the comment data.
-				$comment_query = new WP_Comment_Query;
-				$comments = $comment_query->query( $query_args );
-
-				if ( isset( $comments[0] ) ) {
-					Muut_Custom_Post_Types::instance()->markCommentAsSpam( $comments[0]->comment_ID );
+				if ( $comment ) {
+					Muut_Custom_Post_Types::instance()->markCommentAsSpam( $comment->comment_ID );
 				}
+			// The path leads the a top-level thread.
 			} else {
-				// The path leads to a top-level thread.
-				$query_args = array(
-					'post_type' => Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME,
-					'post_status' => Muut_Custom_Post_Types::MUUT_PUBLIC_POST_STATUS,
-					'meta_query' => array(
-						array(
-							'key' => 'muut_path',
-							'value' => $path,
-						),
-					),
-					'posts_per_page' => 1,
-				);
+				$thread_post = self::webhookGetPostFromPath( $path, Muut_Custom_Post_Types::MUUT_PUBLIC_POST_STATUS );
 
-				// Get the post data.
-				$posts_query = new WP_Query;
-				$posts = $posts_query->query( $query_args );
-
-				if ( isset( $posts[0] ) ) {
-					Muut_Custom_Post_Types::instance()->markPostAsSpam( $posts[0]->ID );
+				if ( $thread_post ) {
+					Muut_Custom_Post_Types::instance()->markPostAsSpam( $thread_post->ID );
 				}
 			}
 		}
@@ -663,54 +564,19 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		public function processUnspam( $request, $event ) {
 			$path = $request['path'];
 
-			$split_path = explode( '#', $path );
-			$split_final = explode( '/', $split_path[1] );
-			if ( count( $split_final ) > 1 ) {
-				// The path leads to an individual reply.
-				$comment_base = $split_path[0] . '#' . $split_final[0];
-				$query_args = array(
-					'meta_query' => array(
-						'relation' => 'AND',
-						array(
-							'key' => 'muut_path',
-							'value' => $comment_base,
-						),
-						array(
-							'key' => 'muut_key',
-							'value' => $split_final[1],
-						),
-					),
-					'status' => Muut_Custom_Post_Types::MUUT_SPAM_POST_STATUS,
-					'number' => 1,
-				);
+			// The path leads to an individual reply.
+			if ( self::webhookPathType( $path ) == 'reply' ) {
+				$comment = self::webhookGetCommentFromPath( $path, Muut_Custom_Post_Types::MUUT_SPAM_POST_STATUS );
 
-				// Get the comment data.
-				$comment_query = new WP_Comment_Query;
-				$comments = $comment_query->query( $query_args );
-
-				if ( isset( $comments[0] ) ) {
-					Muut_Custom_Post_Types::instance()->markCommentAsNotSpam( $comments[0]->comment_ID );
+				if ( $comment ) {
+					Muut_Custom_Post_Types::instance()->markCommentAsNotSpam( $comment->comment_ID );
 				}
+			// The path leads the a top-level thread.
 			} else {
-				// The path leads to a top-level thread.
-				$query_args = array(
-					'post_type' => Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME,
-					'post_status' => Muut_Custom_Post_Types::MUUT_SPAM_POST_STATUS,
-					'meta_query' => array(
-						array(
-							'key' => 'muut_path',
-							'value' => $path,
-						),
-					),
-					'posts_per_page' => 1,
-				);
+				$thread_post = self::webhookGetPostFromPath( $path, Muut_Custom_Post_Types::MUUT_SPAM_POST_STATUS );
 
-				// Get the post data.
-				$posts_query = new WP_Query;
-				$posts = $posts_query->query( $query_args );
-
-				if ( isset( $posts[0] ) ) {
-					Muut_Custom_Post_Types::instance()->markPostAsNotSpam( $posts[0]->ID );
+				if ( $thread_post ) {
+					Muut_Custom_Post_Types::instance()->markPostAsNotSpam( $thread_post->ID );
 				}
 			}
 		}
@@ -756,6 +622,109 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			// Otherwise, return the post id.
 			return $matches[1][0];
 
+		}
+
+		/**
+		 * Static function for finding out if a given webhook path (with hash sign instead of colon) leads to a comment
+		 * or a top-level thread.
+		 *
+		 * @param string $path The webhook path.
+		 * @return string Either "post" or "reply".
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public static function webhookPathType( $path ) {
+			$split_path = explode( '#', $path );
+			$split_final = explode( '/', $split_path[1] );
+
+			if ( count( $split_final ) > 1 ) {
+				return 'reply';
+			} else {
+				return 'post';
+			}
+		}
+
+		/**
+		 * Get the WP comment that a given webhook path points to.
+		 *
+		 * @param string $path The webhook path.
+		 * @return false|object A WP Comment object or false on failure.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public static function webhookGetCommentFromPath( $path, $status = 'approve' ) {
+			if ( self::webhookPathType( $path ) != 'reply' ) {
+				return false;
+			}
+
+			// Get/create the necessary subpath required for querying the comment.
+			$split_path = explode( '#', $path );
+			$split_final = explode( '/', $split_path[1] );
+			$comment_base = $split_path[0] . '#' . $split_final[0];
+
+			// Define the query args.
+			$query_args = array(
+				'meta_query' => array(
+					'relation' => 'AND',
+					array(
+						'key' => 'muut_path',
+						'value' => $comment_base,
+					),
+					array(
+						'key' => 'muut_key',
+						'value' => $split_final[1],
+					),
+				),
+				'status' => $status,
+				'number' => 1,
+			);
+
+			// Get the comment data.
+			$comment_query = new WP_Comment_Query;
+			$comments = $comment_query->query( $query_args );
+
+			if ( isset( $comments[0] ) ) {
+				return $comments[0];
+ 			} else {
+				return false;
+			}
+		}
+
+		/**
+		 * Get the WP Post that a given webhook path points to.
+		 *
+		 * @param string $path The webhook path.
+		 * @return false|WP_Post A WordPress Post object or false on failure.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public static function webhookGetPostFromPath( $path, $status = Muut_Custom_Post_Types::MUUT_PUBLIC_POST_STATUS ) {
+			if ( self::webhookPathType( $path ) != 'post' ) {
+				return false;
+			}
+
+			// Define the query args.
+			$query_args = array(
+				'post_type' => Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME,
+				'post_status' => $status,
+				'meta_query' => array(
+					array(
+						'key' => 'muut_path',
+						'value' => $path,
+					),
+				),
+				'posts_per_page' => 1,
+			);
+
+			// Get the post data.
+			$posts_query = new WP_Query;
+			$posts = $posts_query->query( $query_args );
+
+			if ( isset( $posts[0] ) ) {
+				return $posts[0];
+			} else {
+				return false;
+			}
 		}
 	}
 }
