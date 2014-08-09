@@ -16,6 +16,13 @@
 	<ul id="muut-recentcomments">
 		<?php
 		foreach ( $latest_comments_data as $comment ) {
+			if ( is_string( $comment['user'] ) ) {
+				$user_obj->displayname = $comment['user'];
+				$user_obj->img = '';
+				$user_obj->path = $comment['user'];
+			} else {
+				$user_obj = $comment['user'];
+			}
  			echo $this->getRowMarkup( $comment['post_id'], $comment['timestamp'], $comment['user'] );
 		}
 		?>

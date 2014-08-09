@@ -68,10 +68,15 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @since 3.0.2
 		 */
 		public function addActions() {
+			// Reset the widget cache when the admin Muut page is visted.
+			add_action( 'load-toplevel_page_' . Muut::SLUG, array( __CLASS__, 'refreshCache' ) );
+
 			// Update the transient data when a reply is made.
 			add_action( 'muut_webhook_request_reply', array( $this, 'updateWidgetData' ), 100, 2 );
 			// The reason we have to worry about this below (post event) is in case it is on threaded commenting.
 			add_action( 'muut_webhook_request_post', array( $this, 'updateWidgetData' ), 100, 2 );
+			// When a comment is removed, spammed, or unspammed, make sure to refresh the post it was a comment for's last reply time meta.
+			add_action( 'muut_webhook_request', array( $this, 'updatePostLatestReplyTime' ), 15, 2 );
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueWidgetScripts' ), 12 );
 			add_action( 'wp_print_scripts', array( $this, 'printWidgetJs' ) );
@@ -195,16 +200,10 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 				return;
 			}
 
-			// Check if a WP post exists in the database that would match the path of the "post" request (for threaded commenting).
-			preg_match_all( '/^\/' . addslashes( muut()->getForumName() ) . '\/' . addslashes( muut()->getOption( 'comments_base_domain' ) ) . '\/([0-9]+)(?:\/|\#)?.*$/', $path, $matches );
+			// Make sure the post (if one matches) is a post with Muut commenting enabled.
+			$post_id = Muut_Webhooks::getPostIdRepliedTo( $path );
 
-			if ( empty( $matches ) || !isset( $matches[1][0] ) || !is_numeric( $matches[1][0] ) ) {
-				return;
-			}
-			$post_id = $matches[1][0];
-
-			// Make sure the post is a post with Muut commenting enabled.
-			if ( !Muut_Post_Utility::isMuutCommentingPost( $post_id ) ) {
+			if ( !$post_id ) {
 				return;
 			}
 
@@ -213,7 +212,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			update_post_meta( $post_id, self::REPLY_LAST_USER_DATA_NAME, $user );
 
 			// Update the transient with array of the posts and their data for the "latest comments."
-			$this->refreshCache();
+			self::refreshCache();
 		}
 
 		/**
@@ -224,7 +223,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0.2
 		 */
-		public function refreshCache( $number_of_posts = 10 ) {
+		public static function refreshCache( $number_of_posts = 10 ) {
 			$number_of_posts = is_numeric( $number_of_posts ) ? $number_of_posts : 10;
 
 			$number_of_posts = apply_filters( 'muut_latest_comments_number_of_posts_to_store', $number_of_posts );
@@ -263,9 +262,8 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			}
 
 			// Update the transient with the data as well as the JSON file.
-			$this->updateTransient( $data_array );
-			$this->updateJsonFile( $data_array );
-
+			self::updateTransient( $data_array );
+			self::updateJsonFile( $data_array );
 			return $data_array;
 		}
 
@@ -277,7 +275,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0.2
 		 */
-		protected function updateTransient( $data_array ) {
+		protected static function updateTransient( $data_array ) {
 			if ( !is_array( $data_array ) ) {
 				return;
 			}
@@ -294,7 +292,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0.2
 		 */
-		protected function updateJsonFile( $data_array ) {
+		protected static function updateJsonFile( $data_array ) {
 			if ( !is_array( $data_array ) ) {
 				return;
 			}
@@ -378,7 +376,12 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		/**
 		 * Get a row markup for given row data.
 		 *
-		 *
+		 * @param int $post_id The ID of the post we are fetching the row data for.
+		 * @param mixed $timestamp The timestamp we are saying was the time for the post, or the template placeholder.
+		 * @param mixed $user_obj The user object in the format from the webhook.
+		 * @return string The Markup.
+		 * @author Paul Hughes
+		 * @since 3.0.2
 		 */
 		public function getRowMarkup( $post_id, $timestamp, $user_obj ) {
 			if ( is_numeric( $timestamp ) ) {
@@ -412,6 +415,102 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			$html .= '</li>';
 
 			return $html;
+		}
+
+		/**
+		 * Updates/checks the latest reply-time on a post if one of its comments is removed (if it was the latest comment, obviously it's no longer the latest).
+		 *
+		 * @param $request array The array that was parsed from the request body.
+		 * @param $event string The event that was sent.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function updatePostLatestReplyTime( $request, $event ) {
+			// Only execute for the applicable events.
+			$events = array( 'remove', 'spam', 'unspam' );
+			if ( in_array( $event, $events ) ) {
+				$path = $request['path'];
+
+				$split_path = explode( '#', $path );
+				$split_final = explode( '/', $split_path[1] );
+				$comment_base = $split_path[0] . '#' . $split_final[0];
+
+				// See if the path is a reply to a given post.
+				$post_id = Muut_Webhooks::getPostIdRepliedTo( $path );
+
+				if ( !$post_id ) {
+					return;
+				}
+
+				$latest_update_timestamp = get_post_time( 'U', true, $post_id );
+				$muut_user = '';
+				$has_replies = false;
+				// If it is threaded commenting, make sure to check for the top-level times.
+				if ( Muut_Comment_Overrides::instance()->getCommentingPostCommentType( $post_id ) == 'threaded' ) {
+					// Check if a WP post exists in the database that would match the path of the "post" request (for threaded commenting).
+					$post_query_args = array(
+						'post_type' => Muut_Custom_Post_Types::MUUT_THREAD_CPT_NAME,
+						'post_status' => Muut_Custom_Post_Types::MUUT_PUBLIC_POST_STATUS,
+						'meta_query' => array(
+							array(
+								'key' => 'muut_channel_path',
+								'value' => $split_path[0],
+							),
+						),
+						'orderby' => 'post_date_gmt',
+						'order' => 'DESC',
+						'posts_per_page' => 1,
+					);
+
+					$query = new WP_Query( $post_query_args );
+					$posts = $query->get_posts();
+
+					if ( !empty( $posts ) && is_array( $posts ) ) {
+						$post_update_time = get_post_time( 'U', true, $posts[0] );
+						if ( $post_update_time > $latest_update_timestamp ) {
+							$latest_update_timestamp = $post_update_time;
+							$muut_user = get_post_meta( $posts[0]->ID, 'muut_user', true );
+							$has_replies = true;
+						}
+					}
+				}
+				// Also check the actual comments.
+				$comment_query_args = array(
+					'meta_query' => array(
+						array(
+							'key' => 'muut_path',
+							'value' => $comment_base,
+						),
+					),
+					'orderby' => 'comment_date_gmt',
+					'order' => 'DESC',
+					'number' => 1,
+				);
+				// Get the comment data.
+				$comment_query = new WP_Comment_Query;
+				$comments = $comment_query->query( $comment_query_args );
+
+				if ( !empty( $comments ) && is_array( $comments ) ) {
+					$comment_update_time = strtotime( $comments[0]->comment_date_gmt );
+					if ( $comment_update_time > $latest_update_timestamp ) {
+						$latest_update_timestamp = $comment_update_time;
+						$muut_user = get_comment_meta( $comments[0]->comment_ID, 'muut_user', true );
+					}
+					$has_replies = true;
+				}
+
+				if ( !$has_replies ) {
+					delete_post_meta( $post_id, self::REPLY_UPDATE_TIME_NAME );
+					delete_post_meta( $post_id, self::REPLY_LAST_USER_DATA_NAME );
+				} else {
+					// Add/update a meta for the post with the time of the last comment and the user data responsible.
+					update_post_meta( $post_id, self::REPLY_UPDATE_TIME_NAME, $latest_update_timestamp );
+					update_post_meta( $post_id, self::REPLY_LAST_USER_DATA_NAME, $muut_user );
+				}
+
+				self::refreshCache();
+			}
 		}
 	}
 }
