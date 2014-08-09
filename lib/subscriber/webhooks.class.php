@@ -502,7 +502,8 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 
 			// The path leads to an individual reply.
 			if ( self::webhookPathType( $path ) == 'reply' ) {
-				$comment = self::webhookGetCommentFromPath( $path, 'any' );
+				// (null status means any status for commen queries)
+				$comment = self::webhookGetCommentFromPath( $path, null );
 
 				if ( $comment ) {
 					$likes = (int) get_comment_meta( $comment->comment_ID, 'muut_likes', true );
