@@ -192,9 +192,11 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			$settings = 'data-show_online="false" ';
 
 			if ( isset( $post_commenting_options['type'] ) && $post_commenting_options['type'] == 'threaded' ) {
-				$settings .= 'data-show_title="false" title="Comments on ' . $post_type_name . ': ' . get_the_title( $post_id ) . '" data-channel="' . $post_type_name . ': ' . get_the_title( $post_id ) . '"';
+				$post_title = substr( sprintf( __( 'Comments on %s', 'muut' ), get_the_title( $post_id ) ), 0, 82 );
+				$settings .= 'data-show_title="false" title="' . $post_title . '" data-channel="' . $post_title . '"';
 			} else {
-				$settings .= 'data-show_title="true" title="' . $post_type_name . ': ' . get_the_title( $post_id ) . '" data-channel="' . __( 'Comments', 'muut' ) . '" ';
+				$post_title = substr( $post_type_name . ': ' . get_the_title( $post_id ), 0, 82 );
+				$settings .= 'data-show_title="true" title="' . $post_title . '" data-channel="' . __( 'Comments', 'muut' ) . '" ';
 			}
 
 			if ( isset( $post_commenting_options['disable_uploads'] ) && $post_commenting_options['disable_uploads'] == '1' ) {
