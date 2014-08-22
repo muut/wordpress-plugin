@@ -387,15 +387,15 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			if ( is_numeric( $timestamp ) ) {
 				$time_since = time() - $timestamp;
 				if ( $time_since < 60 ) {
-					$list_time = 'just now';
+					$list_time = _x( 'just now', 'comment-just-posted', 'muut' );
 				} elseif ( $time_since < ( 60 * 60 ) ) {
-					$list_time = floor( $time_since / 60 ) . 'm';
+					$list_time = floor( $time_since / 60 ) . _x( 'm', 'abbreviation-for-minutes', 'muut' );
 				} elseif ( $time_since < ( 60 * 60 * 24 ) ) {
-					$list_time = floor( $time_since / ( 60 * 60 ) ) . 'h';
+					$list_time = floor( $time_since / ( 60 * 60 ) ) . _x( 'h', 'abbreviation-for-hours', 'muut' );
 				} elseif ( $time_since < ( 60 * 60 * 24 * 7 ) ) {
-					$list_time = floor( $time_since / ( 60 * 60 * 24 ) ) . 'd';
+					$list_time = floor( $time_since / ( 60 * 60 * 24 ) ) . _x( 'd', 'abbreviation-for-days', 'muut' );
 				} else {
-					$list_time = floor( $time_since / ( 60 * 60 * 24 * 7 ) ) . 'w';
+					$list_time = floor( $time_since / ( 60 * 60 * 24 * 7 ) ) . _x( 'w', 'abbreviation-for-weeks', 'muut' );
 				}
 			} else {
 				$list_time = '%LISTTIME%';
@@ -424,7 +424,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @param $event string The event that was sent.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.1
 		 */
 		public function updatePostLatestReplyTime( $request, $event ) {
 			// Only execute for the applicable events.

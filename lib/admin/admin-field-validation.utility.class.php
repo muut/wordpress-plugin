@@ -81,7 +81,7 @@ if ( !class_exists( 'Muut_Field_Validation' ) ) {
 		/**
 		 * Function to validate that a string (like forum name) has no whitespace.
 		 *
-		 * @param string $string $value The value that we are validating.
+		 * @param string $value The value that we are validating.
 		 * @return bool Whether the field is valid or not.
 		 * @author Paul Hughes
 		 * @since 3.0.2
@@ -95,6 +95,22 @@ if ( !class_exists( 'Muut_Field_Validation' ) ) {
 				return false;
 			} else {
 				return true;
+			}
+		}
+
+		/**
+		 * Validate alphanumeric.
+		 *
+		 * @param string $value The value we are validating.
+		 * @return bool Whether the field is valid or not.
+		 * @author Paul Hughes
+		 * @since 3.0.2.2
+		 */
+		public static function validateAlphaNumeric( $value ) {
+			if ( preg_match( '/^[a-zA-Z0-9]*$/', $value ) ) {
+				return true;
+			} else {
+				return false;
 			}
 		}
 	}

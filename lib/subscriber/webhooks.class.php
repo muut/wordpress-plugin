@@ -79,7 +79,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @since 3.0.2
 		 */
 		public function addActions() {
-			add_action( 'admin_init', array( $this, 'addWebhooksEndpoint' ) );
+			add_action( 'init', array( $this, 'addWebhooksEndpoint' ), 6 );
 
 			add_action( 'wp', array( $this, 'receiveRequest' ), 20 );
 
@@ -531,7 +531,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @param $event
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.1
 		 */
 		public function processSpam( $request, $event ) {
 			$path = $request['path'];
@@ -560,7 +560,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @param $event
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.1
 		 */
 		public function processUnspam( $request, $event ) {
 			$path = $request['path'];
@@ -632,7 +632,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @param string $path The webhook path.
 		 * @return string Either "post" or "reply".
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.1
 		 */
 		public static function webhookPathType( $path ) {
 			$split_path = explode( '#', $path );
@@ -651,7 +651,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @param string $path The webhook path.
 		 * @return false|object A WP Comment object or false on failure.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.1
 		 */
 		public static function webhookGetCommentFromPath( $path, $status = 'approve' ) {
 			if ( self::webhookPathType( $path ) != 'reply' ) {
@@ -697,7 +697,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @param string $path The webhook path.
 		 * @return false|WP_Post A WordPress Post object or false on failure.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.1
 		 */
 		public static function webhookGetPostFromPath( $path, $status = Muut_Custom_Post_Types::MUUT_PUBLIC_POST_STATUS ) {
 			if ( self::webhookPathType( $path ) != 'post' ) {

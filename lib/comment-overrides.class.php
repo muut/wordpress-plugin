@@ -329,7 +329,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 		 * @param int $post_id The commenting post id.
 		 * @return null|string The commenting type that is enabled or null if failed.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.1
 		 */
 		public function getCommentingPostCommentType( $post_id ) {
 			$post_commenting_options = Muut_Post_Utility::getPostOption( $post_id, 'commenting_settings' );

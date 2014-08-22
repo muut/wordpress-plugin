@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Muut\n"
-"POT-Creation-Date: 2014-07-30 17:38-0500\n"
-"PO-Revision-Date: 2014-07-30 17:39-0500\n"
+"POT-Creation-Date: 2014-08-22 18:49-0500\n"
+"PO-Revision-Date: 2014-08-22 18:49-0500\n"
 "Last-Translator: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language-Team: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.7\n"
+"X-Generator: Poedit 1.6.8\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -90,8 +90,8 @@ msgstr ""
 msgid "Enable forum"
 msgstr ""
 
-#: lib/admin/admin-post-editor.class.php:172 lib/muut.class.php:975
-#: lib/muut.class.php:976 views/admin-settings.php:34
+#: lib/admin/admin-post-editor.class.php:172 lib/muut.class.php:980
+#: lib/muut.class.php:981 views/admin-settings.php:34
 msgid "Muut"
 msgstr ""
 
@@ -107,48 +107,61 @@ msgstr ""
 msgid "Failed to save settings."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:269
+#: lib/admin/admin-settings.class.php:271
 msgid ""
 "Custom S3 Bucket name must be associated with a valid server. Make sure it "
 "matches the bucket you set up with Muut from your forum page settings."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:289
+#: lib/admin/admin-settings.class.php:294
 msgid ""
 "Forum name must contain no spaces of any kind. Make sure the forum name is "
 "the name you registered with Muut when you set up the forum."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:334
+#: lib/admin/admin-settings.class.php:322
+msgid "API Key must have no spaces and only alphanumeric characters."
+msgstr ""
+
+#: lib/admin/admin-settings.class.php:351
+msgid "Secret Key must have no spaces and only alphanumeric characters."
+msgstr ""
+
+#: lib/admin/admin-settings.class.php:399
 msgid ""
 "S3 bucket preferences have beem removed in this version in the interests of "
 "simpler and better SEO; don't worry, it's a good thing!"
 msgstr ""
 
-#: lib/channel.utility.class.php:67 lib/comment-overrides.class.php:197
-#: lib/comment-overrides.class.php:211 lib/muut.class.php:544
+#: lib/channel.utility.class.php:67 lib/comment-overrides.class.php:199
+#: lib/comment-overrides.class.php:213 lib/muut.class.php:544
 msgid "Comments"
 msgstr ""
 
-#: lib/custom-post-types.class.php:100 lib/custom-post-types.class.php:105
+#: lib/comment-overrides.class.php:195
+#, php-format
+msgid "Comments on %s"
+msgstr ""
+
+#: lib/custom-post-types.class.php:102 lib/custom-post-types.class.php:107
 msgid "Muut Threads"
 msgstr ""
 
-#: lib/custom-post-types.class.php:101
+#: lib/custom-post-types.class.php:103
 msgid "Muut Thread"
 msgstr ""
 
-#: lib/custom-post-types.class.php:107
+#: lib/custom-post-types.class.php:109
 msgid ""
 "This post type is not for public use, but is mainly for storing Muut thread "
 "data passed to it via webhooks."
 msgstr ""
 
-#: lib/custom-post-types.class.php:123
+#: lib/custom-post-types.class.php:125
 msgid "Public Muut Post"
 msgstr ""
 
-#: lib/custom-post-types.class.php:128
+#: lib/custom-post-types.class.php:130
 msgid "Spammed Muut Post"
 msgstr ""
 
@@ -164,87 +177,112 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
-#: lib/muut.class.php:786
-msgid "Arabic"
+#: lib/muut.class.php:546 lib/widgets/widget-latest-comments.class.php:390
+msgctxt "comment-just-posted"
+msgid "just now"
 msgstr ""
 
-#: lib/muut.class.php:787
-msgid "Brazil Portuguese"
+#: lib/muut.class.php:547 lib/widgets/widget-latest-comments.class.php:392
+msgctxt "abbreviation-for-minutes"
+msgid "m"
 msgstr ""
 
-#: lib/muut.class.php:788
-msgid "Bulgarian"
+#: lib/muut.class.php:548 lib/widgets/widget-latest-comments.class.php:394
+msgctxt "abbreviation-for-hours"
+msgid "h"
 msgstr ""
 
-#: lib/muut.class.php:789
-msgid "Chinese"
+#: lib/muut.class.php:549 lib/widgets/widget-latest-comments.class.php:396
+msgctxt "abbreviation-for-days"
+msgid "d"
 msgstr ""
 
-#: lib/muut.class.php:790
-msgid "Chinese / Taiwan"
+#: lib/muut.class.php:550 lib/widgets/widget-latest-comments.class.php:398
+msgctxt "abbreviation-for-weeks"
+msgid "w"
 msgstr ""
 
 #: lib/muut.class.php:791
-msgid "Dutch"
+msgid "Arabic"
 msgstr ""
 
 #: lib/muut.class.php:792
-msgid "English"
+msgid "Brazil Portuguese"
 msgstr ""
 
 #: lib/muut.class.php:793
-msgid "Finnish"
+msgid "Bulgarian"
 msgstr ""
 
 #: lib/muut.class.php:794
-msgid "French"
+msgid "Chinese"
 msgstr ""
 
 #: lib/muut.class.php:795
-msgid "German"
+msgid "Chinese / Taiwan"
 msgstr ""
 
 #: lib/muut.class.php:796
-msgid "Hungarian"
+msgid "Dutch"
 msgstr ""
 
 #: lib/muut.class.php:797
-msgid "Hebrew"
+msgid "English"
 msgstr ""
 
 #: lib/muut.class.php:798
-msgid "Indonesian"
+msgid "Finnish"
 msgstr ""
 
 #: lib/muut.class.php:799
-msgid "Japanese"
+msgid "French"
 msgstr ""
 
 #: lib/muut.class.php:800
-msgid "Korean"
+msgid "German"
 msgstr ""
 
 #: lib/muut.class.php:801
-msgid "Polish"
+msgid "Hungarian"
 msgstr ""
 
 #: lib/muut.class.php:802
-msgid "Russian"
+msgid "Hebrew"
 msgstr ""
 
 #: lib/muut.class.php:803
-msgid "Spanish"
+msgid "Indonesian"
 msgstr ""
 
 #: lib/muut.class.php:804
-msgid "Swedish"
+msgid "Japanese"
 msgstr ""
 
 #: lib/muut.class.php:805
-msgid "Tamil"
+msgid "Korean"
 msgstr ""
 
 #: lib/muut.class.php:806
+msgid "Polish"
+msgstr ""
+
+#: lib/muut.class.php:807
+msgid "Russian"
+msgstr ""
+
+#: lib/muut.class.php:808
+msgid "Spanish"
+msgstr ""
+
+#: lib/muut.class.php:809
+msgid "Swedish"
+msgstr ""
+
+#: lib/muut.class.php:810
+msgid "Tamil"
+msgstr ""
+
+#: lib/muut.class.php:811
 msgid "Turkish"
 msgstr ""
 
@@ -265,7 +303,7 @@ msgid ""
 "content."
 msgstr ""
 
-#: lib/subscriber/webhooks.class.php:234
+#: lib/subscriber/webhooks.class.php:236
 msgid ""
 "Note that webhooks functionality will only work for posts made after "
 "activation."
@@ -312,11 +350,11 @@ msgctxt "anonymous users"
 msgid "anonymous"
 msgstr ""
 
-#: lib/widgets/widget-trending-posts.class.php:43
+#: lib/widgets/widget-trending-posts.class.php:41
 msgid "Muut Trending Posts"
 msgstr ""
 
-#: lib/widgets/widget-trending-posts.class.php:45
+#: lib/widgets/widget-trending-posts.class.php:43
 msgid "Use this to show the Muut posts with the most activity."
 msgstr ""
 

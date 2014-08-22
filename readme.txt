@@ -3,7 +3,7 @@ Contributors: PaulHughes01, tipiirai, jannelehtinen
 Tags: forum, commenting, comments, social, realtime, discussion, widgets
 Requires at least: 3.7
 Tested up to: 3.9.2
-Stable tag: 3.0.2.1
+Stable tag: 3.0.2.2
 License: MIT
 License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
 
@@ -100,6 +100,13 @@ The update to version 3.0.1 is a small update with a couple big fixes and better
 The update to version 3.0 is a major update that enhances the plugin experience in a large way. The update _does_ support all of the earlier plugin functionality (such as the shortcodes), but we recommend updating when you have a little bit of time to experiment and ensure that everything continues to work as expected. We hope you enjoy the new version!
 
 == Changelog ==
+
+= 3.0.2.2 =
+Bug Fixes
+
+* Fixed problem with webhooks stopping working after a while since activation.
+* Internationalized strings in widgets on the frontend.
+* Validating fields more strictly on the backend.
 
 = 3.0.2.1 =
 Bug Fixes
