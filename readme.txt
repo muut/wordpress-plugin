@@ -11,7 +11,7 @@ License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
 
 Muut represents a complete re-imagination of what internet discussion forums and commenting should be like.
 
-It's a modern, fast, highly scalable discussion platform that you can embed onto your WordPress website, and personalize with css to match the design of your site. For more information on why we do what we do, check out our [manifesto](https://muut.com/manifesto/).
+It’s a modern, fast, highly scalable discussion platform that you can embed onto your WordPress website, and personalize with css to match the design of your site. For more information on why we do what we do, check out our [manifesto](https://muut.com/manifesto/).
 
 Whether you’re setting up for the first time or have just updated to the new version of the plugin, you’re going to love what we’ve done to make implementing Muut in your WordPress website easy and flexible.
 
@@ -37,12 +37,22 @@ Whether you’re setting up for the first time or have just updated to the new v
 * Custom S3 bucket support for Developer accounts
 * Escaped fragment support for Google
 
+= New! Widget Details =
+
+* _Online Users_ – Now the Online Users list isn’t limited to just your main forum page and channel embeds. You can use the Online Users widget on any of your pages to show who is currently logged in (and how many other people are viewing the site). Watch users’ portraits appear on the fly as they sign in to join the discussion.
+* _Latest Comments_ – Since Muut is so great to use as the commenting system on your posts and pages, the Latest Comments widget keeps track of which posts have received the latest comments and who made them, and all the users on your website can see it update in real-time as they participate in the discussions on all your posts.
+* _Trending Topics_ – If you want to help users stay on top of which posts are getting the most activity on your forum, the Trending Posts widget does just that, with real-time updates to comments and likes—not to mention the trademark Muut green “currently typing” circle.
+* _Discussion Channel_ – You can now embed a single specific channel in your website’s sidebar. Users can watch and join the discussion without having to stop browsing the rest of your website.
+* _My Feed_ – By using the My Feed widget, users can keep track of all the activity on all the discussions they’ve joined and postes they’ve made right in your website’s sidebars.
+
+The recently introduced Webhooks feature of Muut forums makes the Latest Comments and Trending Posts widgets possible, so that means that those two widgets will only work on forums that have a Developer subscription (the others are good to go with any forum!).
+
 You can find more information about Muut at our [website](https://muut.com) and read the full [plugin documentation](https://muut.com/docs/wordpress.html).
 
 == Installation ==
 
 1. From your website admin, visit _Plugins > Add New_
-2. Search for _"Muut"_
+2. Search for _“Muut”_
 3. Click _Install Now_
 4. Activate the plugin
 5. Visit the _Muut_ menu item on the Admin navigation
@@ -56,7 +66,7 @@ If you need help with any aspect of integrating with the plugin, feel free to ch
 
 = Can I still use WordPress commenting if I only want to use the main forum functionality? =
 
-Absolutely. You simply can deactivate the "Use Muut for post commenting" Muut setting in the Muut administration page. Alternatively, you can disable or enable Muut commenting on specific posts by enabling that global setting and then activating/deactivating "Use Muut for commenting" option on a post-by-post basis.
+Absolutely. You simply can deactivate the “Use Muut for post commenting” Muut setting in the Muut administration page. Alternatively, you can disable or enable Muut commenting on specific posts by enabling that global setting and then activating/deactivating “Use Muut for commenting” option on a post-by-post basis.
 
 = Can I embed a Muut channel with content surrounding it, before and after? =
 
@@ -70,8 +80,13 @@ There are several great ways to learn more about and get help with the plugin. T
 
 1. A Muut forum
 2. Muut post commenting
-3. Muut settings page
-4. Muut post/page editor panel
+3. Online Users widget
+4. Latest Comments widget (with subscription)
+5. Trending Posts widget (with subscription)
+6. Discussion Channel widget
+7. My Feed widget
+8. Muut settings page
+9. Muut post/page editor panel
 
 == Upgrade Notice ==
 
@@ -97,11 +112,11 @@ Bug Fixes
 = 3.0.2 =
 Features, UX, Improvements
 
-* Added "Who's Online" widget.
-* Added "Discussion Channel" widget.
-* Added "My Feed" widget.
-* Added "Latest Comments" widget.
-* Added "Trending Posts" widget.
+* Added “Who’s Online” widget.
+* Added “Discussion Channel” widget.
+* Added “My Feed” widget.
+* Added “Latest Comments” widget.
+* Added “Trending Posts” widget.
 * Added Muut Webhooks support.
 * Clean framework to setup listeners for Muut websocket events (devs).
 * Easy to hook into Muut webhook events to extend functionality (devs).
@@ -127,7 +142,7 @@ Features, UX, Improvements
 Bug Fixes
 
 * If Muut commenting is globally disabled, pages no longer default to being Channel embed pages on creation.
-* Able to disable Muut commenting on specific pages and posts, even if "Use Muut commenting on posts with existing comments" is on.
+* Able to disable Muut commenting on specific pages and posts, even if “Use Muut commenting on posts with existing comments” is on.
 
 = 3.0 =
 * Added meta box / panel to the post editor (and page editor) that controls the Muut embeds for that post, including Muut commenting.
