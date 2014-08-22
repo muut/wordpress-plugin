@@ -105,6 +105,7 @@ The update to version 3.0 is a major update that enhances the plugin experience 
 Bug Fixes
 
 * Fixed problem with webhooks stopping working after a while since activation.
+* Internationalized strings in widgets on the frontend.
 * Validating fields more strictly on the backend.
 
 = 3.0.2.1 =
