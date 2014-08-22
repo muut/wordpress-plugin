@@ -3,7 +3,7 @@ Contributors: PaulHughes01, tipiirai, jannelehtinen
 Tags: forum, commenting, comments, social, realtime, discussion, widgets
 Requires at least: 3.7
 Tested up to: 3.9.2
-Stable tag: 3.0.2.1
+Stable tag: 3.0.2.2
 License: MIT
 License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
 

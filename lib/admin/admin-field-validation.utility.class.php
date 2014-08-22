@@ -104,7 +104,7 @@ if ( !class_exists( 'Muut_Field_Validation' ) ) {
 		 * @param string $value The value we are validating.
 		 * @return bool Whether the field is valid or not.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.2
 		 */
 		public static function validateAlphaNumeric( $value ) {
 			if ( preg_match( '/^[a-zA-Z0-9]*$/', $value ) ) {

@@ -263,7 +263,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		 * @param int $post_id The post ID we are marking as spam.
 		 * @return int The post ID or 0 if failed.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.1
 		 */
 		public function markPostAsSpam( $post_id ) {
 			if ( !is_numeric( $post_id ) || get_post_type( $post_id ) !== self::MUUT_THREAD_CPT_NAME ) {
@@ -300,7 +300,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		 * @param int $post_id The post ID we are unspamming.
 		 * @return int The post ID or 0 if failed.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.1
 		 */
 		public function markPostAsNotSpam( $post_id ) {
 			if ( !is_numeric( $post_id ) || get_post_type( $post_id ) !== self::MUUT_THREAD_CPT_NAME ) {
@@ -337,7 +337,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		 * @param int $post_id The post ID we are marking as spam.
 		 * @return int The post ID or 0 if failed.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.1
 		 */
 		public function markCommentAsSpam( $comment_id ) {
 			if ( !is_numeric( $comment_id ) ) {
@@ -359,7 +359,7 @@ if ( !class_exists( 'Muut_Custom_Post_Types' ) ) {
 		 * @param int $post_id The post ID we are unspamming.
 		 * @return int The post ID or 0 if failed.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.1
 		 */
 		public function markCommentAsNotSpam( $comment_id ) {
 			if ( !is_numeric( $comment_id ) ) {

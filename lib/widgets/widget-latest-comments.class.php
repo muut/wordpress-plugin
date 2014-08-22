@@ -424,7 +424,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 		 * @param $event string The event that was sent.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.1
 		 */
 		public function updatePostLatestReplyTime( $request, $event ) {
 			// Only execute for the applicable events.
