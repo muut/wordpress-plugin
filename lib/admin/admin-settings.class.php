@@ -253,6 +253,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				//This first case is deprecated and should no longer be used. Delete after next release.
 				//TODO: Delete after next release.
 				case 'custom_s3_bucket_name':
+					$value = trim( $value );
 					$submitted_settings = $this->getSubmittedSettings();
 					if ( isset( $submitted_settings['use_custom_s3_bucket'] ) && isset( $submitted_settings['enable_proxy_rewrites'] ) && $submitted_settings['use_custom_s3_bucket'] && $submitted_settings['enable_proxy_rewrites'] ) {
 						if ( isset( $submitted_settings['forum_name'] ) ) {
@@ -276,11 +277,14 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 
 							// Unset the value, so nothing *breaks* (defaults to Muut.com indexing).
 							$value = '';
+						} else {
+							$value = sanitize_text_field( $value );
 						}
 					}
 					break;
 
 				case 'forum_name':
+					$value = trim( $value );
 					// Make sure the forum name has no whitespace.
 					$valid = Muut_Field_Validation::validateHasNoWhitespace( $value );
 
@@ -295,7 +299,67 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 						$this->addErrorToQueue( $error_args );
 
 						$value = muut()->getForumName();
+					} else {
+						$value = sanitize_text_field( $value );
 					}
+					break;
+				case 'subscription_api_key':
+					$validations = array(
+						'validateHasNoWhitespace',
+						'validateAlphaNumeric',
+					);
+					$value = trim( $value );
+					$valid = true;
+					foreach ( $validations as $validation ) {
+						if ( method_exists( 'Muut_Field_Validation', $validation ) && $valid ) {
+							$valid = Muut_Field_Validation::$validation( $value );
+						}
+					}
+
+					if ( !$valid ) {
+						$error_args = array(
+							'name' => $name,
+							'message' => __( 'API Key must have no spaces and only alphanumeric characters.', 'muut' ),
+							'field' => 'muut_subscription_api_key',
+							'new_value' => $value,
+							'old_value' => muut()->getOption( $name ),
+						);
+						$this->addErrorToQueue( $error_args );
+
+						$value = muut()->getOption( 'subscription_api_key', '' );
+					} else {
+						$value = sanitize_text_field( $value );
+					}
+
+					break;
+				case 'subscription_secret_key':
+					$validations = array(
+						'validateHasNoWhitespace',
+						'validateAlphaNumeric',
+					);
+					$value = trim( $value );
+					$valid = true;
+					foreach ( $validations as $validation ) {
+						if ( method_exists( 'Muut_Field_Validation', $validation ) && $valid ) {
+							$valid = Muut_Field_Validation::$validation( $value );
+						}
+					}
+
+					if ( !$valid ) {
+						$error_args = array(
+							'name' => $name,
+							'message' => __( 'Secret Key must have no spaces and only alphanumeric characters.', 'muut' ),
+							'field' => 'muut_subscription_secret_key',
+							'new_value' => $value,
+							'old_value' => muut()->getOption( $name ),
+						);
+						$this->addErrorToQueue( $error_args );
+
+						$value = muut()->getOption( 'subscription_secret_key', '' );
+					} else {
+						$value = sanitize_text_field( $value );
+					}
+
 					break;
 			}
 
