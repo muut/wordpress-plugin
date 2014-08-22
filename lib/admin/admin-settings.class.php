@@ -316,7 +316,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 					$error_fields[] = $error['field'];
 				}
 
-				$error_field_list = '"' . join( '"," ', $error_fields ) . '"';
+				$error_field_list = '"' . join( '","', $error_fields ) . '"';
 				echo '<script type="text/javascript">';
 				echo 'var muut_error_fields = [' . $error_field_list . '];';
 				echo '</script>';
