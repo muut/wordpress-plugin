@@ -101,6 +101,12 @@ The update to version 3.0 is a major update that enhances the plugin experience 
 
 == Changelog ==
 
+= 3.0.2.2 =
+Bug Fixes
+
+* Fixed problem with webhooks stopping working after a while since activation.
+* Validating fields more strictly on the backend.
+
 = 3.0.2.1 =
 Bug Fixes
 
