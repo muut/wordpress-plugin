@@ -232,7 +232,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 			$error = wp_parse_args( $error, $default_values );
 
 			if ( is_string( $error['message'] ) && !empty( $error['message'] ) ) {
-				$this->errorQueue['name'] = $error;
+				$this->errorQueue[$error['name']] = $error;
 				return true;
 			} else {
 				return false;
@@ -345,7 +345,8 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 * @since 3.0.1
 		 */
 		public function prepareAdminNotices() {
-			foreach( $this->errorQueue as $name => $error ) {
+			$error_queue = array_reverse( $this->errorQueue );
+			foreach( $error_queue as $name => $error ) {
 				muut()->queueAdminNotice( 'error', $error['message'] );
 			}
 		}
