@@ -23,9 +23,9 @@ muut(function(app, rpc) {
   });
 });
 
-jQuery(document).ready( function($) {
+var __muut_frontend_strings = muut_frontend_functions_localized;
 
-  var __muut_frontend_strings = muut_frontend_functions_localized;
+jQuery(document).ready( function($) {
 
   // Adds the comments navigation link to the forum navigation.
   var body = $('body');
@@ -162,15 +162,15 @@ var muut_time_format = function(timestamp) {
   var time_since = Math.round(timestamp / 1000);
   var list_time = '';
   if ( time_since < 60 ) {
-    list_time = 'just now';
+    list_time = __muut_frontend_strings.just_now;
   } else if ( time_since < ( 60 * 60 ) ) {
-    list_time = String(Math.floor( time_since / 60 )) + 'm';
+    list_time = String(Math.floor( time_since / 60 )) + __muut_frontend_strings.minutes_abbreviation;
   } else if ( time_since < ( 60 * 60 * 24 ) ) {
-    list_time = String(Math.floor( time_since / ( 60 * 60 ) )) + 'h';
+    list_time = String(Math.floor( time_since / ( 60 * 60 ) )) + __muut_frontend_strings.hours_abbreviation;
   } else if ( time_since < ( 60 * 60 * 24 * 7 ) ) {
-    list_time = String(Math.floor( time_since / ( 60 * 60 * 24 ) )) + 'd';
+    list_time = String(Math.floor( time_since / ( 60 * 60 * 24 ) )) + __muut_frontend_strings.days_abbreviation;
   } else {
-    list_time = String(Math.floor( time_since / ( 60 * 60 * 24 * 7 ) )) + 'w';
+    list_time = String(Math.floor( time_since / ( 60 * 60 * 24 * 7 ) )) + __muut_frontend_strings.weeks_abbreviation;
   }
   return list_time;
 };

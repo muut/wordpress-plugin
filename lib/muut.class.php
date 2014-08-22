@@ -543,6 +543,11 @@ if ( !class_exists( 'Muut' ) ) {
 				'muut-frontend-functions' => array(
 					'comments' => __( 'Comments', 'muut' ),
 					'admin' => __( 'Admin', 'muut' ),
+					'just_now' => _x( 'just now', 'comment-just-posted', 'muut' ),
+					'minutes_abbreviation' => _x( 'm', 'abbreviation-for-minutes', 'muut' ),
+					'hours_abbreviation' => _x( 'h', 'abbreviation-for-hours', 'muut' ),
+					'days_abbreviation' => _x( 'd', 'abbreviation-for-days', 'muut' ),
+					'weeks_abbreviation' => _x( 'w', 'abbreviation-for-weeks', 'muut' ),
 				),
 				'muut-widget-online-users' => array(
 					
