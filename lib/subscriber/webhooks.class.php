@@ -79,7 +79,7 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @since 3.0.2
 		 */
 		public function addActions() {
-			add_action( 'admin_init', array( $this, 'addWebhooksEndpoint' ) );
+			add_action( 'init', array( $this, 'addWebhooksEndpoint' ), 6 );
 
 			add_action( 'wp', array( $this, 'receiveRequest' ), 20 );
 
