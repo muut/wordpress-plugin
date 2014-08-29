@@ -1228,6 +1228,20 @@ if ( !class_exists( 'Muut' ) ) {
 				return false;
 			}
 		}
+
+		/**
+		 * Gets the upgrade URL for upgrading a given forum subscription.
+		 *
+		 * @return string the Upload link.
+		 * @author Paul Hughes
+		 * @since 3.0.2.2
+		 */
+		public function getUpgradeUrl() {
+			$forum_name = muut()->getForumName();
+			$upgrade_link = $forum_name ? 'https://muut.com/account/#' . $forum_name : 'https://muut.com/pricing/';
+
+			return $upgrade_link;
+		}
 	}
 	/**
 	 * END MAIN CLASS
