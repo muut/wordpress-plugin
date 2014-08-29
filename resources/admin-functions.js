@@ -111,11 +111,12 @@ jQuery(document).ready( function($) {
   }
 
   // Upgrade to developer links should open the upgrade window.
-  $('a.muut_upgrade_to_developer_link').on('click', function(e){
-    var muut_upgrade_url = 'https://muut.com/pricing/?' + $('#muut_forum_name').val() + '/developer';
+  // OUT OF DATE: Now just opens new window/tab.
+  /*$('a.muut_upgrade_to_developer_link').on('click', function(e){
+    var muut_upgrade_url = 'https://muut.com/account/#' + $('#muut_forum_name').val();
     window.open(muut_upgrade_url,"","width=1000,height=750,status=0,scrollbars=0,menubar=0");
     e.preventDefault();
-  });
+  });*/
 
   $('input.muut_autoselect').on('focus', function(e) {
     $(this).blur();

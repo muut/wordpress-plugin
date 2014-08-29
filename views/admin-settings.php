@@ -104,7 +104,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 	</table>
 	<h3 class="title"><?php _e( 'Single Sign-on', 'muut' ); ?></h3>
 		<?php $sso_field_class = $display_values['subscription_use_sso'] ? '' : 'hidden'; ?>
-		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade to Muut Developer%s to use the WordPress authentication system for your forum.%s No logging in twice—WordPress users automatically become Muut users.', 'muut' ), '<a class="muut_upgrade_to_developer_link" href="#">', '</a>', '<br />' ); ?></p>
+		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade your forum%s to a Small or Medium subscription to use your website’s user authentication system on your forum.%s No logging in twice—WordPress users automatically become Muut users.', 'muut' ), '<a class="muut_upgrade_to_developer_link" href="' . muut()->getUpgradeUrl() . '">', '</a>', '<br />' ); ?></p>
 		<table class="form-table">
 			<tbody>
 			<tr>
