@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Muut\n"
-"POT-Creation-Date: 2014-08-22 18:49-0500\n"
-"PO-Revision-Date: 2014-08-22 18:49-0500\n"
+"POT-Creation-Date: 2014-08-29 13:54-0500\n"
+"PO-Revision-Date: 2014-08-29 13:54-0500\n"
 "Last-Translator: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language-Team: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language: en_US\n"
@@ -422,9 +422,9 @@ msgstr ""
 #: views/admin-settings.php:107
 #, php-format
 msgid ""
-"%sUpgrade to Muut Developer%s to use the WordPress authentication system for "
-"your forum.%s No logging in twice—WordPress users automatically become Muut "
-"users."
+"%sUpgrade your forum%s to a Small or Medium subscription to use your "
+"website’s user authentication system on your forum.%s No logging in twice—"
+"WordPress users automatically become Muut users."
 msgstr ""
 
 #: views/admin-settings.php:113
@@ -727,15 +727,16 @@ msgstr ""
 #, php-format
 msgid ""
 "Single Sign-On (SSO) let's you use WordPress registration and login instead "
-"of Muut's. For this to work you need to %supgrade%s your forums to support "
-"SSO and then input the public/private keypair to the settings."
+"of Muut's. For this to work you need to %supgrade%s your forum to support "
+"Federated Identities with the Small or Medium subscription and then input "
+"the public/private keypair to the settings."
 msgstr ""
 
 #: views/blocks/help-tab-settings-sso.php:13
 msgid ""
 "Grab the keys directly from the forum frontend (either on your embed or at "
-"muut.com) by clicking the \"Settings\" link and then opening the \"Developer"
-"\" tab."
+"muut.com) by clicking the \"Settings\" link and copying the API Key and "
+"Secret Key from the top bar."
 msgstr ""
 
 #: views/blocks/help-tab-settings-sso.php:16
@@ -756,7 +757,8 @@ msgstr ""
 #: views/blocks/help-tab-settings-webhooks.php:13
 #, php-format
 msgid ""
-"To use webhooks, you need to %supgrade%s your forum to a developer license."
+"To use webhooks, you need to %supgrade%s your forum to support Outgoing "
+"Webhooks with a Small or Medium license."
 msgstr ""
 
 #: views/blocks/help-tab-settings-webhooks.php:16
