@@ -726,7 +726,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function printCurrentPageJs() {
-			if ( !is_admin() && get_post() ) {
+			if ( $this->needsMuutResources() || ( !is_admin() && get_post() ) ) {
 				echo '<script type="text/javascript">';
 				echo 'var muut_object;';
 				echo 'if ( typeof ajaxurl == "undefined" ) { var ajaxurl = "' . admin_url('admin-ajax.php') . '"; }';
