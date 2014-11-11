@@ -421,12 +421,10 @@ if ( !class_exists( 'Muut' ) ) {
 			if ( apply_filters( 'use_https_for_proxy', false ) ) {
 				$proxy_server = 'https://';
 			}
-			/** REMOVED S3 Bucket proxying support starting in version 3.0.2. Is not useful and can hinder SEO. */
-			/*$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
+			/** RE-ADDED S3 Bucket proxying support starting in version 3.0.2.3. Previously REMOVED in 3.0.2 */
+			$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
 				? $this->getOption( 'custom_s3_bucket_name' )
 				: self::MUUTSERVERS . '/i';
-			*/
-			$proxy_server .= self::MUUTSERVERS . '/i';
 
 			return apply_filters( 'muut_proxy_server', $proxy_server );
 		}

@@ -164,6 +164,8 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				'is_threaded_default',
 				'show_online_default',
 				'allow_uploads_default',
+				'subscription_use_signed_setup',
+				'use_custom_s3_bucket',
 				'subscription_use_sso',
 				'enable_proxy_rewrites',
 				'use_webhooks',
@@ -175,6 +177,8 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 
 			if ( ( isset( $settings['forum_name'] ) && $settings['forum_name'] != muut()->getForumName() )
 				|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != muut()->getOption( 'enable_proxy_rewrites' ) )
+				|| ( isset( $settings['use_custom_s3_bucket'] ) && $settings['use_custom_s3_bucket'] != muut()->getOption( 'use_custom_s3_bucket' ) )
+				|| ( isset( $settings['custom_s3_bucket_name'] ) && $settings['custom_s3_bucket_name'] != muut()->getOption( 'custom_s3_bucket_name' ) )
 				|| ( isset( $settings['use_webhooks'] ) && $settings['use_webhooks'] != muut()->getOption( 'use_webhooks' ) )
 			) {
 				flush_rewrite_rules( true );
@@ -251,7 +255,6 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		public function validateSettings( $value, $name ) {
 			switch( $name ) {
 				//This first case is deprecated and should no longer be used. Delete after next release.
-				//TODO: Delete after next release.
 				case 'custom_s3_bucket_name':
 					$value = trim( $value );
 					$submitted_settings = $this->getSubmittedSettings();
