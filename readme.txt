@@ -3,7 +3,7 @@ Contributors: PaulHughes01, tipiirai, jannelehtinen
 Tags: forum, commenting, comments, social, realtime, discussion, widgets
 Requires at least: 3.7
 Tested up to: 4.0
-Stable tag: 3.0.2.2
+Stable tag: 3.0.2.3
 License: MIT
 License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
 
@@ -45,9 +45,9 @@ Whether you’re setting up for the first time or have just updated to the new v
 * _Discussion Channel_ – You can now embed a single specific channel in your website’s sidebar. Users can watch and join the discussion without having to stop browsing the rest of your website.
 * _My Feed_ – By using the My Feed widget, users can keep track of all the activity on all the discussions they’ve joined and postes they’ve made right in your website’s sidebars.
 
-The recently introduced Webhooks feature of Muut forums makes the Latest Comments and Trending Posts widgets possible, so that means that those two widgets will only work on forums that have a Developer subscription (the others are good to go with any forum!).
+The recently introduced Webhooks feature of Muut forums makes the Latest Comments and Trending Posts widgets possible, so that means that those two widgets will only work on forums that have a Small or Medium subscription (the others are good to go with any forum!). See our [pricing page](https://muut.com/pricing/) for details.
 
-You can find more information about Muut at our [website](https://muut.com) and read the full [plugin documentation](https://muut.com/docs/wordpress.html).
+You can find more information about Muut at our [website](https://muut.com) and read the full [plugin documentation](https://muut.com/help/#wordpress).
 
 == Installation ==
 
@@ -100,6 +100,20 @@ The update to version 3.0.1 is a small update with a couple big fixes and better
 The update to version 3.0 is a major update that enhances the plugin experience in a large way. The update _does_ support all of the earlier plugin functionality (such as the shortcodes), but we recommend updating when you have a little bit of time to experiment and ensure that everything continues to work as expected. We hope you enjoy the new version!
 
 == Changelog ==
+
+= 3.0.2.3 =
+Features, UX, Improvements
+
+* Added back the Custom S3 Bucket Support
+* Added support for signed embeds separate from SSO/Federated Identities (for secure embedding)
+
+Notes
+
+* Webhooks: 'post' webhook now also stores the body content (replies already were).
+
+Bug Fixes
+
+* Various small fixes.
 
 = 3.0.2.2 =
 Bug Fixes

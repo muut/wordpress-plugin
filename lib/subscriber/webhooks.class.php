@@ -385,11 +385,20 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 */
 		public function processPost( $request, $event ) {
 
+			$body = '';
+			if ( isset( $request['thread']->body ) ) {
+				if( is_array( $request['thread']->body ) ) {
+					$body = implode( ' ', $request['thread']->body );
+				} elseif ( is_string( $request['thread']->body ) ) {
+					$body = $request['thread']->body;
+				}
+			}
+
 			$new_thread_args = array(
 				'title' => $request['thread']->title,
 				'path' => $request['location']->path,
 				'user' => $request['thread']->user,
-				'body' => '',
+				'body' => $body,
 			);
 
 			$custom_posts_object = Muut_Custom_Post_Types::instance();

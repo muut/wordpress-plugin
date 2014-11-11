@@ -117,10 +117,16 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 				'callback' => array( $this, 'renderSettingsHelpSeoTabContent' ),
 			);
 
-			$help_sso_tab_args = array(
-				'id' => 'muut_settings_help_sso_tab',
-				'title' => __( 'Single Sign-On', 'muut' ),
-				'callback' => array( $this, 'renderSettingsHelpSsoTabContent' ),
+			$help_signedsetup_tab_args = array(
+				'id' => 'muut_settings_help_signedsetup_tab',
+				'title' => __( 'Signed Setup', 'muut' ),
+				'callback' => array( $this, 'renderSettingsHelpSignedsetupTabContent' ),
+			);
+
+			$help_fedid_tab_args = array(
+				'id' => 'muut_settings_help_fedid_tab',
+				'title' => __( 'Federated Identities', 'muut' ),
+				'callback' => array( $this, 'renderSettingsHelpFedidTabContent' ),
 			);
 
 			$help_webhooks_tab_args = array(
@@ -138,7 +144,9 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 
 			$screen->add_help_tab( $help_seo_tab_args );
 
-			$screen->add_help_tab( $help_sso_tab_args );
+			$screen->add_help_tab( $help_signedsetup_tab_args );
+
+			$screen->add_help_tab( $help_fedid_tab_args );
 
 			$screen->add_help_tab( $help_webhooks_tab_args );
 
@@ -203,7 +211,20 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 		}
 
 		/**
-		 * Renders the content for the SSO help tab on the main Muut settings page.
+		 * Renders the content for the Signed Setup help tab on the main Muut settings page.
+		 *
+		 * @param WP_Screen $screen The current screen.
+		 * @param array $tab The current tab array.
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.2.3
+		 */
+		public function renderSettingsHelpSignedsetupTabContent( $screen, $tab ) {
+			include( muut()->getPluginPath() . 'views/blocks/help-tab-settings-signedsetup.php' );
+		}
+
+		/**
+		 * Renders the content for the Federated Identities help tab on the main Muut settings page.
 		 *
 		 * @param WP_Screen $screen The current screen.
 		 * @param array $tab The current tab array.
@@ -211,8 +232,8 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public function renderSettingsHelpSsoTabContent( $screen, $tab ) {
-			include( muut()->getPluginPath() . 'views/blocks/help-tab-settings-sso.php' );
+		public function renderSettingsHelpFedidTabContent( $screen, $tab ) {
+			include( muut()->getPluginPath() . 'views/blocks/help-tab-settings-fedid.php' );
 		}
 
 		/**

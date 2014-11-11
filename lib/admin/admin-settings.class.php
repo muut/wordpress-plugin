@@ -73,9 +73,10 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 */
 		public function addActions() {
 			add_action( 'load-toplevel_page_' . Muut::SLUG, array( $this, 'saveSettings' ) );
-			add_action( 'load-toplevel_page_' . Muut::SLUG, array( $this, 'maybeShowS3RemoveNotice' ), 9 );
 			add_action( 'admin_notices', array( $this, 'prepareAdminNotices' ), 9 );
+			add_action( 'admin_notices', array( $this, 'maybeShowReviewRequestNotice' ), 8 );
 			add_action( 'admin_print_scripts', array( $this, 'printJsFieldNames') );
+			add_action( 'wp_ajax_dismiss_review_request_notice', array( $this, 'ajaxDismissReviewRequestNotice' ) );
 		}
 
 		/**
@@ -164,6 +165,8 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				'is_threaded_default',
 				'show_online_default',
 				'allow_uploads_default',
+				'subscription_use_signed_setup',
+				'use_custom_s3_bucket',
 				'subscription_use_sso',
 				'enable_proxy_rewrites',
 				'use_webhooks',
@@ -175,6 +178,8 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 
 			if ( ( isset( $settings['forum_name'] ) && $settings['forum_name'] != muut()->getForumName() )
 				|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != muut()->getOption( 'enable_proxy_rewrites' ) )
+				|| ( isset( $settings['use_custom_s3_bucket'] ) && $settings['use_custom_s3_bucket'] != muut()->getOption( 'use_custom_s3_bucket' ) )
+				|| ( isset( $settings['custom_s3_bucket_name'] ) && $settings['custom_s3_bucket_name'] != muut()->getOption( 'custom_s3_bucket_name' ) )
 				|| ( isset( $settings['use_webhooks'] ) && $settings['use_webhooks'] != muut()->getOption( 'use_webhooks' ) )
 			) {
 				flush_rewrite_rules( true );
@@ -251,7 +256,6 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		public function validateSettings( $value, $name ) {
 			switch( $name ) {
 				//This first case is deprecated and should no longer be used. Delete after next release.
-				//TODO: Delete after next release.
 				case 'custom_s3_bucket_name':
 					$value = trim( $value );
 					$submitted_settings = $this->getSubmittedSettings();
@@ -394,12 +398,13 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0.2
 		 */
-		public function maybeShowS3RemoveNotice() {
+		/* COMMENTED OUT IN 3.0.2.3 when s3 was re-added
+		 * public function maybeShowS3RemoveNotice() {
 			if ( muut()->getOption( 'removed_s3_support' ) ) {
-				muut()->queueAdminNotice( 'updated', __("S3 bucket preferences have beem removed in this version in the interests of simpler and better SEO; don't worry, it's a good thing!", 'muut' ) );
+				muut()->queueAdminNotice( 'updated', __("S3 bucket preferences have been removed in this version in the interests of simpler and better SEO; don't worry, it's a good thing!", 'muut' ) );
 				muut()->deleteOption( 'removed_s3_support' );
 			}
-		}
+		}*/
 
 		/**
 		 * Queues the admin notices generated here to the main Muut admin notices renderer.
@@ -413,6 +418,42 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 			foreach( $error_queue as $name => $error ) {
 				muut()->queueAdminNotice( 'error', $error['message'] );
 			}
+		}
+
+		/**
+		 * Displays the dismissible admin notice requesting a review.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.2.3
+		 */
+		public function maybeShowReviewRequestNotice() {
+			if ( !muut()->getOption( 'dismissed_review_request', false ) ) {
+				$update_timestamps = muut()->getOption( 'update_timestamps', array() );
+				$update_time = !empty( $update_timestamps ) ? array_pop( $update_timestamps ) : false;
+
+				if ( $update_time && ( time() - $update_time > 604800 ) ) {
+					echo '<div class="updated" id="muut_dismiss_review_request_notice">';
+					wp_nonce_field( 'muut_dismiss_review_request', 'dismiss_review_request_nonce' );
+					echo '<p>' . sprintf( __( 'Enjoying Muut? We\'d love it you would pop over to the %splugin page%s and leave a rating and review!', 'muut' ), '<a class="dismiss_review_request" target="_blank" href="https://wordpress.org/plugins/muut/">', '</a>' ) . '<span style="float: right"><a href="#" class="dismiss_review_request">X</a></span></p>';
+					echo '</div>';
+				}
+			}
+		}
+
+		/**
+		 * Dismisses the review request notice.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.2.3
+		 */
+		public function ajaxDismissReviewRequestNotice() {
+			check_ajax_referer( 'muut_dismiss_review_request', 'security' );
+			if ( isset( $_POST['dismiss'] ) && $_POST['dismiss'] ) {
+				muut()->setOption( 'dismissed_review_request', true );
+			}
+			die();
 		}
 	}
 }

@@ -272,7 +272,7 @@ if ( !class_exists( 'Muut_Shortcodes' ) ) {
 		 * @since 3.0
 		 */
 		public function checkForShortcodes( $requires_resources, $page_id ) {
-			if ( !$requires_resources ) {
+			if ( !is_admin() && !$requires_resources ) {
 				if ( $page_id == get_the_ID() ) {
 					global $post;
 

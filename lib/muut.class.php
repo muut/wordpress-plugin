@@ -26,7 +26,7 @@ if ( !class_exists( 'Muut' ) ) {
 		/**
 		 * The current version of Muut
 		 */
-		const VERSION = '3.0.2.2';
+		const VERSION = '3.0.2.3';
 
 		/**
 		 * The version of Muut this was released with.
@@ -421,12 +421,10 @@ if ( !class_exists( 'Muut' ) ) {
 			if ( apply_filters( 'use_https_for_proxy', false ) ) {
 				$proxy_server = 'https://';
 			}
-			/** REMOVED S3 Bucket proxying support starting in version 3.0.2. Is not useful and can hinder SEO. */
-			/*$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
+			/** RE-ADDED S3 Bucket proxying support starting in version 3.0.2.3. Previously REMOVED in 3.0.2 */
+			$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
 				? $this->getOption( 'custom_s3_bucket_name' )
 				: self::MUUTSERVERS . '/i';
-			*/
-			$proxy_server .= self::MUUTSERVERS . '/i';
 
 			return apply_filters( 'muut_proxy_server', $proxy_server );
 		}
@@ -611,6 +609,7 @@ if ( !class_exists( 'Muut' ) ) {
 				),
 				'subscription_api_key' => '',
 				'subscription_secret_key' => '',
+				'subscription_use_signed_setup' => '0',
 				'subscription_use_sso' => false,
 				'enable_proxy_rewrites' => '1',
 				'use_custom_s3_bucket' => '0',
@@ -726,7 +725,7 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0
 		 */
 		public function printCurrentPageJs() {
-			if ( !is_admin() && get_post() ) {
+			if ( $this->needsMuutResources() || ( !is_admin() && get_post() ) ) {
 				echo '<script type="text/javascript">';
 				echo 'var muut_object;';
 				echo 'if ( typeof ajaxurl == "undefined" ) { var ajaxurl = "' . admin_url('admin-ajax.php') . '"; }';

@@ -444,7 +444,7 @@ if ( !class_exists( 'Muut_Initializer' ) ) {
 			if ( version_compare( Muut::VERSION, muut()->getOption( 'current_version', '0' ), '>' ) ) {
 				$this->initUpdater();
 			}
-			if ( isset( $_GET['page'] ) && $_GET['page'] == 'muut' ) {
+			if ( ( defined('DOING_AJAX') && DOING_AJAX ) || isset( $_GET['page'] ) && $_GET['page'] == 'muut' ) {
 				$this->initAdminSettings();
 			}
 			$this->initContextualHelp();

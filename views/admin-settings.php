@@ -21,6 +21,7 @@ $current_values = array(
 	'enable_proxy_rewrites' => muut()->getOption( 'enable_proxy_rewrites', '1' ),
 	'use_custom_s3_bucket' => muut()->getOption( 'use_custom_s3_bucket', '0' ),
 	'custom_s3_bucket_name' => muut()->getOption( 'custom_s3_bucket_name', '' ),
+	'subscription_use_signed_setup' => muut()->getOption( 'subscription_use_signed_setup', '0' ),
 	'subscription_use_sso' => muut()->getOption( 'subscription_use_sso', '0' ),
 	'subscription_api_key' => muut()->getOption( 'subscription_api_key', '' ),
 	'subscription_secret_key' => muut()->getOption( 'subscription_secret_key', '' ),
@@ -82,7 +83,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 						<label for="muut_replace_comments"><?php _e( 'Use Muut for post commenting', 'muut' ); ?></label>
 					</th>
 				</tr>
-				<tr class="indented" data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')">
+				<tr class="indented" data-muut_requires="muut_replace_comments" data-muut_require_func="is(':checked')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')">
 					<th class="th-full" colspan="2">
 						<input name="setting[override_all_comments]" type="checkbox" id="muut_override_all_comments" value="1" <?php checked( '1', $display_values['override_all_comments'] ); ?> />
 						<label for="muut_override_all_comments"><?php _e( 'Use Muut commenting on posts with existing comments (data not deleted)', 'muut' ); ?></label>
@@ -100,37 +101,71 @@ $display_values = wp_parse_args( $error_values, $current_values );
 				<label for="muut_enable_proxy_rewrites"><?php printf( __( 'Allow search engines to crawl discussions at %s', 'muut' ), '<strong>' . str_replace( array( 'http://', 'https://', ), '', get_site_url() ) . '</strong>.' ); ?></label>
 			</th>
 		</tr>
+		<tr class="<?php echo $custom_s3_field_class; ?> indented" data-muut_requires="muut_enable_proxy_rewrites" data-muut_require_func="is(':checked()')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')">
+			<th class="th-full" colspan="2">
+				<input name="setting[use_custom_s3_bucket]" type="checkbox" id="muut_use_custom_s3_bucket" value="1" <?php checked( '1', $display_values['use_custom_s3_bucket'] ); ?> />
+				<label for="muut_use_custom_s3_bucket"><?php printf( __( 'Serve from your own S3 Bucket (%sRequires Small Subscription%s)', 'muut' ), '<a class="muut_upgrade_community_link" href="' . muut()->getUpgradeUrl() . '" target="_blank">', '</a>' ); ?></label>
+			</th>
+		</tr>
+		<tr class="<?php echo $custom_s3_field_class; ?> indented" data-muut_requires="muut_use_custom_s3_bucket" data-muut_require_func="is(':checked()')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')">
+			<th scope="row">
+				<label for="muut_custom_s3_bucket_name"><?php _e( 'S3 Bucket Name', 'muut' ); ?></label>
+			</th>
+			<td>
+				<input name="setting[custom_s3_bucket_name]" type="text" id="muut_custom_s3_bucket_name" placeholder="s3.bucket.name" value="<?php echo $display_values['custom_s3_bucket_name']; ?>" />
+			</td>
+		</tr>
+		<?php $show_s3_bucket_input = muut()->getOption( 'use_custom_s3_bucket' ) ? '' : 'hidden'; ?>
+		<tr class="<?php echo $show_s3_bucket_input; ?> indented show_slow" id="muut_s3_requirement_paragraph" data-muut_requires="muut_use_custom_s3_bucket" data-muut_require_func="is(':checked()')">
+			<td colspan="2">
+				<span class="description"><?php _e( 'The bucket name you enter must be the same S3 bucket registered for the forum in the Muut settings', 'muut' ); ?></span>
+			</td>
+		</tr>
 		</tbody>
 	</table>
-	<h3 class="title"><?php _e( 'Single Sign-on', 'muut' ); ?></h3>
-		<?php $sso_field_class = $display_values['subscription_use_sso'] ? '' : 'hidden'; ?>
-		<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')"><?php printf( __( '%sUpgrade your forum%s to a Small or Medium subscription to use your website’s user authentication system on your forum.%s No logging in twice—WordPress users automatically become Muut users.', 'muut' ), '<a class="muut_upgrade_to_developer_link" href="' . muut()->getUpgradeUrl() . '">', '</a>', '<br />' ); ?></p>
-		<table class="form-table">
-			<tbody>
-			<tr>
-				<th class="th-full" colspan="2">
-					<input name="setting[subscription_use_sso]" type="checkbox" id="muut_subscription_use_sso" value="1" <?php checked( '1', $display_values['subscription_use_sso'] ); ?> />
-					<label for="muut_subscription_use_sso"><?php _e( 'Enable', 'muut' ); ?></label>
-				</th>
-			</tr>
-			<tr class="<?php echo $sso_field_class; ?> indented" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':checked()')">
-				<th scope="row">
-					<label for="muut_subscription_api_key"><?php _e( 'API Key', 'muut' ); ?></label>
-				</th>
-				<td>
-					<input name="setting[subscription_api_key]" type="text" id="muut_subscription_api_key" value="<?php echo $display_values['subscription_api_key']; ?>" />
-				</td>
-			</tr>
-			<tr class="<?php echo $sso_field_class; ?> indented" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':checked()')">
-				<th scope="row">
-					<label for="muut_subscription_secret_key"><?php _e( 'Secret Key', 'muut' ); ?></label>
-				</th>
-				<td>
-					<input name="setting[subscription_secret_key]" type="text" id="muut_subscription_secret_key" value="<?php echo $display_values['subscription_secret_key']; ?>" />
-				</td>
-			</tr>
-			</tbody>
-		</table>
+	<h3 class="title"><?php _e( 'Signed Setup', 'muut' ); ?></h3>
+	<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_signed_setup" data-muut_require_func="is(':not(:checked)')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')"><?php printf( __( 'If you have a Small or Medium subscription and are using Federated Identities (Small) or Secure Embedding (Medium), you need to enter your API credentials to sign the embed. You can see the details of our premium plans at our %spricing list%s or %supgrade your forum now%s.', 'muut' ), '<a target="_blank" href="https://muut.com/pricing/">', '</a>', '<a class="muut_upgrade_community_link" href="' . muut()->getUpgradeUrl() . '" target="_blank">', '</a>' ); ?></p>
+	<table class="form-table">
+		<tbody>
+		<tr>
+			<th class="th-full" colspan="2">
+				<input name="setting[subscription_use_signed_setup]" type="checkbox" id="muut_subscription_use_signed_setup" value="1" <?php checked( '1', $display_values['subscription_use_signed_setup'] ); ?> />
+				<label for="muut_subscription_use_signed_setup"><?php _e( 'Enable', 'muut' ); ?></label>
+			</th>
+		</tr>
+		<tr class="<?php echo $sso_field_class; ?> indented" data-muut_requires="muut_subscription_use_signed_setup" data-muut_require_func="is(':checked()')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')">
+			<th scope="row">
+				<label for="muut_subscription_api_key"><?php _e( 'API Key', 'muut' ); ?></label>
+			</th>
+			<td>
+				<input name="setting[subscription_api_key]" type="text" id="muut_subscription_api_key" value="<?php echo $display_values['subscription_api_key']; ?>" />
+			</td>
+		</tr>
+		<tr class="<?php echo $sso_field_class; ?> indented" data-muut_requires="muut_subscription_use_signed_setup" data-muut_require_func="is(':checked()')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')">
+			<th scope="row">
+				<label for="muut_subscription_secret_key"><?php _e( 'Secret Key', 'muut' ); ?></label>
+			</th>
+			<td>
+				<input name="setting[subscription_secret_key]" type="text" id="muut_subscription_secret_key" value="<?php echo $display_values['subscription_secret_key']; ?>" />
+			</td>
+		</tr>
+		</tbody>
+	</table>
+	<h3 class="title"><?php _e( 'Federated Identities (formerly Single Sign-On)', 'muut' ); ?></h3>
+	<?php $sso_field_class = $display_values['subscription_use_sso'] ? '' : 'hidden'; ?>
+	<p class="muut_requires_input_block muut_use_sso_description" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')"><?php printf( __( '%sUpgrade your forum%s to a Small or Medium subscription to use your website’s user authentication system on your forum. No logging in twice—WordPress users automatically become Muut users.', 'muut' ), '<a class="muut_upgrade_community_link" href="' . muut()->getUpgradeUrl() . '" target="_blank">', '</a>'); ?></p>
+	<table class="form-table">
+		<tbody>
+		<tr>
+			<th class="th-full" colspan="2">
+				<input name="setting[subscription_use_sso]" type="checkbox" id="muut_subscription_use_sso" value="1" <?php checked( '1', $display_values['subscription_use_sso'] ); ?> class="muut_requires_input_block" data-muut_requires="muut_subscription_use_signed_setup" data-muut_require_func="is(':checked')" data-muut_require_true_cb="removeAttr('disabled')" data-muut_require_false_cb="removeAttr('checked').attr('disabled', true); $('.muut_use_sso_description').check_requires_fields()" />
+				<span class="muut_requires_input_block" data-muut_requires="muut_subscription_use_signed_setup" data-muut_require_func="is(':checked')" data-muut_require_true_cb="removeClass('disabled')" data-muut_require_false_cb="addClass('disabled')">
+					<label for="muut_subscription_use_sso"><?php _e( 'Enable', 'muut' ); ?><span class="muut_requires_input_block" data-muut_requires="muut_subscription_use_signed_setup" data-muut_require_func="is(':checked')" data-muut_require_true_cb="addClass('hidden')" data-muut_require_false_cb="removeClass('hidden')"> (Requires Signed Setup)</span></label>
+				</span>
+			</th>
+		</tr>
+		</tbody>
+	</table>
 	<h3 class="title"><?php _e( 'Widgets', 'muut' ); ?></h3>
 	<?php $sso_field_class = $display_values['subscription_use_sso'] ? '' : 'hidden'; ?>
 	<p><?php _e( 'The plugin comes packed with the following real-time widgets that you can place on any page.', 'muut' ); ?></p>

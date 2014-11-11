@@ -73,6 +73,8 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 			$version_thresholds = apply_filters( 'muut_updater_version_thresholds', array(
 				'2.0.13',
 				'3.0',
+				'3.0.2',
+				'3.0.2.3',
 			) );
 			natsort( $version_thresholds );
 			$this->versionThresholds = $version_thresholds;
@@ -192,6 +194,12 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 						muut()->deleteOption( 'use_custom_s3_bucket' );
 					}
 				break;
+
+				case '3.0.2.3':
+					if ( muut()->getOption( 'subscription_use_sso' ) ) {
+						muut()->setOption( 'subscription_use_signed_setup', 1);
+					}
+					break;
 			}
 		}
 
