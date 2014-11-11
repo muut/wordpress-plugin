@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Muut\n"
-"POT-Creation-Date: 2014-08-29 13:54-0500\n"
-"PO-Revision-Date: 2014-08-29 13:54-0500\n"
+"POT-Creation-Date: 2014-11-11 04:51-0500\n"
+"PO-Revision-Date: 2014-11-11 04:51-0500\n"
 "Last-Translator: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language-Team: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.8\n"
+"X-Generator: Poedit 1.6.10\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: lib/admin/admin-contextual-help.class.php:110
 #: lib/admin/admin-post-editor.class.php:122
-#: lib/admin/admin-post-editor.class.php:123 views/admin-settings.php:76
+#: lib/admin/admin-post-editor.class.php:123 views/admin-settings.php:77
 msgid "Commenting"
 msgstr ""
 
@@ -36,27 +36,31 @@ msgstr ""
 msgid "SEO"
 msgstr ""
 
-#: lib/admin/admin-contextual-help.class.php:122
-msgid "Single Sign-On"
+#: lib/admin/admin-contextual-help.class.php:122 views/admin-settings.php:126
+msgid "Signed Setup"
 msgstr ""
 
 #: lib/admin/admin-contextual-help.class.php:128
+msgid "Federated Identities"
+msgstr ""
+
+#: lib/admin/admin-contextual-help.class.php:134
 msgid "Webhooks"
 msgstr ""
 
-#: lib/admin/admin-contextual-help.class.php:246
+#: lib/admin/admin-contextual-help.class.php:267
 msgid "Muut Commenting"
 msgstr ""
 
-#: lib/admin/admin-contextual-help.class.php:251
+#: lib/admin/admin-contextual-help.class.php:272
 msgid "Muut Channel"
 msgstr ""
 
-#: lib/admin/admin-contextual-help.class.php:256
+#: lib/admin/admin-contextual-help.class.php:277
 msgid "Muut Forum"
 msgstr ""
 
-#: lib/admin/admin-contextual-help.class.php:329
+#: lib/admin/admin-contextual-help.class.php:350
 msgid "Muut Widgets"
 msgstr ""
 
@@ -90,51 +94,52 @@ msgstr ""
 msgid "Enable forum"
 msgstr ""
 
-#: lib/admin/admin-post-editor.class.php:172 lib/muut.class.php:980
-#: lib/muut.class.php:981 views/admin-settings.php:34
+#: lib/admin/admin-post-editor.class.php:172 lib/muut.class.php:979
+#: lib/muut.class.php:980 views/admin-settings.php:35
 msgid "Muut"
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:112
+#: lib/admin/admin-settings.class.php:114
 msgid "Settings successfully saved, other than the errors below:"
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:115
+#: lib/admin/admin-settings.class.php:117
 msgid "Settings successfully saved."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:119
+#: lib/admin/admin-settings.class.php:121
 msgid "Failed to save settings."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:271
+#: lib/admin/admin-settings.class.php:276
 msgid ""
 "Custom S3 Bucket name must be associated with a valid server. Make sure it "
 "matches the bucket you set up with Muut from your forum page settings."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:294
+#: lib/admin/admin-settings.class.php:299
 msgid ""
 "Forum name must contain no spaces of any kind. Make sure the forum name is "
 "the name you registered with Muut when you set up the forum."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:322
+#: lib/admin/admin-settings.class.php:327
 msgid "API Key must have no spaces and only alphanumeric characters."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:351
+#: lib/admin/admin-settings.class.php:356
 msgid "Secret Key must have no spaces and only alphanumeric characters."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:399
+#: lib/admin/admin-settings.class.php:439
+#, php-format
 msgid ""
-"S3 bucket preferences have beem removed in this version in the interests of "
-"simpler and better SEO; don't worry, it's a good thing!"
+"Enjoying Muut? We'd love it you would pop over to the %splugin page%s and "
+"leave a rating and review!"
 msgstr ""
 
 #: lib/channel.utility.class.php:67 lib/comment-overrides.class.php:199
-#: lib/comment-overrides.class.php:213 lib/muut.class.php:544
+#: lib/comment-overrides.class.php:213 lib/muut.class.php:542
 msgid "Comments"
 msgstr ""
 
@@ -165,124 +170,124 @@ msgstr ""
 msgid "Spammed Muut Post"
 msgstr ""
 
-#: lib/muut.class.php:540
+#: lib/muut.class.php:538
 msgid "Go ahead!"
 msgstr ""
 
-#: lib/muut.class.php:541
+#: lib/muut.class.php:539
 msgid "Don't do that!"
 msgstr ""
 
-#: lib/muut.class.php:545
+#: lib/muut.class.php:543
 msgid "Admin"
 msgstr ""
 
-#: lib/muut.class.php:546 lib/widgets/widget-latest-comments.class.php:390
+#: lib/muut.class.php:544 lib/widgets/widget-latest-comments.class.php:390
 msgctxt "comment-just-posted"
 msgid "just now"
 msgstr ""
 
-#: lib/muut.class.php:547 lib/widgets/widget-latest-comments.class.php:392
+#: lib/muut.class.php:545 lib/widgets/widget-latest-comments.class.php:392
 msgctxt "abbreviation-for-minutes"
 msgid "m"
 msgstr ""
 
-#: lib/muut.class.php:548 lib/widgets/widget-latest-comments.class.php:394
+#: lib/muut.class.php:546 lib/widgets/widget-latest-comments.class.php:394
 msgctxt "abbreviation-for-hours"
 msgid "h"
 msgstr ""
 
-#: lib/muut.class.php:549 lib/widgets/widget-latest-comments.class.php:396
+#: lib/muut.class.php:547 lib/widgets/widget-latest-comments.class.php:396
 msgctxt "abbreviation-for-days"
 msgid "d"
 msgstr ""
 
-#: lib/muut.class.php:550 lib/widgets/widget-latest-comments.class.php:398
+#: lib/muut.class.php:548 lib/widgets/widget-latest-comments.class.php:398
 msgctxt "abbreviation-for-weeks"
 msgid "w"
 msgstr ""
 
-#: lib/muut.class.php:791
+#: lib/muut.class.php:790
 msgid "Arabic"
 msgstr ""
 
-#: lib/muut.class.php:792
+#: lib/muut.class.php:791
 msgid "Brazil Portuguese"
 msgstr ""
 
-#: lib/muut.class.php:793
+#: lib/muut.class.php:792
 msgid "Bulgarian"
 msgstr ""
 
-#: lib/muut.class.php:794
+#: lib/muut.class.php:793
 msgid "Chinese"
 msgstr ""
 
-#: lib/muut.class.php:795
+#: lib/muut.class.php:794
 msgid "Chinese / Taiwan"
 msgstr ""
 
-#: lib/muut.class.php:796
+#: lib/muut.class.php:795
 msgid "Dutch"
 msgstr ""
 
-#: lib/muut.class.php:797
+#: lib/muut.class.php:796
 msgid "English"
 msgstr ""
 
-#: lib/muut.class.php:798
+#: lib/muut.class.php:797
 msgid "Finnish"
 msgstr ""
 
-#: lib/muut.class.php:799
+#: lib/muut.class.php:798
 msgid "French"
 msgstr ""
 
-#: lib/muut.class.php:800
+#: lib/muut.class.php:799
 msgid "German"
 msgstr ""
 
-#: lib/muut.class.php:801
+#: lib/muut.class.php:800
 msgid "Hungarian"
 msgstr ""
 
-#: lib/muut.class.php:802
+#: lib/muut.class.php:801
 msgid "Hebrew"
 msgstr ""
 
-#: lib/muut.class.php:803
+#: lib/muut.class.php:802
 msgid "Indonesian"
 msgstr ""
 
-#: lib/muut.class.php:804
+#: lib/muut.class.php:803
 msgid "Japanese"
 msgstr ""
 
-#: lib/muut.class.php:805
+#: lib/muut.class.php:804
 msgid "Korean"
 msgstr ""
 
-#: lib/muut.class.php:806
+#: lib/muut.class.php:805
 msgid "Polish"
 msgstr ""
 
-#: lib/muut.class.php:807
+#: lib/muut.class.php:806
 msgid "Russian"
 msgstr ""
 
-#: lib/muut.class.php:808
+#: lib/muut.class.php:807
 msgid "Spanish"
 msgstr ""
 
-#: lib/muut.class.php:809
+#: lib/muut.class.php:808
 msgid "Swedish"
 msgstr ""
 
-#: lib/muut.class.php:810
+#: lib/muut.class.php:809
 msgid "Tamil"
 msgstr ""
 
-#: lib/muut.class.php:811
+#: lib/muut.class.php:810
 msgid "Turkish"
 msgstr ""
 
@@ -368,134 +373,158 @@ msgstr ""
 msgid "Enabling this will disable other types of Muut embeds on this %s."
 msgstr ""
 
-#: views/admin-settings.php:34
+#: views/admin-settings.php:35
 msgid "Forums and commenting re-imagined."
 msgstr ""
 
-#: views/admin-settings.php:39
+#: views/admin-settings.php:40
 #, php-format
 msgid ""
 "Please enter the name of your Muut forum. If you don't have one, please "
 "%ssetup now%s!"
 msgstr ""
 
-#: views/admin-settings.php:40
+#: views/admin-settings.php:41
 msgid ""
 "You can have any number of forums, users, or commenting pages. No traffic "
 "limits: 10, 1,000, or 100,000,000 loads a day, for free."
 msgstr ""
 
-#: views/admin-settings.php:46 views/blocks/help-tab-settings-general.php:11
+#: views/admin-settings.php:47 views/blocks/help-tab-settings-general.php:11
 msgid "Forum Name"
 msgstr ""
 
-#: views/admin-settings.php:57
+#: views/admin-settings.php:58
 msgid "Continue"
 msgstr ""
 
-#: views/admin-settings.php:62 views/blocks/help-tab-settings-general.php:15
+#: views/admin-settings.php:63 views/blocks/help-tab-settings-general.php:15
 msgid "Language"
 msgstr ""
 
-#: views/admin-settings.php:82
+#: views/admin-settings.php:83
 #: views/blocks/help-tab-settings-commenting.php:11
 msgid "Use Muut for post commenting"
 msgstr ""
 
-#: views/admin-settings.php:88
+#: views/admin-settings.php:89
 msgid "Use Muut commenting on posts with existing comments (data not deleted)"
 msgstr ""
 
-#: views/admin-settings.php:93
+#: views/admin-settings.php:94
 msgid "Search Engine Optimization (SEO)"
 msgstr ""
 
-#: views/admin-settings.php:100
+#: views/admin-settings.php:101
 #, php-format
 msgid "Allow search engines to crawl discussions at %s"
 msgstr ""
 
-#: views/admin-settings.php:105
-msgid "Single Sign-on"
-msgstr ""
-
 #: views/admin-settings.php:107
 #, php-format
-msgid ""
-"%sUpgrade your forum%s to a Small or Medium subscription to use your "
-"website’s user authentication system on your forum.%s No logging in twice—"
-"WordPress users automatically become Muut users."
+msgid "Serve from your own S3 Bucket (%sRequires Small Subscription%s)"
 msgstr ""
 
-#: views/admin-settings.php:113
+#: views/admin-settings.php:112
+msgid "S3 Bucket Name"
+msgstr ""
+
+#: views/admin-settings.php:121
+msgid ""
+"The bucket name you enter must be the same S3 bucket registered for the "
+"forum in the Muut settings"
+msgstr ""
+
+#: views/admin-settings.php:127
+#, php-format
+msgid ""
+"If you have a Small or Medium subscription and are using Federated "
+"Identities (Small) or Secure Embedding (Medium), you need to enter your API "
+"credentials to sign the embed. You can see the details of our premium plans "
+"at our %spricing list%s or %supgrade your forum now%s."
+msgstr ""
+
+#: views/admin-settings.php:133 views/admin-settings.php:163
 msgid "Enable"
 msgstr ""
 
-#: views/admin-settings.php:118
+#: views/admin-settings.php:138
 msgid "API Key"
 msgstr ""
 
-#: views/admin-settings.php:126
+#: views/admin-settings.php:146
 msgid "Secret Key"
 msgstr ""
 
-#: views/admin-settings.php:134
+#: views/admin-settings.php:154
+msgid "Federated Identities (formerly Single Sign-On)"
+msgstr ""
+
+#: views/admin-settings.php:156
+#, php-format
+msgid ""
+"%sUpgrade your forum%s to a Small or Medium subscription to use your "
+"website’s user authentication system on your forum. No logging in twice—"
+"WordPress users automatically become Muut users."
+msgstr ""
+
+#: views/admin-settings.php:169
 msgid "Widgets"
 msgstr ""
 
-#: views/admin-settings.php:136
+#: views/admin-settings.php:171
 msgid ""
 "The plugin comes packed with the following real-time widgets that you can "
 "place on any page."
 msgstr ""
 
-#: views/admin-settings.php:138
+#: views/admin-settings.php:173
 #, php-format
 msgid "%sMy Feed%s - List of the current user's most recent posts."
 msgstr ""
 
-#: views/admin-settings.php:139
+#: views/admin-settings.php:174
 #, php-format
 msgid "%sWho's Online%s - A real-time list of currently logged-in users."
 msgstr ""
 
-#: views/admin-settings.php:140
+#: views/admin-settings.php:175
 #, php-format
 msgid ""
 "%sDiscussion Channel%s - Embed a single discussion channel in to your "
 "website's sidebar."
 msgstr ""
 
-#: views/admin-settings.php:141
+#: views/admin-settings.php:176
 #, php-format
 msgid ""
 "%sLatest Comments%s - The most recent comments on your site, updating in "
 "real-time."
 msgstr ""
 
-#: views/admin-settings.php:141 views/admin-settings.php:142
+#: views/admin-settings.php:176 views/admin-settings.php:177
 msgid "Uses webhooks"
 msgstr ""
 
-#: views/admin-settings.php:142
+#: views/admin-settings.php:177
 #, php-format
 msgid ""
 "%sTrending Topics%s - The most popular discussion, updating in real-time."
 msgstr ""
 
-#: views/admin-settings.php:149
+#: views/admin-settings.php:184
 msgid "Configure webhooks for latest comments or trending topics"
 msgstr ""
 
-#: views/admin-settings.php:152
+#: views/admin-settings.php:187
 msgid "Finish Setup"
 msgstr ""
 
-#: views/admin-settings.php:166
+#: views/admin-settings.php:201
 msgid "To complete your webhooks setup..."
 msgstr ""
 
-#: views/admin-settings.php:167
+#: views/admin-settings.php:202
 msgid ""
 "From your main forum page, open the Muut settings, select the integrations "
 "tab, and create a new integration as below using the following URL and "
@@ -656,6 +685,22 @@ msgid ""
 "bases using the %sCommenting%s tab in the Muut metabox for that post."
 msgstr ""
 
+#: views/blocks/help-tab-settings-fedid.php:10
+#, php-format
+msgid ""
+"Federated Identities (previously called Single Sign-On, or SSO) lets your "
+"users use WordPress registration and login instead of Muut's. For this to "
+"work you need to %supgrade%s your forum to support Federated Identities with "
+"the Small or Medium subscription and then enable input your API keys in the "
+"Signed Setup section."
+msgstr ""
+
+#: views/blocks/help-tab-settings-fedid.php:13
+msgid ""
+"Once enabled, Federated Identities will be used on all the forum and "
+"commenting instances created by this plugin."
+msgstr ""
+
 #: views/blocks/help-tab-settings-general.php:12
 #, php-format
 msgid ""
@@ -701,10 +746,11 @@ msgstr ""
 #: views/blocks/help-tab-settings-seo.php:17
 #, php-format
 msgid ""
-"If you have a developer subscription and have set up a custom S3 Bucket for "
-"your Muut forum, you can serve content directly from that bucket rather than "
-"from %s. Once enabled, the bucket name you enter must be the same S3 bucket "
-"registered for the forum in the Muut settings."
+"If you have a Small or Medium subscription and have set up a custom S3 "
+"Bucket for your Muut forum, you can serve content directly from that bucket "
+"rather than from %s. Once enabled, the bucket name you enter must be the "
+"same S3 bucket registered for the forum in the Muut settings. %sFor more "
+"details on S3 Bucket setup, see the %smain Muut documentation%s."
 msgstr ""
 
 #: views/blocks/help-tab-settings-sidebar.php:10
@@ -723,27 +769,27 @@ msgstr ""
 msgid "Upgrade Pricing"
 msgstr ""
 
-#: views/blocks/help-tab-settings-sso.php:10
+#: views/blocks/help-tab-settings-signedsetup.php:10
+msgid ""
+"If you have a Small or Medium subscription and are using Federated "
+"Identities (Small) or Secure Embedding (Medium), you need to enable signed "
+"embedding by entering your API credentials in this section. You can get the "
+"API keys directly from the forum frontend (either on your embed or at muut."
+"com) by clicking the \"Settings\" link and copying the API Key and Secret "
+"Key from the top bar."
+msgstr ""
+
+#: views/blocks/help-tab-settings-signedsetup.php:13
+msgid ""
+"This is not required (and is discouraged) if you are not using one of the "
+"premium services dependent on it."
+msgstr ""
+
+#: views/blocks/help-tab-settings-signedsetup.php:16
 #, php-format
 msgid ""
-"Single Sign-On (SSO) let's you use WordPress registration and login instead "
-"of Muut's. For this to work you need to %supgrade%s your forum to support "
-"Federated Identities with the Small or Medium subscription and then input "
-"the public/private keypair to the settings."
-msgstr ""
-
-#: views/blocks/help-tab-settings-sso.php:13
-msgid ""
-"Grab the keys directly from the forum frontend (either on your embed or at "
-"muut.com) by clicking the \"Settings\" link and copying the API Key and "
-"Secret Key from the top bar."
-msgstr ""
-
-#: views/blocks/help-tab-settings-sso.php:16
-msgid ""
-"After these fields are filled the SSO is enabled on all the forum and "
-"commenting instances: be it automatically generated or installed with "
-"shortcode."
+"For more information about our premium plans and features, see our %spricing "
+"page%s or %supgrade your forum%s now."
 msgstr ""
 
 #: views/blocks/help-tab-settings-webhooks.php:10
