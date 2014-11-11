@@ -217,7 +217,7 @@ if ( !class_exists( 'Muut_Admin_Contextual_Help' ) ) {
 		 * @param array $tab The current tab array.
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.3
 		 */
 		public function renderSettingsHelpSignedsetupTabContent( $screen, $tab ) {
 			include( muut()->getPluginPath() . 'views/blocks/help-tab-settings-signedsetup.php' );

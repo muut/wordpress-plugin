@@ -426,7 +426,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.3
 		 */
 		public function maybeShowReviewRequestNotice() {
 			if ( !muut()->getOption( 'dismissed_review_request', false ) ) {
@@ -447,7 +447,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.2.3
 		 */
 		public function ajaxDismissReviewRequestNotice() {
 			check_ajax_referer( 'muut_dismiss_review_request', 'security' );
