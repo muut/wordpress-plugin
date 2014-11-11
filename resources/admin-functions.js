@@ -127,6 +127,20 @@ jQuery(document).ready( function($) {
     }, 1);
   };
 
+  /** Dismiss the Review Request popup on link click to do so **/
+  var muut_dismiss_review_notice = $('#muut_dismiss_review_request_notice');
+  muut_dismiss_review_notice.find('.dismiss_review_request').on('click', function(e) {
+    var data = {
+      action: 'dismiss_review_request_notice',
+      security: muut_dismiss_review_notice.find('input[name="dismiss_review_request_nonce"]').val(),
+      dismiss: true
+    };
+
+    $.post( ajaxurl, data, function(response) {
+      muut_dismiss_review_notice.hide('slow');
+    });
+  });
+
   // Resize thickbox for the settings webhooks integration box.
   $('.muut_settings_finish_webhook_setup').on('click', function() {
     muut_open_webhooks_setup_thickbox();
