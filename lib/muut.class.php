@@ -611,6 +611,7 @@ if ( !class_exists( 'Muut' ) ) {
 				),
 				'subscription_api_key' => '',
 				'subscription_secret_key' => '',
+				'subscription_use_signed_setup' => '0',
 				'subscription_use_sso' => false,
 				'enable_proxy_rewrites' => '1',
 				'use_custom_s3_bucket' => '0',
