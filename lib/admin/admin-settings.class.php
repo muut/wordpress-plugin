@@ -73,7 +73,6 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 */
 		public function addActions() {
 			add_action( 'load-toplevel_page_' . Muut::SLUG, array( $this, 'saveSettings' ) );
-			add_action( 'load-toplevel_page_' . Muut::SLUG, array( $this, 'maybeShowS3RemoveNotice' ), 9 );
 			add_action( 'admin_notices', array( $this, 'prepareAdminNotices' ), 9 );
 			add_action( 'admin_notices', array( $this, 'maybeShowReviewRequestNotice' ), 8 );
 			add_action( 'admin_print_scripts', array( $this, 'printJsFieldNames') );
