@@ -104,7 +104,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 		</tbody>
 	</table>
 	<h3 class="title"><?php _e( 'Signed Setup', 'muut' ); ?></h3>
-	<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_signed_setup" data-muut_require_func="is(':not(:checked)')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')"><?php printf( __( 'If you have a Small or Medium subscription and are using Federated Identities (Small) or Secure Embedding (Medium), you need to enter your API credentials to sign the embed. You can see the details of our premium plans at our %spricing list%s or %supgrade your forum now%s.', 'muut' ), '<a target="_blank" href="https://muut.com/pricing/">', '</a>', '<a class="muut_upgrade_community_link" href="' . muut()->getUpgradeUrl() . '">', '</a>' ); ?></p>
+	<p class="muut_requires_input_block" data-muut_requires="muut_subscription_use_signed_setup" data-muut_require_func="is(':not(:checked)')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')"><?php printf( __( 'If you have a Small or Medium subscription and are using Federated Identities (Small) or Secure Embedding (Medium), you need to enter your API credentials to sign the embed. You can see the details of our premium plans at our %spricing list%s or %supgrade your forum now%s.', 'muut' ), '<a target="_blank" href="https://muut.com/pricing/">', '</a>', '<a class="muut_upgrade_community_link" href="' . muut()->getUpgradeUrl() . '" target="_blank">', '</a>' ); ?></p>
 	<table class="form-table">
 		<tbody>
 		<tr>
@@ -133,7 +133,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 	</table>
 	<h3 class="title"><?php _e( 'Federated Identities (formerly Single Sign-On)', 'muut' ); ?></h3>
 	<?php $sso_field_class = $display_values['subscription_use_sso'] ? '' : 'hidden'; ?>
-	<p class="muut_requires_input_block muut_use_sso_description" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')"><?php printf( __( '%sUpgrade your forum%s to a Small or Medium subscription to use your website’s user authentication system on your forum. No logging in twice—WordPress users automatically become Muut users.', 'muut' ), '<a class="muut_upgrade_community_link" href="' . muut()->getUpgradeUrl() . '">', '</a>'); ?></p>
+	<p class="muut_requires_input_block muut_use_sso_description" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')"><?php printf( __( '%sUpgrade your forum%s to a Small or Medium subscription to use your website’s user authentication system on your forum. No logging in twice—WordPress users automatically become Muut users.', 'muut' ), '<a class="muut_upgrade_community_link" href="' . muut()->getUpgradeUrl() . '" target="_blank">', '</a>'); ?></p>
 	<table class="form-table">
 		<tbody>
 		<tr>

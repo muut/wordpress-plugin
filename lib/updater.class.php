@@ -192,6 +192,12 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 						muut()->deleteOption( 'use_custom_s3_bucket' );
 					}
 				break;
+
+				case '3.0.2.3':
+					if ( muut()->getOption( 'subscription_use_sso' ) ) {
+						muut()->setOption( 'subscription_use_signed_setup', 1);
+					}
+					break;
 			}
 		}
 
