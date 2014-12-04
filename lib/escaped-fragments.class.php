@@ -183,7 +183,7 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		public function filterCommentsOverrideIndexContent( $content, $post_id, $type ) {
 			if ( $this->isUsingEscapedFragments() )  {
 				$post_commenting_options = Muut_Post_Utility::getPostOption( $post_id, 'commenting_settings' );
-				if ( $post_commenting_options['type'] == 'threaded' ) {
+				if ( isset( $post_commenting_options['type'] ) && $post_commenting_options['type'] == 'threaded' ) {
 					$this->context = 'threaded-commenting';
 				} else {
 					$this->context = 'flat-commenting';
