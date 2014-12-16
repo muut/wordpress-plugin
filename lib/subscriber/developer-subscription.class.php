@@ -131,6 +131,7 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 					if ( !$avatar ) {
 						$avatar = function_exists( 'bp_core_fetch_avatar' ) ? bp_core_fetch_avatar( array( 'item_id' => $user->ID, 'html' => false ) ) : "//gravatar.com/avatar/" . md5( $user->user_email );
 					}
+					$avatar = apply_filters( 'muut_fedid_user_avatar_url', $avatar, $user->ID, $user );
 
 					$data = array(
 						'user' => array(
