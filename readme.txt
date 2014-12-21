@@ -2,7 +2,7 @@
 Contributors: PaulHughes01, tipiirai, jannelehtinen
 Tags: forum, commenting, comments, social, realtime, discussion, widgets
 Requires at least: 3.7
-Tested up to: 4.0
+Tested up to: 4.1
 Stable tag: 3.0.2.3
 License: MIT
 License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
