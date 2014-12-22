@@ -16,7 +16,7 @@ get_header();
 		<div id="primary" class="content-area">
 			<article class="page hentry">
 			<div id="content" class="entry-content" role="main">
-				<?php if ( apply_filters( 'muut_show_title_on_forum_page', true ) ) { ?>
+				<?php if ( apply_filters( 'muut_show_title_on_forum_page', false ) ) { ?>
 					<h1 class="entry-title"><?php the_title(); ?></h1>
 				<?php } ?>
 				<?php while ( have_posts() ) : the_post();
