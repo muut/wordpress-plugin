@@ -180,3 +180,8 @@ span.description {
 .widget .muut_widget_error {
     line-height: 1.7em;
 }
+
+.muut_admin_notice .dismiss_notice_button {
+    float: right;
+    margin-top: 5px;
+}

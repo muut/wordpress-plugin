@@ -76,7 +76,6 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 			add_action( 'admin_notices', array( $this, 'prepareAdminNotices' ), 9 );
 			add_action( 'admin_notices', array( $this, 'maybeShowReviewRequestNotice' ), 8 );
 			add_action( 'admin_print_scripts', array( $this, 'printJsFieldNames') );
-			add_action( 'wp_ajax_dismiss_review_request_notice', array( $this, 'ajaxDismissReviewRequestNotice' ) );
 		}
 
 		/**
@@ -290,7 +289,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				case 'forum_name':
 					$value = trim( $value );
 					// Make sure the forum name has no whitespace.
-					$valid = Muut_Field_Validation::validateHasNoWhitespace( $value ) && Muut_Field_Validation::validateNoRegexEscaping( $value );
+					$valid = Muut_Field_Validation::validateHasNoWhitespace( $value ) && Muut_Field_Validation::validateNoRegexEscaping( $value, array('-') );
 
 					if ( !$valid ) {
 						$error_args = array(
@@ -428,32 +427,19 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 * @since 3.0.2.3
 		 */
 		public function maybeShowReviewRequestNotice() {
-			if ( !muut()->getOption( 'dismissed_review_request', false ) ) {
+			$dismissed_notices = muut()->getOption( 'dismissed_notices', array() );
+			if ( !isset( $dismissed_notices['review_request'] ) || !$dismissed_notices['review_request'] ) {
 				$update_timestamps = muut()->getOption( 'update_timestamps', array() );
 				$update_time = !empty( $update_timestamps ) ? array_pop( $update_timestamps ) : false;
 
-				if ( $update_time && ( time() - $update_time > 604800 ) ) {
-					echo '<div class="updated" id="muut_dismiss_review_request_notice">';
-					wp_nonce_field( 'muut_dismiss_review_request', 'dismiss_review_request_nonce' );
-					echo '<p>' . sprintf( __( 'Enjoying Muut? We\'d love it you would pop over to the %splugin page%s and leave a rating and review!', 'muut' ), '<a class="dismiss_review_request" target="_blank" href="https://wordpress.org/plugins/muut/">', '</a>' ) . '<span style="float: right"><a href="#" class="dismiss_review_request">X</a></span></p>';
+				//if ( $update_time && ( time() - $update_time > 604800 ) ) {
+					echo '<div class="updated muut_admin_notice" id="muut_dismiss_review_request_notice">';
+					wp_nonce_field( 'muut_dismiss_notice', 'dismiss_nonce' );
+					echo '<span style="float: right" class="dismiss_notice_button"><a href="#" class="dismiss_notice">X</a></span>';
+					echo '<p>' . sprintf( __( 'Enjoying Muut? We\'d love it you would pop over to the %splugin page%s and leave a rating and review!', 'muut' ), '<a class="dismiss_notice" target="_blank" href="https://wordpress.org/plugins/muut/">', '</a>' ) . '</p>';
 					echo '</div>';
-				}
+				//}
 			}
-		}
-
-		/**
-		 * Dismisses the review request notice.
-		 *
-		 * @return void
-		 * @author Paul Hughes
-		 * @since 3.0.2.3
-		 */
-		public function ajaxDismissReviewRequestNotice() {
-			check_ajax_referer( 'muut_dismiss_review_request', 'security' );
-			if ( isset( $_POST['dismiss'] ) && $_POST['dismiss'] ) {
-				muut()->setOption( 'dismissed_review_request', true );
-			}
-			die();
 		}
 	}
 }

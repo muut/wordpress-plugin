@@ -75,6 +75,7 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 				'3.0',
 				'3.0.2',
 				'3.0.2.3',
+				'3.0.3'
 			) );
 			natsort( $version_thresholds );
 			$this->versionThresholds = $version_thresholds;
@@ -200,6 +201,17 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 						muut()->setOption( 'subscription_use_signed_setup', 1);
 					}
 					break;
+
+				case '3.0.3':
+					muut()->setOption( 'dismissed_review_request', true );
+					$dismissed_review_request = muut()->getOption( 'dismissed_review_request', false );
+					$dismissed_notices = (array) muut()->getOption( 'dismissed_notices', array() );
+					if ( $dismissed_review_request ) {
+						$dismissed_notices['review_request'] = $dismissed_review_request;
+					}
+					$dismissed_notices['update_notice'] = false;
+					muut()->setOption( 'dismissed_notices', $dismissed_notices );
+					muut()->deleteOption( 'dismissed_review_request' );
 			}
 		}
 

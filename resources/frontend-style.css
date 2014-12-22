@@ -143,3 +143,7 @@
 .muut_widget_wrapper p.m-message {
     padding: 0;
 }
+
+.entry-content .m-face {
+    display: inline;
+}
