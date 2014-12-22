@@ -14,9 +14,8 @@ get_header();
 ?>
 	<div id="main-content" class="main-content">
 		<div id="primary" class="content-area">
-			<article class="page hentry">
-			<div id="content" class="entry-content" role="main">
-				<?php if ( apply_filters( 'muut_show_title_on_forum_page', true ) ) { ?>
+			<div id="content" class="site-content" role="main">
+				<?php if ( apply_filters( 'muut_show_title_on_forum_page', false ) ) { ?>
 					<h1 class="entry-title"><?php the_title(); ?></h1>
 				<?php } ?>
 				<?php while ( have_posts() ) : the_post();
@@ -25,7 +24,6 @@ get_header();
 					}
 				endwhile; ?>
 			</div><!-- #content -->
-				</article>
 		</div><!-- #primary -->
 	</div><!-- #main-content -->
 <?php
