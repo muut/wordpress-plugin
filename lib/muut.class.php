@@ -344,7 +344,7 @@ if ( !class_exists( 'Muut' ) ) {
 					'<IfModule mod_rewrite.c>',
 					'RewriteEngine On',
 					'RewriteBase /',
-					'RewriteRule ^i/(' . $this->getForumName() . ')(/.*)?$ ' . $this->getProxyContentServer() . '/$1$2 [P]',
+					'RewriteRule ^i/(' . preg_quote( $this->getForumName() ) . ')(/.*)?$ ' . $this->getProxyContentServer() . '/$1$2 [P]',
 					'RewriteRule ^m/(.*)$ http://' . self::MUUTSERVERS . '/m/$1 [P]',
 					'</IfModule>',
 				);
@@ -371,7 +371,7 @@ if ( !class_exists( 'Muut' ) ) {
 		public function addProxyRewritesFilter( $rules ) {
 			$permastruct = get_option( 'permalink_structure', '' );
 
-			$muut_rules = "RewriteRule ^i/(" . $this->getForumName() . ")(/.*)?\$ " . $this->getProxyContentServer() . "/\$1\$2 [P]\n";
+			$muut_rules = "RewriteRule ^i/(" . preg_quote( $this->getForumName() ) . ")(/.*)?\$ " . $this->getProxyContentServer() . "/\$1\$2 [P]\n";
 			$muut_rules .=	"RewriteRule ^m/(.*)$ http://" . self::MUUTSERVERS . "/m/\$1 [P]";
 
 			if ( $permastruct == '' ) {

@@ -282,7 +282,7 @@ if ( !class_exists( 'Muut_Shortcodes' ) ) {
 				} else {
 					$post = get_post( $page_id );
 				}
-				if ( has_shortcode( $post->post_content, 'muut' ) || has_shortcode( $post->post_content, 'moot' ) ) {
+				if (  isset( $post ) && is_a( $post, 'WP_Post' ) && ( has_shortcode( $post->post_content, 'muut' ) || has_shortcode( $post->post_content, 'moot' ) ) ) {
 					$requires_resources = true;
 				}
 			}

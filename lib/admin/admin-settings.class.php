@@ -290,12 +290,12 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				case 'forum_name':
 					$value = trim( $value );
 					// Make sure the forum name has no whitespace.
-					$valid = Muut_Field_Validation::validateHasNoWhitespace( $value );
+					$valid = Muut_Field_Validation::validateHasNoWhitespace( $value ) && Muut_Field_Validation::validateNoRegexEscaping( $value );
 
 					if ( !$valid ) {
 						$error_args = array(
 							'name' => $name,
-							'message' => __( 'Forum name must contain no spaces of any kind. Make sure the forum name is the name you registered with Muut when you set up the forum.', 'muut' ),
+							'message' => __( 'Forum name must contain no spaces or special characters of any kind. Make sure the forum name is the name you registered with Muut when you set up the forum.', 'muut' ),
 							'field' => 'muut_forum_name',
 							'new_value' => $value,
 							'old_value' => muut()->getForumName(),

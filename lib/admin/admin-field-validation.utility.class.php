@@ -113,5 +113,23 @@ if ( !class_exists( 'Muut_Field_Validation' ) ) {
 				return false;
 			}
 		}
+
+		/**
+		 * Function to validate that a is regular-expression save (does not need to be escaped in any way)..
+		 *
+		 * @param string $value The value that we are validating.
+		 * @return bool Whether the field is valid or not.
+		 * @author Paul Hughes
+		 * @since 3.0.2
+		 */
+		public static function validateNoRegexEscaping( $value ) {
+			$escaped = preg_quote( $value );
+
+			if ( $escaped != $value ) {
+				return false;
+			} else {
+				return true;
+			}
+		}
 	}
 }
