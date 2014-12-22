@@ -3,7 +3,7 @@ Contributors: PaulHughes01, tipiirai, jannelehtinen
 Tags: forum, commenting, comments, social, realtime, discussion, widgets
 Requires at least: 3.7
 Tested up to: 4.1
-Stable tag: 3.0.2.3
+Stable tag: 3.0.3
 License: MIT
 License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
 
@@ -101,11 +101,27 @@ The update to version 3.0 is a major update that enhances the plugin experience 
 
 == Changelog ==
 
+= 3.0.3 =
+Features, UX, Improvements
+
+* Added support for new WordPress Twenty-Fifteen theme.
+* Updated default Forum Template.
+* Added "old" directory under templates to house older template versions for reference.
+
+Notes
+
+* Added filter for Federated Identity user avatar `muut_fedid_user_avatar_url`. Filters avatar URL and passes User ID and User object as arguments.
+
+Bug Fixes
+
+* Forum name more strictly validated, to prevent corrupted .htaccess file.
+* Fixed PHP Notice that displays when shortcodes are being used.
+
 = 3.0.2.3 =
 Features, UX, Improvements
 
-* Added back the Custom S3 Bucket Support
-* Added support for signed embeds separate from SSO/Federated Identities (for secure embedding)
+* Added back the Custom S3 Bucket Support.
+* Added support for signed embeds separate from SSO/Federated Identities (for secure embedding).
 
 Notes
 
