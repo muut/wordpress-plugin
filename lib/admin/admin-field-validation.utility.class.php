@@ -122,7 +122,8 @@ if ( !class_exists( 'Muut_Field_Validation' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0.2
 		 */
-		public static function validateNoRegexEscaping( $value ) {
+		public static function validateNoRegexEscaping( $value, $ignore_chars = array() ) {
+			$value = str_replace( $ignore_chars, '', $value );
 			$escaped = preg_quote( $value );
 
 			if ( $escaped != $value ) {

@@ -290,7 +290,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				case 'forum_name':
 					$value = trim( $value );
 					// Make sure the forum name has no whitespace.
-					$valid = Muut_Field_Validation::validateHasNoWhitespace( $value ) && Muut_Field_Validation::validateNoRegexEscaping( $value );
+					$valid = Muut_Field_Validation::validateHasNoWhitespace( $value ) && Muut_Field_Validation::validateNoRegexEscaping( $value, array('-') );
 
 					if ( !$valid ) {
 						$error_args = array(
