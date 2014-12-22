@@ -127,18 +127,30 @@ jQuery(document).ready( function($) {
     }, 1);
   };
 
-  /** Dismiss the Review Request popup on link click to do so **/
-  var muut_dismiss_review_notice = $('#muut_dismiss_review_request_notice');
-  muut_dismiss_review_notice.find('.dismiss_review_request').on('click', function(e) {
-    var data = {
-      action: 'dismiss_review_request_notice',
-      security: muut_dismiss_review_notice.find('input[name="dismiss_review_request_nonce"]').val(),
-      dismiss: true
-    };
+  /** Function for dismissing a given admin notice **/
+  var muut_dismiss_notice = function( notice_el, notice_name ) {
+      var data = {
+        action: 'dismiss_notice',
+        security: $(notice_el).find('input[name="dismiss_nonce"]').val(),
+        dismiss: true,
+        notice_name: notice_name
+      };
 
-    $.post( ajaxurl, data, function(response) {
-      muut_dismiss_review_notice.hide('slow');
-    });
+      $.post( ajaxurl, data, function(response) {
+        $(notice_el).hide('slow');
+      });
+  };
+
+  /** Dismiss the Review Request popup on link click to do so **/
+  var review_request_notice = $('#muut_dismiss_review_request_notice');
+  review_request_notice.on('click', '.dismiss_notice', function(e) {
+    muut_dismiss_notice( review_request_notice, 'review_request');
+  });
+
+  /** Dismiss the upgrade notice **/
+  var muut_update_notice = $('#muut_update_notice');
+  muut_update_notice.on('click', '.dismiss_notice', function(e) {
+    muut_dismiss_notice( muut_update_notice, 'update_notice');
   });
 
   // Resize thickbox for the settings webhooks integration box.
