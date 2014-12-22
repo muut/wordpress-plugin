@@ -1280,7 +1280,7 @@ if ( !class_exists( 'Muut' ) ) {
 					echo '<div class="updated muut_admin_notice" id="muut_update_notice">';
 					wp_nonce_field( 'muut_dismiss_notice', 'dismiss_nonce' );
 					echo '<span class="dismiss_notice_button"><a href="#" class="dismiss_notice">X</a></span>';
-					echo '<p>' . sprintf( __( 'The %sMuut Plugin%s update to version 3.0.3 revised the default Forum Template. You might want to head over to your %sForum Page%s and make sure it all looks as you expect! Check the post on our forum about the %slatest release%s for details or help.', 'muut' ), '<b>', '</b>', '<a href="' . get_permalink( $forum_page_id ) . '">', '</a>', '<a target="_blank" href="https://muut.com">', '</a>' ) . '</p>';
+					echo '<p>' . sprintf( __( 'The %sMuut Plugin%s update to version 3.0.3 revised the default Forum Template (just a little!). You might want to head over to your %sForum Page%s and make sure it all looks as you expect! Check the post on our %sWordPress support forum%s about the latest release for details or help.', 'muut' ), '<b>', '</b>', '<a href="' . get_permalink( $forum_page_id ) . '">', '</a>', '<a target="_blank" href="https://muut.com/forum/#!/wordpress">', '</a>' ) . '</p>';
 					echo '<p>' . __( 'Happy Muuting! :-)' ) . '</p>';
 					echo '</div>';
 				} else {
