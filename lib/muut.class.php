@@ -619,7 +619,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'enable_proxy_rewrites' => '1',
 				'use_custom_s3_bucket' => '0',
 				'custom_s3_bucket_name' => '',
-				'comments_base_domain' => $_SERVER['SERVER_NAME'],
+				'comments_base_domain' => substr( get_home_url( null, null, 'http' ), 7),
 				'activation_timestamp' => '0',
 				'use_webhooks' => '0',
 				'webhooks_secret' => '',

@@ -167,7 +167,7 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 						'subscription_api_key' => get_option( 'muut_api_key', '' ),
 						'subscription_secret_key' => get_option( 'muut_secret_key', '' ),
 						'subscription_use_sso' => get_option( 'muut_api_key', false ) && get_option( 'muut_secret_key', false ) ? true : false,
-						'comments_base_domain' => $this->oldVersion == '0' ? $_SERVER['SERVER_NAME'] : 'wordpress',
+						'comments_base_domain' => $this->oldVersion == '0' ? substr( get_home_url( null, null, 'http' ), 7) : 'wordpress',
 					);
 
 					// muut()->setOptions() is a protected method, so we have to do it one-by-one.
