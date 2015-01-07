@@ -117,10 +117,14 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			$latest_comments_data = array_slice( $this->getLatestCommentsData(), 0, $instance['number_of_comments'] );
 
 			// Render widget.
+			// Used to allow the adding of other "allowed" comments base domains if it has changed or whatnot.
+			// SAME filter as in webhooks.class.php
+			$comments_base_domains = join( '","', apply_filters( 'muut_webhooks_allowed_comments_base_domains', array( muut()->getOption( 'comments_base_domain' ) ) ) );
+
 			echo $args['before_widget'];
 			echo '<script type="text/javascript">';
 			echo 'var muut_latest_comments_num_posts = "' . $instance['number_of_comments'] . '";';
-			echo 'var muut_latest_comments_path = "' . muut()->getOption( 'comments_base_domain') . '";';
+			echo 'var muut_latest_comments_path = ["' . $comments_base_domains . '"];';
 			if ( get_the_ID() && Muut_Post_Utility::isMuutCommentingPost( get_the_ID() ) ) {
 				echo 'var muut_wp_post_id = ' . get_the_ID() . ';';
 				echo 'var muut_wp_post_permalink = "' . get_permalink() . '";';
