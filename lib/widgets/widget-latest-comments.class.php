@@ -413,7 +413,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			}
 			$user_link_path = Muut_Post_Utility::getForumPageId() && Muut_Post_Utility::getForumPageId() != get_the_ID() ? get_permalink( Muut_Post_Utility::getForumPageId() ) . '#!/' . $user_obj->path . '"' : false;
 			$html = '<li class="muut_recentcomments" data-post-id="' . $post_id . '" data-timestamp="' . $timestamp. '" data-username="' . $user_obj->path . '">';
-			$html .= muut_get_user_facelink_avatar( $user_obj->path, $user_obj->displayname, false, $user_link_path, $user_obj->img, false );
+			$html .= apply_filters( 'muut_latest_comments_show_avatar', true ) ? muut_get_user_facelink_avatar( $user_obj->path, $user_obj->displayname, false, $user_link_path, $user_obj->img, false ) : '';
 			$html .= '<span class="recent-comments-post-title"><a href="' . $permalink . '">' . $title . '</a></span>';
 			$html .= '<div class="muut-post-time-since">' . $list_time . '</div>';
 			$html .= '</li>';
