@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Muut\n"
-"POT-Creation-Date: 2014-12-22 14:07-0500\n"
-"PO-Revision-Date: 2014-12-22 14:07-0500\n"
+"POT-Creation-Date: 2015-01-08 14:05-0500\n"
+"PO-Revision-Date: 2015-01-08 14:05-0500\n"
 "Last-Translator: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language-Team: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language: en_US\n"
@@ -183,27 +183,27 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
-#: lib/muut.class.php:549 lib/widgets/widget-latest-comments.class.php:390
+#: lib/muut.class.php:549 lib/widgets/widget-latest-comments.class.php:394
 msgctxt "comment-just-posted"
 msgid "just now"
 msgstr ""
 
-#: lib/muut.class.php:550 lib/widgets/widget-latest-comments.class.php:392
+#: lib/muut.class.php:550 lib/widgets/widget-latest-comments.class.php:396
 msgctxt "abbreviation-for-minutes"
 msgid "m"
 msgstr ""
 
-#: lib/muut.class.php:551 lib/widgets/widget-latest-comments.class.php:394
+#: lib/muut.class.php:551 lib/widgets/widget-latest-comments.class.php:398
 msgctxt "abbreviation-for-hours"
 msgid "h"
 msgstr ""
 
-#: lib/muut.class.php:552 lib/widgets/widget-latest-comments.class.php:396
+#: lib/muut.class.php:552 lib/widgets/widget-latest-comments.class.php:400
 msgctxt "abbreviation-for-days"
 msgid "d"
 msgstr ""
 
-#: lib/muut.class.php:553 lib/widgets/widget-latest-comments.class.php:398
+#: lib/muut.class.php:553 lib/widgets/widget-latest-comments.class.php:402
 msgctxt "abbreviation-for-weeks"
 msgid "w"
 msgstr ""

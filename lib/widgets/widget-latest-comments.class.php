@@ -117,10 +117,14 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			$latest_comments_data = array_slice( $this->getLatestCommentsData(), 0, $instance['number_of_comments'] );
 
 			// Render widget.
+			// Used to allow the adding of other "allowed" comments base domains if it has changed or whatnot.
+			// SAME filter as in webhooks.class.php
+			$comments_base_domains = join( '","', apply_filters( 'muut_webhooks_allowed_comments_base_domains', array( muut()->getOption( 'comments_base_domain' ) ) ) );
+
 			echo $args['before_widget'];
 			echo '<script type="text/javascript">';
 			echo 'var muut_latest_comments_num_posts = "' . $instance['number_of_comments'] . '";';
-			echo 'var muut_latest_comments_path = "' . muut()->getOption( 'comments_base_domain') . '";';
+			echo 'var muut_latest_comments_path = ["' . $comments_base_domains . '"];';
 			if ( get_the_ID() && Muut_Post_Utility::isMuutCommentingPost( get_the_ID() ) ) {
 				echo 'var muut_wp_post_id = ' . get_the_ID() . ';';
 				echo 'var muut_wp_post_permalink = "' . get_permalink() . '";';
@@ -409,7 +413,7 @@ if ( !class_exists( 'Muut_Widget_Latest_Comments' ) ) {
 			}
 			$user_link_path = Muut_Post_Utility::getForumPageId() && Muut_Post_Utility::getForumPageId() != get_the_ID() ? get_permalink( Muut_Post_Utility::getForumPageId() ) . '#!/' . $user_obj->path . '"' : false;
 			$html = '<li class="muut_recentcomments" data-post-id="' . $post_id . '" data-timestamp="' . $timestamp. '" data-username="' . $user_obj->path . '">';
-			$html .= muut_get_user_facelink_avatar( $user_obj->path, $user_obj->displayname, false, $user_link_path, $user_obj->img, false );
+			$html .= apply_filters( 'muut_latest_comments_show_avatar', true ) ? muut_get_user_facelink_avatar( $user_obj->path, $user_obj->displayname, false, $user_link_path, $user_obj->img, false ) : '';
 			$html .= '<span class="recent-comments-post-title"><a href="' . $permalink . '">' . $title . '</a></span>';
 			$html .= '<div class="muut-post-time-since">' . $list_time . '</div>';
 			$html .= '</li>';

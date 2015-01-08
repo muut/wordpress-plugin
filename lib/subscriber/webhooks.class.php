@@ -621,17 +621,19 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 		 * @return int|false The post ID, if it is a comment on a given post or false, if not found.
 		 */
 		public static function getPostIdRepliedTo( $path ) {
-			// Check if the comment path is in the Muut post comment path formayt.
-			preg_match_all( '/^\/' . addslashes( muut()->getForumName() ) . '\/' . addslashes( muut()->getOption( 'comments_base_domain' ) ) . '\/([0-9]+)(?:\/|\#)?.*$/', $path, $matches );
+			// Used to allow the adding of other "allowed" comments base domains if it has changed or whatnot.
+			$comments_base_domains = apply_filters( 'muut_webhooks_allowed_comments_base_domains', array( muut()->getOption( 'comments_base_domain' ) ) );
 
-			// If it doesn't match or isn't a commenting post, return false.
-			if ( empty( $matches ) || !isset( $matches[1][0] ) || !is_numeric( $matches[1][0] ) || !Muut_Post_Utility::isMuutCommentingPost( $matches[1][0] ) ) {
-				return false;
+			$matches = array();
+
+			// Check if the comment path is in the Muut post comment path format.
+			foreach( $comments_base_domains as $base_domain ) {
+				preg_match_all( '/^\/' . addslashes( muut()->getForumName() ) . '\/' . addslashes( $base_domain ) . '\/([0-9]+)(?:\/|\#)?.*$/', $path, $matches );
+				// If there is a match, return it and exit this loop and function.
+				if ( !empty( $matches ) && isset( $matches[1][0] ) && is_numeric( $matches[1][0] ) && Muut_Post_Utility::isMuutCommentingPost( $matches[1][0] ) ) {
+					return $matches[1][0];
+				}
 			}
-
-			// Otherwise, return the post id.
-			return $matches[1][0];
-
 		}
 
 		/**

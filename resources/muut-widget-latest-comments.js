@@ -24,7 +24,13 @@ jQuery(document).ready(function($) {
 
         var widget_latest_comments_num_showing = widget_latest_comments_current_list_elements.length;
 
-        var muut_comments_root_path = muutObj().path + '/' + muut_latest_comments_path;
+        var widget_muut_base_path = muutObj().path;
+
+        var muut_comments_root_paths = muut_latest_comments_path.map(function(cur) {
+          return widget_muut_base_path + '/' + cur;
+        });
+
+        //var muut_comments_root_path = muutObj().path + '/' + muut_latest_comments_path;
 
         // Init all of the facelink functionality (tooltips and such).
         widget_latest_comments_wrapper.facelinkinit();
@@ -70,13 +76,15 @@ jQuery(document).ready(function($) {
         // Return the WP post id on success, or false on failure.
         var muut_is_wp_commenting_thread = function(path) {
           // The commenting base path.
-          var path_post_id_re = new RegExp( muut_comments_root_path + '/([0-9]+)');
-          // If the string lines up with the commenting base path.
-          if(path.search(muut_comments_root_path) != -1) {
-            // Do the regular expression comparison to get the WP Post id the path references.
-            matches = path_post_id_re.exec(path);
-            if ( matches && typeof matches[1] != 'undefined' ) {
-              return parseInt(matches[1]);;
+          for ( i=0; i<muut_comments_root_paths.length; i++ ) {
+            var path_post_id_re = new RegExp(muut_comments_root_paths[i] + '/([0-9]+)');
+            // If the string lines up with the commenting base path.
+            if (path.search(muut_comments_root_paths[i]) != -1) {
+              // Do the regular expression comparison to get the WP Post id the path references.
+              matches = path_post_id_re.exec(path);
+              if (matches && typeof matches[1] != 'undefined') {
+                return parseInt(matches[1]);
+              }
             }
           }
           return false;

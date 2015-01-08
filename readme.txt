@@ -3,7 +3,7 @@ Contributors: PaulHughes01, tipiirai, jannelehtinen
 Tags: forum, commenting, comments, social, realtime, discussion, widgets
 Requires at least: 3.7
 Tested up to: 4.1
-Stable tag: 3.0.3
+Stable tag: 3.0.3.1
 License: MIT
 License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
 
@@ -90,6 +90,9 @@ There are several great ways to learn more about and get help with the plugin. T
 
 == Upgrade Notice ==
 
+= 3.0.3 =
+The update to version 3.0.3 is mainly an update for compatibility with 4.1 and Twenty-Fifteen.
+
 = 3.0.2 =
 The update to version 3.0.2 is mostly a feature update, focusing on the five added widgets.
 
@@ -100,6 +103,15 @@ The update to version 3.0.1 is a small update with a couple big fixes and better
 The update to version 3.0 is a major update that enhances the plugin experience in a large way. The update _does_ support all of the earlier plugin functionality (such as the shortcodes), but we recommend updating when you have a little bit of time to experiment and ensure that everything continues to work as expected. We hope you enjoy the new version!
 
 == Changelog ==
+
+= 3.0.3.1 =
+Notes
+
+* Added filter `muut_latest_comments_show_avatar` to allow not-showing the avatars in the Latest Comments widget; defaults to true.
+
+Bug Fixes
+
+* Fixed some errors with the Latest Comments widget such that not all posts necessarily were being registered as changing, such as if domain name was changing.
 
 = 3.0.3 =
 Features, UX, Improvements
