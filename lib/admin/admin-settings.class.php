@@ -153,39 +153,40 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 		 */
 		protected function settingsValidate( $settings ) {
 
-			if ( isset( $_POST['initial_save'] ) ) {
-				return apply_filters( 'muut_settings_initial_save', apply_filters( 'muut_settings_validated', $settings ) );
+			if ( !isset( $_POST['initial_save'] ) || !$_POST['initial_save'] ) {
+
+				$boolean_settings = apply_filters( 'muut_boolean_settings', array(
+					'replace_comments',
+					'use_threaded_commenting',
+					'override_all_comments',
+					'is_threaded_default',
+					'show_online_default',
+					'allow_uploads_default',
+					'subscription_use_signed_setup',
+					'use_custom_s3_bucket',
+					'subscription_use_sso',
+					'enable_proxy_rewrites',
+					'use_webhooks',
+				) );
+
+				foreach ( $boolean_settings as $boolean_setting ) {
+					$settings[$boolean_setting] = isset( $settings[$boolean_setting] ) ? $settings[$boolean_setting] : '0';
+				}
+
+				if ( ( isset( $settings['forum_name'] ) && $settings['forum_name'] != muut()->getForumName() )
+					|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != muut()->getOption( 'enable_proxy_rewrites' ) )
+					|| ( isset( $settings['use_custom_s3_bucket'] ) && $settings['use_custom_s3_bucket'] != muut()->getOption( 'use_custom_s3_bucket' ) )
+					|| ( isset( $settings['custom_s3_bucket_name'] ) && $settings['custom_s3_bucket_name'] != muut()->getOption( 'custom_s3_bucket_name' ) )
+					|| ( isset( $settings['use_webhooks'] ) && $settings['use_webhooks'] != muut()->getOption( 'use_webhooks' ) )
+				) {
+					flush_rewrite_rules( true );
+				}
+
+				// If the Secret Key setting does not get submitted (i.e. is disabled), make sure to erase its value.
+				$settings['subscription_secret_key'] = isset( $settings['subscription_secret_key'] ) ? $settings['subscription_secret_key'] : '';
+			} else {
+				$settings = apply_filters( 'muut_settings_initial_save', $settings );
 			}
-
-			$boolean_settings = apply_filters( 'muut_boolean_settings', array(
-				'replace_comments',
-				'use_threaded_commenting',
-				'override_all_comments',
-				'is_threaded_default',
-				'show_online_default',
-				'allow_uploads_default',
-				'subscription_use_signed_setup',
-				'use_custom_s3_bucket',
-				'subscription_use_sso',
-				'enable_proxy_rewrites',
-				'use_webhooks',
-			) );
-
-			foreach ( $boolean_settings as $boolean_setting ) {
-				$settings[$boolean_setting] = isset( $settings[$boolean_setting]) ? $settings[$boolean_setting] : '0';
-			}
-
-			if ( ( isset( $settings['forum_name'] ) && $settings['forum_name'] != muut()->getForumName() )
-				|| ( isset( $settings['enable_proxy_rewrites'] ) && $settings['enable_proxy_rewrites'] != muut()->getOption( 'enable_proxy_rewrites' ) )
-				|| ( isset( $settings['use_custom_s3_bucket'] ) && $settings['use_custom_s3_bucket'] != muut()->getOption( 'use_custom_s3_bucket' ) )
-				|| ( isset( $settings['custom_s3_bucket_name'] ) && $settings['custom_s3_bucket_name'] != muut()->getOption( 'custom_s3_bucket_name' ) )
-				|| ( isset( $settings['use_webhooks'] ) && $settings['use_webhooks'] != muut()->getOption( 'use_webhooks' ) )
-			) {
-				flush_rewrite_rules( true );
-			}
-
-			// If the Secret Key setting does not get submitted (i.e. is disabled), make sure to erase its value.
-			$settings['subscription_secret_key'] = isset( $settings['subscription_secret_key']) ? $settings['subscription_secret_key'] : '';
 
 			foreach ( $settings as $name => &$value ) {
 				$value = apply_filters( 'muut_validate_setting_' . $name, $value );
@@ -296,7 +297,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 							'name' => $name,
 							'message' => __( 'Forum name must contain no spaces or special characters of any kind. Make sure the forum name is the name you registered with Muut when you set up the forum.', 'muut' ),
 							'field' => 'muut_forum_name',
-							'new_value' => $value,
+							'new_value' => stripslashes($value),
 							'old_value' => muut()->getForumName(),
 						);
 						$this->addErrorToQueue( $error_args );
