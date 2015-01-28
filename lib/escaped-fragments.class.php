@@ -74,6 +74,9 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 		 */
 		protected function addActions() {
 			add_action( 'wp_head', array( $this, 'printEscapedFragmentMetaRequire' ) );
+
+			add_action( 'wp', array( $this, 'registerCanonicalTagAction' ) );
+
 		}
 
 		/**
@@ -326,6 +329,23 @@ if ( !class_exists( 'Muut_Escaped_Fragments' ) ) {
 				$content = $new_content;
 			}
 			return $content;
+		}
+
+		public function registerCanonicalTagAction() {
+			if ( isset( $_REQUEST['_escaped_fragment_'] ) && is_singular() && (  muut_is_forum_page() || muut_post_uses_muut() || muut_is_channel_page() ) ) {
+				if ( function_exists( 'rel_canonical' ) ) {
+					remove_action( 'wp_head', 'rel_canonical' );
+				}
+				add_action( 'wp_head', array( $this, 'canonicalTag' ) );
+			}
+		}
+
+		public function canonicalTag() {
+			if ( isset( $_REQUEST['_escaped_fragment_'] ) ) {
+				$link = get_permalink() . "#!" . $_REQUEST['_escaped_fragment_'];
+
+				echo "<link rel=\"canonical\" href=\"" . $link . "\" />\n";
+			}
 		}
 	}
 }
