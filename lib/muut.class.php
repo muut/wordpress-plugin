@@ -167,6 +167,7 @@ if ( !class_exists( 'Muut' ) ) {
 
 			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ), 50 );
 			add_action( 'admin_notices', array( $this, 'maybeShowUpdateNotice' ) );
+			add_action( 'admin_notices', array( $this, 'maybeShowUploadsDirectoryFailureNotice' ) );
 
 			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
 
@@ -1295,6 +1296,26 @@ if ( !class_exists( 'Muut' ) ) {
 					$dismissed_notices['update_notice'] = true;
 					muut()->setOption( 'dismissed_notices', $dismissed_notices );
 				}
+			}
+		}
+
+		/**
+		 * Displays a dismissible admin notice if the Muut uploads directory is not writeable.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.4
+		 */
+		public function maybeShowUploadsDirectoryFailureNotice() {
+			$dismissed_notices = muut()->getOption( 'dismissed_notices', array() );
+			if ( ( !isset( $dismissed_notices['uploads_dir_fail_notice'] ) || !$dismissed_notices['uploads_dir_fail_notice'] ) && !Muut_Files_Utility::checkMuutUploadsDirectory( '/' ) ) {
+				$wp_upload_dir = wp_upload_dir();
+				$muut_uploads_dir = trailingslashit( $wp_upload_dir['basedir'] ) . Muut_Files_Utility::UPLOADS_DIR_NAME;
+				echo '<div class="updated muut_admin_notice" id="muut_uploads_dir_fail_notice">';
+				wp_nonce_field( 'muut_dismiss_notice', 'dismiss_nonce' );
+				echo '<span class="dismiss_notice_button"><a href="#" class="dismiss_notice">X</a></span>';
+				echo '<p>' . sprintf( __( 'The %sMuut Plugin%s has some advanced functionality that requires your uploads directory be writeable. You should create a directory with permissions 755 at %s, or change the permissions of the main uploads directory to 755. There are instrucitons on how to do that %shere%s.', 'muut' ), '<b>', '</b>', $muut_uploads_dir, '<a href="http://codex.wordpress.org/Changing_File_Permissions">', '</a>') . '</p>';
+				echo '</div>';
 			}
 		}
 	}
