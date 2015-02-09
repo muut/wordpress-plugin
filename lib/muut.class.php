@@ -363,7 +363,7 @@ if ( !class_exists( 'Muut' ) ) {
 				if ( ( !file_exists( $htaccess_file ) && is_writable( $home_path ) ) || is_writable( $htaccess_file ) ) {
 					insert_with_markers( $htaccess_file, 'WordPress', $rules );
 				} else {
-					$error_notice = sprintf( 'It looks like the %sMuut Plugin%s doesn\'t have permission to edit your .htaccess file. If you want to have content indexable under your website\'s domain, you should head over to your site\'s %sPermalinks%s settings and select a different permalink structure.', '<b>', '</b>', '<a href="' . admin_url('options-permalink.php') .'">', '</a>' );
+					$error_notice = sprintf( __( 'It looks like the %sMuut Plugin%s doesn\'t have permission to edit your .htaccess file. If you want to have content indexable under your website\'s domain, you should head over to your site\'s %sPermalinks%s settings and select a different permalink structure.', 'muut' ), '<b>', '</b>', '<a href="' . admin_url('options-permalink.php') .'">', '</a>' );
 					$this->queueAdminNotice( 'error', $error_notice );
 				}
 				$this->setOption( 'added_rewrite_rules', true );

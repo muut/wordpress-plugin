@@ -65,8 +65,6 @@ if ( !class_exists( 'Muut_Field_Validation' ) ) {
 				'timeout' => $args['timeout'],
 			) );
 
-			error_log($value);
-
 			// Make the request.
 			$response = wp_remote_get( $value, $request_args );
 

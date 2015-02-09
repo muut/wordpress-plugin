@@ -230,7 +230,7 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 
 						if ( !$valid ) {
 							muut()->setOption( 'use_custom_s3_bucket', '0' );
-							$error_notice = sprintf( 'The %sMuut Plugin%s has been updated to version 3.0.4, but there was an error converting your S3 bucket to the new format (just the bucket name, not the full URL). Your S3 bucket has been disabled; would you like to %sgo fix it%s right now?', '<b>', '</b>', '<a href="' . admin_url( 'admin.php?page=muut' ) . '">', '</a>' );
+							$error_notice = sprintf( __( 'The %sMuut Plugin%s has been updated to version 3.0.4, but there was an error converting your S3 bucket to the new format (just the bucket name, not the full URL). Your S3 bucket has been disabled; would you like to %sgo fix it%s right now?', 'muut' ), '<b>', '</b>', '<a href="' . admin_url( 'admin.php?page=muut' ) . '">', '</a>' );
 							muut()->queueAdminNotice( 'error', $error_notice );
 						} else {
 							muut()->setOption( 'custom_s3_bucket_name', $s3_bucket );

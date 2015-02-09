@@ -185,7 +185,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 
 					if ( ( !file_exists( $htaccess_file ) && !is_writable( $home_path ) ) || !is_writable( $htaccess_file ) ) {
 						if ( get_option( 'permalink_structure', '') != '' ) {
-							$error = array( 'field' => '', 'new_value' => '', 'name' => 'htaccess_permissions', 'message' => sprintf( 'It looks like the %sMuut Plugin%s doesn\'t have permission to edit your .htaccess file. If you want to have content indexable under your website\'s domain, you should head over to the bottom of your site\'s %sPermalinks%s settings and copy the new code there to your .htaccess file.', '<b>', '</b>', '<a href="' . admin_url( 'options-permalink.php' ) . '">', '</a>' ) );
+							$error = array( 'field' => '', 'new_value' => '', 'name' => 'htaccess_permissions', 'message' => sprintf( __( 'It looks like the %sMuut Plugin%s doesn\'t have permission to edit your .htaccess file. If you want to have content indexable under your website\'s domain, you should head over to the bottom of your site\'s %sPermalinks%s settings and copy the new code there to your .htaccess file.', 'muut' ), '<b>', '</b>', '<a href="' . admin_url( 'options-permalink.php' ) . '">', '</a>' ) );
 							$this->errorQueue[$error['name']] = $error;
 						}
 					}
