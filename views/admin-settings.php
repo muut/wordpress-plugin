@@ -133,6 +133,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 				<label for="muut_subscription_use_signed_setup"><?php _e( 'Enable', 'muut' ); ?></label>
 			</th>
 		</tr>
+		<?php $sso_field_class = $display_values['subscription_use_sso'] ? '' : 'hidden'; ?>
 		<tr class="<?php echo $sso_field_class; ?> indented" data-muut_requires="muut_subscription_use_signed_setup" data-muut_require_func="is(':checked()')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')">
 			<th scope="row">
 				<label for="muut_subscription_api_key"><?php _e( 'API Key', 'muut' ); ?></label>
@@ -152,7 +153,6 @@ $display_values = wp_parse_args( $error_values, $current_values );
 		</tbody>
 	</table>
 	<h3 class="title"><?php _e( 'Federated Identities (formerly Single Sign-On)', 'muut' ); ?></h3>
-	<?php $sso_field_class = $display_values['subscription_use_sso'] ? '' : 'hidden'; ?>
 	<p class="muut_requires_input_block muut_use_sso_description" data-muut_requires="muut_subscription_use_sso" data-muut_require_func="is(':not(:checked)')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')"><?php printf( __( '%sUpgrade your forum%s to a Small or Medium subscription to use your website’s user authentication system on your forum. No logging in twice—WordPress users automatically become Muut users.', 'muut' ), '<a class="muut_upgrade_community_link" href="' . muut()->getUpgradeUrl() . '" target="_blank">', '</a>'); ?></p>
 	<table class="form-table">
 		<tbody>
@@ -167,7 +167,6 @@ $display_values = wp_parse_args( $error_values, $current_values );
 		</tbody>
 	</table>
 	<h3 class="title"><?php _e( 'Widgets', 'muut' ); ?></h3>
-	<?php $sso_field_class = $display_values['subscription_use_sso'] ? '' : 'hidden'; ?>
 	<p><?php _e( 'The plugin comes packed with the following real-time widgets that you can place on any page.', 'muut' ); ?></p>
 	<ul>
 		<li><?php printf( __( '%sMy Feed%s - List of the current user\'s most recent posts.', 'muut' ), '<b>', '</b>' ); ?></li>
