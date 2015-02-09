@@ -267,7 +267,8 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 						} else {
 							$forum_name = '';
 						}
-						$url = $value . '/' . $forum_name;
+						$url_protocol = apply_filters( 'muut_s3_bucket_url_protocol', 'http' );
+						$url = $url_protocol . '://' . $value . '.' . apply_filters( 'muut_amazon_s3_url', Muut::AMAZONS3URL ) . '/' . $forum_name;
 						$valid = Muut_Field_Validation::validateExternalUri( $url );
 						if ( !$valid ) {
 							$error_args = array(

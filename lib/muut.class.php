@@ -54,6 +54,11 @@ if ( !class_exists( 'Muut' ) ) {
 		const MUUTAPISERVER = 'api.muut.com';
 
 		/**
+		 * The amazon S3 bucket base URL
+		 */
+		const AMAZONS3URL = 's3-website-us-east-1.amazonaws.com';
+
+		/**
 		 * @property Whether develop mode was executed.
 		 */
 		private $developMode;
@@ -428,7 +433,7 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 			/** RE-ADDED S3 Bucket proxying support starting in version 3.0.2.3. Previously REMOVED in 3.0.2 */
 			$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
-				? $this->getOption( 'custom_s3_bucket_name' )
+				? $this->getOption( 'custom_s3_bucket_name' ) . '.' . apply_filters( 'muut_amazon_s3_url', self::AMAZONS3URL )
 				: self::MUUTSERVERS . '/i';
 
 			return apply_filters( 'muut_proxy_server', $proxy_server );
