@@ -75,7 +75,8 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 				'3.0',
 				'3.0.2',
 				'3.0.2.3',
-				'3.0.3'
+				'3.0.3',
+				'3.0.4',
 			) );
 			natsort( $version_thresholds );
 			$this->versionThresholds = $version_thresholds;
