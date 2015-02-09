@@ -109,7 +109,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				if ( muut()->setOption( $settings ) ) {
 					if ( !empty( $this->errorQueue ) ) {
 						// Display partial success notice if they were updated or matched the previous settings.
-						muut()->queueAdminNotice( 'updated', __( 'Settings successfully saved, other than the errors below:', 'muut' ) );
+						muut()->queueAdminNotice( 'updated', __( 'Settings successfully saved, other than the errors listed.', 'muut' ) );
 					} else {
 						// Display success notice if they were updated or matched the previous settings.
 						muut()->queueAdminNotice( 'updated', __( 'Settings successfully saved.', 'muut' ) );
@@ -180,8 +180,16 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 					|| ( isset( $settings['use_webhooks'] ) && $settings['use_webhooks'] != muut()->getOption( 'use_webhooks' ) )
 				) {
 					flush_rewrite_rules( true );
-				}
+					$home_path = get_home_path();
+					$htaccess_file = $home_path.'.htaccess';
 
+					if ( ( !file_exists( $htaccess_file ) && !is_writable( $home_path ) ) || !is_writable( $htaccess_file ) ) {
+						if ( get_option( 'permalink_structure', '') != '' ) {
+							$error = array( 'field' => '', 'new_value' => '', 'name' => 'htaccess_permissions', 'message' => sprintf( 'It looks like the %sMuut Plugin%s doesn\'t have permission to edit your .htaccess file. If you want to have content indexable under your website\'s domain, you should head over to the bottom of your site\'s %sPermalinks%s settings and copy the new code there to your .htaccess file.', '<b>', '</b>', '<a href="' . admin_url( 'options-permalink.php' ) . '">', '</a>' ) );
+							$this->errorQueue[$error['name']] = $error;
+						}
+					}
+				}
 				// If the Secret Key setting does not get submitted (i.e. is disabled), make sure to erase its value.
 				$settings['subscription_secret_key'] = isset( $settings['subscription_secret_key'] ) ? $settings['subscription_secret_key'] : '';
 			} else {
