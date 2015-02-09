@@ -26,7 +26,7 @@ if ( !class_exists( 'Muut' ) ) {
 		/**
 		 * The current version of Muut
 		 */
-		const VERSION = '3.0.3.1';
+		const VERSION = '3.0.4';
 
 		/**
 		 * The version of Muut this was released with.
