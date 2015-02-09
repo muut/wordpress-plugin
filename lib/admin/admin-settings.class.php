@@ -442,13 +442,13 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				$update_timestamps = muut()->getOption( 'update_timestamps', array() );
 				$update_time = !empty( $update_timestamps ) ? array_pop( $update_timestamps ) : false;
 
-				//if ( $update_time && ( time() - $update_time > 604800 ) ) {
+				if ( $update_time && ( time() - $update_time > 604800 ) ) {
 					echo '<div class="updated muut_admin_notice" id="muut_dismiss_review_request_notice">';
 					wp_nonce_field( 'muut_dismiss_notice', 'dismiss_nonce' );
 					echo '<span style="float: right" class="dismiss_notice_button"><a href="#" class="dismiss_notice">X</a></span>';
 					echo '<p>' . sprintf( __( 'Enjoying Muut? We\'d love it you would pop over to the %splugin page%s and leave a rating and review!', 'muut' ), '<a class="dismiss_notice" target="_blank" href="https://wordpress.org/plugins/muut/">', '</a>' ) . '</p>';
 					echo '</div>';
-				//}
+				}
 			}
 		}
 	}
