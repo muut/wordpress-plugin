@@ -13,6 +13,8 @@ Muut represents a complete re-imagination of what internet discussion forums and
 
 It’s a modern, fast, highly scalable discussion platform that you can embed onto your WordPress website, and personalize with css to match the design of your site. For more information on why we do what we do, check out our [manifesto](https://muut.com/manifesto/).
 
+With Muut, you have a discussion platform that offers unlimited posts, comments, users, threads (everything, really) 100% free—forever. We also have some premium packages available (free to try!) that offer additional features to augment your community. You can see more details about that optional extra functionality on our [pricing page](https://muut.com/pricing/).
+
 Whether you’re setting up for the first time or have just updated to the new version of the plugin, you’re going to love what we’ve done to make implementing Muut in your WordPress website easy and flexible.
 
 = Why Muut? = 
