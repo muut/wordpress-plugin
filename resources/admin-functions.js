@@ -153,6 +153,12 @@ jQuery(document).ready( function($) {
     muut_dismiss_notice( muut_update_notice, 'update_notice');
   });
 
+  /** Dismiss the file permissions notice **/
+  var muut_uploads_dir_fail_notice = $('#muut_uploads_dir_fail_notice');
+  muut_uploads_dir_fail_notice.on('click', '.dismiss_notice', function(e) {
+    muut_dismiss_notice( muut_uploads_dir_fail_notice, 'uploads_dir_fail_notice');
+  });
+
   // Resize thickbox for the settings webhooks integration box.
   $('.muut_settings_finish_webhook_setup').on('click', function() {
     muut_open_webhooks_setup_thickbox();

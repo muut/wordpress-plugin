@@ -57,7 +57,7 @@ if ( !class_exists( 'Muut_Field_Validation' ) ) {
 			$args = wp_parse_args( $args, $default_arguments );
 
 			// Make sure the URI begins with http:// or https://. If not, add it.
-			if ( substr( $value, 0, 7 ) != 'http://' || substr( $value, 0, 8 ) != 'https://' ) {
+			if ( substr( $value, 0, 7 ) != 'http://' && substr( $value, 0, 8 ) != 'https://' ) {
 				$value = 'http://' . $value;
 			}
 

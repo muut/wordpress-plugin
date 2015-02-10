@@ -75,7 +75,8 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 				'3.0',
 				'3.0.2',
 				'3.0.2.3',
-				'3.0.3'
+				'3.0.3',
+				'3.0.4',
 			) );
 			natsort( $version_thresholds );
 			$this->versionThresholds = $version_thresholds;
@@ -212,6 +213,31 @@ if ( !class_exists( 'Muut_Updater' ) ) {
 					$dismissed_notices['update_notice'] = false;
 					muut()->setOption( 'dismissed_notices', $dismissed_notices );
 					muut()->deleteOption( 'dismissed_review_request' );
+					break;
+
+				case '3.0.4':
+					$use_s3_bucket = muut()->getOption( 'use_custom_s3_bucket', '0' );
+					$s3_bucket = muut()->getOption( 'custom_s3_bucket_name', '' );
+
+					if ( $use_s3_bucket == 1 && $s3_bucket ) {
+						$forum_name = muut()->getForumName();
+						if ( substr( $s3_bucket, -34, 34 ) == 's3-website-us-east-1.amazonaws.com' ) {
+							$s3_bucket = str_replace( array( 'http://', 'https://', '.s3-website-us-east-1.amazonaws.com' ), '', $s3_bucket );
+						}
+						$url_protocol = apply_filters( 'muut_s3_bucket_url_protocol', 'http' );
+						$url = $url_protocol . '://' . $s3_bucket . '.' . apply_filters( 'muut_amazon_s3_url', Muut::AMAZONS3URL ) . '/' . $forum_name;
+						$valid = Muut_Field_Validation::validateExternalUri( $url );
+
+						if ( !$valid ) {
+							muut()->setOption( 'use_custom_s3_bucket', '0' );
+							$error_notice = sprintf( __( 'The %sMuut Plugin%s has been updated to version 3.0.4, but there was an error converting your S3 bucket to the new format (just the bucket name, not the full URL). Your S3 bucket has been disabled; would you like to %sgo fix it%s right now?', 'muut' ), '<b>', '</b>', '<a href="' . admin_url( 'admin.php?page=muut' ) . '">', '</a>' );
+							muut()->queueAdminNotice( 'error', $error_notice );
+						} else {
+							muut()->setOption( 'custom_s3_bucket_name', $s3_bucket );
+							flush_rewrite_rules();
+						}
+					}
+				break;
 			}
 		}
 

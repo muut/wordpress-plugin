@@ -16,9 +16,8 @@ $id_attr = muut()->getWrapperCssId() ? 'id="' . muut()->getWrapperCssId() . '"' 
 <div <?php echo $id_attr; ?> class="<?php echo muut()->getWrapperCssClass(); ?>" <?php echo $settings; ?>  data-url="<?php echo muut()->getContentPathPrefix(); ?>i/<?php echo muut()->getForumName(); ?>">
 
 	<!-- Muut API -->
-	<?php if ( !muut()->getOption( 'subscription_use_sso' ) ) { ?>
+
 	<a class="muut-url" href="<?php echo muut()->getContentPathPrefix(); ?>i/<?php echo muut()->getForumName(); ?>"><?php echo get_the_title(); ?></a>
-	<?php } ?>
 
 	<!-- Custom HTML -->
 	<?php

@@ -57,7 +57,7 @@ if ( !class_exists( 'Muut_Files_Utility' ) ) {
 
 			// If the uploads directory (and specified subdirectory) do not exist, create them with proper permissions.
 			if ( !file_exists( $sub_path ) ) {
-				if (!mkdir( $sub_path, 0755, true ) ) {
+				if (@!mkdir( $sub_path, 0755, true ) ) {
 					return false;
 				}
 			}

@@ -109,7 +109,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				if ( muut()->setOption( $settings ) ) {
 					if ( !empty( $this->errorQueue ) ) {
 						// Display partial success notice if they were updated or matched the previous settings.
-						muut()->queueAdminNotice( 'updated', __( 'Settings successfully saved, other than the errors below:', 'muut' ) );
+						muut()->queueAdminNotice( 'updated', __( 'Settings successfully saved, other than the errors listed.', 'muut' ) );
 					} else {
 						// Display success notice if they were updated or matched the previous settings.
 						muut()->queueAdminNotice( 'updated', __( 'Settings successfully saved.', 'muut' ) );
@@ -180,8 +180,16 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 					|| ( isset( $settings['use_webhooks'] ) && $settings['use_webhooks'] != muut()->getOption( 'use_webhooks' ) )
 				) {
 					flush_rewrite_rules( true );
-				}
+					$home_path = get_home_path();
+					$htaccess_file = $home_path.'.htaccess';
 
+					if ( ( !file_exists( $htaccess_file ) && !is_writable( $home_path ) ) || !is_writable( $htaccess_file ) ) {
+						if ( get_option( 'permalink_structure', '') != '' ) {
+							$error = array( 'field' => '', 'new_value' => '', 'name' => 'htaccess_permissions', 'message' => sprintf( __( 'It looks like the %sMuut Plugin%s doesn\'t have permission to edit your .htaccess file. If you want to have content indexable under your website\'s domain, you should head over to the bottom of your site\'s %sPermalinks%s settings and copy the new code there to your .htaccess file.', 'muut' ), '<b>', '</b>', '<a href="' . admin_url( 'options-permalink.php' ) . '">', '</a>' ) );
+							$this->errorQueue[$error['name']] = $error;
+						}
+					}
+				}
 				// If the Secret Key setting does not get submitted (i.e. is disabled), make sure to erase its value.
 				$settings['subscription_secret_key'] = isset( $settings['subscription_secret_key'] ) ? $settings['subscription_secret_key'] : '';
 			} else {
@@ -267,7 +275,8 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 						} else {
 							$forum_name = '';
 						}
-						$url = $value . '/' . $forum_name;
+						$url_protocol = apply_filters( 'muut_s3_bucket_url_protocol', 'http' );
+						$url = $url_protocol . '://' . $value . '.' . apply_filters( 'muut_amazon_s3_url', Muut::AMAZONS3URL ) . '/' . $forum_name;
 						$valid = Muut_Field_Validation::validateExternalUri( $url );
 						if ( !$valid ) {
 							$error_args = array(
@@ -433,13 +442,13 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 				$update_timestamps = muut()->getOption( 'update_timestamps', array() );
 				$update_time = !empty( $update_timestamps ) ? array_pop( $update_timestamps ) : false;
 
-				//if ( $update_time && ( time() - $update_time > 604800 ) ) {
+				if ( $update_time && ( time() - $update_time > 604800 ) ) {
 					echo '<div class="updated muut_admin_notice" id="muut_dismiss_review_request_notice">';
 					wp_nonce_field( 'muut_dismiss_notice', 'dismiss_nonce' );
 					echo '<span style="float: right" class="dismiss_notice_button"><a href="#" class="dismiss_notice">X</a></span>';
 					echo '<p>' . sprintf( __( 'Enjoying Muut? We\'d love it you would pop over to the %splugin page%s and leave a rating and review!', 'muut' ), '<a class="dismiss_notice" target="_blank" href="https://wordpress.org/plugins/muut/">', '</a>' ) . '</p>';
 					echo '</div>';
-				//}
+				}
 			}
 		}
 	}

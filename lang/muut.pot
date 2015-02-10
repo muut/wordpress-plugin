@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Muut\n"
-"POT-Creation-Date: 2015-01-08 14:05-0500\n"
-"PO-Revision-Date: 2015-01-08 14:05-0500\n"
+"POT-Creation-Date: 2015-02-09 12:23-0500\n"
+"PO-Revision-Date: 2015-02-09 12:23-0500\n"
 "Last-Translator: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language-Team: Paul Hughes <paul@paulalexanderhughes.com>\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.1\n"
+"X-Generator: Poedit 1.7.4\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -94,13 +94,13 @@ msgstr ""
 msgid "Enable forum"
 msgstr ""
 
-#: lib/admin/admin-post-editor.class.php:172 lib/muut.class.php:984
-#: lib/muut.class.php:985 views/admin-settings.php:35
+#: lib/admin/admin-post-editor.class.php:172 lib/muut.class.php:993
+#: lib/muut.class.php:994 views/admin-settings.php:35
 msgid "Muut"
 msgstr ""
 
 #: lib/admin/admin-settings.class.php:112
-msgid "Settings successfully saved, other than the errors below:"
+msgid "Settings successfully saved, other than the errors listed."
 msgstr ""
 
 #: lib/admin/admin-settings.class.php:115
@@ -111,28 +111,37 @@ msgstr ""
 msgid "Failed to save settings."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:274
+#: lib/admin/admin-settings.class.php:188
+#, php-format
+msgid ""
+"It looks like the %sMuut Plugin%s doesn't have permission to edit your ."
+"htaccess file. If you want to have content indexable under your website's "
+"domain, you should head over to the bottom of your site's %sPermalinks%s "
+"settings and copy the new code there to your .htaccess file."
+msgstr ""
+
+#: lib/admin/admin-settings.class.php:284
 msgid ""
 "Custom S3 Bucket name must be associated with a valid server. Make sure it "
 "matches the bucket you set up with Muut from your forum page settings."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:297
+#: lib/admin/admin-settings.class.php:307
 msgid ""
 "Forum name must contain no spaces or special characters of any kind. Make "
 "sure the forum name is the name you registered with Muut when you set up the "
 "forum."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:325
+#: lib/admin/admin-settings.class.php:335
 msgid "API Key must have no spaces and only alphanumeric characters."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:354
+#: lib/admin/admin-settings.class.php:364
 msgid "Secret Key must have no spaces and only alphanumeric characters."
 msgstr ""
 
-#: lib/admin/admin-settings.class.php:439
+#: lib/admin/admin-settings.class.php:449
 #, php-format
 msgid ""
 "Enjoying Muut? We'd love it you would pop over to the %splugin page%s and "
@@ -140,7 +149,7 @@ msgid ""
 msgstr ""
 
 #: lib/channel.utility.class.php:67 lib/comment-overrides.class.php:199
-#: lib/comment-overrides.class.php:213 lib/muut.class.php:547
+#: lib/comment-overrides.class.php:213 lib/muut.class.php:556
 msgid "Comments"
 msgstr ""
 
@@ -171,128 +180,137 @@ msgstr ""
 msgid "Spammed Muut Post"
 msgstr ""
 
-#: lib/muut.class.php:543
+#: lib/muut.class.php:366
+#, php-format
+msgid ""
+"It looks like the %sMuut Plugin%s doesn't have permission to edit your ."
+"htaccess file. If you want to have content indexable under your website's "
+"domain, you should head over to your site's %sPermalinks%s settings and "
+"select a different permalink structure."
+msgstr ""
+
+#: lib/muut.class.php:552
 msgid "Go ahead!"
 msgstr ""
 
-#: lib/muut.class.php:544
+#: lib/muut.class.php:553
 msgid "Don't do that!"
 msgstr ""
 
-#: lib/muut.class.php:548
+#: lib/muut.class.php:557
 msgid "Admin"
 msgstr ""
 
-#: lib/muut.class.php:549 lib/widgets/widget-latest-comments.class.php:394
+#: lib/muut.class.php:558 lib/widgets/widget-latest-comments.class.php:394
 msgctxt "comment-just-posted"
 msgid "just now"
 msgstr ""
 
-#: lib/muut.class.php:550 lib/widgets/widget-latest-comments.class.php:396
+#: lib/muut.class.php:559 lib/widgets/widget-latest-comments.class.php:396
 msgctxt "abbreviation-for-minutes"
 msgid "m"
 msgstr ""
 
-#: lib/muut.class.php:551 lib/widgets/widget-latest-comments.class.php:398
+#: lib/muut.class.php:560 lib/widgets/widget-latest-comments.class.php:398
 msgctxt "abbreviation-for-hours"
 msgid "h"
 msgstr ""
 
-#: lib/muut.class.php:552 lib/widgets/widget-latest-comments.class.php:400
+#: lib/muut.class.php:561 lib/widgets/widget-latest-comments.class.php:400
 msgctxt "abbreviation-for-days"
 msgid "d"
 msgstr ""
 
-#: lib/muut.class.php:553 lib/widgets/widget-latest-comments.class.php:402
+#: lib/muut.class.php:562 lib/widgets/widget-latest-comments.class.php:402
 msgctxt "abbreviation-for-weeks"
 msgid "w"
 msgstr ""
 
-#: lib/muut.class.php:795
+#: lib/muut.class.php:804
 msgid "Arabic"
 msgstr ""
 
-#: lib/muut.class.php:796
+#: lib/muut.class.php:805
 msgid "Brazil Portuguese"
 msgstr ""
 
-#: lib/muut.class.php:797
+#: lib/muut.class.php:806
 msgid "Bulgarian"
 msgstr ""
 
-#: lib/muut.class.php:798
+#: lib/muut.class.php:807
 msgid "Chinese"
 msgstr ""
 
-#: lib/muut.class.php:799
+#: lib/muut.class.php:808
 msgid "Chinese / Taiwan"
 msgstr ""
 
-#: lib/muut.class.php:800
+#: lib/muut.class.php:809
 msgid "Dutch"
 msgstr ""
 
-#: lib/muut.class.php:801
+#: lib/muut.class.php:810
 msgid "English"
 msgstr ""
 
-#: lib/muut.class.php:802
+#: lib/muut.class.php:811
 msgid "Finnish"
 msgstr ""
 
-#: lib/muut.class.php:803
+#: lib/muut.class.php:812
 msgid "French"
 msgstr ""
 
-#: lib/muut.class.php:804
+#: lib/muut.class.php:813
 msgid "German"
 msgstr ""
 
-#: lib/muut.class.php:805
+#: lib/muut.class.php:814
 msgid "Hungarian"
 msgstr ""
 
-#: lib/muut.class.php:806
+#: lib/muut.class.php:815
 msgid "Hebrew"
 msgstr ""
 
-#: lib/muut.class.php:807
+#: lib/muut.class.php:816
 msgid "Indonesian"
 msgstr ""
 
-#: lib/muut.class.php:808
+#: lib/muut.class.php:817
 msgid "Japanese"
 msgstr ""
 
-#: lib/muut.class.php:809
+#: lib/muut.class.php:818
 msgid "Korean"
 msgstr ""
 
-#: lib/muut.class.php:810
+#: lib/muut.class.php:819
 msgid "Polish"
 msgstr ""
 
-#: lib/muut.class.php:811
+#: lib/muut.class.php:820
 msgid "Russian"
 msgstr ""
 
-#: lib/muut.class.php:812
+#: lib/muut.class.php:821
 msgid "Spanish"
 msgstr ""
 
-#: lib/muut.class.php:813
+#: lib/muut.class.php:822
 msgid "Swedish"
 msgstr ""
 
-#: lib/muut.class.php:814
+#: lib/muut.class.php:823
 msgid "Tamil"
 msgstr ""
 
-#: lib/muut.class.php:815
+#: lib/muut.class.php:824
 msgid "Turkish"
 msgstr ""
 
-#: lib/muut.class.php:1283
+#: lib/muut.class.php:1292
 #, php-format
 msgid ""
 "The %sMuut Plugin%s update to version 3.0.3 revised the default Forum "
@@ -301,8 +319,17 @@ msgid ""
 "%sWordPress support forum%s about the latest release for details or help."
 msgstr ""
 
-#: lib/muut.class.php:1284
+#: lib/muut.class.php:1293
 msgid "Happy Muuting! :-)"
+msgstr ""
+
+#: lib/muut.class.php:1317
+#, php-format
+msgid ""
+"The %sMuut Plugin%s has some advanced functionality that requires your "
+"uploads directory be writeable. You should create a directory with "
+"permissions 755 at %s, or change the permissions of the main uploads "
+"directory to 755. There are instrucitons on how to do that %shere%s."
 msgstr ""
 
 #: lib/shortcodes.class.php:142
@@ -326,6 +353,15 @@ msgstr ""
 msgid ""
 "Note that webhooks functionality will only work for posts made after "
 "activation."
+msgstr ""
+
+#: lib/updater.class.php:233
+#, php-format
+msgid ""
+"The %sMuut Plugin%s has been updated to version 3.0.4, but there was an "
+"error converting your S3 bucket to the new format (just the bucket name, not "
+"the full URL). Your S3 bucket has been disabled; would you like to %sgo fix "
+"it%s right now?"
 msgstr ""
 
 #: lib/widgets/widget-channel-embed.class.php:34
@@ -462,15 +498,15 @@ msgstr ""
 msgid "Enable"
 msgstr ""
 
-#: views/admin-settings.php:138
+#: views/admin-settings.php:139
 msgid "API Key"
 msgstr ""
 
-#: views/admin-settings.php:146
+#: views/admin-settings.php:147
 msgid "Secret Key"
 msgstr ""
 
-#: views/admin-settings.php:154
+#: views/admin-settings.php:155
 msgid "Federated Identities (formerly Single Sign-On)"
 msgstr ""
 

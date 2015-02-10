@@ -1,21 +1,21 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Muut\n"
-"POT-Creation-Date: 2014-11-11 04:51-0500\n"
-"PO-Revision-Date: 2014-11-11 13:09+0100\n"
+"POT-Creation-Date: 2015-02-09 17:47-0000\n"
+"PO-Revision-Date: 2015-02-09 18:05-0000\n"
 "Last-Translator: \n"
 "Language-Team: Paul Hughes <paul@paulalexanderhughes.com>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.8\n"
+"X-Generator: Poedit 1.7.1\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
 "esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
 "_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Language: fr\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: lib/admin/admin-contextual-help.class.php:98
@@ -94,26 +94,39 @@ msgstr "Intégration d'un forum"
 msgid "Enable forum"
 msgstr "Activer le forum "
 
-#: lib/admin/admin-post-editor.class.php:172 lib/muut.class.php:979
-#: lib/muut.class.php:980 views/admin-settings.php:35
+#: lib/admin/admin-post-editor.class.php:172 lib/muut.class.php:993
+#: lib/muut.class.php:994 views/admin-settings.php:35
 msgid "Muut"
 msgstr "Muut"
 
-#: lib/admin/admin-settings.class.php:114
-msgid "Settings successfully saved, other than the errors below:"
+#: lib/admin/admin-settings.class.php:112
+msgid "Settings successfully saved, other than the errors listed."
 msgstr ""
 "Paramètres sauvegardés avec succès, à l'exception des erreurs mentionnées ci-"
 "dessous :"
 
-#: lib/admin/admin-settings.class.php:117
+#: lib/admin/admin-settings.class.php:115
 msgid "Settings successfully saved."
 msgstr "Paramètres sauvegardés avec succès"
 
-#: lib/admin/admin-settings.class.php:121
+#: lib/admin/admin-settings.class.php:119
 msgid "Failed to save settings."
 msgstr "Erreur de sauvegarde des paramètres."
 
-#: lib/admin/admin-settings.class.php:276
+#: lib/admin/admin-settings.class.php:188
+#, php-format
+msgid ""
+"It looks like the %sMuut Plugin%s doesn't have permission to edit your ."
+"htaccess file. If you want to have content indexable under your website's "
+"domain, you should head over to the bottom of your site's %sPermalinks%s "
+"settings and copy the new code there to your .htaccess file."
+msgstr ""
+"﻿Il semble que le %splugin %s ne soit pas autorisé à modifier votre fichier ."
+"htaccess. Si vous voulez indexer le contenu sous le nom de domaine votre "
+"site Web, vous devez vous rendre dans les paramètres suivants  %sPermalinks "
+"%s et copier ce nouveau code dans votre fichier .htaccess."
+
+#: lib/admin/admin-settings.class.php:284
 msgid ""
 "Custom S3 Bucket name must be associated with a valid server. Make sure it "
 "matches the bucket you set up with Muut from your forum page settings."
@@ -121,27 +134,29 @@ msgstr ""
 "Le S3 Bucket doit être associé à un serveur valide. Assurez-vous que le "
 "bucket soit bien installé avec Muut via les paramètres de votre forum."
 
-#: lib/admin/admin-settings.class.php:299
+#: lib/admin/admin-settings.class.php:307
 msgid ""
-"Forum name must contain no spaces of any kind. Make sure the forum name is "
-"the name you registered with Muut when you set up the forum."
+"Forum name must contain no spaces or special characters of any kind. Make "
+"sure the forum name is the name you registered with Muut when you set up the "
+"forum."
 msgstr ""
-"Le nom du forum ne doit contenir aucun espace. Assurez-vous que le nom du "
-"forum est bien celui que vous avez renseigné en le créant."
+"Le nom du forum ne doit contenir aucun espace ou de caractères spéciaux "
+"d'aucune sorte. Assurez-vous que le nom du forum est bien celui que vous "
+"avez renseigné à la création de votre compte."
 
-#: lib/admin/admin-settings.class.php:327
+#: lib/admin/admin-settings.class.php:335
 msgid "API Key must have no spaces and only alphanumeric characters."
 msgstr ""
 "La clé API ne doit pas contenir d'espace, mais uniquement des caractères "
 "alphanumériques. "
 
-#: lib/admin/admin-settings.class.php:356
+#: lib/admin/admin-settings.class.php:364
 msgid "Secret Key must have no spaces and only alphanumeric characters."
 msgstr ""
 "La clé secrète ne doit pas contenir d'espace, mais uniquement des caractères "
 "alphanumériques. "
 
-#: lib/admin/admin-settings.class.php:439
+#: lib/admin/admin-settings.class.php:449
 #, php-format
 msgid ""
 "Enjoying Muut? We'd love it you would pop over to the %splugin page%s and "
@@ -151,7 +166,7 @@ msgstr ""
 "noter et évaluer le plugin! "
 
 #: lib/channel.utility.class.php:67 lib/comment-overrides.class.php:199
-#: lib/comment-overrides.class.php:213 lib/muut.class.php:542
+#: lib/comment-overrides.class.php:213 lib/muut.class.php:556
 msgid "Comments"
 msgstr "Commentaires"
 
@@ -184,126 +199,171 @@ msgstr "Post public"
 msgid "Spammed Muut Post"
 msgstr "Post considéré comme du spam"
 
-#: lib/muut.class.php:538
+#: lib/muut.class.php:366
+#, php-format
+msgid ""
+"It looks like the %sMuut Plugin%s doesn't have permission to edit your ."
+"htaccess file. If you want to have content indexable under your website's "
+"domain, you should head over to your site's %sPermalinks%s settings and "
+"select a different permalink structure."
+msgstr ""
+"﻿Il semble que le %splugin%s ne soit pas autorisé à modifier votre fichier ."
+"htaccess. Si vous souhaitez indexer le contenu sous le nom de domaine de "
+"votre site web, vous devez vous rendre dans les paramètres % sPermalinks %s "
+"et sélectionner une structure différente."
+
+#: lib/muut.class.php:552
 msgid "Go ahead!"
 msgstr "Allez-y!"
 
-#: lib/muut.class.php:539
+#: lib/muut.class.php:553
 msgid "Don't do that!"
 msgstr "Ne faîtes pas ça !"
 
-#: lib/muut.class.php:543
+#: lib/muut.class.php:557
 msgid "Admin"
 msgstr "Admin"
 
-#: lib/muut.class.php:544 lib/widgets/widget-latest-comments.class.php:390
+#: lib/muut.class.php:558 lib/widgets/widget-latest-comments.class.php:394
 msgctxt "comment-just-posted"
 msgid "just now"
 msgstr "à l'instant"
 
-#: lib/muut.class.php:545 lib/widgets/widget-latest-comments.class.php:392
+#: lib/muut.class.php:559 lib/widgets/widget-latest-comments.class.php:396
 msgctxt "abbreviation-for-minutes"
 msgid "m"
 msgstr "m"
 
-#: lib/muut.class.php:546 lib/widgets/widget-latest-comments.class.php:394
+#: lib/muut.class.php:560 lib/widgets/widget-latest-comments.class.php:398
 msgctxt "abbreviation-for-hours"
 msgid "h"
 msgstr "h"
 
-#: lib/muut.class.php:547 lib/widgets/widget-latest-comments.class.php:396
+#: lib/muut.class.php:561 lib/widgets/widget-latest-comments.class.php:400
 msgctxt "abbreviation-for-days"
 msgid "d"
 msgstr "d"
 
-#: lib/muut.class.php:548 lib/widgets/widget-latest-comments.class.php:398
+#: lib/muut.class.php:562 lib/widgets/widget-latest-comments.class.php:402
 msgctxt "abbreviation-for-weeks"
 msgid "w"
 msgstr "w"
 
-#: lib/muut.class.php:790
+#: lib/muut.class.php:804
 msgid "Arabic"
 msgstr "Arabe"
 
-#: lib/muut.class.php:791
+#: lib/muut.class.php:805
 msgid "Brazil Portuguese"
 msgstr "Portugais brésilien"
 
-#: lib/muut.class.php:792
+#: lib/muut.class.php:806
 msgid "Bulgarian"
 msgstr "Bulgare"
 
-#: lib/muut.class.php:793
+#: lib/muut.class.php:807
 msgid "Chinese"
 msgstr "Chinois"
 
-#: lib/muut.class.php:794
+#: lib/muut.class.php:808
 msgid "Chinese / Taiwan"
 msgstr "Chinois / Taïwan"
 
-#: lib/muut.class.php:795
+#: lib/muut.class.php:809
 msgid "Dutch"
 msgstr "Néerlandais"
 
-#: lib/muut.class.php:796
+#: lib/muut.class.php:810
 msgid "English"
 msgstr "Anglais"
 
-#: lib/muut.class.php:797
+#: lib/muut.class.php:811
 msgid "Finnish"
 msgstr "Finnois"
 
-#: lib/muut.class.php:798
+#: lib/muut.class.php:812
 msgid "French"
 msgstr "Français"
 
-#: lib/muut.class.php:799
+#: lib/muut.class.php:813
 msgid "German"
 msgstr "Allemand"
 
-#: lib/muut.class.php:800
+#: lib/muut.class.php:814
 msgid "Hungarian"
 msgstr "Hongrois"
 
-#: lib/muut.class.php:801
+#: lib/muut.class.php:815
 msgid "Hebrew"
 msgstr "Hébreu"
 
-#: lib/muut.class.php:802
+#: lib/muut.class.php:816
 msgid "Indonesian"
 msgstr "Indonésien"
 
-#: lib/muut.class.php:803
+#: lib/muut.class.php:817
 msgid "Japanese"
 msgstr "Japonais"
 
-#: lib/muut.class.php:804
+#: lib/muut.class.php:818
 msgid "Korean"
 msgstr "Coréen"
 
-#: lib/muut.class.php:805
+#: lib/muut.class.php:819
 msgid "Polish"
 msgstr "Polonais"
 
-#: lib/muut.class.php:806
+#: lib/muut.class.php:820
 msgid "Russian"
 msgstr "Russe"
 
-#: lib/muut.class.php:807
+#: lib/muut.class.php:821
 msgid "Spanish"
 msgstr "Espagnol"
 
-#: lib/muut.class.php:808
+#: lib/muut.class.php:822
 msgid "Swedish"
 msgstr "Suédois"
 
-#: lib/muut.class.php:809
+#: lib/muut.class.php:823
 msgid "Tamil"
 msgstr "Tamoul"
 
-#: lib/muut.class.php:810
+#: lib/muut.class.php:824
 msgid "Turkish"
 msgstr "Tuc"
+
+#: lib/muut.class.php:1292
+#, php-format
+msgid ""
+"The %sMuut Plugin%s update to version 3.0.3 revised the default Forum "
+"Template (just a little!). You might want to head over to your %sForum Page"
+"%s and make sure it all looks as you expect! Check the post on our "
+"%sWordPress support forum%s about the latest release for details or help."
+msgstr ""
+"La mise à jour du %splugin%s avec la version 3.0.3 a modifié le template par "
+"défaut. Nous vous recommandons de vérifier que la %spage contenant votre "
+"forum%s correspond à ce que vous souhaitez! Vous pouvez consulter l'article "
+"sur notre  %sforum d'aide%s pour plus de détails sur cette dernière version "
+"et/ou obtenir de l'aide."
+
+#: lib/muut.class.php:1293
+msgid "Happy Muuting! :-)"
+msgstr "Amusez-vous bien avec Muut! :)"
+
+#: lib/muut.class.php:1317
+#, php-format
+msgid ""
+"The %sMuut Plugin%s has some advanced functionality that requires your "
+"uploads directory be writeable. You should create a directory with "
+"permissions 755 at %s, or change the permissions of the main uploads "
+"directory to 755. There are instrucitons on how to do that %shere%s."
+msgstr ""
+"﻿Le %splugin %s comporte des fonctionnalités avancées nécessitant que  votre "
+"répertoire uploads soit accessible en écriture. Vous devriez créer un "
+"répertoire avec les autorisations 755 à %s, ou changer les permissions sur "
+"le répertoire uploads principal à 755. Vous trouverez plus d'informations "
+"%sici%s."
 
 #: lib/shortcodes.class.php:142
 #, php-format
@@ -336,6 +396,19 @@ msgid ""
 msgstr ""
 "Attention - les webhooks ne fonctionneront que pour les posts publiés après "
 "activation."
+
+#: lib/updater.class.php:233
+#, php-format
+msgid ""
+"The %sMuut Plugin%s has been updated to version 3.0.4, but there was an "
+"error converting your S3 bucket to the new format (just the bucket name, not "
+"the full URL). Your S3 bucket has been disabled; would you like to %sgo fix "
+"it%s right now?"
+msgstr ""
+"Le %splugin%s a été mis à jour avec version 3.0.4, mais une erreur s'est "
+"produite lors de la conversion  au nouveau format de votre S3 bucket. Il "
+"s'agit uniquement du nom, et non de l'url complète.Votre S3 bucket a donc "
+"été désactivé; souhaitez-vous %sle réactiver%s maintenant?"
 
 #: lib/widgets/widget-channel-embed.class.php:34
 msgid "Muut Discussion Channel"
@@ -486,15 +559,15 @@ msgstr ""
 msgid "Enable"
 msgstr "Autoriser"
 
-#: views/admin-settings.php:138
+#: views/admin-settings.php:139
 msgid "API Key"
 msgstr "Clé API"
 
-#: views/admin-settings.php:146
+#: views/admin-settings.php:147
 msgid "Secret Key"
 msgstr "Clé secrète"
 
-#: views/admin-settings.php:154
+#: views/admin-settings.php:155
 msgid "Federated Identities (formerly Single Sign-On)"
 msgstr "Fédération d'identités (anciennement SSO)"
 
@@ -1032,3 +1105,15 @@ msgstr "Commentaires"
 #: views/widgets/widget-trending-posts.php:29
 msgid "likes"
 msgstr "j'aime"
+
+#~ msgid "Settings successfully saved, other than the errors below:"
+#~ msgstr ""
+#~ "Paramètres sauvegardés avec succès, à l'exception des erreurs mentionnées "
+#~ "ci-dessous :"
+
+#~ msgid ""
+#~ "Forum name must contain no spaces of any kind. Make sure the forum name "
+#~ "is the name you registered with Muut when you set up the forum."
+#~ msgstr ""
+#~ "Le nom du forum ne doit contenir aucun espace. Assurez-vous que le nom du "
+#~ "forum est bien celui que vous avez renseigné en le créant."

@@ -26,7 +26,7 @@ if ( !class_exists( 'Muut' ) ) {
 		/**
 		 * The current version of Muut
 		 */
-		const VERSION = '3.0.3.1';
+		const VERSION = '3.0.4';
 
 		/**
 		 * The version of Muut this was released with.
@@ -52,6 +52,11 @@ if ( !class_exists( 'Muut' ) ) {
 		 * The Muut API base URI.
 		 */
 		const MUUTAPISERVER = 'api.muut.com';
+
+		/**
+		 * The amazon S3 bucket base URL
+		 */
+		const AMAZONS3URL = 's3-website-us-east-1.amazonaws.com';
 
 		/**
 		 * @property Whether develop mode was executed.
@@ -162,6 +167,7 @@ if ( !class_exists( 'Muut' ) ) {
 
 			add_action( 'admin_notices', array( $this, 'renderAdminNotices' ), 50 );
 			add_action( 'admin_notices', array( $this, 'maybeShowUpdateNotice' ) );
+			add_action( 'admin_notices', array( $this, 'maybeShowUploadsDirectoryFailureNotice' ) );
 
 			add_action( 'flush_rewrite_rules_hard', array( $this, 'removeRewriteAdded' ) );
 
@@ -356,6 +362,9 @@ if ( !class_exists( 'Muut' ) ) {
 
 				if ( ( !file_exists( $htaccess_file ) && is_writable( $home_path ) ) || is_writable( $htaccess_file ) ) {
 					insert_with_markers( $htaccess_file, 'WordPress', $rules );
+				} else {
+					$error_notice = sprintf( __( 'It looks like the %sMuut Plugin%s doesn\'t have permission to edit your .htaccess file. If you want to have content indexable under your website\'s domain, you should head over to your site\'s %sPermalinks%s settings and select a different permalink structure.', 'muut' ), '<b>', '</b>', '<a href="' . admin_url('options-permalink.php') .'">', '</a>' );
+					$this->queueAdminNotice( 'error', $error_notice );
 				}
 				$this->setOption( 'added_rewrite_rules', true );
 			} else {
@@ -428,7 +437,7 @@ if ( !class_exists( 'Muut' ) ) {
 			}
 			/** RE-ADDED S3 Bucket proxying support starting in version 3.0.2.3. Previously REMOVED in 3.0.2 */
 			$proxy_server .= ( $this->getOption( 'use_custom_s3_bucket' ) && $this->getOption( 'custom_s3_bucket_name' ) != '' && !$force_muut_server )
-				? $this->getOption( 'custom_s3_bucket_name' )
+				? $this->getOption( 'custom_s3_bucket_name' ) . '.' . apply_filters( 'muut_amazon_s3_url', self::AMAZONS3URL )
 				: self::MUUTSERVERS . '/i';
 
 			return apply_filters( 'muut_proxy_server', $proxy_server );
@@ -1287,6 +1296,26 @@ if ( !class_exists( 'Muut' ) ) {
 					$dismissed_notices['update_notice'] = true;
 					muut()->setOption( 'dismissed_notices', $dismissed_notices );
 				}
+			}
+		}
+
+		/**
+		 * Displays a dismissible admin notice if the Muut uploads directory is not writeable.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.4
+		 */
+		public function maybeShowUploadsDirectoryFailureNotice() {
+			$dismissed_notices = muut()->getOption( 'dismissed_notices', array() );
+			if ( ( !isset( $dismissed_notices['uploads_dir_fail_notice'] ) || !$dismissed_notices['uploads_dir_fail_notice'] ) && !Muut_Files_Utility::checkMuutUploadsDirectory( '/' ) ) {
+				$wp_upload_dir = wp_upload_dir();
+				$muut_uploads_dir = trailingslashit( $wp_upload_dir['basedir'] ) . Muut_Files_Utility::UPLOADS_DIR_NAME;
+				echo '<div class="updated muut_admin_notice" id="muut_uploads_dir_fail_notice">';
+				wp_nonce_field( 'muut_dismiss_notice', 'dismiss_nonce' );
+				echo '<span class="dismiss_notice_button"><a href="#" class="dismiss_notice">X</a></span>';
+				echo '<p>' . sprintf( __( 'The %sMuut Plugin%s has some advanced functionality that requires your uploads directory be writeable. You should create a directory with permissions 755 at %s, or change the permissions of the main uploads directory to 755. There are instrucitons on how to do that %shere%s.', 'muut' ), '<b>', '</b>', $muut_uploads_dir, '<a href="http://codex.wordpress.org/Changing_File_Permissions">', '</a>') . '</p>';
+				echo '</div>';
 			}
 		}
 	}
