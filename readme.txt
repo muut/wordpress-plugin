@@ -9,11 +9,9 @@ License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
 
 == Description ==
 
-Muut represents a complete re-imagination of what internet discussion forums and commenting should be like.
+Muut represents a complete re-imagination of what internet discussion forums and commenting should be.
 
-It’s a modern, fast, highly scalable discussion platform that you can embed onto your WordPress website, and personalize with css to match the design of your site. For more information on why we do what we do, check out our [manifesto](https://muut.com/manifesto/).
-
-With Muut, you have a discussion platform that offers unlimited posts, comments, users, threads (everything, really) 100% free—forever. We also have some premium packages available (free to try!) that offer additional features to augment your community. You can see more details about that optional extra functionality on our [pricing page](https://muut.com/pricing/).
+It’s a modern, fast, highly scalable discussion platform that you can embed onto your WordPress website, and personalize with css to match the design of your site. With Muut, you have a discussion platform that offers unlimited posts, comments, users, threads (everything, really) 100% free—forever. We also have some premium packages available (free to try!) that offer additional features to augment your community.
 
 Whether you’re setting up for the first time or have just updated to the new version of the plugin, you’re going to love what we’ve done to make implementing Muut in your WordPress website easy and flexible.
 
@@ -47,9 +45,9 @@ Whether you’re setting up for the first time or have just updated to the new v
 * _Discussion Channel_ – You can now embed a single specific channel in your website’s sidebar. Users can watch and join the discussion without having to stop browsing the rest of your website.
 * _My Feed_ – By using the My Feed widget, users can keep track of all the activity on all the discussions they’ve joined and postes they’ve made right in your website’s sidebars.
 
-The recently introduced Webhooks feature of Muut forums makes the Latest Comments and Trending Posts widgets possible, so that means that those two widgets will only work on forums that have a Small or Medium subscription (the others are good to go with any forum!). See our [pricing page](https://muut.com/pricing/) for details.
+The recently introduced Webhooks feature of Muut forums makes the Latest Comments and Trending Posts widgets possible, so that means that those two widgets will only work on forums that have a Small or Medium subscription (all the others are good to go with all subscriptions as well as the free plan!).
 
-You can find more information about Muut at our [website](https://muut.com) and read the full [plugin documentation](https://muut.com/help/#wordpress).
+You can find more information about Muut at our [website](https://muut.com) and read the full [plugin documentation](https://muut.com/help/#wordpress). For more information about why we do what we do, check out our [Manifesto](https://muut.com/manifesto/) and see our [pricing page](https://muut.com/pricing/) for details on the various additional features available in the premium plans.
 
 == Installation ==
 
