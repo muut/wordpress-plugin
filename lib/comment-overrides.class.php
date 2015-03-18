@@ -114,6 +114,8 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 				}
 			}
 
+			$path = apply_filters( 'muut_comments_path_for_post', $path, $post_id, $post_commenting_options['type'] );
+
 			if ( !$full_path ) {
 				return $path;
 			} else {
