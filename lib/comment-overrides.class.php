@@ -97,6 +97,9 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 
 			$post_commenting_options = Muut_Post_Utility::getPostOption( $post_id, 'commenting_settings' );
 
+			$default_type = apply_filters( 'muut_default_commenting_type', 'flat' );
+			$commenting_type = isset( $post_commenting_options['type'] ) ? $post_commenting_options['type'] : $default_type;
+
 			if ( $domain == '' ) {
 				// Assign the domain name to the post for permanent reference.
 				$domain = muut()->getOption( 'comments_base_domain' );
@@ -109,12 +112,12 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 				$path = $domain . ':' . sanitize_title( $post->post_title );
 			} else {
 				$path = $domain . '/' . $post_id;
-				if ( !isset( $post_commenting_options['type'] ) || $post_commenting_options['type'] == 'flat' ) {
+				if ( $commenting_type == 'flat' ) {
 					$path .= ':comments';
 				}
 			}
 
-			$path = apply_filters( 'muut_comments_path_for_post', $path, $post_id, $post_commenting_options['type'] );
+			$path = apply_filters( 'muut_comments_path_for_post', $path, $post_id, $commenting_type );
 
 			if ( !$full_path ) {
 				return $path;
