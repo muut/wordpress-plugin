@@ -2,7 +2,7 @@
 Contributors: PaulHughes01, tipiirai, jannelehtinen
 Tags: forum, commenting, comments, social, realtime, discussion, widgets
 Requires at least: 3.7
-Tested up to: 4.1
+Tested up to: 4.2
 Stable tag: 3.0.4
 License: MIT
 License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
@@ -11,7 +11,7 @@ License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
 
 Muut represents a complete re-imagination of what internet discussion forums and commenting should be. It’s a modern, fast, highly scalable discussion platform that you can embed onto your WordPress website, and personalize with css to match the design of your site.
 
-[youtube https://www.youtube.com/watch?v=joIY33Uzzck]
+[youtube https://www.youtube.com/watch?v=tj1AvTRY-lM]
 
 With Muut, you have a discussion platform that offers unlimited posts, comments, users, threads (everything, really) 100% free—forever. We also have some premium packages available (free to try!) that offer additional features to augment your community.
 
