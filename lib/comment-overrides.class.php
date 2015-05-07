@@ -62,7 +62,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 		 * @since  3.0
 		 */
 		protected function addActions() {
-
+			add_action( 'shutdown', array( $this, 'flushPostCommentCount' ), 10 );
 		}
 
 		/**
@@ -245,6 +245,20 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 		}
 
 		/**
+		 * Removes the post meta store of the comment count after a given post's page is loaded (effectively clearing the cache)
+		 * Next time the post count is then requested, it will grab a fresh copy.
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since 3.0.5
+		 */
+		public function flushPostCommentCount() {
+			if ( is_single() && Muut_Post_Utility::isMuutCommentingPost( get_the_ID() ) ) {
+				delete_post_meta( get_the_ID(), 'muut_comments_count' );
+			}
+		}
+
+		/**
 		 * For posts that have Muut commenting enabled, set the number of comments to zero so that it does not
 		 * (in most themes) show a comment count, but rather sticks with "Leave a reply."
 		 *
@@ -261,7 +275,12 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 					$post = get_post( $post_id );
 
 					if ( is_a( $post, 'WP_Post' ) ) {
-						$this->fetchCommentCountForMuutPosts( array( $post ) );
+						$count = get_post_meta( $post_id, 'muut_comments_count', true );
+						if ( $count === '' ) {
+							$this->fetchCommentCountForMuutPosts( array( $post ) );
+						} else {
+							wp_cache_set( "muut-comments-{$post_id}", $count, 'counts' );
+						}
 					}
 				}
 
@@ -285,7 +304,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			if ( !apply_filters( 'muut_do_not_fetch_post_counts', false ) && is_main_query() ) {
 				$post_count_queue = array();
 				foreach ( $posts as $post ) {
-					if ( Muut_Post_Utility::isMuutCommentingPost( $post->ID ) && wp_cache_get( "muut-comments-{$post->ID}" , 'counts' ) === false ) {
+					if ( Muut_Post_Utility::isMuutCommentingPost( $post->ID ) && wp_cache_get( "muut-comments-{$post->ID}" , 'counts' ) === false && get_post_meta( $post->ID, 'muut_comments_count', true ) === '' ) {
 						$path = '/' . $this->getCommentsPath( $post->ID, true );
 						$post_count_queue[$post->ID] = $path;
 					}
@@ -317,6 +336,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 							if ( !is_null( $return_array ) ) {
 								$post_array = array_flip( $post_count_queue );
 								foreach ( $post_array as $url => $id ) {
+									update_post_meta( $id, 'muut_comments_count', $return_array->$url->size );
 									wp_cache_set( "muut-comments-{$id}", $return_array->$url->size, 'counts' );
 								}
 							}
