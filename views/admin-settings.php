@@ -157,7 +157,7 @@ $display_values = wp_parse_args( $error_values, $current_values );
 			</th>
 			<td>
 				<input name="setting[website_uses_caching]" type="checkbox" id="muut_website_uses_caching" value="1" <?php checked( '1', $display_values['website_uses_caching'] ); ?> />
-				<label for="muut_website_uses_caching"><?php _e( 'Enable this if your site uses a caching plugin. Make sure it is set to expire at least every 24 hours!', 'muut' ); ?></label>
+				<label for="muut_website_uses_caching"><?php _e( 'Enable if using a caching plugin. (Cache must be set to expire every 24 hours or less)', 'muut' ); ?></label>
 			</td>
 		</tr>
 		</tbody>
