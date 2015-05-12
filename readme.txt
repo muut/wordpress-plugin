@@ -2,8 +2,8 @@
 Contributors: PaulHughes01, tipiirai, jannelehtinen
 Tags: forum, commenting, comments, social, realtime, discussion, widgets
 Requires at least: 3.7
-Tested up to: 4.2
-Stable tag: 3.0.4
+Tested up to: 4.2.2
+Stable tag: 3.0.5
 License: MIT
 License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
 
@@ -11,7 +11,7 @@ License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
 
 Muut represents a complete re-imagination of what internet discussion forums and commenting should be. It’s a modern, fast, highly scalable discussion platform that you can embed onto your WordPress website, and personalize with css to match the design of your site.
 
-[youtube https://www.youtube.com/watch?v=tj1AvTRY-lM]
+[youtube https://www.youtube.com/watch?v=huOjL8t-q_0]
 
 With Muut, you have a discussion platform that offers unlimited posts, comments, users, threads (everything, really) 100% free—forever. We also have some premium packages available (free to try!) that offer additional features to augment your community.
 
@@ -92,6 +92,9 @@ There are several great ways to learn more about and get help with the plugin. T
 
 == Upgrade Notice ==
 
+= 3.0.5 =
+The update to version 3.0.5 adds an option for signed embeds to work better with caching plugins, along with some other small improvements and bug fixes.
+
 = 3.0.4 =
 The update to version 3.0.4 is mainly small but important bug fixes and improvements in notifications for errors and possible problems with environment.
 
@@ -108,6 +111,16 @@ The update to version 3.0.1 is a small update with a couple big fixes and better
 The update to version 3.0 is a major update that enhances the plugin experience in a large way. The update _does_ support all of the earlier plugin functionality (such as the shortcodes), but we recommend updating when you have a little bit of time to experiment and ensure that everything continues to work as expected. We hope you enjoy the new version!
 
 == Changelog ==
+
+= 3.0.5 =
+Notes
+
+* Added option in plugin settings for signed embeds to dynamically fetch the signature info for websites that us caching plugins so that pages with Muut can be cached properly, but they still need to expire at least once every 24 hours.
+* Comment Counts are cached to decrease the API calls to the Muut servers.
+
+Bug Fixes
+
+* Base domains with ":" in them (such as for ports) have that replaced with "_" in the comment path generation.
 
 = 3.0.4 =
 Notes
