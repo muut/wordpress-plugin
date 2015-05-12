@@ -209,7 +209,7 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 *
 		 * @return string The JS object as a string.
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.5
 		 */
 		public function getSignedObjectArray() {
 			$api_key = muut()->getOption( 'subscription_api_key', '' );
@@ -243,7 +243,7 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 *
 		 * @return void
 		 * @author Paul Hughes
-		 * @since NEXT_RELEASE
+		 * @since 3.0.5
 		 */
 		public function ajaxGetSignedMessage() {
 			check_ajax_referer( 'muut_get_signed', 'security' );
