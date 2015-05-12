@@ -174,3 +174,21 @@ var muut_time_format = function(timestamp) {
   }
   return list_time;
 };
+
+var muut_fetch_signed_data = function ( wp_nonce, ajax_url ) {
+  return jQuery.Deferred( function(dfd) {
+    var data = {
+      action: 'muut_get_signed',
+      security: wp_nonce
+    };
+
+    jQuery.post( ajax_url, data, function(response) {
+      if ( typeof response.success != 'undefined' ) {
+        var signed_data = response.data;
+        dfd.resolve( signed_data );
+      } else {
+        dfd.fail();
+      }
+    }, 'json');
+  }).promise();
+};

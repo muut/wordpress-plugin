@@ -73,8 +73,10 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 		 * @since 3.0
 		 */
 		public function addActions() {
-			add_action( 'wp_print_scripts', array( $this, 'printSsoJs' ) );
+			add_action( 'wp_print_scripts', array( $this, 'printSsoJs' ), 11 );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueDeveloperScripts' ), 9 );
+			add_action( 'wp_ajax_muut_get_signed', array( $this, 'ajaxGetSignedMessage' ) );
+			add_action( 'wp_ajax_nopriv_muut_get_signed', array( $this, 'ajaxGetSignedMessage' ) );
 		}
 
 		/**
@@ -192,16 +194,33 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 				}
 
 				echo 'var muut_conf = {';
-				echo 'api: {';
-				echo 'key: "' .  $api_key .'",';
-				echo 'timestamp: "' . $this->timestamp . '",';
-				echo 'signature: "' . $this->getSignature() . '",';
-				echo 'message: "' . $this->getSigningMessage() . '"';
-				echo '}';
-				echo $additional_string;
+				if ( !muut()->getOption( 'website_uses_caching', '0' ) ) {
+					echo 'api:';
+					echo json_encode( $this->getSignedObjectArray() );
+					echo $additional_string;
+				}
 				echo '};';
 			}
 			echo '</script>';
+		}
+
+		/**
+		 * Gets the full Javascript object (as string) for the api property of the muut conf.
+		 *
+		 * @return string The JS object as a string.
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function getSignedObjectArray() {
+			$api_key = muut()->getOption( 'subscription_api_key', '' );
+			$signed = array(
+				'key' => $api_key,
+				'timestamp' => $this->timestamp,
+				'signature' => $this->getSignature(),
+				'message' => $this->getSigningMessage(),
+			);
+
+			return $signed;
 		}
 
 		/**
@@ -217,6 +236,37 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 				$class = 'muut_sso';
 			}
 			return $class;
+		}
+
+		/**
+		 * Gets the signed data over AJAX (for sites with caching plugins).
+		 *
+		 * @return void
+		 * @author Paul Hughes
+		 * @since NEXT_RELEASE
+		 */
+		public function ajaxGetSignedMessage() {
+			check_ajax_referer( 'muut_get_signed', 'security' );
+
+
+			$result = array(
+				'success' => true,
+				'data' => array(
+					'api' => $this->getSignedObjectArray(),
+				),
+			);
+
+			$additional = array();
+			if ( muut()->getOption( 'subscription_use_sso' ) ) {
+				$additional['login_url'] = apply_filters( 'muut_sso_login_url', wp_login_url( get_permalink() ) );
+			}
+			$additional = apply_filters( 'muut_addional_signed_conf_parameters', $additional );
+			foreach( $additional as $key => $value ) {
+				$result['data'][$key] = $value;
+			}
+
+			exit( json_encode( $result ) );
+
 		}
 	}
 }

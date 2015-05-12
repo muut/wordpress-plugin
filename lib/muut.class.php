@@ -176,7 +176,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueueAdminScripts' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ), 11 );
 
-			add_action( 'wp_print_scripts', array( $this, 'printCurrentPageJs' ) );
+			add_action( 'wp_print_scripts', array( $this, 'printCurrentPageJs' ), 10 );
 			add_action( 'wp_footer', array( $this, 'printHiddenMuutDiv' ) );
 
 			add_action( 'wp_ajax_dismiss_notice', array( $this, 'ajaxDismissNotice' ) );
@@ -625,6 +625,7 @@ if ( !class_exists( 'Muut' ) ) {
 				'subscription_secret_key' => '',
 				'subscription_use_signed_setup' => '0',
 				'subscription_use_sso' => false,
+				'website_uses_caching' => '0',
 				'enable_proxy_rewrites' => '1',
 				'use_custom_s3_bucket' => '0',
 				'custom_s3_bucket_name' => '',
@@ -743,7 +744,7 @@ if ( !class_exists( 'Muut' ) ) {
 				echo '<script type="text/javascript">';
 				echo 'var muut_object;';
 				echo 'if ( typeof ajaxurl == "undefined" ) { var ajaxurl = "' . admin_url('admin-ajax.php') . '"; }';
-				echo 'function muutObj() { if( typeof muut_object == "undefined" && typeof muut() != "undefined" ) { muut_object = muut(); } return muut_object; }';
+				echo 'function muutObj() { if( typeof muut_object == "undefined" ) { if ( typeof muut() != "undefined" ) { muut_object = muut(); } else if ( muut() != "undefined" ) { muut_object = jQuery(); } } return muut_object; }';
 				echo'</script>';
 				$page_id = get_the_ID();
 				$forum_page_id = Muut_Post_Utility::getForumPageId();
@@ -757,6 +758,10 @@ if ( !class_exists( 'Muut' ) ) {
 							echo 'var muut_show_comments_in_nav = ' .  $forum_settings['show_comments_in_forum'] . ';';
 						Muut_Post_Utility::getPostOption( $page_id, 'forum_settings' );
 						}
+					}
+					if (  $this->getOption( 'subscription_use_signed_setup' ) && $this->getOption( 'website_uses_caching') ) {
+						echo 'var muut_must_fetch_signed = true;';
+						echo 'var muut_fetch_signed_nonce = "' . wp_create_nonce( 'muut_get_signed') . '";';
 					}
 					echo '</script>';
 				}

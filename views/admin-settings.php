@@ -25,6 +25,7 @@ $current_values = array(
 	'subscription_use_sso' => muut()->getOption( 'subscription_use_sso', '0' ),
 	'subscription_api_key' => muut()->getOption( 'subscription_api_key', '' ),
 	'subscription_secret_key' => muut()->getOption( 'subscription_secret_key', '' ),
+	'website_uses_caching' => muut()->getOption( 'website_uses_caching', '0' ),
 	'use_webhooks' => muut()->getOption( 'use_webhooks', '' ),
 	'webhooks_secret' => muut()->getOption( 'webhooks_secret', '' ),
 );
@@ -148,6 +149,15 @@ $display_values = wp_parse_args( $error_values, $current_values );
 			</th>
 			<td>
 				<input name="setting[subscription_secret_key]" type="text" id="muut_subscription_secret_key" value="<?php echo $display_values['subscription_secret_key']; ?>" />
+			</td>
+		</tr>
+		<tr class="<?php echo $sso_field_class; ?> indented" data-muut_requires="muut_subscription_use_signed_setup" data-muut_require_func="is(':checked()')" data-muut_require_true_cb="removeClass('hidden')" data-muut_require_false_cb="addClass('hidden')">
+			<th scope="row">
+				<label for="muut_website_uses_caching"><?php _e( 'Caching?', 'muut' ); ?></label>
+			</th>
+			<td>
+				<input name="setting[website_uses_caching]" type="checkbox" id="muut_website_uses_caching" value="1" <?php checked( '1', $display_values['website_uses_caching'] ); ?> />
+				<label for="muut_website_uses_caching"><?php _e( 'Enable this if your site uses a caching plugin. Make sure it is set to expire at least every 24 hours!', 'muut' ); ?></label>
 			</td>
 		</tr>
 		</tbody>

@@ -165,6 +165,7 @@ if ( !class_exists( 'Muut_Admin_Settings' ) ) {
 					'subscription_use_signed_setup',
 					'use_custom_s3_bucket',
 					'subscription_use_sso',
+					'website_uses_caching',
 					'enable_proxy_rewrites',
 					'use_webhooks',
 				) );
