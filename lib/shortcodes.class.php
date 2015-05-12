@@ -170,7 +170,7 @@ if ( !class_exists( 'Muut_Shortcodes' ) ) {
 				$post = get_post( get_the_ID() );
 			}
 
-			if ( has_shortcode( $post->post_content, 'moot' ) || has_shortcode( $post->post_content, 'muut' ) ) {
+			if ( is_a( $post, 'WP_Post' ) && ( has_shortcode( $post->post_content, 'moot' ) || has_shortcode( $post->post_content, 'muut' ) ) ) {
 				wp_enqueue_script( 'muut' );
 				wp_enqueue_style( 'muut-forum-css' );
 			}
