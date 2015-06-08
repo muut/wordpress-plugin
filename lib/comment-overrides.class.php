@@ -76,7 +76,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 			add_filter( 'comments_template', array( $this, 'commentsTemplate' ) );
 			add_filter( 'get_comments_link', array( $this, 'commentsLink' ), 10, 2 );
 			add_filter( 'get_comments_number', array( $this, 'muutCommentsNumber' ), 10, 2 );
-			add_filter( 'the_posts', array( $this, 'fetchCommentCountForMuutPosts' ) );
+			add_filter( 'wp_head', array( $this, 'fetchCommentCountForMuutPosts' ) );
 		}
 
 		/**
@@ -276,9 +276,7 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 
 					if ( is_a( $post, 'WP_Post' ) ) {
 						$count = get_post_meta( $post_id, 'muut_comments_count', true );
-						if ( $count === '' ) {
-							$this->fetchCommentCountForMuutPosts( array( $post ) );
-						} else {
+						if ( $count !== '' ) {
 							wp_cache_set( "muut-comments-{$post_id}", $count, 'counts' );
 						}
 					}
@@ -298,11 +296,13 @@ if ( !class_exists( 'Muut_Comment_Overrides' ) ) {
 		 * @author Paul Hughes
 		 * @since 3.0
 		 */
-		public function fetchCommentCountForMuutPosts( $posts ) {
+		public function fetchCommentCountForMuutPosts() {
+			global $wp_query;
 			// Only execute this functionality if "do not fetch" is not set.
 			// That filter can be used (set to true) to prevent any of this from executing.
-			if ( !apply_filters( 'muut_do_not_fetch_post_counts', false ) && is_main_query() ) {
+			if ( !apply_filters( 'muut_do_not_fetch_post_counts', false ) && $wp_query->is_main_query() ) {
 				$post_count_queue = array();
+				$posts = $wp_query->posts;
 				foreach ( $posts as $post ) {
 					if ( Muut_Post_Utility::isMuutCommentingPost( $post->ID ) && wp_cache_get( "muut-comments-{$post->ID}" , 'counts' ) === false && get_post_meta( $post->ID, 'muut_comments_count', true ) === '' ) {
 						$path = '/' . $this->getCommentsPath( $post->ID, true );
