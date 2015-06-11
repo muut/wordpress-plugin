@@ -11,8 +11,7 @@
 jQuery(document).ready(function($) {
 
   // Once Muut is loaded...
-  if (typeof muutObj() != 'undefined' ) {
-    muutObj().on('load', function() {
+    $('body').on('muut_loaded', function() {
       // Set the latest comments wrapper object.
 
       var widget_latest_comments_wrapper = $('#muut-widget-latest-comments-wrapper');
@@ -278,5 +277,4 @@ jQuery(document).ready(function($) {
         });
       }
     });
-  }
 });

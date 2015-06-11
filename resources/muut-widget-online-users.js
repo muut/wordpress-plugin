@@ -11,8 +11,7 @@
 jQuery(document).ready(function($) {
 
   // Once Muut is loaded...
-  if (typeof muutObj() != 'undefined' ) {
-    muutObj().on('load', function() {
+    $('body').on('muut_loaded', function() {
       // Functionality for the online users widget.
       var widget_online_users_wrapper = $('#muut-widget-online-users-wrapper');
 
@@ -136,5 +135,4 @@ jQuery(document).ready(function($) {
         }
       }
     });
-  }
 });

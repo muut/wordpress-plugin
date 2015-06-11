@@ -176,7 +176,7 @@ if ( !class_exists( 'Muut' ) ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueueAdminScripts' ) );
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueFrontendScripts' ), 11 );
 
-			add_action( 'wp_print_scripts', array( $this, 'printCurrentPageJs' ), 10 );
+			add_action( 'wp_footer', array( $this, 'printCurrentPageJs' ), 500 );
 			add_action( 'wp_footer', array( $this, 'printHiddenMuutDiv' ) );
 
 			add_action( 'wp_ajax_dismiss_notice', array( $this, 'ajaxDismissNotice' ) );
@@ -742,9 +742,9 @@ if ( !class_exists( 'Muut' ) ) {
 		public function printCurrentPageJs() {
 			if ( $this->needsMuutResources() || ( !is_admin() && get_post() ) ) {
 				echo '<script type="text/javascript">';
-				echo 'var muut_object;';
+				echo 'var muut_object = jQuery();';
 				echo 'if ( typeof ajaxurl == "undefined" ) { var ajaxurl = "' . admin_url('admin-ajax.php') . '"; }';
-				echo 'function muutObj() { if( typeof muut_object == "undefined" ) { if ( typeof muut() != "undefined" ) { muut_object = muut(); } else if ( muut() != "undefined" ) { muut_object = jQuery(); } } return muut_object; }';
+				echo 'function muutObj() { if( typeof muut_object.path == "undefined" ) { if ( typeof muut() != "undefined" ) { muut_object = muut(); } } return muut_object; }';
 				echo'</script>';
 				$page_id = get_the_ID();
 				$forum_page_id = Muut_Post_Utility::getForumPageId();
@@ -759,10 +759,6 @@ if ( !class_exists( 'Muut' ) ) {
 						Muut_Post_Utility::getPostOption( $page_id, 'forum_settings' );
 						}
 					}
-					if (  $this->getOption( 'subscription_use_signed_setup' ) && $this->getOption( 'website_uses_caching') ) {
-						echo 'var muut_must_fetch_signed = true;';
-						echo 'var muut_fetch_signed_nonce = "' . wp_create_nonce( 'muut_get_signed') . '";';
-					}
 					echo '</script>';
 				}
 				if( Muut_Post_Utility::getForumPageId() != $page_id
@@ -773,6 +769,10 @@ if ( !class_exists( 'Muut' ) ) {
 						|| is_active_widget( false, false, 'muut_online_users_widget' )
 						|| is_active_widget( false, false, 'muut_trending_posts_widget' )) ) {
 					echo '<script type="text/javascript">';
+						if (  $this->getOption( 'subscription_use_signed_setup' ) && $this->getOption( 'website_uses_caching') ) {
+							echo 'var muut_must_fetch_signed = true;';
+							echo 'var muut_fetch_signed_nonce = "' . wp_create_nonce( 'muut_get_signed') . '";';
+						}
 						echo 'var muut_widget_conf = { url: "' . $this->getForumIndexUri() . '", path: "/' . $this->getForumName() . '", widget: true };';
 						echo 'var muut_force_load = true;';
 						if ( $forum_page_id ) {
@@ -793,7 +793,11 @@ if ( !class_exists( 'Muut' ) ) {
 		 * @since 3.0.2
 		 */
 		public function printHiddenMuutDiv() {
-			echo '<div id="muut_hidden_embed_div" style="display: none;"></div>';
+			$class = '';
+			if ( $this->getOption( 'subscription_use_signed_setup' ) ) {
+				$class .= 'muut_sso ';
+			}
+			echo '<div id="muut_hidden_embed_div" class="' . $class . '" style="display: none;"><a class="muut-url" href="' . $this->getContentPathPrefix() . 'i/' . $this->getForumName() . '">Forum</a></div>';
 		}
 
 		/**

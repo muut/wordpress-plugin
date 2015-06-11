@@ -14,9 +14,15 @@ jQuery( function($) {
       muut_fetch_signed_data(muut_fetch_signed_nonce, ajaxurl).done( function( data ) {
         $.extend(muut_conf, data);
         $('.muut_sso').muut(muut_conf);
+        muut().on('load', function() {
+          $('body').trigger('muut_loaded');
+        });
       })
     } else {
       $('.muut_sso').muut(muut_conf);
+      muut().on('load', function() {
+        $('body').trigger('muut_loaded');
+      });
     }
   }
 });

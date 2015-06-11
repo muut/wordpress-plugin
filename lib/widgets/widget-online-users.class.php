@@ -49,7 +49,7 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 * @since 3.0.2
 		 */
 		protected function addActions() {
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueWidgetScripts' ), 12 );
+			add_action( 'wp_enqueue_scripts', array( $this, 'enqueueWidgetScripts' ), 5 );
 			add_action( 'init', array( $this, 'maybeRequireMuutResources') );
 		}
 
@@ -138,7 +138,7 @@ if ( !class_exists( 'Muut_Widget_Online_Users' ) ) {
 		 */
 		public function enqueueWidgetScripts() {
 			if ( is_active_widget( false, false, $this->id_base, true ) ) {
-				wp_enqueue_script( 'muut-widget-online-users', muut()->getPluginUrl() . 'resources/muut-widget-online-users.js', array( 'jquery', 'muut-widgets-initialize' ), Muut::VERSION, true );
+				wp_enqueue_script( 'muut-widget-online-users', muut()->getPluginUrl() . 'resources/muut-widget-online-users.js', array( 'jquery' ), Muut::VERSION, true );
 
 				// Localization translation strings.
 				$localizations = array(

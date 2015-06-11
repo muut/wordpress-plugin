@@ -13,8 +13,7 @@ jQuery(document).ready(function($) {
   var trending_posts_executed = 0;
 
   // Once Muut is loaded...
-  if (typeof muutObj() != 'undefined' ) {
-    muutObj().on('load', function() {
+    $('body').on('muut_loaded', function() {
       var body = $('body');
 
       if(body.hasClass('muut-forum-home') && typeof muut_stored_channel_list != 'undefined' && typeof muut_stored_channels_nonce == 'string' && muutObj().user.is_admin == true ) {
@@ -105,5 +104,4 @@ jQuery(document).ready(function($) {
       // Make sure that some of the functions know not to be executed again.
       trending_posts_executed = 1;
     });
-  }
 });

@@ -11,8 +11,7 @@
 jQuery(document).ready(function($) {
 
   // Once Muut is loaded...
-  if (typeof muutObj() != 'undefined' ) {
-    muutObj().on('load', function() {
+    $('body').on('muut_loaded', function() {
       // Functionality for the My Feed widget.
       var widget_my_feed_wrapper = $('#muut-widget-my-feed-wrapper');
 
@@ -41,5 +40,4 @@ jQuery(document).ready(function($) {
 
       }
     });
-  }
 });
