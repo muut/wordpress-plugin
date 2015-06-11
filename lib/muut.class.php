@@ -745,6 +745,10 @@ if ( !class_exists( 'Muut' ) ) {
 				echo 'var muut_object = jQuery();';
 				echo 'if ( typeof ajaxurl == "undefined" ) { var ajaxurl = "' . admin_url('admin-ajax.php') . '"; }';
 				echo 'function muutObj() { if( typeof muut_object.path == "undefined" ) { if ( typeof muut() != "undefined" ) { muut_object = muut(); } } return muut_object; }';
+				if (  $this->getOption( 'subscription_use_signed_setup' ) && $this->getOption( 'website_uses_caching') ) {
+					echo 'var muut_must_fetch_signed = true;';
+					echo 'var muut_fetch_signed_nonce = "' . wp_create_nonce( 'muut_get_signed') . '";';
+				}
 				echo'</script>';
 				$page_id = get_the_ID();
 				$forum_page_id = Muut_Post_Utility::getForumPageId();
@@ -769,10 +773,6 @@ if ( !class_exists( 'Muut' ) ) {
 						|| is_active_widget( false, false, 'muut_online_users_widget' )
 						|| is_active_widget( false, false, 'muut_trending_posts_widget' )) ) {
 					echo '<script type="text/javascript">';
-						if (  $this->getOption( 'subscription_use_signed_setup' ) && $this->getOption( 'website_uses_caching') ) {
-							echo 'var muut_must_fetch_signed = true;';
-							echo 'var muut_fetch_signed_nonce = "' . wp_create_nonce( 'muut_get_signed') . '";';
-						}
 						echo 'var muut_widget_conf = { url: "' . $this->getForumIndexUri() . '", path: "/' . $this->getForumName() . '", widget: true };';
 						echo 'var muut_force_load = true;';
 						if ( $forum_page_id ) {
