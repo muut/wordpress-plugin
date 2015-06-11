@@ -137,13 +137,15 @@ if ( !class_exists( 'Muut_Developer_Subscription' ) ) {
 
 					$data = array(
 						'user' => array(
-							'id' => $user->user_login,
-							'email' => $user->user_email,
+							'id' => apply_filters( 'muut_fedid_user_id', $user->user_login, $user->ID, $user ),
+							'email' => apply_filters( 'muut_fedid_user_email', $user->user_email, $user->ID, $user ),
 							'avatar' => $avatar,
-							'displayname' => $display_name,
-							'is_admin' => is_super_admin()
+							'displayname' => apply_filters( 'muut_fedid_user_email', $display_name, $user->ID, $user ),
+							'is_admin' => apply_filters( 'muut_fedid_user_is_admin', is_super_admin(), $user->ID, $user ),
 						)
 					);
+
+					$data = apply_filters( 'muut_fedid_user_data', $data, $user->ID, $user );
 				}
 			} else {
 				$data = array();
