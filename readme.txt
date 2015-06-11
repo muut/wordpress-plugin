@@ -3,7 +3,7 @@ Contributors: PaulHughes01, tipiirai, jannelehtinen
 Tags: forum, commenting, comments, social, realtime, discussion, widgets
 Requires at least: 3.7
 Tested up to: 4.2.2
-Stable tag: 3.0.5
+Stable tag: 3.0.6
 License: MIT
 License URI: https://github.com/moot/wordpress/blob/master/LICENSE.txt
 
@@ -92,6 +92,9 @@ There are several great ways to learn more about and get help with the plugin. T
 
 == Upgrade Notice ==
 
+= 3.0.6 =
+The update to version 3.0.6 contains some updates to the widgets as they are handled on cached websites as well as speed optimizations.
+
 = 3.0.5 =
 The update to version 3.0.5 adds an option for signed embeds to work better with caching plugins, along with some other small improvements and bug fixes.
 
@@ -111,6 +114,12 @@ The update to version 3.0.1 is a small update with a couple big fixes and better
 The update to version 3.0 is a major update that enhances the plugin experience in a large way. The update _does_ support all of the earlier plugin functionality (such as the shortcodes), but we recommend updating when you have a little bit of time to experiment and ensure that everything continues to work as expected. We hope you enjoy the new version!
 
 == Changelog ==
+
+= 3.0.6 =
+Notes
+
+* Improved the functionality of widgets in relation to websites with caching enabled.
+* Improved performance on websites with large numbers of posts and pages displaying large numbers of them at once.
 
 = 3.0.5 =
 Notes
