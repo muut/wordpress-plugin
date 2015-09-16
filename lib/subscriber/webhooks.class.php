@@ -409,6 +409,9 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 				update_post_meta( $inserted_post, 'muut_likes', '0' );
 				update_post_meta( $inserted_post, 'muut_thread_likes', '0' );
 			}
+			
+			// Hook to perform action after Post
+			do_action('muut_webhook_after_request_post', $request, $event, $inserted_post);
 		}
 
 		/**
@@ -435,7 +438,9 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 			if ( $inserted_comment ) {
 				update_comment_meta( $inserted_comment, 'muut_likes', '0' );
 			}
-
+			
+			// Hook to perform action after Reply
+			do_action('muut_webhook_after_request_reply', $request, $event, $inserted_comment);
 		}
 
 		/**
@@ -521,6 +526,10 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 					// Remove the number of likes from the thread count of likes.
 					$post_likes = $post_likes - $likes;
 					update_post_meta( $comment->comment_post_ID, 'muut_thread_likes', $post_likes );
+					
+					// Hook before the comment is deleted
+					do_action('muut_webhook_after_request_remove', $request, $event, 'comment', $comment->comment_ID);
+
 					wp_delete_comment( $comment->comment_ID, true );
 				}
 			// The path leads the a top-level thread.
@@ -528,6 +537,9 @@ if ( !class_exists( 'Muut_Webhooks' ) ) {
 				$thread_post = self::webhookGetPostFromPath( $path, 'any' );
 
 				if ( $thread_post ) {
+					// Hook before the post is deleted
+					do_action('muut_webhook_after_request_remove', $request, $event, 'post', $thread_post->ID);
+					
 					wp_delete_post( $thread_post->ID, true );
 				}
 			}
